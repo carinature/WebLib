@@ -1,0 +1,50 @@
+
+:root {
+    /* defining global vars */
+    --primary-color-light: #f0ece2;
+    --secondary-color-light: #dfd3c3;
+    --primary-color-dark: #596e79;
+    --secondary-color-dark: #255873;
+    --misc-color: #c7b198;
+
+}
+
+body {
+    /*background-color: var(--primary-color);*/
+}
+
+.bg-light {
+  background-color: var(--primary-color-light) !important;
+}
+
+/*todo consider changing*/
+/*a.bg-light:hover, a.bg-light:focus,*/
+/*button.bg-light:hover,*/
+/*button.bg-light:focus {*/
+/*  background-color: #dae0e5 !important;*/
+/*}*/
+
+.bg-dark {
+  background-color: var(--primary-color-dark) !important;
+}
+/*todo consider changing*/
+/*a.bg-dark:hover, a.bg-dark:focus,*/
+/*button.bg-dark:hover,*/
+/*button.bg-dark:focus {*/
+/*  background-color: #1d2124 !important;*/
+/*}*/
+
+
+/*.jumbotron {*/
+/*    max-height: 13em !important;*/
+/*    !*padding: 5em;!* inherit;*!*!*/
+/*    !*    height: 20%  !important;*!*/
+/*    !*    width: 20%  !important;*!*/
+
+/*}*/
+
+/*.size-20 {*/
+/*  height: 20%;*/
+/*  !*background: #aaa;*!*/
+/*}*/
+
