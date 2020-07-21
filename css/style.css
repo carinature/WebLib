@@ -14,12 +14,23 @@
 body {
     /*background-color: var(--primary-color);*/
     padding-top: 15em;
+        /*background-color: var(--primary-color-light) !*!important;*!*/
+
 }
+
+/*img {*/  /*DONT DO IT*/
+/*    max-width: 90%;*/
+/*    padding-left: 5rem;*/
+/*}*/
 
 .bgn-light {
-    background-color: var(--secondary-color-light); /*!important;*/
+    background-color: var(--primary-color-light); /*!important;*/
+    /*background-color: var(--secondary-color-light); !*!important;*!*/
 }
 
+.bgn-dark {
+    background-color: var(--primary-color-light) /*!important;*/
+}
 /*todo consider changing*/
 /*a.bg-light:hover, a.bg-light:focus,*/
 /*button.bg-light:hover,*/
@@ -27,16 +38,23 @@ body {
 /*  background-color: #dae0e5 !important;*/
 /*}*/
 
-.bgn-dark {
-    background-color: var(--primary-color-light) /*!important;*/
-}
-
 /*todo consider changing*/
 /*a.bg-dark:hover, a.bg-dark:focus,*/
 /*button.bg-dark:hover,*/
 /*button.bg-dark:focus {*/
 /*  background-color: #1d2124 !important;*/
 /*}*/
+
+
+.btn-primary {
+    background-color: var(--accent-color);
+    border: 1px solid var(--misc-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--misc-color);
+    border: 1px solid var(--misc-color);
+}
 
 
 /*.jumbotron {*/
@@ -63,12 +81,44 @@ body {
     top: 0; /* At the top */
     z-index: 99;
     text-align: left;
+    display: inline-block;
+    float: left;
 }
 
 /* Style the logo */
-.navbar .logo {
+.navbar #logo {
     max-height: 15em;
+    margin-right: 2em;
+    margin-left: 1em;
     /*font-size: 35px;*/
     /*font-weight: bold;*/
     transition: 0.2s;
+}
+
+/*.navbar-collapse {*/
+/*    !*-ms-flex-preferred-size: 100%;*!*/
+/*    !*flex-basis: 100%;*!*/
+/*    !*-webkit-box-flex: 1;*!*/
+/*    !*-ms-flex-positive: 1;*!*/
+/*    !*flex-grow: 1;*!*/
+/*    !*-webkit-box-align: center;*!*/
+/*    !*-ms-flex-align: center;*!*/
+/*    align-items: center;*/
+/*}*/
+
+#search-form {
+    padding-top: 15em;
+}
+
+.lead {
+    text-align: justify;
+}
+
+.jumbotron {
+    background-color: var(--secondary-color-light);
+}
+
+.s01 form .inner-form .input-field.third-wrap .btn-search {
+    background-color: var(--accent-color);
+
 }

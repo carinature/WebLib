@@ -226,6 +226,11 @@ hr.light-100 {
         font-size: 2em;
         padding: .7rem;
     }
+    .logo{
+        max-height: 5em;
+            /*transition: 0.2s;*/
+
+    }
 }
 
 
@@ -256,7 +261,8 @@ figure {
 }
 
 #fixed {
-    background-image: url('../../bs4/img/mac.png');
+    /*background-image: url('http://tiresias.haifa.ac.il/static/large13.1.png'); !*KT*!*/
+    /*background-image: url('../images/lib-4-noncom-reuse.jpg'); !*KT*!*/
     position: fixed;
     display: block;
     top: 0;

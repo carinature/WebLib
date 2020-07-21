@@ -7,10 +7,6 @@
     <meta name="author" content="Karina">
 
     <!--    bootstrap related scripts -->
-    <!--original-->
-    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>-->
-    <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
     <script src="../js/jquery-3.5.1.min.js"></script>
     <script src="../js/popper.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
@@ -22,30 +18,29 @@
 
 
     <!--    bootstrap related stylesheets -->
-    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="../css/bootstrap.min.css">
 
     <!--    your stylesheets  -->
     <link href="../css/search-engine-main.css" rel="stylesheet"/>
     <link href="../css/bs4-style.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
-    <!--        <link href="css/main.css" rel="stylesheet" />-->
 
 </head>
 
-<!--the good stuff-->
 
 <!-- Navigation -->
 <!--<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">-->
 <nav class="navbar navbar-expand-md navbar-light bgn-light sticky-top">
+    <!--    <div class="row">-->
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
             <div class="row">
-<!--                <img src="../images/logo-hcmh-pic.png" class="img-fluid col">-->
-                <img id="logo" src="../images/logo-hcmh-pic.png" height="140em" alt="h.c.m.h logo">
-                <div class="col navbar-title">
+                <!--                <img src="../images/logo-hcmh-pic.png" class="img-fluid col">-->
+                <!--                <img class="img-fluid" id="logo" src="../images/logo-hcmh-pic-bg-clear.png" alt="h.c.m.h logo" height="10em">-->
+                <img class="img-fluid" id="logo" src="../images/logo-hcmh-pic-bg-clear.png" alt="h.c.m.h logo">
+                <div class="navbar-title">
                     <h1 id="title"><b>Tiresias</b></h1>
-                    <h4 id="subtitle">The Ancient Mediterranean Religions Source Database</h4>
+                    <p id="subtitle">The Ancient Mediterranean Religions Source Database</p>
                 </div>
             </div>
         </a>
@@ -57,59 +52,35 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active"><a class="nav-link" href="#">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Team</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Connect</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Bibliography</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Sources</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Connect</a></li>
         </ul>
     </div>
-    </div>
+    <!--    </div>-->
 </nav>
 <br>
-<!--- Image Slider -->
-<div id="slides" class="carousel slide" data-ride="carousel">
-    <ul class="carousel-indicators">
-        <li data-target="#slides" data-slide-to="0" class="active"></li>
-        <li data-target="#slides" data-slide-to="1"></li>
-        <li data-target="#slides" data-slide-to="2"></li>
-    </ul>
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img class="size-20" src="../images/bg-bluish.png"/>
-            <div class="carousel-caption">
-                <h1 class="display-2">caption 1 - display 2</h1>
-                <h3>caption 1 - h3</h3>
-                <button type="button" class="btn">some butt</button>
-                <button type="button" class="btn btn-primary btm-lg">anoother butt</button>
-            </div>
-        </div>
+<br>
 
-        <div class="carousel-item">
-            <img src="../images/bg-dark-cream.png"/>
-            <!--            <img src="https://wp-media.patheos.com/subdomain/sites/8/2016/04/AiG404Page.png"/>-->
-        </div>
-        <div class="carousel-item">
-            <img src="../images/lib-1.jpg"/>
-            <!--            <img src="https://wp-media.patheos.com/subdomain/sites/8/2016/04/AiG404Page.png"/>-->
-        </div>
-    </div>
-</div>
-
+<!--<div class="col-12">-->  <!--DO NOT DELETE THIS! -->
+<!--    <h1 class="display-4" style="text-align: center">Tiresias</b><br> The Ancient Mediterranean Religions Source Database</h1>-->
+<!--</div>-->
+<!--<hr>-->
 
 <!-- search form -->
-<div class="row">
+<div class="row" id="search-form">
     <div class="s01">
         <form>
             <div class="inner-form">
                 <div class="input-field first-wrap">
-                    <input id="search" type="text" placeholder="What are you looking for?"/>
+                    <input id="search" type="text" placeholder="What subject are you looking for?"/>
                 </div>
-                <!--                <div class="input-field second-wrap">-->
-                <!--                    <input id="location" type="text" placeholder="location"/>-->
-                <!--                </div>-->
+                <div class="input-field second-wrap">
+                    <input id="location" type="text" placeholder="Optional: another keyword maybe?"/>
+                </div>
                 <div class="input-field third-wrap">
-                    <!--                                    <div class="input-field second-wrap">-->
-                    <!--                                <button class="btn-search" type="button">Search</button>-->
-                    <button class="btn-search" type="button">
+                    <button class="btn-search btn-primary" type="button">
                         <!--                    <button class="btn btn-primary" type="button">-->
                         <i class="fas fa-search" aria-hidden="true"></i>
                     </button>
@@ -121,144 +92,272 @@
 </div>
 
 
-<!--- Jumbotron -->
+<!--- 'About' Section (previous: "welcome section") -->
+<span id="about"><br><br><br><br><br></span>
+<div class="container-fluid padding">
+    <div class="row welcome text-center">
+        <div class="col-12" style="background-color: var(--secondary-color-light)"> <!--todo move the style to css-->
+            <h1 class="display-4">Tiresias: The Ancient Mediterranean Religions Source Database</h1>
+        </div>
+        <!--        <hr> &lt;!&ndash; horizantal rule &ndash;&gt;-->
+        <div class="col-12">
+            <p class="lead">
+                Tiresias: The Ancient Mediterranean Religions Source Database provides access to references to ancient
+                texts according to topic, mostly on religion, c. -800 BCE to 800 CE in the Mediterranean area. In some
+                cases, direct access to full text is also available. Topic tagging is based on existing subject indices
+                from scholarly books, allowing highly detailed topic resolution. The site is in development, and
+                currently includes 4,671,592 keyed to 53,097 subjects.
+                The construction of the database is based on the following method. Many research volumes in ancient
+                history are published with two indices: one for subjects, topics or terms, and one for ancient text
+                references (the latter is also known as an index locorum). Using these indices, each page of the indexed
+                book can be identified as relating to specific subjects as well as specific ancient texts, indicating
+                with a certain probability that these text references can be tagged as related to these subjects. In
+                order to bring this probability closer to 100%, we assess the overlap from a number of books of this
+                connection between text reference and subject. These tags are combined to create a general database of
+                subjects of ancient texts. The database is thus based on existing expert-made indices, unified and
+                assisted by digital means.
+                The results for each search are divided into three: highly validated results, where the reference is
+                tagged with the subject in more than one book; validated results, where the reference is tagged with the
+                subject only in one book, but more than once; and non-validated results, where the reference is tagged
+                with the subject only once, in one book.
+                The database includes general subjects, ideas, names and places, almost all in English; the subjects are
+                the same you would find in a good subject index of a book.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<!--- This site .. (previous: Jumbotron) -->
+<span id="contact"></span>
 <div class="container-fluid">
     <div class="row jumbotron">
         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
-            <p class="lead">Match at a gas station<br>
-                On his first day working at the gas station, John watched a senior co-worker measure the level of
-                gasoline in the underground tanks by lowering a giant measuring stick down into them.
-                "What would happen if I threw a lit match into the hole?" John said as a joke.
-                "It would go out," the co-worker replied in a very factual manner.
-                "Really?" John asked, surprised to hear that. "Is there a lack of oxygen down there or some safety
-                device that would extinguish it before the fumes ignited?"
-                "No, the force from the explosion would blow out the match."
+            <p class="lead">This site attempts to provide full-text (in source language and English) for highly
+                validated
+                results. <br>Full texts for Hebrew Bible and rabbinic texts is kindly supplied by Sefaria; <br> Greek
+                and
+                Latin texts, supplied by Perseus Scaife, <br>The Quran, supplied by Tanzil.net.<br>
+                The site is part of a digital humanities research project investigating innovative methods for text
+                topic retrieval, conducted by Moshe Blidstein of the General History Department and the Haifa Center for
+                Mediterranean History and Daphne Raban, the Department of Information & Knowledge Management, both at
+                the University of Haifa.
+
             </p>
             <p class=" ">
-                HTML or HTML5?<br>
-                Guy 1 - 'How can you tell the difference between HTML and HTML5?'
-                Guy 2 - 'Open it in Internet Explorer'
-                Guy 1 - 'Ok'
-                Guy 2 - 'Did it work?'
-                Guy 1 - 'No'
-                Guy 2 - 'It's HTML5'
+                For information and suggestions, please contact mblidstei@univ.haifa.ac.il.
             </p>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-2">
             <a href="#">
-                <button type="button" class="btn btn-ouline-secondery btn-lg">other butt</button>
+                <button type="button" class="btn btn-ouline-secondery btn-lg btn-primary">Contact Us</button>
             </a>
         </div>
     </div>
 </div>
-<!--- Welcome Section -->
-<div class="container-fluid padding">
-    <div class="row welcome text-center">
-        <div class="col-12">
-            <h1 class="display-4">You Go Girl!!!</h1>
-        </div>
-        <hr> <!-- horizantal rule -->
-        <div class="col-12">
-            <p class="lead">
-                A HTML developer was walking down the street when he was greeted by a donkey.
-                "Hello Mr Programmer", the donkey said, "how are you?".
-                "mighty fine, thank you donkey", the HTML dev replied.
-                Immediately the donkey started crying.
-                "What's the matter little friend?" the HTML dev asked.
-                "I called you a programmer, at least you could call me horse" the donkey bawled.
-            </p>
-        </div>
-    </div>
-</div>
-<!--- Three Column Section -->
+
+
+<!--- Aknowledge, icons Section (previous: Three Column Section) -->
 <div class="container-fluid padding">
     <div class="row text-center padding">
         <div class="col-xs-12 col-sm-6 col-md-4">
-            <i class="fas fa-code"></i>
-            <h3>html5</h3>
-            <p> What did the HTML coding dog say?
-                Href Href!
+            <a href="https://www.sefaria.org.il/"><img src="../images/sefaria-logo.jpg" style="max-height: 8rem"/></a>
+            <h3>Sefaria</h3>
+            <p> some short description
             </p>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-4">
-            <i class="fas fa-bold"></i>
-            <h3>bootstrap</h3>
-            <p> I used to code a lot of HTML<br>
-                but now it's just some&lt;BODY&gt; that I used to know
+            <a href="https://scaife.perseus.org/"><img src="../images/scaife-logo.png" style="max-height: 8rem"/></a>
+            <h3>Scaife Viewer</h3>
+            <p> some short description
             </p>
         </div>
         <div class="col-sm-12 col-md-4">
-            <i class="fab fa-css3"></i>
-            <h3>bootstrap</h3>
-            <p> So Land O’Lakes got rid of the Native American on their package...<br>
-                ...But kept the land. Sounds oddly familiar.
+            <a href="http://tanzil.net/"><img src="../images/tanzil-logo.jpg" style="max-height: 8rem"/></a>
+            <h3>Tanzil.net</h3>
+            <p> some short description
             </p>
         </div>
     </div>
     <hr class="my-4">
 </div>
-<!--- Two Column Section -->
+
+
+<!--- Fixed background -->
+<figure>
+    <div class="fixed-wrap">
+        <div id="fixed" style="background-image: url('../images/lib-4-noncom-reuse.jpg')">
+            <!--            this stays empty so you can see the pages background, and feel like you're sliding over it-->
+        </div>
+    </div>
+</figure>
+<br>
+<br>
+<br>
+
+
+<!--- Note of caution Section (previous: Two Column Section) -->
 <div class="container-fluid padding">
     <div class="row padding">
-        <div class="col-lg-6">
+        <div class="col-lg-6" style="padding: 5em">
             <!--   should be the same as     <div class="col-md-12 col-lg-6">-->
             <h2>If you build it...</h2>
-            <h4>5 Russian Jokes about Vodka</h4>
-            <p>#1
-                A Gentleman comes to the shop and asked,
-                - Give me a bottle of vodka and a bottle of Coca-cola.
-                After Half an hour he comes again and asked again,
-                - Give me a bottle of vodka and a bottle of Coca-cola.
-                After one hour he comes again and asked to the shopkeeper>
-                - Give me a bottle of vodka and a bottle of... of Sprite. It seems Coca-cola makes me sick! :)
-            </p>
-            <p>
-                #2
-                A patient went to a doctor. Patient was suffering from insomnia, nervous breakdown and Depression. After
-                some checking the doctor said,
-                Doctor: This medicine is for insomnia, this one is for nervous break-down, and also take this one for
-                depression.
-                Patient: Thank you very much, doctor, but do you have any other medicine besides vodka?
-            </p>
-            <p>
-                #3
-                Tell us, what forces you to drink vodka every day?
-                - Nothing. I'm a volunteer.
-            </p>
-            <p>
-                #4
-                The Traffic police stops a car.
-                Policeman asked the man, Have you drunk vodka today?
-                Driver: No.
-                Policeman: Breathe into the tube... Well, no alcohol is detected... Maybe the tube is broken… (breathes
-                into the tube himself) No, it's working!
-            </p>
-            <p>
-                #5
-                Two Russian friends Went in a bar and ordered beer vodka.
-                One of them adds: - Make sure the mug glass is clean!
-                After a minute the waiter brings two beer mugs vodka glasses and asks: - Which of you ordered beer vodka
-                in a clean mug glass?
-            </p>
-            <br>
-            <a href="#" class="btn btn-primary">Learn more</a>
+            <h5>Note:</h5>
+            <p>The database is in its early stages of development, with many errors. Please use with caution. References
+                are to texts between the 8th century BCE and the 8th century CE.
+                The site is part of a digital humanities research project, conducted by Moshe Blidstein of the General
+                History Department and the Haifa Center for Mediterranean History and Daphne Raban, the Department of
+                Information & Knowledge Management, both at the University of Haifa. For information and suggestions,
+                please contact mblidstei@univ.haifa.ac.il.</p>
 
         </div>
-        <div class="col-lg-6">
-            <img class="img-fluid" src="https://assets.hongkiat.com/uploads/programming-jokes/joke-algorithm-is.jpg">
+        <div class="col-lg-6" style="padding: 5em">
+            <!--            <img class="img-fluid" src="https://assets.hongkiat.com/uploads/programming-jokes/joke-algorithm-is.jpg">-->
+            <h2><br></h2> <!--for alignment properties -->
+            <h5><br></h5>
+            <p>If you would like to receive updates on the development of the project, please enter your email and click
+                "submit":</p>
+            <a href="#" class="btn btn-primary">Submit</a>
+            <br><br>
+            <p>For more information, see About</p>
         </div>
     </div>
 </div>
 <hr class="my-4">
 
-<!--- Fixed background -->
-<figure>
-    <div class="fixed-wrap">
-        <div id="fixed">
-            <!--            this stays empty so you can see the pages background, and feel like you're sliding over it-->
+
+<!--- word graph Column Section -->
+<!--- Meet the team -->
+<div class="container-fluid padding">
+    <div class="row welcome text-center">
+        <div class="col-12">
+            <h1 class="display-4">word graph</h1>
+        </div>
+        <hr>
+    </div>
+</div>
+<!--<div class="container-fluid padding">-->
+
+<!--    <div class="row"><img src="http://tiresias.haifa.ac.il/static/large13.1.png" style="max-width: 90%; padding-left: 7em">-->
+<!--    </div>-->
+<!--</div>-->
+<!-- - Image Slider-->
+<h3>This is an image of the main subjects in the database.
+    Subjects are arranged by the number of references they share: subjects sharing many references are graphed close to
+    each other, while subjects sharing few references are far apart.
+    Colors show general clusters of subjects.
+    Download the image to view at greater resolution.</h3>
+<div id="slides" class="carousel slide" data-ride="carousel">
+    <ul class="carousel-indicators">
+        <li data-target="#slides" data-slide-to="0" class="active"></li>
+        <li data-target="#slides" data-slide-to="1"></li>
+        <li data-target="#slides" data-slide-to="2"></li>
+    </ul>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <!--            <img class="size-20" src="../images/bg-bluish.png"/>-->
+            <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
+                 style="max-width: 90%; padding-left: 7em"/>
+            <div class="carousel-caption">
+                <h1 class="display-2">Don't you love those word graphs?</h1>
+                <h3>This is an image of the main subjects in the database.
+                    Subjects are arranged by the number of references they share: subjects sharing many references are
+                    graphed close to each other, while subjects sharing few references are far apart.
+                    Colors show general clusters of subjects.
+                    Download the image to view at greater resolution.</h3>
+                <button type="button" class="btn">Analize</button>
+                <button type="button" class="btn btn-primary btm-lg">More</button>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <!--            <img src="../images/bg-dark-cream.png"/>-->
+            <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
+                 style="max-width: 90%; padding-left: 7em"/>
+        </div>
+        <div class="carousel-item">
+            <!--            <img src="../images/lib-1.jpg"/>-->
+            <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
+                 style="max-width: 90%; padding-left: 7em"/>
         </div>
     </div>
-</figure>
+</div>
+
+<!--- This site .. (previous: Jumbotron) -->
+<span id="contact"></span>
+<div class="container-fluid">
+    <div class="row jumbotron">
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
+            <p class="lead">This site attempts to provide full-text (in source language and English) for highly
+                validated
+                results. <br>Full texts for Hebrew Bible and rabbinic texts is kindly supplied by Sefaria; <br> Greek
+                and
+                Latin texts, supplied by Perseus Scaife, <br>The Quran, supplied by Tanzil.net.<br>
+                The site is part of a digital humanities research project investigating innovative methods for text
+                topic retrieval, conducted by Moshe Blidstein of the General History Department and the Haifa Center for
+                Mediterranean History and Daphne Raban, the Department of Information & Knowledge Management, both at
+                the University of Haifa.
+
+            </p>
+            <p class=" ">
+                For information and suggestions, please contact mblidstei@univ.haifa.ac.il.
+            </p>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-2">
+            <a href="#">
+                <button type="button" class="btn btn-ouline-secondery btn-lg btn-primary">Contact Us</button>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!--- Connect -->
+<div class="container-fluid padding">
+    <div class="row padding text-center">
+        <div class="col-12"><h2>Share</h2></div>
+        <div class="col-12 social padding">
+            <a href="https://www.facebook.com/sharer/sharer.php?u=Tiresias"><i class="fab fa-facebook"></i> </a>
+            <a href="#"><i class="fab fa-google-plus-g"></i> </a>
+            <a href="https://twitter.com/home?status=Tiresias"><i class="fab fa-twitter"></i> </a>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=Tiresias&amp;title=&amp;summary=&amp;source="><i
+                    class="fab fa-linkedin"></i> </a>
+        </div>
+
+    </div>
+</div>
+
+<!--- Footer -->
+<footer>
+    <div class="container-fluid padding">
+        <div class="row  text-center">
+            <div class="col-md-4">
+                <img src="../images/logo-hcmh.jpg" style="max-height: 12rem">
+                <!--                <img src="../images/logo-hcmh-pic-bg-clear.png" >-->
+            </div>
+            <div class="col-md-4">
+                <hr class="light">
+                <p>050-5050505</p>
+                <p>email@email.com</p>
+                <p>221 bakers st.</p>
+                <p>Ankh-Morpork</p>
+                <p>Disc World, 112357</p>
+            </div>
+            <div class="col-md-4">
+                <hr class="light">
+                <h5>Hours</h5>
+                <hr class="light">
+                <p>Days ending with Y: 4am-11pm</p>
+                <p>All the rest: That's funny...</p>
+                <p>(pun intended)</p>
+            </div>
+            <div class="col-12">
+                <hr class="light-100">
+                <h5>Created by Karina Ture, Dr. Moshe Blidstein and Prof. Dafna Raban</h5>
+            </div>
+        </div>
+    </div>
+</footer>
+
 
 <!--- Emoji Section -->
 <button class="fun" data-toggle="collapse" data-target="#emoji">CLICK FOR FUN</button>
@@ -279,6 +378,7 @@
         </div>
     </div>
 </div>
+
 
 <!--- Meet the team -->
 <div class="container-fluid padding">
@@ -393,58 +493,43 @@
 </div>
 <hr class="my-4">
 
-<!--- Connect -->
-<div class="container-fluid padding">
-    <div class="row padding text-center">
-        <div class="col-12"><h2>Connect</h2></div>
-        <div class="col-12 social padding">
-            <a href="#"><i class="fab fa-facebook"></i> </a>
-            <a href="#"><i class="fab fa-google-plus-g"></i> </a>
-            <a href="#"><i class="fab fa-twitter"></i> </a>
-            <a href="#"><i class="fab fa-youtube"></i> </a>
-            <a href="#"><i class="fab fa-instagram"></i> </a>
-        </div>
-
-    </div>
-</div>
-
-<!--- Footer -->
-<footer>
-    <div class="container-fluid padding">
-        <div class="row  text-center">
-            <div class="col-md-4">
-                <img src="../../bs4/img/w3newbie.png">
-                <hr class="light">
-                <p>050-5050505</p>
-                <p>email@email.com</p>
-                <p>221 bakers st.</p>
-                <p>Ankh-Morpork</p>
-                <p>Disc World, 112357</p>
-            </div>
-            <div class="col-md-4">
-                <hr class="light">
-                <h5>Hours</h5>
-                <hr class="light">
-                <p>Days ending with Y: 4am-11pm</p>
-                <p>All the rest: That's funny...</p>
-                <p>(pun intended)</p>
-            </div>
-            <div class="col-md-4">
-                <hr class="light">
-                <h5>Something Else</h5>
-                <hr class="light">
-                <p>Days ending with Y: 4am-11pm</p>
-                <p>All the rest: That's funny...</p>
-                <p>(pun intended)</p>
-            </div>
-            <div class="col-12">
-                <hr class="light-100">
-                <h5>&copy; w3newbie.com (He's a real champ! KT)</h5>
-            </div>
-        </div>
-    </div>
-</footer>
-
+<h4>5 Russian Jokes about Vodka</h4>
+<p>#1
+    A Gentleman comes to the shop and asked,
+    - Give me a bottle of vodka and a bottle of Coca-cola.
+    After Half an hour he comes again and asked again,
+    - Give me a bottle of vodka and a bottle of Coca-cola.
+    After one hour he comes again and asked to the shopkeeper>
+    - Give me a bottle of vodka and a bottle of... of Sprite. It seems Coca-cola makes me sick! :)
+</p>
+<p>
+    #2
+    A patient went to a doctor. Patient was suffering from insomnia, nervous breakdown and Depression. After
+    some checking the doctor said,
+    Doctor: This medicine is for insomnia, this one is for nervous break-down, and also take this one for
+    depression.
+    Patient: Thank you very much, doctor, but do you have any other medicine besides vodka?
+</p>
+<p>
+    #3
+    Tell us, what forces you to drink vodka every day?
+    - Nothing. I'm a volunteer.
+</p>
+<p>
+    #4
+    The Traffic police stops a car.
+    Policeman asked the man, Have you drunk vodka today?
+    Driver: No.
+    Policeman: Breathe into the tube... Well, no alcohol is detected... Maybe the tube is broken… (breathes
+    into the tube himself) No, it's working!
+</p>
+<p>
+    #5
+    Two Russian friends Went in a bar and ordered beer vodka.
+    One of them adds: - Make sure the mug glass is clean!
+    After a minute the waiter brings two beer mugs vodka glasses and asks: - Which of you ordered beer vodka
+    in a clean mug glass?
+</p>
 
 </body>
 </html>
@@ -456,10 +541,6 @@
 <!--</div>-->
 <!-- End View in Browser: Drew's #1 Trending YouTube Tutorial -->
 
+<p style="text-align: center">Many thanks to &copy; w3newbie.com (He's a real champ!)</p>
 
-<p>Jokes generated by AI at the University of Edinburgh<br>
-    I like my relationships like I like my source: Open.
-    I like my coffee like I like my war: Cold.
-    I like my boys like I like my sectors: Bad.
-</p>
 

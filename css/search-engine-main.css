@@ -483,8 +483,9 @@ legend {
 }
 
 .s01 form .inner-form {
-  background: var(--primary-color-dark);
+  /*background: var(--accent-color); !*KT*!*/
   /*background: rgba(0, 0, 0, 0.5);*/
+    background: var(--secondary-color-light);/*KT*/
   padding: 50px 47px;
   display: -ms-flexbox;
   display: flex;
@@ -503,7 +504,7 @@ legend {
 .s01 form .inner-form .input-field input {
   height: 100%;
   background: #fff;
-  /*background: var(--primary-color-light);*/
+  /*background: var(--secondary-color-light);!*KT*!*/
   border-radius: 1px;
   border: 0;
   display: block;
