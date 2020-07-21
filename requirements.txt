@@ -1,0 +1,17 @@
+flask
+# mysql-connector-python
+# should run these before 'pip install mysqlclient' :
+#   sudo apt-get install mysql-server
+#   sudo apt-get install libmysqlclient-dev
+mysqlclient
+# MySQLdb
+pymysql
+pandas
+numpy
+regex
+natsort
+requests
+datetime
+# PIL
+# Pillow
+Image

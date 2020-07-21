@@ -1,8 +1,10 @@
 
 :root {
     /* defining global vars */
-    --primary-color-light: #f0ece2;
-    --secondary-color-light: #dfd3c3;
+    --primary-color-light: #FCF46D;
+    --secondary-color-light: #FEFABA;
+    --accent-color: #6D75FC;
+
     --primary-color-dark: #596e79;
     --secondary-color-dark: #255873;
     --misc-color: #c7b198;
@@ -11,10 +13,11 @@
 
 body {
     /*background-color: var(--primary-color);*/
+    padding-top: 15em;
 }
 
-.bg-light {
-  background-color: var(--primary-color-light) !important;
+.bgn-light {
+    background-color: var(--secondary-color-light); /*!important;*/
 }
 
 /*todo consider changing*/
@@ -24,9 +27,10 @@ body {
 /*  background-color: #dae0e5 !important;*/
 /*}*/
 
-.bg-dark {
-  background-color: var(--primary-color-dark) !important;
+.bgn-dark {
+    background-color: var(--primary-color-light) /*!important;*/
 }
+
 /*todo consider changing*/
 /*a.bg-dark:hover, a.bg-dark:focus,*/
 /*button.bg-dark:hover,*/
@@ -48,3 +52,23 @@ body {
 /*  !*background: #aaa;*!*/
 /*}*/
 
+
+/* Create a sticky/fixed navbar */
+.navbar {
+    /*overflow: hidden;*/
+    padding: 30px 10px 30px 10px; /* Large padding which will shrink on scroll (using JS) */
+    transition: 0.2s; /* Adds a transition effect when the padding is decreased */
+    position: fixed; /* Sticky/fixed navbar */
+    width: 100%;
+    top: 0; /* At the top */
+    z-index: 99;
+    text-align: left;
+}
+
+/* Style the logo */
+.navbar .logo {
+    max-height: 15em;
+    /*font-size: 35px;*/
+    /*font-weight: bold;*/
+    transition: 0.2s;
+}
