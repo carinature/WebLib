@@ -194,6 +194,28 @@ hr.light-100 {
         font-size: 2.5em;
         padding: 1.2rem;
     }
+
+
+    #logo{ /*KT*/
+        /*max-height: 5em;*/
+        /*max-width: 10%;*/
+        /*max-height: 10%;*/
+        height: 5em;
+        /*height: auto\9;*/
+            transition: 0.2s;
+        /*display: none;*/
+  display: block;
+
+
+    }
+
+    #title{/*KT*/
+        font-size: 1rem;
+    }
+
+    #subtitle{/*KT*/
+        font-size: 0.75rem;
+    }
 }
 
 @media (max-width: 576px) {
@@ -226,9 +248,25 @@ hr.light-100 {
         font-size: 2em;
         padding: .7rem;
     }
-    .logo{
-        max-height: 5em;
-            /*transition: 0.2s;*/
+
+    #logo{ /*KT*/
+        /*max-height: 5em;*/
+        /*max-width: 10%;*/
+        /*max-height: 10%;*/
+        /*!*height: 10%;*!*/
+        /*height: auto\9;*/
+        /*    transition: 0.2s;*/
+        display: none;
+    }
+
+    #title{/*KT*/
+        /*font-size: 1rem;*/
+        margin-left: 2rem;
+    }
+
+    #subtitle{/*KT*/
+        font-size: 1rem;
+                margin-left: 2rem;
 
     }
 }
