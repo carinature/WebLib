@@ -17,7 +17,7 @@ function scrollFunction() {
         // logo.style.width = "5em";
 
         title.style.padding = "5px 10px 5px 10px";
-        document.getElementById("title").style.fontSize = "1em";
+        document.getElementById("navbar-title").style.fontSize = "1em";
         // document.getElementById("subtitle").style.fontSize = "1em"; todo should be smaller?
 
     } else {
@@ -29,7 +29,7 @@ function scrollFunction() {
         // logo.style.width = "10em";
 
         title.style.padding = "30px 10px 10px 10px";
-        document.getElementById("title").style.fontSize = "2em";
+        document.getElementById("navbar-title").style.fontSize = "2em";
         // document.getElementById("subtitle").style.fontSize = "1em"; todo should be smaller?
     }
 }

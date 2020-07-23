@@ -164,6 +164,18 @@ hr.light-100 {
         font-size: 4em;
         padding: 2rem;
     }
+
+    #navbar-title { /*KT*/
+        font-size: 3rem;
+        padding-left: 3rem;
+        transition: 400ms;
+    }
+
+    #navbar-subtitle { /*KT*/
+        /*font-size: 0.75rem;*/
+        display: none;
+        transition: 400ms;
+    }
 }
 
 @media (max-width: 768px) {
@@ -196,25 +208,29 @@ hr.light-100 {
     }
 
 
-    #logo{ /*KT*/
+    #logo { /*KT*/
         /*max-height: 5em;*/
         /*max-width: 10%;*/
         /*max-height: 10%;*/
         height: 5em;
         /*height: auto\9;*/
-            transition: 0.2s;
+        transition: 0.2s;
         /*display: none;*/
-  display: block;
-
-
+        display: block;
+        transition: 400ms;
     }
 
-    #title{/*KT*/
-        font-size: 1rem;
+    #navbar-title { /*KT*/
+        font-size: 3rem;
+        padding-left: 3rem;
+        transition: 400ms;
     }
 
-    #subtitle{/*KT*/
-        font-size: 0.75rem;
+    #navbar-subtitle { /*KT*/
+        /*font-size: 0.75rem;*/
+        display: none;
+        transition: 400ms;
+
     }
 }
 
@@ -249,7 +265,7 @@ hr.light-100 {
         padding: .7rem;
     }
 
-    #logo{ /*KT*/
+    #logo { /*KT*/
         /*max-height: 5em;*/
         /*max-width: 10%;*/
         /*max-height: 10%;*/
@@ -257,16 +273,19 @@ hr.light-100 {
         /*height: auto\9;*/
         /*    transition: 0.2s;*/
         display: none;
+        transition: 400ms;
     }
 
-    #title{/*KT*/
+    #navbar-title { /*KT*/
+        font-size: 3rem;
+        margin-left: 3rem;
+    }
+
+    #navbar-subtitle { /*KT*/
         /*font-size: 1rem;*/
-        margin-left: 2rem;
-    }
-
-    #subtitle{/*KT*/
-        font-size: 1rem;
-                margin-left: 2rem;
+        /*margin-left: 1rem;*/
+        /*!*display: inline;*!*/
+        /*transition: 400ms;*/
 
     }
 }

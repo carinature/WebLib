@@ -14,12 +14,15 @@ function get_joke_of_the_day() {
 
 function search_button_function() {
     console.log("search-button");
-    let anchor = document.getElementById("action-area");
+    // let anchor = document.getElementById("action-area");
     // console.log(anchor);
-    let htmlelem = "<h1>htmlelem</h1>";
-    anchor.insertAdjacentHTML("afterend", htmlelem);
-    let elem = document.createElement('h2');
-    elem = anchor.insertAdjacentElement("afterend", elem);
-    elem.textContent = 'pipi';
+    // let htmlelem = "<h1>htmlelem</h1>";
+    // anchor.insertAdjacentHTML("afterend", htmlelem);
+    // let elem = document.createElement('h2');
+    // elem = anchor.insertAdjacentElement("afterend", elem);
+    // elem.textContent = 'pipi';
+
+      location.replace("../html/search-results.html")
+
 }
 
