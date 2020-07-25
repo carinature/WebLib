@@ -33,8 +33,130 @@
     <link href="../css/search-engine-main.css" rel="stylesheet"/>
     <link href="../css/bs4-style.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
+
+
+    <style>/* Dropdown Button */
+    .dropbtn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Dropdown button on hover & focus */
+    .dropbtn:hover, .dropbtn:focus {
+        background-color: #3e8e41;
+    }
+
+    /* The search field */
+    #myInput {
+        box-sizing: border-box;
+        /*background-image: url('searchicon.png');*/
+        background-position: 14px 12px;
+        background-repeat: no-repeat;
+        font-size: 16px;
+        padding: 14px 20px 12px 45px;
+        border: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* The search field when it gets focus/clicked on */
+    #myInput:focus {
+        outline: 3px solid #ddd;
+    }
+
+    /* The container <div> - needed to position the dropdown content */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    /* Dropdown Content (Hidden by Default) */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f6f6f6;
+        min-width: 230px;
+        border: 1px solid #ddd;
+        z-index: 1;
+        /*right: 0;*//*may be good in case of hebrew content, or if for some reason you want the button to appear on the right corner of it's corner*/
+
+    }
+
+    /* Links inside the dropdown */
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    /* Change color of dropdown links on hover */
+    .dropdown-content a:hover {
+        background-color: #f1f1f1
+    }
+
+    /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+    .show {
+        display: block;
+    }</style>
+
+    <script>
+        /* When the user clicks on the button,
+        toggle between hiding and showing the dropdown content */
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        function filterFunction() {
+            var input, filter, ul, li, a, i;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            div = document.getElementById("myDropdown");
+            a = div.getElementsByTagName("a");
+            for (i = 0; i < a.length; i++) {
+                txtValue = a[i].textContent || a[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    a[i].style.display = "";
+                } else {
+                    a[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+
+
 </head>
 <body>
+
+<!--<div class="s01">-->
+
+
+<!--    <label for="cars">Choose a car:</label>-->
+
+<!--    <select name="cars" id="cars">-->
+<!--        <option value="volvo">Volvo</option>-->
+<!--        <option value="saab">Saab</option>-->
+<!--        <option value="mercedes">Mercedes</option>-->
+<!--        <option value="audi">Audi</option>-->
+<!--    </select>-->
+
+<!--    <div class="dropdown">-->
+<!--        <button onclick="myFunction()" class="dropbtn">Any Century</button>-->
+<!--        <div id="myDropdown" class="dropdown-content">-->
+<!--            <label for="myInput"> Just pick one</label> <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">-->
+<!--            <<a href="#about">About</a>-->
+<!--            <<a href="#base">Base</a>-->
+<!--            <<a href="#blog">Blog</a>-->
+<!--            <<a href="#contact">Contact</a>-->
+<!--            <<a href="#custom">Custom</a>-->
+<!--            <<a href="#support">Support</a>-->
+<!--            <<a href="#tools">Tools</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-md navbar-light bgn-light sticky-top">
@@ -68,19 +190,12 @@
 <br>
 
 <!--Filtering-->
-<!--the button-->
-<!--<div class="s01">-->
-<!--    &lt;!&ndash;    <button class="btn btn-primary" data-toggle="collapse" data-target="#search-ref"&ndash;&gt;-->
-<!--    &lt;!&ndash;                style="padding: 0 15rem 0 15rem; ">&ndash;&gt;-->
-<!--    <button data-toggle="collapse" data-target="#search-ref">-->
-<!--        <h1>filter</h1>-->
-<!--    </button>-->
-<!--</div>-->
 
-<!--<div class="s01">-->
+<!--subject and century options-->
+<!--the button-->
 <button class="fun s01 btn-primary" data-toggle="collapse" data-target="#filtering">CLICK FOR FUN</button>
 <div class="s01">    <!-- s01 should appear in a parent element of collapse so it would use the correct css rule -->
-    <!--todo instead of relying on exsiting consider just making your own class for this case-->
+    <!--todo instead of relying on existing consider just making your own class for this case-->
     <div id="filtering" class="collapse ">
         <form class="">
             <div class="container-fluid padding ">
@@ -89,10 +204,39 @@
                     <div class="col-sm-12 col-md-6 ">
                         <label for="include">Including: <input id="include" type="text" placeholder="Subject"> </label>
                         <label for="exclude">Excluding: <input id="exclude" type="text" placeholder="Subject"> </label>
-                        <img class="gif" src="../../bs4/img/gif/panda.gif" alt="panda gif"/>
+                        <!--                        <img class="gif" src="../../bs4/img/gif/panda.gif" alt="panda gif"/>-->
                     </div>
                     <div class="col-sm-12 col-md-6">
-                        <img class="gif" src="../../bs4/img/gif/chicken.gif" alt="chicken gif"/></div>
+                        <!--from centurry-->
+                        <label>From: <input list="from-century-dl" name="browser" placeholder="Any Century"></label>
+                        <datalist id="from-century-dl">
+                            <option value="Internet Explorer">
+                            <option value="Firefox">
+                            <option value="Chrome">
+                            <option value="Opera">
+                            <option value="Safari">
+                        </datalist>
+                        <!--to centurry-->
+                        <label>To: <input list="to-century-dl" name="browser" placeholder="Any Century"></label>
+                        <datalist id="to-century-dl">
+                            <option value="Internet Explorer">
+                            <option value="Firefox">
+                            <option value="Chrome">
+                            <option value="Opera">
+                            <option value="Safari">
+                        </datalist>
+                        <!-- Language-->
+                        <label>Language: <input list="language-dl" name="browser" placeholder="All"></label>
+                        <datalist id="language-dl">
+                            <option value="Internet Explorer">
+                            <option value="Firefox">
+                            <option value="Chrome">
+                            <option value="Opera">
+                            <option value="Safari">
+                        </datalist>
+
+                        <!--                        <img class="gif" src="../../bs4/img/gif/chicken.gif" alt="chicken gif"/>-->
+                    </div>
                     <!--                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/unicorn.gif" alt="unicorn gif"/></div>-->
                     <!--                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/poo.gif" alt="poo gif"/></div>-->
                 </div>
@@ -102,6 +246,7 @@
     </div>
 </div>
 
+<!--attempt to fetch all-->
 
 <!--&lt;!&ndash;- search by reference HIDDEN Section &ndash;&gt;-->
 <!--<div id="search-ref" class="collapse">-->
