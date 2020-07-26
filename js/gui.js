@@ -36,9 +36,10 @@ function scrollFunction() {
 
 
 function ShowHideDiv() {
-        var chkYes = document.getElementById("chkYes");
-        var search_subject = document.getElementById("search-subject");
-        var search_ref = document.getElementById("search-ref");
-        search_subject.style.display = chkYes.checked ? "block" : "none";
-        search_ref.style.display = chkYes.checked ? "none" : "block";
-    }
+    var chkYes = document.getElementById("chkYes");
+    var search_subject = document.getElementById("search-subject");
+    var search_ref = document.getElementById("search-ref");
+    search_subject.style.display = chkYes.checked ? "block" : "none";
+    search_ref.style.display = chkYes.checked ? "none" : "block";
+}
+
