@@ -204,8 +204,7 @@
 <!--hidden filtering section-->
 <div class="s01">    <!-- s01 should appear in a parent element of collapse, so it would use the correct css rule for form-->
     <!--todo instead of relying on existing consider just making your own class for this case-->
-    <!--    <div id="filtering" class="collapse ">-->
-    <div>
+    <div id="filtering" class="collapse ">
         <form class="">
             <div class="container-fluid padding ">
                 <!--            <div class="row text-center ">--> <!--todo dont delete this yet-->
@@ -289,6 +288,7 @@
                             <input id="ancient-reference" type="text"
                                    placeholder=" (e.g., 1.1 for chapter 1 verse 1, or leave empty for whole work)"></label>
                         <br><br><br><br><br><br>
+                        <br><br><br>
                         <!--                        <form>-->
                         <div class="custom-control custom-switch" style="text-align: left">
                             <input type="checkbox" class="custom-control-input" id="switch">
@@ -302,6 +302,13 @@
                 </div>
                 <!--            </div>-->
             </div>
+
+        </form>
+    </div>
+</div>
+<button type="button" class=" btn btn-ouline-secondery btn-lg btn-primary" style="float: right; margin-right: 5%"
+                    onclick="alert('Fetching Data...')">Fetch
+            </button>
             <div class="form-group padding" style="margin-left: 5%">
                 <div class="custom-control custom-switch" style="text-align: left">
                     <input type="checkbox" class="custom-control-input" id="checkAll">
@@ -318,14 +325,46 @@
                 <div class="custom-control custom-switch" style="text-align: left">
                     <input type="checkbox" class="custom-control-input" id="filter-opt2">
                     <label class="custom-control-label padding" for="filter-opt2">
-                        Option 1<br>
+                        Option 2<br>
+                    </label>
+                </div>
+                <div class="custom-control custom-switch" style="text-align: left">
+                    <input type="checkbox" class="custom-control-input" id="filter-opt3">
+                    <label class="custom-control-label padding" for="filter-opt3">
+                        Option 3<br>
+                    </label>
+                </div>
+                <div class="custom-control custom-switch" style="text-align: left">
+                    <input type="checkbox" class="custom-control-input" id="filter-opt4">
+                    <label class="custom-control-label padding" for="filter-opt4">
+                        Option 4<br>
+                    </label>
+                </div>
+                <div class="custom-control custom-switch" style="text-align: left">
+                    <input type="checkbox" class="custom-control-input" id="filter-opt5">
+                    <label class="custom-control-label padding" for="filter-opt5">
+                        Option 5<br>
+                    </label>
+                </div>
+                <div class="custom-control custom-switch" style="text-align: left">
+                    <input type="checkbox" class="custom-control-input" id="filter-opt6">
+                    <label class="custom-control-label padding" for="filter-opt6">
+                        Option 6<br>
+                    </label>
+                </div>
+                <div class="custom-control custom-switch" style="text-align: left">
+                    <input type="checkbox" class="custom-control-input" id="filter-opt7">
+                    <label class="custom-control-label padding" for="filter-opt7">
+                        Option 7<br>
+                    </label>
+                </div>
+                <div class="custom-control custom-switch" style="text-align: left">
+                    <input type="checkbox" class="custom-control-input" id="filter-opt8">
+                    <label class="custom-control-label padding" for="filter-opt8">
+                        Option 8<br>
                     </label>
                 </div>
             </div>
-        </form>
-    </div>
-</div>
-
 <!--attempt to fetch all-->
 
 <!--&lt;!&ndash;- search by reference HIDDEN Section &ndash;&gt;-->
