@@ -13,11 +13,11 @@ function scrollFunction() {
 
         // logo.style.padding = "5px 10px 5px 10px";
         // logo.style.margin = "5px 10px 5px 10px";
-        logo.style.height = "5em";
+        logo.style.height = "7.5rem";
         // logo.style.width = "5em";
-
+        logo.style.margin = "10px";
         title.style.padding = "5px 10px 5px 10px";
-        document.getElementById("navbar-title").style.fontSize = "1em";
+        // document.getElementById("navbar-title").style.fontSize = "1em";
         // document.getElementById("subtitle").style.fontSize = "1em"; todo should be smaller?
 
     } else {
@@ -25,11 +25,11 @@ function scrollFunction() {
 
         // logo.style.padding = "30px 10px 30px 10px";
         // logo.style.margin = "30px 10px 30px 10px";
-        logo.style.height = "10em";
+        logo.style.height = "10rem";
         // logo.style.width = "10em";
 
         title.style.padding = "30px 10px 10px 10px";
-        document.getElementById("navbar-title").style.fontSize = "2em";
+        // document.getElementById("navbar-title").style.fontSize = "2em";
         // document.getElementById("subtitle").style.fontSize = "1em"; todo should be smaller?
     }
 }
@@ -42,4 +42,3 @@ function ShowHideDiv() {
     search_subject.style.display = chkYes.checked ? "block" : "none";
     search_ref.style.display = chkYes.checked ? "none" : "block";
 }
-

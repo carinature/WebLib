@@ -7,33 +7,33 @@
     <meta name="author" content="Karina">
 
     <!--    bootstrap related scripts -->
-    <script src="../js/jquery-3.5.1.min.js"></script>
-    <script src="../js/popper.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <!--    for extra fonts and icons  -->
     <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 
     <!--    your own scripts  -->
-    <script src="../js/gui.js"></script>
+    <script src="js/gui.js"></script>
 
 
     <!--    bootstrap related stylesheets -->
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <!--    your stylesheets  -->
-    <link href="../css/search-engine-main.css" rel="stylesheet"/>
-    <link href="../css/bs4-style.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="css/search-engine-main.css" rel="stylesheet"/>
+    <link href="css/bs4-style.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
 </head>
 
 <body>
 <!-- Navigation -->
 <nav class="navbar navbar-expand-md navbar-light bgn-light sticky-top">
-    <div class="container-fluid">
+    <div class="container-fluid" style="max-height: 8rem">
         <a class="navbar-brand" href="#">
             <div class="row">
-                <img class="img-fluid " id="logo" src="../images/logo-hcmh-pic-bg-clear.png"
+                <img class="img-fluid " id="logo" src="images/logo-hcmh-pic-bg-clear.png"
                      style="max-height: 10rem" alt="h.c.m.h logo">
                 <div class="navbar-title">
                     <h1 id="navbar-title"><b>Tiresias</b></h1>
@@ -50,8 +50,8 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="book-indices.html">Bibliography</a></li>
-            <li class="nav-item"><a class="nav-link" href="subject-list.html">Sources</a></li>
+            <li class="nav-item"><a class="nav-link" href="html/book-indices.html">Sources</a></li>
+            <li class="nav-item"><a class="nav-link" href="html/subject-list.html">Subjects</a></li>
             <li class="nav-item"><a class="nav-link" href="#contact">Connect</a></li>
         </ul>
     </div>
@@ -76,7 +76,7 @@
         <label for="chkNo" style="vertical-align: middle; font-size: 1.5em">Search by Reference</label>
     </span>
 </div>
-
+<br><br>
 
 <!-- search form -->
 <div class="row" id="search-subject">
@@ -98,9 +98,7 @@
             </div>
         </form>
     </div>
-
 </div>
-
 
 <!--- search by reference HIDDEN Section -->
 <!--<div id="search-ref" class="collapse">-->
@@ -127,12 +125,13 @@
         </form>
     </div>
     <div class="s01 padding">
-        <h5>If you have a specific reference to ancient text, enter it here to receive a list of subjects relevant to
+        <p class="lead" style="color: var(--accent-color);">If you have a specific reference to ancient text, enter it here to
+            receive a list of subjects relevant to
             it.<br>
             Most author/title styles are accepted. for reference style, please use arabic numerals separated by a
             period:<br>
             e.g., 1.5 for book 1, line 5 (or chapter 1, verse 5).<br>
-            Leave reference box empty to search for a whole book.</h5>
+            Leave reference box empty to search for a whole book.</p>
     </div>
 </div>
 <br><br><br>
@@ -151,7 +150,8 @@
                 texts according to topic, mostly on religion, c. -800 BCE to 800 CE in the Mediterranean area. In some
                 cases, direct access to full text is also available. Topic tagging is based on existing subject indices
                 from scholarly books, allowing highly detailed topic resolution. The site is in development, and
-                currently includes 4,671,592 keyed to 53,097 subjects.
+                currently includes 4,671,592 keyed to 53,097 subjects.</p>
+            <p class="lead collapse-p">
                 The construction of the database is based on the following method. Many research volumes in ancient
                 history are published with two indices: one for subjects, topics or terms, and one for ancient text
                 references (the latter is also known as an index locorum). Using these indices, each page of the indexed
@@ -160,23 +160,25 @@
                 order to bring this probability closer to 100%, we assess the overlap from a number of books of this
                 connection between text reference and subject. These tags are combined to create a general database of
                 subjects of ancient texts. The database is thus based on existing expert-made indices, unified and
-                assisted by digital means.
+                assisted by digital means.</p>
+            <p class="lead collapse-p">
                 The results for each search are divided into three: highly validated results, where the reference is
                 tagged with the subject in more than one book; validated results, where the reference is tagged with the
                 subject only in one book, but more than once; and non-validated results, where the reference is tagged
-                with the subject only once, in one book.
+                with the subject only once, in one book.</p>
+            <p class="lead collapse-p">
                 The database includes general subjects, ideas, names and places, almost all in English; the subjects are
                 the same you would find in a good subject index of a book.
             </p>
         </div>
     </div>
+    <span id="contact"><br><br></span>
 </div>
 
 
 <!--- This site .. (previous: Jumbotron) -->
-<span id="contact"><br><br><br><br><br><br><br><br></span>
 <div class="container-fluid">
-    <div class="row jumbotron">
+    <div class="row jumbotron" style="padding: 5%">
         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10"><br>
             <p class="lead">This site attempts to provide full-text (in source language and English) for highly
                 validated
@@ -194,9 +196,11 @@
             </p>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-2"><br><br>
-            <a href="#">
-                <button type="button" class="btn btn-ouline-secondery btn-lg btn-primary">Contact Us</button>
-            </a>
+            <!--            <a href="#" class="s01">-->
+            <button type="button" class="s01 btn btn-ouline-secondery btn-lg btn-primary"
+                    onclick="alert('More Details at the bottom of the page')">Contact Us
+            </button>
+            <!--            </a>-->
         </div>
     </div>
 </div>
@@ -206,19 +210,19 @@
 <div class="container-fluid padding"><br><br>
     <div class="row text-center padding">
         <div class="col-xs-12 col-sm-6 col-md-4">
-            <a href="https://www.sefaria.org.il/"><img src="../images/sefaria-logo.jpg" style="max-height: 8rem"/></a>
+            <a href="https://www.sefaria.org.il/"><img src="images/sefaria-logo.jpg" style="max-height: 8rem"/></a>
             <h3>Sefaria</h3>
             <p> some short description
             </p>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-4">
-            <a href="https://scaife.perseus.org/"><img src="../images/scaife-logo.png" style="max-height: 8rem"/></a>
+            <a href="https://scaife.perseus.org/"><img src="images/scaife-logo.png" style="max-height: 8rem"/></a>
             <h3>Scaife Viewer</h3>
             <p> some short description
             </p>
         </div>
         <div class="col-sm-12 col-md-4">
-            <a href="http://tanzil.net/"><img src="../images/tanzil-logo.jpg" style="max-height: 8rem"/></a>
+            <a href="http://tanzil.net/"><img src="images/tanzil-logo.jpg" style="max-height: 8rem"/></a>
             <h3>Tanzil.net</h3>
             <p> some short description
             </p>
@@ -231,7 +235,7 @@
 <!--- Fixed background -->
 <figure>
     <div class="fixed-wrap">
-        <div id="fixed" style="background-image: url('../images/lib-4-noncom-reuse.jpg')">
+        <div id="fixed" style="background-image: url('images/lib-4-noncom-reuse.jpg')">
             <!--            this stays empty so you can see the pages background, and feel like you're sliding over it-->
         </div>
     </div>
@@ -262,7 +266,9 @@
             <h5><br></h5>
             <p>If you would like to receive updates on the development of the project, please enter your email and click
                 "submit":</p>
-            <a href="#" class="btn btn-primary">Submit</a>
+            <label for="user-email">Email Address:</label><br>
+            <input type="text" id="user-email" name="user-email" value="username@email.edu"><br><br>
+            <a href="#" class="btn btn-primary" onclick="alert('This feature is TBD (KarinaT)')">Submit</a>
             <br><br>
             <p>For more information, see About</p>
         </div>
@@ -272,7 +278,6 @@
 
 
 <!--- word graph Column Section -->
-<!--- Meet the team -->
 <div class="container-fluid padding">
     <div class="row welcome text-center">
         <div class="col-12">
@@ -304,29 +309,32 @@
     <div class="carousel-inner">
         <div class="carousel-item active">
             <!--            <img class="size-20" src="../images/bg-bluish.png"/>-->
-            <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
-                 style="max-width: 90%; padding-left: 7em"/>
+            <a target="_blank" href="http://tiresias.haifa.ac.il/static/large13.1.png">
+                <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
+                     style="max-width: 90%; padding-left: 7em"/></a>
             <div class="carousel-caption">
-                <h1 class="display-2">Don't you love those word graphs?</h1>
-                <h3>This is an image of the main subjects in the database.
+                <h1 class="display-2">This is an image of the main subjects in the database.</h1>
+                <h3>
                     Subjects are arranged by the number of references they share: subjects sharing many references are
                     graphed close to each other, while subjects sharing few references are far apart.
                     Colors show general clusters of subjects.
                     Download the image to view at greater resolution.</h3>
-                <button type="button" class="btn">Analize</button>
+                <button type="button" class="btn">Analise</button>
                 <button type="button" class="btn btn-primary btm-lg">More</button>
             </div>
         </div>
 
         <div class="carousel-item">
             <!--            <img src="../images/bg-dark-cream.png"/>-->
-            <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
-                 style="max-width: 90%; padding-left: 7em"/>
+            <a target="_blank" href="http://tiresias.haifa.ac.il/static/large13.1.png">
+                <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
+                     style="max-width: 90%; padding-left: 7em"/></a>
         </div>
         <div class="carousel-item">
             <!--            <img src="../images/lib-1.jpg"/>-->
-            <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
-                 style="max-width: 90%; padding-left: 7em"/>
+            <a target="_blank" href="http://tiresias.haifa.ac.il/static/large13.1.png">
+                <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
+                     style="max-width: 90%; padding-left: 7em"/></a>
         </div>
     </div>
 </div>
@@ -347,10 +355,10 @@
 
 <!--- Footer -->
 <footer>
-    <div class="container-fluid padding">
-        <div class="row  text-center">
+    <div class="container-fluid padding" style="width: 100%">
+        <div class="row text-center">
             <div class="col-md-4">
-                <img src="../images/logo-hcmh.jpg" style="max-height: 12rem">
+                <img src="images/logo-hcmh.jpg" style="max-height: 10rem">
                 <!--                <img src="../images/logo-hcmh-pic-bg-clear.png" >-->
             </div>
             <div class="col-md-4">
@@ -384,13 +392,13 @@
     <div class="container-fluid padding">
         <div class="row text-center">
             <div class="row text-center">
-                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/panda.gif" alt="panda gif"/>
+                <div class="col-sm-6 col-md-3"><img class="gif" src="../bs4/img/gif/panda.gif" alt="panda gif"/>
                 </div>
-                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/chicken.gif" alt="chicken gif"/>
+                <div class="col-sm-6 col-md-3"><img class="gif" src="../bs4/img/gif/chicken.gif" alt="chicken gif"/>
                 </div>
-                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/unicorn.gif" alt="unicorn gif"/>
+                <div class="col-sm-6 col-md-3"><img class="gif" src="../bs4/img/gif/unicorn.gif" alt="unicorn gif"/>
                 </div>
-                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/poo.gif" alt="poo gif"/></div>
+                <div class="col-sm-6 col-md-3"><img class="gif" src="../bs4/img/gif/poo.gif" alt="poo gif"/></div>
 
 
             </div>
@@ -550,7 +558,7 @@
 <!--    After a minute the waiter brings two beer mugs vodka glasses and asks: - Which of you ordered beer vodka-->
 <!--    in a clean mug glass?-->
 <!--</p>-->
-    <script src="../js/script.js"></script>
+<script src="js/script.js"></script>
 
 </body>
 </html>

@@ -35,97 +35,97 @@
     <link href="../css/style.css" rel="stylesheet">
 
 
-    <style>/* Dropdown Button */
-    .dropbtn {
-        background-color: #4CAF50;
-        color: white;
-        padding: 16px;
-        font-size: 16px;
-        border: none;
-        cursor: pointer;
-    }
+    <!--    <style>/* Dropdown Button */-->
+    <!--    .dropbtn {-->
+    <!--        background-color: #4CAF50;-->
+    <!--        color: white;-->
+    <!--        padding: 16px;-->
+    <!--        font-size: 16px;-->
+    <!--        border: none;-->
+    <!--        cursor: pointer;-->
+    <!--    }-->
 
-    /* Dropdown button on hover & focus */
-    .dropbtn:hover, .dropbtn:focus {
-        background-color: #3e8e41;
-    }
+    <!--    /* Dropdown button on hover & focus */-->
+    <!--    .dropbtn:hover, .dropbtn:focus {-->
+    <!--        background-color: #3e8e41;-->
+    <!--    }-->
 
-    /* The search field */
-    #myInput {
-        box-sizing: border-box;
-        /*background-image: url('searchicon.png');*/
-        background-position: 14px 12px;
-        background-repeat: no-repeat;
-        font-size: 16px;
-        padding: 14px 20px 12px 45px;
-        border: none;
-        border-bottom: 1px solid #ddd;
-    }
+    <!--    /* The search field */-->
+    <!--    #myInput {-->
+    <!--        box-sizing: border-box;-->
+    <!--        /*background-image: url('searchicon.png');*/-->
+    <!--        background-position: 14px 12px;-->
+    <!--        background-repeat: no-repeat;-->
+    <!--        font-size: 16px;-->
+    <!--        padding: 14px 20px 12px 45px;-->
+    <!--        border: none;-->
+    <!--        border-bottom: 1px solid #ddd;-->
+    <!--    }-->
 
-    /* The search field when it gets focus/clicked on */
-    #myInput:focus {
-        outline: 3px solid #ddd;
-    }
+    <!--    /* The search field when it gets focus/clicked on */-->
+    <!--    #myInput:focus {-->
+    <!--        outline: 3px solid #ddd;-->
+    <!--    }-->
 
-    /* The container <div> - needed to position the dropdown content */
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
+    <!--    /* The container <div> - needed to position the dropdown content */-->
+    <!--    .dropdown {-->
+    <!--        position: relative;-->
+    <!--        display: inline-block;-->
+    <!--    }-->
 
-    /* Dropdown Content (Hidden by Default) */
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f6f6f6;
-        min-width: 230px;
-        border: 1px solid #ddd;
-        z-index: 1;
-        /*right: 0;*//*may be good in case of hebrew content, or if for some reason you want the button to appear on the right corner of it's corner*/
+    <!--    /* Dropdown Content (Hidden by Default) */-->
+    <!--    .dropdown-content {-->
+    <!--        display: none;-->
+    <!--        position: absolute;-->
+    <!--        background-color: #f6f6f6;-->
+    <!--        min-width: 230px;-->
+    <!--        border: 1px solid #ddd;-->
+    <!--        z-index: 1;-->
+    <!--        /*right: 0;*//*may be good in case of hebrew content, or if for some reason you want the button to appear on the right corner of it's corner*/-->
 
-    }
+    <!--    }-->
 
-    /* Links inside the dropdown */
-    .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-    }
+    <!--    /* Links inside the dropdown */-->
+    <!--    .dropdown-content a {-->
+    <!--        color: black;-->
+    <!--        padding: 12px 16px;-->
+    <!--        text-decoration: none;-->
+    <!--        display: block;-->
+    <!--    }-->
 
-    /* Change color of dropdown links on hover */
-    .dropdown-content a:hover {
-        background-color: #f1f1f1
-    }
+    <!--    /* Change color of dropdown links on hover */-->
+    <!--    .dropdown-content a:hover {-->
+    <!--        background-color: #f1f1f1-->
+    <!--    }-->
 
-    /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-    .show {
-        display: block;
-    }</style>
+    <!--    /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */-->
+    <!--    .show {-->
+    <!--        display: block;-->
+    <!--    }</style>-->
 
-    <script>
-        /* When the user clicks on the button,
-        toggle between hiding and showing the dropdown content */
-        function myFunction() {
-            document.getElementById("myDropdown").classList.toggle("show");
-        }
+    <!--    <script>-->
+    <!--        /* When the user clicks on the button,-->
+    <!--        toggle between hiding and showing the dropdown content */-->
+    <!--        function myFunction() {-->
+    <!--            document.getElementById("myDropdown").classList.toggle("show");-->
+    <!--        }-->
 
-        function filterFunction() {
-            var input, filter, ul, li, a, i;
-            input = document.getElementById("myInput");
-            filter = input.value.toUpperCase();
-            div = document.getElementById("myDropdown");
-            a = div.getElementsByTagName("a");
-            for (i = 0; i < a.length; i++) {
-                txtValue = a[i].textContent || a[i].innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    a[i].style.display = "";
-                } else {
-                    a[i].style.display = "none";
-                }
-            }
-        }
-    </script>
+    <!--        function filterFunction() {-->
+    <!--            var input, filter, ul, li, a, i;-->
+    <!--            input = document.getElementById("myInput");-->
+    <!--            filter = input.value.toUpperCase();-->
+    <!--            div = document.getElementById("myDropdown");-->
+    <!--            a = div.getElementsByTagName("a");-->
+    <!--            for (i = 0; i < a.length; i++) {-->
+    <!--                txtValue = a[i].textContent || a[i].innerText;-->
+    <!--                if (txtValue.toUpperCase().indexOf(filter) > -1) {-->
+    <!--                    a[i].style.display = "";-->
+    <!--                } else {-->
+    <!--                    a[i].style.display = "none";-->
+    <!--                }-->
+    <!--            }-->
+    <!--        }-->
+    <!--    </script>-->
 
 
 </head>
@@ -159,13 +159,13 @@
 <!--</div>-->
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-md navbar-light bgn-light sticky-top">
-    <div class="container-fluid">
+<nav class="navbar navbar-expand-md navbar-light bgn-light sticky-top" >
+    <div class="container-fluid" style="max-height: 8rem">
         <a class="navbar-brand" href="#">
             <div class="row">
                 <img class="img-fluid " id="logo" src="../images/logo-hcmh-pic-bg-clear.png"
                      style="max-height: 10rem" alt="h.c.m.h logo">
-                <div class="navbar-title-div">
+                <div class="navbar-title">
                     <h1 id="navbar-title"><b>Tiresias</b></h1>
                     <p id="navbar-subtitle">The Ancient Mediterranean Religions Source Database</p>
                 </div>
@@ -178,11 +178,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="../html/index.html#about">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="book-indices.html">Bibliography</a></li>
-            <li class="nav-item"><a class="nav-link" href="subject-list.html">Sources</a></li>
-            <li class="nav-item"><a class="nav-link" href="../html/index.html#contact">Connect</a></li>
+            <li class="nav-item active"><a class="nav-link" href="../index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="book-indices.html">Sources</a></li>
+            <li class="nav-item"><a class="nav-link" href="subject-list.html">Subjects</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Connect</a></li>
         </ul>
     </div>
 </nav>
@@ -193,52 +193,85 @@
 
 <!--subject and century options-->
 <!--the button-->
-<button class="fun s01 btn-primary" data-toggle="collapse" data-target="#filtering">CLICK FOR FUN</button>
-<div class="s01">    <!-- s01 should appear in a parent element of collapse so it would use the correct css rule -->
+<button class="fun s01 btn-primary" data-toggle="collapse" data-target="#filtering">Advanced Search Options</button>
+<!--hidden filtering section-->
+<div class="s01">    <!-- s01 should appear in a parent element of collapse, so it would use the correct css rule for form-->
     <!--todo instead of relying on existing consider just making your own class for this case-->
     <div id="filtering" class="collapse ">
         <form class="">
             <div class="container-fluid padding ">
                 <!--            <div class="row text-center ">--> <!--todo dont delete this yet-->
                 <div class="row text-center inner-form">
-                    <div class="col-sm-12 col-md-6 ">
+                    <div class="col-sm-12 col-md-6" style="text-align: right; ">
+                        <h5 class="welcome text-center" style="float: top; vertical-align: top">Filter by Sub-subject</h5>
+                        <hr>
                         <label for="include">Including: <input id="include" type="text" placeholder="Subject"> </label>
                         <label for="exclude">Excluding: <input id="exclude" type="text" placeholder="Subject"> </label>
                         <!--                        <img class="gif" src="../../bs4/img/gif/panda.gif" alt="panda gif"/>-->
                     </div>
-                    <div class="col-sm-12 col-md-6">
-                        <!--from centurry-->
+                    <div class="col-sm-12 col-md-6" style="text-align: right; ">
+                        <h5 class="welcome text-center">Filter by Text</h5>
+                        <hr>
+                        <!--from century-->
                         <label>From: <input list="from-century-dl" name="browser" placeholder="Any Century"></label>
                         <datalist id="from-century-dl">
-                            <option value="Internet Explorer">
-                            <option value="Firefox">
-                            <option value="Chrome">
-                            <option value="Opera">
-                            <option value="Safari">
+                            <option value="8 BCE">8 BCE</option>
+                            <option value="7 BCE">7 BCE</option>
+                            <option value="6 BCE">6 BCE</option>
+                            <option value="5 BCE">5 BCE</option>
+                            <option value="4 BCE">4 BCE</option>
+                            <option value="3 BCE">3 BCE</option>
+                            <option value="2 BCE">2 BCE</option>
+                            <option value="1 BCE">1 BCE</option>
+                            <option value="1 CE">1 CE</option>
+                            <option value="2 CE">2 CE</option>
+                            <option value="3 CE">3 CE</option>
+                            <option value="4 CE">4 CE</option>
+                            <option value="5 CE">5 CE</option>
+                            <option value="6 CE">6 CE</option>
+                            <option value="7 CE">7 CE</option>
+                            <option value="8 CE">8 CE</option>
                         </datalist>
-                        <!--to centurry-->
-                        <label>To: <input list="to-century-dl" name="browser" placeholder="Any Century"></label>
+                        <!--to century-->
+                        <label style="margin-left: 10px">To: <input list="to-century-dl" name="browser" placeholder="Any Century"></label>
                         <datalist id="to-century-dl">
-                            <option value="Internet Explorer">
-                            <option value="Firefox">
-                            <option value="Chrome">
-                            <option value="Opera">
-                            <option value="Safari">
+                            <option value="8 BCE">
+                            <option value="7 BCE">
+                            <option value="6 BCE">
+                            <option value="5 BCE">
+                            <option value="4 BCE">
+                            <option value="3 BCE">
+                            <option value="2 BCE">
+                            <option value="1 BCE">
+                            <option value="1 CE">
+                            <option value="2 CE">
+                            <option value="3 CE">
+                            <option value="4 CE">
+                            <option value="5 CE">
+                            <option value="6 CE">
+                            <option value="7 CE">
+                            <option value="8 CE">
                         </datalist>
                         <!-- Language-->
                         <label>Language: <input list="language-dl" name="browser" placeholder="All"></label>
                         <datalist id="language-dl">
-                            <option value="Internet Explorer">
-                            <option value="Firefox">
-                            <option value="Chrome">
-                            <option value="Opera">
-                            <option value="Safari">
+                            <option value="Aramaic">
+                            <option value="Arabic">
+                            <option value="Greek">
+                            <option value="Hebrew">
+                            <option value="Latin">
+                            <option value="Syriac">
                         </datalist>
+                        <h5 class="welcome text-center">Filter by Reference</h5>
+                        <hr>
+                        <label for="ancient-author">Ancient Author:
+                            <input id="ancient-author" type="text" placeholder=" (In English)"> </label>
+                        <label for="ancient-title">Ancient Work-Title:
+                            <input id="ancient-title" type="text" placeholder=" (In English)"> </label>
+                        <label for="ancient-reference">Reference:
+                            <input id="ancient-reference" type="text" placeholder=" (e.g., 1.1 for chapter 1 verse 1, or leave empty for whole work)"></label>
 
-                        <!--                        <img class="gif" src="../../bs4/img/gif/chicken.gif" alt="chicken gif"/>-->
                     </div>
-                    <!--                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/unicorn.gif" alt="unicorn gif"/></div>-->
-                    <!--                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/poo.gif" alt="poo gif"/></div>-->
                 </div>
                 <!--            </div>-->
             </div>
@@ -277,10 +310,11 @@
 <!--    </div>-->
 <!--</div>-->
 
+<div style="min-height: 30vh;"></div>
 <!--Footer--><!--- Footer -->
 <footer>
     <div class="container-fluid padding">
-        <div class="row  text-center">
+        <div class="row text-center">
             <div class="col-md-4">
                 <img src="../images/logo-hcmh.jpg" style="max-height: 12rem">
                 <!--                <img src="../images/logo-hcmh-pic-bg-clear.png" >-->
@@ -311,22 +345,22 @@
 
 
 <!--- Emoji Section -->
-<button class="fun" data-toggle="collapse" data-target="#emoji">CLICK FOR FUN</button>
-<div id="emoji" class="collapse">
-    <div class="container-fluid padding">
-        <div class="row text-center">
-            <div class="row text-center">
-                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/panda.gif" alt="panda gif"/>
-                </div>
-                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/chicken.gif" alt="chicken gif"/>
-                </div>
-                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/unicorn.gif" alt="unicorn gif"/>
-                </div>
-                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/poo.gif" alt="poo gif"/></div>
-            </div>
-        </div>
-    </div>
-</div>
+<!--<button class="fun" data-toggle="collapse" data-target="#emoji">CLICK FOR FUN</button>-->
+<!--<div id="emoji" class="collapse">-->
+<!--    <div class="container-fluid padding">-->
+<!--        <div class="row text-center">-->
+<!--            <div class="row text-center">-->
+<!--                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/panda.gif" alt="panda gif"/>-->
+<!--                </div>-->
+<!--                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/chicken.gif" alt="chicken gif"/>-->
+<!--                </div>-->
+<!--                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/unicorn.gif" alt="unicorn gif"/>-->
+<!--                </div>-->
+<!--                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/poo.gif" alt="poo gif"/></div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 </body>
 </html>
