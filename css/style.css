@@ -172,3 +172,7 @@ body {
 .filter-form{
     display: inline;
 }
+
+/*#switch{ !*for the 'Fetch full text' checkbox in the filter form*!*/
+/*    margin: 10px;*/
+/*}*/

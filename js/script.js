@@ -22,7 +22,6 @@ function search_button_function() {
     // elem = anchor.insertAdjacentElement("afterend", elem);
     // elem.textContent = 'pipi';
 
-      location.replace("../html/search-results.html")
+      location.replace("/home/rbd/workspace/web/web_lib_project/html/search-results.html")
 
 }
-
