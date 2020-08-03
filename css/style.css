@@ -20,10 +20,11 @@
     font-family: spectral;
     src: url("../misc/Spectral-Regular.ttf");
 }
+
 body {
     /*background-color: var(--primary-color);*/
     padding-top: 15em;
-    /*background-color: var(--primary-color-light);*/  /*  !important;*/
+    /*background-color: var(--primary-color-light);*/ /*  !important;*/
     font-family: spectral, sans-serif;
     /*font: */
 }
@@ -35,7 +36,7 @@ body {
 
 .bgn-light {
     background-color: var(--primary-color-light); /*!important;*/
-    /*background-color: var(--secondary-color-light);*/  /* !important;*/
+    /*background-color: var(--secondary-color-light);*/ /* !important;*/
 }
 
 .bgn-dark {
@@ -110,17 +111,19 @@ body {
 .navbar-collapse h1 #navbar-subtitle {
     display: none;
 }
-.navbar-collapse h1 #navbar-title{
-    font-size: 3rem; !important;
+
+.navbar-collapse h1 #navbar-title {
+    font-size: 3rem;
+!important;
     /*transform: scale(2);*/
-/*}*/
-/*    !*-ms-flex-preferred-size: 100%;*!*/
-/*    !*flex-basis: 100%;*!*/
-/*    !*-webkit-box-flex: 1;*!*/
-/*    !*-ms-flex-positive: 1;*!*/
-/*    !*flex-grow: 1;*!*/
-/*    !*-webkit-box-align: center;*!*/
-/*    !*-ms-flex-align: center;*!*/
+    /*}*/
+    /*    !*-ms-flex-preferred-size: 100%;*!*/
+    /*    !*flex-basis: 100%;*!*/
+    /*    !*-webkit-box-flex: 1;*!*/
+    /*    !*-ms-flex-positive: 1;*!*/
+    /*    !*flex-grow: 1;*!*/
+    /*    !*-webkit-box-align: center;*!*/
+    /*    !*-ms-flex-align: center;*!*/
     align-items: center;
 }
 
@@ -175,10 +178,14 @@ body {
 
 }
 
-.filter-form{
+.filter-form {
     display: inline;
 }
 
 /*#switch{ !*for the 'Fetch full text' checkbox in the filter form*!*/
 /*    margin: 10px;*/
 /*}*/
+
+.refsite-logos { /*the logos on the first page in the if you build it section*/
+    max-height: 4rem
+}
