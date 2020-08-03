@@ -1,6 +1,6 @@
 venv
 .idea
-/images
+#/images
 /pies
 #/misc/*.py
 #/misc/*.js
