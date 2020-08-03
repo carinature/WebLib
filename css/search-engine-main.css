@@ -222,7 +222,7 @@ input,
 optgroup,
 select,
 textarea {
-    font-family: sans-serif;
+    font-family: spectral, sans-serif;
     /* 1 */
     font-size: 100%;
     /* 1 */
@@ -461,7 +461,8 @@ legend {
     justify-content: center;
     -ms-flex-align: center;
     align-items: center;
-    font-family: 'Poppins', sans-serif;
+    /*font-family: 'Poppins', sans-serif;*/
+    font-family: 'spectral', sans-serif;
     /*background: url("../images/Search_001.png");*/
     background-size: cover;
     background-position: center center;

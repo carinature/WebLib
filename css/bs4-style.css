@@ -223,6 +223,7 @@ hr.light-100 {
         display: block;
         transition: 400ms;
         transform: scale(1);
+        margin-top: 0;
 
 
     }

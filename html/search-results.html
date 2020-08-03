@@ -17,21 +17,6 @@
 
     <!--    your own scripts  -->
     <script src="../js/gui.js"></script>
-    <script> /*todo consider moving to end of body*/
-    $(function () {
-        $('#navbar-place').load("navbar-element.html");
-    })
-    </script>
-    <script> /*todo consider moving to end of body*/
-
-    $("#checkAll").click(function () {
-        $(".custom-control-input").prop('checked', $(this).prop('checked'));
-    });
-
-    </script>
-
-    <!--    <link rel="import" href="navbar-element.html">-->
-
 
     <!--    bootstrap related stylesheets -->
     <link rel="stylesheet" href="../css/bootstrap.min.css">
@@ -41,129 +26,8 @@
     <link href="../css/bs4-style.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
 
-
-    <!--    <style>/* Dropdown Button */-->
-    <!--    .dropbtn {-->
-    <!--        background-color: #4CAF50;-->
-    <!--        color: white;-->
-    <!--        padding: 16px;-->
-    <!--        font-size: 16px;-->
-    <!--        border: none;-->
-    <!--        cursor: pointer;-->
-    <!--    }-->
-
-    <!--    /* Dropdown button on hover & focus */-->
-    <!--    .dropbtn:hover, .dropbtn:focus {-->
-    <!--        background-color: #3e8e41;-->
-    <!--    }-->
-
-    <!--    /* The search field */-->
-    <!--    #myInput {-->
-    <!--        box-sizing: border-box;-->
-    <!--        /*background-image: url('searchicon.png');*/-->
-    <!--        background-position: 14px 12px;-->
-    <!--        background-repeat: no-repeat;-->
-    <!--        font-size: 16px;-->
-    <!--        padding: 14px 20px 12px 45px;-->
-    <!--        border: none;-->
-    <!--        border-bottom: 1px solid #ddd;-->
-    <!--    }-->
-
-    <!--    /* The search field when it gets focus/clicked on */-->
-    <!--    #myInput:focus {-->
-    <!--        outline: 3px solid #ddd;-->
-    <!--    }-->
-
-    <!--    /* The container <div> - needed to position the dropdown content */-->
-    <!--    .dropdown {-->
-    <!--        position: relative;-->
-    <!--        display: inline-block;-->
-    <!--    }-->
-
-    <!--    /* Dropdown Content (Hidden by Default) */-->
-    <!--    .dropdown-content {-->
-    <!--        display: none;-->
-    <!--        position: absolute;-->
-    <!--        background-color: #f6f6f6;-->
-    <!--        min-width: 230px;-->
-    <!--        border: 1px solid #ddd;-->
-    <!--        z-index: 1;-->
-    <!--        /*right: 0;*//*may be good in case of hebrew content, or if for some reason you want the button to appear on the right corner of it's corner*/-->
-
-    <!--    }-->
-
-    <!--    /* Links inside the dropdown */-->
-    <!--    .dropdown-content a {-->
-    <!--        color: black;-->
-    <!--        padding: 12px 16px;-->
-    <!--        text-decoration: none;-->
-    <!--        display: block;-->
-    <!--    }-->
-
-    <!--    /* Change color of dropdown links on hover */-->
-    <!--    .dropdown-content a:hover {-->
-    <!--        background-color: #f1f1f1-->
-    <!--    }-->
-
-    <!--    /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */-->
-    <!--    .show {-->
-    <!--        display: block;-->
-    <!--    }</style>-->
-
-    <!--    <script>-->
-    <!--        /* When the user clicks on the button,-->
-    <!--        toggle between hiding and showing the dropdown content */-->
-    <!--        function myFunction() {-->
-    <!--            document.getElementById("myDropdown").classList.toggle("show");-->
-    <!--        }-->
-
-    <!--        function filterFunction() {-->
-    <!--            var input, filter, ul, li, a, i;-->
-    <!--            input = document.getElementById("myInput");-->
-    <!--            filter = input.value.toUpperCase();-->
-    <!--            div = document.getElementById("myDropdown");-->
-    <!--            a = div.getElementsByTagName("a");-->
-    <!--            for (i = 0; i < a.length; i++) {-->
-    <!--                txtValue = a[i].textContent || a[i].innerText;-->
-    <!--                if (txtValue.toUpperCase().indexOf(filter) > -1) {-->
-    <!--                    a[i].style.display = "";-->
-    <!--                } else {-->
-    <!--                    a[i].style.display = "none";-->
-    <!--                }-->
-    <!--            }-->
-    <!--        }-->
-    <!--    </script>-->
-
-
 </head>
 <body>
-
-<!--<div class="s01">-->
-
-
-<!--    <label for="cars">Choose a car:</label>-->
-
-<!--    <select name="cars" id="cars">-->
-<!--        <option value="volvo">Volvo</option>-->
-<!--        <option value="saab">Saab</option>-->
-<!--        <option value="mercedes">Mercedes</option>-->
-<!--        <option value="audi">Audi</option>-->
-<!--    </select>-->
-
-<!--    <div class="dropdown">-->
-<!--        <button onclick="myFunction()" class="dropbtn">Any Century</button>-->
-<!--        <div id="myDropdown" class="dropdown-content">-->
-<!--            <label for="myInput"> Just pick one</label> <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">-->
-<!--            <<a href="#about">About</a>-->
-<!--            <<a href="#base">Base</a>-->
-<!--            <<a href="#blog">Blog</a>-->
-<!--            <<a href="#contact">Contact</a>-->
-<!--            <<a href="#custom">Custom</a>-->
-<!--            <<a href="#support">Support</a>-->
-<!--            <<a href="#tools">Tools</a>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-md navbar-light bgn-light sticky-top">
@@ -171,7 +35,7 @@
         <a class="navbar-brand" href="#">
             <div class="row">
                 <img class="img-fluid " id="logo" src="../images/logo-hcmh-pic-bg-clear.png"
-                     style="max-height: 10rem" alt="h.c.m.h logo">
+                     style="max-height: 8rem" alt="h.c.m.h logo">
                 <div class="navbar-title">
                     <h1 id="navbar-title"><b>Tiresias</b></h1>
                     <p id="navbar-subtitle">The Ancient Mediterranean Religions Source Database</p>
@@ -179,8 +43,7 @@
             </div>
         </a>
     </div>
-
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" style="margin-top: 1rem">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -193,14 +56,27 @@
         </ul>
     </div>
 </nav>
-<br>
-<br>
 
-<!--Filtering-->
+<!---->
+<!-- results for ... -->
+<div class="container-fluid padding">
+<!--    <div class="row welcome text-center">-->
+    <div class="row welcome ">
+        <div class="col-12">
+            <h1 class="display-4">You Serched for: <span id="search-word"></span></h1>
+            <h4 class="">Number of Results: <span id="search-number"></span></h4><br>
+            <h6 class="">For filtered results use form below and then click "Fetch".</h6>
+        </div>
+        <hr>
+    </div>
+</div>
+<!-- total number of -->
 
-<!--subject and century options-->
+<!-------------------Filtering---------------------->
+
 <!--the button-->
-<button class="fun s01 btn-primary" data-toggle="collapse" data-target="#filtering">Advanced Search Options (click me)git </button>
+<button class="fun s01 btn-primary" data-toggle="collapse" data-target="#filtering">Advanced Search Options (click me)</button>
+
 <!--hidden filtering section-->
 <div class="s01">    <!-- s01 should appear in a parent element of collapse, so it would use the correct css rule for form-->
     <!--todo instead of relying on existing consider just making your own class for this case-->
@@ -210,7 +86,8 @@
                 <!--            <div class="row text-center ">--> <!--todo dont delete this yet-->
                 <div class="row text-center inner-form">
                     <!--                    <div class="col-sm-12 col-md-6" style="text-align: right; ">-->
-                    <div class="col-sm-12 col-md-6">
+                   <!--sub-subject filtering options-->
+ <div class="col-sm-12 col-md-6">
                         <h5 class="welcome text-center" style="float: top; vertical-align: top">Filter by Sub-subject</h5>
                         <hr>
                         <label style="float: right" for="include">Including: <input id="include" type="text"
@@ -223,11 +100,12 @@
 
                     </div>
                     <!--                    <div class="col-sm-12 col-md-6" style="text-align: right; ">-->
-                    <div class="col-sm-12 col-md-6">
+                    <!--text and reference filtering options-->
+<div class="col-sm-12 col-md-6">
                         <h5 class="welcome text-center">Filter by Text</h5>
                         <hr>
                         <!--from century-->
-                        <label style="float: right">From: <input list="from-century-dl" name="browser" placeholder="Any Century"></label>
+                        <label style="float: right;">From: <input list="from-century-dl" name="browser" placeholder="Any Century"></label>
                         <datalist id="from-century-dl">
                             <option value="8 BCE">8 BCE</option>
                             <option value="7 BCE">7 BCE</option>
@@ -247,8 +125,9 @@
                             <option value="8 CE">8 CE</option>
                         </datalist>
                         <!--to century-->
-                        <label style="float: right; margin-left: 10px">To: <input list="to-century-dl" name="browser"
-                                                                                  placeholder="Any Century"></label>
+                        <!--                        <label style="float: right; margin-left: 10px">To: <input list="to-century-dl" name="browser"-->
+                        <label style="float: right;">To: <input list="to-century-dl" name="browser"
+                                                                placeholder="Any Century"></label>
                         <datalist id="to-century-dl">
                             <option value="8 BCE">
                             <option value="7 BCE">
@@ -306,104 +185,78 @@
         </form>
     </div>
 </div>
-<button type="button" class=" btn btn-ouline-secondery btn-lg btn-primary" style="float: right; margin-right: 5%"
-                    onclick="alert('Fetching Data...')">Fetch
-            </button>
-            <div class="form-group padding" style="margin-left: 5%">
-                <div class="custom-control custom-switch" style="text-align: left">
-                    <input type="checkbox" class="custom-control-input" id="checkAll">
-                    <label class="custom-control-label padding" for="checkAll">
-                        <b>Select all</b><br>
-                    </label>
-                </div>
-                <div class="custom-control custom-switch" style="text-align: left">
-                    <input type="checkbox" class="custom-control-input" id="filter-opt1">
-                    <label class="custom-control-label padding" for="filter-opt1">
-                        Option 1<br>
-                    </label>
-                </div>
-                <div class="custom-control custom-switch" style="text-align: left">
-                    <input type="checkbox" class="custom-control-input" id="filter-opt2">
-                    <label class="custom-control-label padding" for="filter-opt2">
-                        Option 2<br>
-                    </label>
-                </div>
-                <div class="custom-control custom-switch" style="text-align: left">
-                    <input type="checkbox" class="custom-control-input" id="filter-opt3">
-                    <label class="custom-control-label padding" for="filter-opt3">
-                        Option 3<br>
-                    </label>
-                </div>
-                <div class="custom-control custom-switch" style="text-align: left">
-                    <input type="checkbox" class="custom-control-input" id="filter-opt4">
-                    <label class="custom-control-label padding" for="filter-opt4">
-                        Option 4<br>
-                    </label>
-                </div>
-                <div class="custom-control custom-switch" style="text-align: left">
-                    <input type="checkbox" class="custom-control-input" id="filter-opt5">
-                    <label class="custom-control-label padding" for="filter-opt5">
-                        Option 5<br>
-                    </label>
-                </div>
-                <div class="custom-control custom-switch" style="text-align: left">
-                    <input type="checkbox" class="custom-control-input" id="filter-opt6">
-                    <label class="custom-control-label padding" for="filter-opt6">
-                        Option 6<br>
-                    </label>
-                </div>
-                <div class="custom-control custom-switch" style="text-align: left">
-                    <input type="checkbox" class="custom-control-input" id="filter-opt7">
-                    <label class="custom-control-label padding" for="filter-opt7">
-                        Option 7<br>
-                    </label>
-                </div>
-                <div class="custom-control custom-switch" style="text-align: left">
-                    <input type="checkbox" class="custom-control-input" id="filter-opt8">
-                    <label class="custom-control-label padding" for="filter-opt8">
-                        Option 8<br>
-                    </label>
-                </div>
-            </div>
+
+<!--the FETCH button-->
+<button type="button" class=" btn btn-ouline-secondery btn-lg btn-primary" style="float: right; margin-right: 5%; padding:1rem 4rem 1rem 4rem;"
+        onclick="alert('Fetching Data...')">Fetch Results
+</button>
+
+<!--check box filtering options -->
+<div class="form-group padding" style="margin-left: 5%">
+    <div class="custom-control custom-switch" style="text-align: left">
+        <input type="checkbox" class="custom-control-input" id="checkAll" onClick="filter_check_all(this)">
+        <label class="custom-control-label padding" for="checkAll">
+            <b>All the Results</b><br>
+        </label>
+    </div>
+    <div class="custom-control custom-switch" style="text-align: left">
+        <input type="checkbox" class="custom-control-input" name="filter-opt" id="filter-opt1">
+        <label class="custom-control-label padding" for="filter-opt1">
+            Option 1<br>
+        </label>
+    </div>
+    <div class="custom-control custom-switch" style="text-align: left">
+        <input type="checkbox" class="custom-control-input" name="filter-opt" id="filter-opt2">
+        <label class="custom-control-label padding" for="filter-opt2">
+            Option 2<br>
+        </label>
+    </div>
+    <div class="custom-control custom-switch" style="text-align: left">
+        <input type="checkbox" class="custom-control-input" name="filter-opt" id="filter-opt3">
+        <label class="custom-control-label padding" for="filter-opt3">
+            Option 3<br>
+        </label>
+    </div>
+    <div class="custom-control custom-switch" style="text-align: left">
+        <input type="checkbox" class="custom-control-input" name="filter-opt" id="filter-opt4">
+        <label class="custom-control-label padding" for="filter-opt4">
+            Option 4<br>
+        </label>
+    </div>
+    <div class="custom-control custom-switch" style="text-align: left">
+        <input type="checkbox" class="custom-control-input" name="filter-opt" id="filter-opt5">
+        <label class="custom-control-label padding" for="filter-opt5">
+            Option 5<br>
+        </label>
+    </div>
+    <div class="custom-control custom-switch" style="text-align: left">
+        <input type="checkbox" class="custom-control-input" name="filter-opt" id="filter-opt6">
+        <label class="custom-control-label padding" for="filter-opt6">
+            Option 6<br>
+        </label>
+    </div>
+    <div class="custom-control custom-switch" style="text-align: left">
+        <input type="checkbox" class="custom-control-input" name="filter-opt" id="filter-opt7">
+        <label class="custom-control-label padding" for="filter-opt7">
+            Option 7<br>
+        </label>
+    </div>
+    <div class="custom-control custom-switch" style="text-align: left">
+        <input type="checkbox" class="custom-control-input" name="filter-opt" id="filter-opt8">
+        <label class="custom-control-label padding" for="filter-opt8">
+            Option 8<br>
+        </label>
+    </div>
+</div>
 <!--attempt to fetch all-->
 
-<!--&lt;!&ndash;- search by reference HIDDEN Section &ndash;&gt;-->
-<!--<div id="search-ref" class="collapse">-->
-<!--    <div class="s01">-->
-<!--        <form>-->
-<!--            <div class="inner-form">-->
-<!--                <div class="input-field ">-->
-<!--                    <input id="search-authon" type="text" placeholder="Author's Name"/>-->
-<!--                    <label for="search-authon" style="vertical-align: middle; font-size: 1.5rem">Search by-->
-<!--                        Subject</label>-->
 
-<!--                </div>-->
-<!--                <br>-->
-<!--                <div class="input-field ">-->
-<!--                    <input id="search-work" type="text" placeholder="Work"/>-->
-<!--                </div>-->
-<!--                <div class="input-field ">-->
-<!--                    <input id="search-reference" type="text" placeholder="Reference"/>-->
-<!--                </div>-->
-<!--                <div class="input-field third-wrap">-->
-<!--                    <button class="btn-search btn-primary" type="button">-->
-<!--                        &lt;!&ndash;                    <button class="btn btn-primary" type="button">&ndash;&gt;-->
-<!--                        <i class="fas fa-search" aria-hidden="true"></i>-->
-<!--                    </button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--</div>-->
-
-<div style="min-height: 30vh;"></div>
-<!--Footer--><!--- Footer -->
+<!-----------------------Footer---------------------->
 <footer>
     <div class="container-fluid padding">
         <div class="row text-center">
             <div class="col-md-4">
                 <img src="../images/logo-hcmh.jpg" style="max-height: 12rem">
-                <!--                <img src="../images/logo-hcmh-pic-bg-clear.png" >-->
             </div>
             <div class="col-md-4">
                 <hr class="light">
@@ -423,30 +276,32 @@
             </div>
             <div class="col-12">
                 <hr class="light-100">
-                <h5>Created by Karina Ture, Dr. Moshe Blidstein and Prof. Dafna Raban</h5>
+                <h5>Created by Prof. Dafna Raban, Dr. Moshe Blidstein, Karina Ture </h5>
             </div>
         </div>
     </div>
 </footer>
 
-
-<!--- Emoji Section -->
-<!--<button class="fun" data-toggle="collapse" data-target="#emoji">CLICK FOR FUN</button>-->
-<!--<div id="emoji" class="collapse">-->
-<!--    <div class="container-fluid padding">-->
-<!--        <div class="row text-center">-->
-<!--            <div class="row text-center">-->
-<!--                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/panda.gif" alt="panda gif"/>-->
-<!--                </div>-->
-<!--                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/chicken.gif" alt="chicken gif"/>-->
-<!--                </div>-->
-<!--                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/unicorn.gif" alt="unicorn gif"/>-->
-<!--                </div>-->
-<!--                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/poo.gif" alt="poo gif"/></div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<!-- scripts -->
+<script src="../js/script.js"></script>
 
 </body>
 </html>
+
+- Emoji Section
+<button class="fun" data-toggle="collapse" data-target="#emoji">CLICK FOR FUN</button>
+<div id="emoji" class="collapse">
+    <div class="container-fluid padding">
+        <div class="row text-center">
+            <div class="row text-center">
+                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/panda.gif" alt="panda gif"/>
+                </div>
+                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/chicken.gif" alt="chicken gif"/>
+                </div>
+                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/unicorn.gif" alt="unicorn gif"/>
+                </div>
+                <div class="col-sm-6 col-md-3"><img class="gif" src="../../bs4/img/gif/poo.gif" alt="poo gif"/></div>
+            </div>
+        </div>
+    </div>
+</div>

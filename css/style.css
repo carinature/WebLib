@@ -16,11 +16,16 @@
 
 }
 
+@font-face {
+    font-family: spectral;
+    src: url("../misc/Spectral-Regular.ttf");
+}
 body {
     /*background-color: var(--primary-color);*/
     padding-top: 15em;
     /*background-color: var(--primary-color-light);*/  /*  !important;*/
-
+    font-family: spectral, sans-serif;
+    /*font: */
 }
 
 /*img {*/ /*DONT DO IT*/
@@ -94,8 +99,9 @@ body {
 /* Style the logo */
 .navbar #logo {
     max-height: 15em;
-    margin-right: 2em;
-    margin-left: 1em;
+    /*margin-right: 2em;*/
+    /*margin-left: 1em;*/
+    margin: 1rem;
     /*font-size: 35px;*/
     /*font-weight: bold;*/
     transition: 0.2s;
