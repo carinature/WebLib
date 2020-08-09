@@ -4,7 +4,7 @@ venv
 /pies
 #/misc/*.py
 #/misc/*.js
-#/misc/fonts-and-icons
+/misc/fonts-and-icons
 #/misc/getfromdb
 .idea/web_lib_project.iml
 .idea/misc.xml

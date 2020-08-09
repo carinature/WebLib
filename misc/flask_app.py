@@ -1645,7 +1645,6 @@ def form_example():
         empty = "Sorry, there are no matches in the database. Please try again with a different search term or with less filters"
         return(unlinkeddata)
 
-
     def splitchap (x):
       x = str(x)
       y = x.split('.')[0]
@@ -1759,7 +1758,6 @@ def form_example():
 
       return render_template('index.html', subjects = subjects, step="choose_lower", c=c, lccs = lccs,\
       ccs =ccs, dds = dds, d = d, option = option, d_texts_subjects = d_texts_subjects, d_subjects = d_subjects)
-
 
     elif request.form["step"] == "choose_upper":
       titles = pd.read_csv("/home/moblid/mysite/titlesa.csv", encoding='utf-8')

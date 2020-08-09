@@ -14,10 +14,12 @@
 
     --misc-color: #c7b198;
 
+    --font-color: #444;
+
 }
 
 @font-face {
-    font-family: spectral;
+    font-family: spectral;  /*todo consider Georgia for font family*/
     src: url("../misc/Spectral-Regular.ttf");
 }
 
@@ -26,6 +28,8 @@ body {
     padding-top: 15em;
     /*background-color: var(--primary-color-light);*/ /*  !important;*/
     font-family: spectral, sans-serif;
+    color: var(--font-color);
+    font-size: large; /*todo*/
     /*font: */
 }
 
