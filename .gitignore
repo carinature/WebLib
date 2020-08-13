@@ -9,3 +9,11 @@ venv
 .idea/web_lib_project.iml
 .idea/misc.xml
 __pycache__/
+.bash_history
+.bashrc
+.gitconfig
+.local/
+.profile
+.pythonstartup.py
+.vimrc
+.virtualenvs/
