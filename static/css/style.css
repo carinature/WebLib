@@ -20,7 +20,7 @@
 
 @font-face {
     font-family: spectral;  /*todo consider Georgia for font family*/
-    src: url("../misc/Spectral-Regular.ttf");
+    src: url("../../misc/Spectral-Regular.ttf");
 }
 
 body {
