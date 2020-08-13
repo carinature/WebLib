@@ -14,13 +14,13 @@
 
     --misc-color: #c7b198;
 
-    --font-color: #444;
+    --font-color: #111444;
 
 }
 
 @font-face {
     font-family: spectral;  /*todo consider Georgia for font family*/
-    src: url("../misc/Spectral-Regular.ttf");
+    src: url("../../misc/Spectral-Regular.ttf");
 }
 
 body {
