@@ -22,7 +22,8 @@ function search_button_function() {
     // elem = anchor.insertAdjacentElement("afterend", elem);
     // elem.textContent = 'pipi';
 
-      location.replace("search-results.html")
+      location.replace("search-results")
+      // location.replace("search-results.html")
 
 }
 

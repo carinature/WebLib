@@ -1,0 +1,12 @@
+venv
+.idea
+images
+pies
+misc/*.py
+misc/*.js
+misc/fonts-and-icons
+misc/getfromdb
+__pycache__
+
+
+venv
