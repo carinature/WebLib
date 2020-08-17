@@ -1,7 +1,8 @@
 flask
 Flask-SQLAlchemy
 
-# # mysql-connector-python
+mysql-connector-python # this is for the option to run 'db.createall()' which is a one-off
+
 # # should run these before 'pip install mysqlclient' :
 # #   sudo apt-get install mysql-server
 # #   sudo apt-get install libmysqlclient-dev
