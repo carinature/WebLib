@@ -31,15 +31,17 @@ class Example_Entry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(4096))
 
-# ++++++++++++  dbg page ++++++++++++
-comments = ["Comments go below: "]
+# comments = ["Comments go below: "]
 
+# ++++++++++++  dbg page ++++++++++++
 
 @app.route('/check', methods=['GET', 'POST'])
 def check_check():
     if request.method == 'GET':
-        return render_template('check.html', comments=comments)
-    comments.append(request.form["contents"])
+        return render_template('check.html', comments=Example_Entry.query.all())
+    comment = Example_Entry(content=request.form["contents"])
+    db.session.add(comment)
+    db.session.commit()
     return redirect('/check')
 
 
