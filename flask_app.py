@@ -9,16 +9,20 @@ app = Flask(__name__)
 # app = Flask(__name__) todo fixme remove this in production!!!
 app.config["DEBUG"] = True
 
-
-@app.errorhandler(404)
-def not_found(error):
-    resp = make_response(render_template('page_not_found.html'), 404)
-    resp.headers['X-Something'] = 'A value'
-    return resp
+from flask_sqlalchemy import SQLAlchemy
+SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+    username="karinature",
+    password="dsmiUw2sn",
+    hostname="karinature.mysql.pythonanywhere-services.com",
+    databasename="karinature$default",
+)
+app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
 # ++++++++++++  dbg page ++++++++++++
-comments = ["sdlkfjsksldjfksldjflkdsjf"]
+comments = ["Comments go below: "]
 
 
 @app.route('/check', methods=['GET', 'POST'])
@@ -46,17 +50,19 @@ def book_indices():
 # @app.route('/subject-list.html')
 def subject_list():
     return render_template('subject-list.html')
-    # return render_template(url_for(subject-list))
+    # return render_template(url_for('subject_list'))
 
 
 @app.route('/')
 @app.route('/index')
 @app.route('/index.html')
 def index():
-    # return '<h1>You did IT!</h1><h1>You did IT!</h1><h1>You did IT!</h1>'
     return render_template('index.html')
 
-# @app.route('/index1.html')
-# def redirect_index():
-#     return redirect(url_for('subject_list'))
-#     # return redirect('/index.html')
+
+@app.errorhandler(404)
+def not_found(error):
+    resp = make_response(render_template('page_not_found.html'), 404)
+    resp.headers['X-Something'] = 'A value'
+    return resp
+

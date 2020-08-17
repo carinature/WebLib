@@ -6,7 +6,8 @@
     /*same but reversed the two colors*/
     /*--primary-color-light: #FEFABA;*/
     /*--secondary-color-light: #FCF46D;*/
-    /*--primary-color-light: #35A;*/ /*todo try these two!!*/
+
+    /*--primary-color-light: #35A; !*todo try these two!!*!*/
     /*--secondary-color-light: #295;*/
 
     --accent-color: #6D75FC;
@@ -16,13 +17,13 @@
 
     --misc-color: #c7b198;
 
-    --font-color: #bbb; /*fixme font color not updating*/
+    --font-color: #444; /*fixme font color not updating*/
 
 }
 
 @font-face {
     font-family: spectral;  /*todo consider Georgia for font family*/
-    src: url("/./static/css/Spectral-Regular.ttf");
+    src: url("/static/css/Spectral-Regular.ttf");
 }
 
 body {
