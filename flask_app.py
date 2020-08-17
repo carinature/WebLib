@@ -15,18 +15,27 @@ SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostnam
     username="karinature",
     password="dsmiUw2sn",
     hostname="karinature.mysql.pythonanywhere-services.com",
-    db_name="karinature$default",
+    # hostname="localhost",
+    db_name="karinature$tryout",
 )
 app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+db = SQLAlchemy(app)
+
+# example table module todo move to a different file (aux/migration/once_off)
+class Example_Entry(db.Model):
+    __tablename__ = "example_table"
+
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(4096))
 
 # ++++++++++++  dbg page ++++++++++++
 comments = ["Comments go below: "]
 
 
 @app.route('/check', methods=['GET', 'POST'])
-# @app.route('/check.html', methods=['GET', 'POST'])
 def check_check():
     if request.method == 'GET':
         return render_template('check.html', comments=comments)
@@ -35,13 +44,11 @@ def check_check():
 
 
 @app.route('/search-results')
-# @app.route('/search-results.html')
 def search_results():
     return render_template('search-results.html')
 
 
 @app.route('/book-indices')
-# @app.route('/book-indices.html')
 def book_indices():
     return render_template('book-indices.html')
 
@@ -55,7 +62,6 @@ def subject_list():
 
 @app.route('/')
 @app.route('/index')
-@app.route('/index.html')
 def index():
     return render_template('index.html')
 
