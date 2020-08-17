@@ -10,16 +10,16 @@ app = Flask(__name__)
 app.config["DEBUG"] = True
 
 from flask_sqlalchemy import SQLAlchemy
-SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+
+SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{db_name}".format(
     username="karinature",
     password="dsmiUw2sn",
     hostname="karinature.mysql.pythonanywhere-services.com",
-    databasename="karinature$default",
+    db_name="karinature$default",
 )
 app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
 
 # ++++++++++++  dbg page ++++++++++++
 comments = ["Comments go below: "]
@@ -27,7 +27,7 @@ comments = ["Comments go below: "]
 
 @app.route('/check', methods=['GET', 'POST'])
 # @app.route('/check.html', methods=['GET', 'POST'])
-def checkcheck():
+def check_check():
     if request.method == 'GET':
         return render_template('check.html', comments=comments)
     comments.append(request.form["contents"])
@@ -50,7 +50,7 @@ def book_indices():
 # @app.route('/subject-list.html')
 def subject_list():
     return render_template('subject-list.html')
-    # return render_template(url_for('subject_list'))
+    # return render_template(url_for('subject_list')+'.html')
 
 
 @app.route('/')
@@ -64,5 +64,5 @@ def index():
 def not_found(error):
     resp = make_response(render_template('page_not_found.html'), 404)
     resp.headers['X-Something'] = 'A value'
+    print(error)
     return resp
-
