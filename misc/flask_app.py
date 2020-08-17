@@ -1454,7 +1454,6 @@ Tiresias: The Ancient Mediterranean Religions Source Database provides access to
 
 
 @app.route('/', methods=['GET', 'POST']) #allow both GET and POST requests
-
 def form_example():
   if request.method == 'POST':  #this block is only entered when the form is submitted
     texts_subjects = pd.read_csv("/home/moblid/mysite/texts_subjects1.csv", encoding='utf8')
@@ -2335,6 +2334,3 @@ margin:0px;
                   <br>
                   </div>
               </form>'''
-
-
-
