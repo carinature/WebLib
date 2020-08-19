@@ -2,20 +2,22 @@
 
 from flask import Flask
 from flask import render_template, make_response, redirect, url_for, request
+from flask_sqlalchemy import SQLAlchemy
+
+import random   # todo remove
+
 
 app = Flask(__name__)
 
 # Also, just to help in case you’ve made a typo in the code somewhere, add this line just after the line that says
-# app = Flask(__name__) todo fixme remove this in production!!!
-app.config["DEBUG"] = True
+# app = Flask(__name__)
+app.config["DEBUG"] = True  # todo fixme remove this in production!!!
 
-from flask_sqlalchemy import SQLAlchemy
 
 # SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{db_name}".format(
 #     username="karinature",
 #     password="dsmiUw2sn",
 #     hostname="karinature.mysql.pythonanywhere-services.com",
-#     # hostname="localhost",
 #     db_name="karinature$tryout",
 # )
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{db_name}".format(
@@ -30,8 +32,9 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
+
 # example table module todo move to a different file (aux/migration/once_off)
-class Example_Entry(db.Model):
+class ExampleEntry(db.Model):
     __tablename__ = "check"
 
     # id = db.Column(db.Integer, primary_key=True)
@@ -39,15 +42,13 @@ class Example_Entry(db.Model):
     int_value_col = db.Column(db.Integer, primary_key=True)
     text_value_col = db.Column(db.String(4096))
 
-# comments = ["Comments go below: "]
 
 # ++++++++++++  dbg page ++++++++++++
-i=0;
 @app.route('/check', methods=['GET', 'POST'])
 def check_check():
     if request.method == 'GET':
-        return render_template('check.html', comments=Example_Entry.query.all())
-    comment = Example_Entry(text_value_col=request.form["contents"], int_value_col=++i)
+        return render_template('check.html', comments=ExampleEntry.query.all())
+    comment = ExampleEntry(text_value_col=request.form["contents"], int_value_col=random.randint(3, 9))
     db.session.add(comment)
     db.session.commit()
     return redirect('/check')

@@ -1,4 +1,5 @@
-# info from https://hub.docker.com/_/mysql
+# more info here https://hub.docker.com/_/mysql
+#   and here https://help.pythonanywhere.com/pages/AccessingMySQLFromOutsidePythonAnywhere/
 version: '3.1'
 
 services:
