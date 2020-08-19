@@ -11,12 +11,18 @@ app.config["DEBUG"] = True
 
 from flask_sqlalchemy import SQLAlchemy
 
+# SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{db_name}".format(
+#     username="karinature",
+#     password="dsmiUw2sn",
+#     hostname="karinature.mysql.pythonanywhere-services.com",
+#     # hostname="localhost",
+#     db_name="karinature$tryout",
+# )
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{db_name}".format(
-    username="karinature",
-    password="dsmiUw2sn",
-    hostname="karinature.mysql.pythonanywhere-services.com",
-    # hostname="localhost",
-    db_name="karinature$tryout",
+    username="root",
+    password="123",
+    hostname="localhost",
+    db_name="tryout",
 )
 app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
@@ -26,20 +32,22 @@ db = SQLAlchemy(app)
 
 # example table module todo move to a different file (aux/migration/once_off)
 class Example_Entry(db.Model):
-    __tablename__ = "example_table"
+    __tablename__ = "check"
 
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(4096))
+    # id = db.Column(db.Integer, primary_key=True)
+    # content = db.Column(db.String(4096))
+    int_value_col = db.Column(db.Integer, primary_key=True)
+    text_value_col = db.Column(db.String(4096))
 
 # comments = ["Comments go below: "]
 
 # ++++++++++++  dbg page ++++++++++++
-
+i=0;
 @app.route('/check', methods=['GET', 'POST'])
 def check_check():
     if request.method == 'GET':
         return render_template('check.html', comments=Example_Entry.query.all())
-    comment = Example_Entry(content=request.form["contents"])
+    comment = Example_Entry(text_value_col=request.form["contents"], int_value_col=++i)
     db.session.add(comment)
     db.session.commit()
     return redirect('/check')

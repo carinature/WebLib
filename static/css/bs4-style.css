@@ -169,7 +169,7 @@ hr.light-100 {
         padding: 2rem;
     }
 
-    #navbar-title { /*KT*/
+    #navbar-title-h1-id { /*KT*/
         font-size: 3rem;
         padding-left: 3rem;
         transition: 400ms;
@@ -228,7 +228,7 @@ hr.light-100 {
 
     }
 
-    #navbar-title { /*KT*/
+    #navbar-title-h1-id { /*KT*/
         font-size: 3rem;
         padding-left: 3rem;
         transition: 400ms;
@@ -285,7 +285,7 @@ hr.light-100 {
         transition: 400ms;
     }
 
-    #navbar-title { /*KT*/
+    #navbar-title-h1-id { /*KT*/
         font-size: 3rem;
         margin-left: 3rem;
         /*transform: scale(0.5);*/

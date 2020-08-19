@@ -3,4 +3,13 @@
 export FLASK_APP=flask_app.py
 export FLASK_ENV=development
 export FLASK_DEBUG=1
+
+#sudo docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=123 -d mysql:5
+sudo docker-compose -f docompose.yml up
+#sudo docker-compose -f mysql-docker-compose.yml up -d
+# sudo docker ps
+# eval $(sudo docker-machine env default)
+# sudo docker-machine restart default
+
 flask run
+
