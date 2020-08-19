@@ -2,10 +2,8 @@
 
 from flask import Flask
 from flask import render_template, make_response, redirect, url_for, request
-from flask_sqlalchemy import SQLAlchemy
 
-import random   # todo remove
-
+import random  # todo remove
 
 app = Flask(__name__)
 
@@ -13,6 +11,7 @@ app = Flask(__name__)
 # app = Flask(__name__)
 app.config["DEBUG"] = True  # todo fixme remove this in production!!!
 
+from flask_sqlalchemy import SQLAlchemy
 
 # SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{db_name}".format(
 #     username="karinature",
@@ -26,6 +25,7 @@ SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostnam
     hostname="localhost",
     db_name="tryout",
 )
+
 app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -44,6 +44,7 @@ class ExampleEntry(db.Model):
 
 
 # ++++++++++++  dbg page ++++++++++++
+
 @app.route('/check', methods=['GET', 'POST'])
 def check_check():
     if request.method == 'GET':

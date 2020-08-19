@@ -18,6 +18,7 @@ services:
 
 #   run it:
 # docker-compose up -d
+# docker-compose up -d -f mysql-docker-compose.yml
 #
 #   connect to server
 # mysql -h 127.0.0.1 -u root -P 3306 -p <MYSQL_ROOT_PASSWORD>
@@ -26,8 +27,14 @@ services:
 #
 #   stop server
 # docker-compose stop
+# docker-compose stop -f mysql-docker-compose.yml
+#
+#  Stop running containers without removing them.
+#  They can be started again with
+#  docker-compose start
 
-#  ---------------------------
+
+  #  ---------------------------
 # for the browser GUI
 # Use <MYSQL_USER>/<MYSQL_ROOT_PASSWORD> as <MYSQL_USER>/<MYSQL_ROOT_PASSWORD> credentials
   adminer:

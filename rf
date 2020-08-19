@@ -5,7 +5,8 @@ export FLASK_ENV=development
 export FLASK_DEBUG=1
 
 #sudo docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=123 -d mysql:5
-sudo docker-compose -f mysql-docker-compose.yml up -d #doesn't "override" the terminal with log
+docker-compose start -f mysql-docker-compose.yml
+#sudo docker-compose -f mysql-docker-compose.yml up -d #doesn't "override" the terminal with log
 #sudo docker-compose -f mysql-docker-compose.yml up #show logs of the DB #usefull
 # sudo docker ps
 # eval $(sudo docker-machine env default)
