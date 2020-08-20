@@ -29,17 +29,20 @@
 </head>
 
 <!--<body style="background-color: cornsilk">-->
-<body >
+<body>
 <!-- Navigation -->
 {% include 'navbar-element.html' %}
 
-<!--<div class="col-12">-->  <!--DO NOT DELETE THIS! -->
-<!--    <h1 class="display-4" style="text-align: center">Tiresias</b><br> The Ancient Mediterranean Religions Source Database</h1>-->
-<!--</div>-->
-<!--<hr>-->
+<div class="col-12">  <!--DO NOT DELETE THIS! -->
+    <h1 class="display-4" style="text-align: center">Tiresias</h1>
+    {#    <h1 class="display-1" style="text-align: center">#}
+    <h1 style="text-align: center">
+        The Ancient Mediterranean Religions Source Database</h1>
+</div>
+<hr>
 <br><br>
 
-<!-- radio search buttons -->
+<!-- Radio search buttons -->
 <div style="text-align: center">
     <span style="margin-left: 2rem; display: inline-block;" class="padding">
        <input class="inline-radio" type="radio" id="chkYes" name="search-radio" onclick="ShowHideDiv()" checked/>
@@ -51,20 +54,21 @@
     </span>
 </div>
 
-
-<!-- search form -->
+<!-- ------- Search Forms -------- -->
+<!--- search by Subject  -->
 <div class="row" id="search-subject">
     <div class="s01">
-        <form>
+        {#        <form action="{{ url_for('search_results') }}" method="POST">#}
+        <form action="{{ url_for('home') }}" method="POST">
             <div class="inner-form">
                 <div class="input-field first-wrap">
-                    <input id="search" type="text" placeholder="What subject are you looking for?"/>
+                    <input name="search-subject" type="text" placeholder="What subject are you looking for?"/>
                 </div>
                 <div class="input-field second-wrap">
-                    <input id="location" type="text" placeholder="Optional: another keyword maybe?"/>
+                    <input name="second-keyword" type="text" placeholder="Optional: another keyword maybe?"/>
                 </div>
                 <div class="input-field third-wrap">
-                    <button class="btn-search btn-primary" type="button" onclick="search_button_function()">
+                    <button class="btn-search btn-primary" type="submit">
                         <!--                    <button class="btn btn-primary" type="button">-->
                         <i class="fas fa-search" aria-hidden="true"></i>
                     </button>
@@ -74,23 +78,25 @@
     </div>
 </div>
 
-<!--- search by reference HIDDEN Section -->
+<!--- search by Reference - hidden Section -->
 <!--<div id="search-ref" class="collapse">-->
 <div class="row" id="search-ref" style="display: none">
     <div class="s01">
-        <form>
+        {#        <form action="{{ url_for('search_results') }}" method="POST">#}
+        <form action="{{ url_for('home') }}" method="POST">
+
             <div class="inner-form">
                 <div class="input-field first-wrap">
-                    <input id="search-authon" type="text" placeholder="Author's Name"/>
+                    <input name="search-author" type="text" placeholder="Author's Name"/>
                 </div>
                 <div class="input-field second-wrap">
-                    <input id="search-work" type="text" placeholder="Work"/>
+                    <input name="search-work" type="text" placeholder="Work"/>
                 </div>
                 <div class="input-field second-wrap">
-                    <input id="search-reference" type="text" placeholder="Reference"/>
+                    <input name="search-reference" type="text" placeholder="Reference"/>
                 </div>
                 <div class="input-field third-wrap">
-                    <button class="btn-search btn-primary" type="button" onclick="search_button_function()">
+                    <button class="btn-search btn-primary" type="submit">
                         <!--                    <button class="btn btn-primary" type="button">-->
                         <i class="fas fa-search" aria-hidden="true"></i>
                     </button>
@@ -99,7 +105,8 @@
         </form>
     </div>
     <div class="s01 padding">
-        <p class="lead" style="color: var(--accent-color);">If you have a specific reference to ancient text, enter it here to
+        <p class="lead" style="color: var(--accent-color);">If you have a specific reference to ancient text, enter it
+            here to
             receive a list of subjects relevant to
             it.<br>
             Most author/title styles are accepted. for reference style, please use arabic numerals separated by a
@@ -114,9 +121,9 @@
 <span id="about"><br><br><br><br><br></span>
 <div class="container-fluid padding">
 
-        <div class="col-12" style="background-color: var(--secondary-color-light)"> <!--todo move the style to css-->
-            <h1 class="display-4 welcome text-center">Tiresias: The Ancient Mediterranean Religions Source Database</h1>
-        </div>
+    <div class="col-12" style="background-color: var(--secondary-color-light)"> <!--todo move the style to css-->
+        <h1 class="display-4 welcome text-center">Tiresias: The Ancient Mediterranean Religions Source Database</h1>
+    </div>
     <div class="s01 welcome text-center">
         <!--        <hr> &lt;!&ndash; horizantal rule &ndash;&gt;-->
         <div class="col-12"><br>
@@ -185,13 +192,15 @@
 <div class="container-fluid padding"><br><br>
     <div class="row text-center padding">
         <div class="col-xs-12 col-sm-6 col-md-4">
-            <a href="https://www.sefaria.org.il/"><img src="../static/images/sefaria-logo.jpg" class="refsite-logos"/></a>
+            <a href="https://www.sefaria.org.il/"><img src="../static/images/sefaria-logo.jpg"
+                                                       class="refsite-logos"/></a>
             <h3>Sefaria</h3>
             <p> some short description
             </p>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-4">
-            <a href="https://scaife.perseus.org/"><img src="../static/images/scaife-logo.png" class="refsite-logos"/></a>
+            <a href="https://scaife.perseus.org/"><img src="../static/images/scaife-logo.png"
+                                                       class="refsite-logos"/></a>
             <h3>Scaife Viewer</h3>
             <p> some short description
             </p>
