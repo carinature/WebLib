@@ -25,14 +25,15 @@ services:
 #
 #         Hurray!!
 #
+#  If you Stop running containers without removing them They can be started again with
+#
 #   stop server
 # docker-compose stop
 # docker-compose stop -f mysql-docker-compose.yml
 #
-#  Stop running containers without removing them.
-#  They can be started again with
-#  docker-compose start
-
+#   start server
+# docker-compose start
+# docker-compose start -f mysql-docker-compose.yml
 
   #  ---------------------------
 # for the browser GUI
