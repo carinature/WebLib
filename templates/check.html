@@ -20,45 +20,54 @@
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
 
     <!--    your stylesheets  -->
-<!--    <link href="../static/css/search-engine-main.css" rel="stylesheet"/>-->
+    <!--    <link href="../static/css/search-engine-main.css" rel="stylesheet"/>-->
     <link href="../static/css/bs4-style.css" rel="stylesheet">
     <link href="../static/css/style.css" rel="stylesheet">
 </head>
 <body>
 
 
-    {% include 'navbar-element.html' %}
+{% include 'navbar-element.html' %}
 
-<br><br><br>
+<br>
+
+
+
+
 
 
 <div class="container">
 
     {% for comment in comments %}
-    <div class="row" >
-        {{ comment.text_value_col }}
-    </div>
+        <div class="row">
+            {{ comment.text_value_col }}
+        </div>
     {% endfor %}
 
 
+    <div class="row">
+        <!--        <form action="." method="POST">-->
+        <form id="new-comment" name="new-comment-name" action="{{ url_for('check_check') }}" method="POST">
+            <label>
+                <textarea class="form-control" name="contents" placeholder="Enter a comment"></textarea>
+            </label>
+            <input type="submit" class="btn btn-success" value="Post comment">
+        </form>
+    </div>
 
-        <div class="row">
-    <!--        <form action="." method="POST">-->
-            <form action="{{ url_for('check_check') }}" method="POST">
-                <label>
-                    <textarea class="form-control" name="contents" placeholder="Enter a comment"></textarea>
-                </label>
-                <input type="submit" class="btn btn-success" value="Post comment">
-            </form>
-        </div>
-
-<!--    <form action="{{ url_for('check_check') }}" method="post">-->
-<!--        <input type="text" name="projectFilepath">-->
-<!--        <input type="submit">-->
-<!--    </form>-->
-
+    <div class="row">
+        <!--        <form action="." method="POST">-->
+        <form id="new-comment2" name="new-comment-name2" action="{{ url_for('check_check') }}" method="POST">
+            <label>
+                <textarea class="form-control" name="contents2" placeholder="Enter a comment"></textarea>
+            </label>
+            <input type="submit" class="btn btn-success" value="Post comment">
+        </form>
+    </div>
 
 </div>
+
+
 {% include 'footer.html' %}
 
 </body>

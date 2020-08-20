@@ -2,6 +2,7 @@
 
 from flask import Flask
 from flask import render_template, make_response, redirect, url_for, request
+from flask_wtf import FlaskForm
 
 import random  # todo remove
 
@@ -37,19 +38,30 @@ db = SQLAlchemy(app)
 class ExampleEntry(db.Model):
     __tablename__ = "check"
 
-    # id = db.Column(db.Integer, primary_key=True)
-    # content = db.Column(db.String(4096))
     int_value_col = db.Column(db.Integer, primary_key=True)
     text_value_col = db.Column(db.String(4096))
 
 
-# ++++++++++++  dbg page ++++++++++++
+# class Login(Form):
+#     login_user = TextField('Username', [validators.Required()])
+#     login_pass = PasswordField('Password', [validators.Required()])
 
+
+
+
+
+# ++++++++++++  dbg page ++++++++++++
 @app.route('/check', methods=['GET', 'POST'])
 def check_check():
     if request.method == 'GET':
         return render_template('check.html', comments=ExampleEntry.query.all())
-    comment = ExampleEntry(text_value_col=request.form["contents"], int_value_col=random.randint(3, 9))
+    print(request.form.get("contents"))
+    print(request.form.get("contents2"))
+    if "contents2" in request.form:
+        comment_contents = request.form["contents2"] + " (from 2nd field)"
+    else:
+        comment_contents = request.form["contents"] + " (from 1nd field)"
+    comment = ExampleEntry(text_value_col=comment_contents, int_value_col=random.randint(3, 9))
     db.session.add(comment)
     db.session.commit()
     return redirect('/check')
