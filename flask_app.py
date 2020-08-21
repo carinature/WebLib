@@ -57,7 +57,7 @@ def check_check():
     if "contents2" in request.form:
         comment_contents = request.form["contents2"] + " (from 2nd field)"
     else:
-        comment_contents = request.form["contents"] + " (from 1nd field)"
+        comment_contents = request.form["contents"] + " (from 1st field)"
     comment = ExampleEntry(text_value_col=comment_contents, int_value_col=random.randint(3, 9))
     db.session.add(comment)
     db.session.commit()
@@ -75,10 +75,19 @@ def book_indices():
 
 
 @app.route('/subject-list')
-# @app.route('/subject-list.html')
 def subject_list():
     return render_template('subject-list.html')
     # return render_template(url_for('subject_list')+'.html')
+
+
+# example table module todo move to a different file (aux/migration/once_off)
+class TextsSubjectsEntry(db.Model):
+    __tablename__ = "texts_subjects"
+
+    indexa = db.Column(db.Integer, primary_key=True)
+    subject = db.Column(db.String(4096))
+    C = db.Column(db.String(4096))
+    # i
 
 
 # @app.route('/#', methods=['GET', 'POST'])
@@ -91,10 +100,8 @@ def home():
         return render_template('index.html')
 
     print('INDEX - POST')
-    print(request.form.to_dict())
-    print(request.form)
-    print(request.form.keys().__str__())
-    print()
+    # print(request.form.to_dict())
+    # print(request.form)
 
     fields = [
         "search-subject",
@@ -103,22 +110,15 @@ def home():
         "search-work",
         "search-reference"
     ]
-    # print("fields: ", fields)
     print(request.form.get("search-subject"))
-    if fields[0] in request.form:
-        print('INDEX - fields[0]')
-        print(request.form.get(fields[0]))
+    for i in range(len(fields)):
+        if fields[i] in request.form:
+            print("index() - field [", i, "]")
+            print(request.form.get(fields[i]))
     else:
         print("whhhhhhtttttttt")
-    if fields[1] in request.form:
-        print('INDEX - fields[1]')
-        print(request.form.get(fields[1]))
-    if fields[2] in request.form:
-        print('INDEX - fields[2]')
-        print(request.form.get(fields[2]))
-    #     print(request.form.to_dict())
-    # print(url_for('search_results'))
-    # print(url_for('home'))
+
+    # todo
     # collect fields
     # depending on which fields/form filled - choose a search function
     # next page should receive the results of the function as params
@@ -132,8 +132,53 @@ def home():
     #   change get to render with params
     #   change html to create/fill new data ("you searched for...", "total #results..")
     #   consider running the functions in "search-result" and NOT "home"
-    return redirect(url_for("search_results"))
+    # return redirect(url_for("search_results"), )
 
+    # change projection to include entire entry instead of indexa alone
+    # add fuzzy (returns things *like* but not necessarily the same) / regex search on the query
+    # clean data before:
+    #   split creation of tables function in db-migration into multiple function
+    #   appropriate normalization
+
+    get_c_from_form = request.form[fields[0]]
+    if get_c_from_form == "":
+        pass
+
+    # db = None
+
+    dds = []
+    if get_c_from_form:
+        c2 = "'%" + get_c_from_form + "%'"
+        # sql_for_df_sub = "SELECT * FROM texts_subjects WHERE subject like " + c2
+
+        results = db.session.query(TextsSubjectsEntry).filter_by(subject=get_c_from_form)
+
+        # texts_subjects2 = texts_subjects1[
+        #     texts_subjects1["subject"].str.contains('\\b' + get_c_from_form + '\\b', case=False, na=False)]
+        # # texts_subjects3 = texts_subjects1[
+        #     # texts_subjects1["subject"].str.contains('\\b' + get_c_from_form + 's\\b', case=False, na=False)]
+        # texts_subjects1 = pd.concat([texts_subjects2, texts_subjects3])
+        # subjects = texts_subjects1['subject'].values.tolist()
+        # # texts_subjects1["C"] = texts_subjects1["C"].apply(hyphenate)
+        # cs = texts_subjects1['C'].values.tolist()
+        # ccs = [item for sublist in cs for item in sublist]
+        # lccs = len(ccs)
+        # pd.set_option('display.max_colwidth', -1)
+        # if option == "and":
+        #     # d2 = "'%" + get_d_from_form + "%'"
+        #     # sql_for_df_sub_d = "SELECT * FROM texts_subjects WHERE subject like " + d2
+        #     d_texts_subjects = pd.read_sql_query(sql_for_df_sub_d, db)
+        #     d_subjects = d_texts_subjects['subject'].values.tolist()
+        #     d_texts_subjects["C"] = d_texts_subjects["C"].apply(hyphenate)
+        #     ds = d_texts_subjects['C'].values.tolist()
+        #     dds = [item for sublist in ds for item in sublist]
+
+        # return redirect(url_for("search_results"), )
+        from flask import jsonify
+
+        print(results.all())
+        return ""
+        # return jsonify(list(results))
 
 @app.errorhandler(404)
 def not_found(error):

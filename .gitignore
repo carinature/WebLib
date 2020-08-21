@@ -7,3 +7,5 @@ misc/*.js
 misc/fonts-and-icons
 misc/getfromdb
 __pycache__
+/utils.py
+raw_data
