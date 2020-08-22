@@ -113,10 +113,14 @@ def home():
     print(request.form.get("search-subject"))
     for i in range(len(fields)):
         if fields[i] in request.form:
-            print("index() - field [", i, "]")
-            print(request.form.get(fields[i]))
-    else:
-        print("whhhhhhtttttttt")
+            print()
+            # print("index() - field [", i, "]")
+            # print(request.form.get(fields[i]))
+        else:
+            print()
+            # print("whhhhhhtttttttt")
+
+    # return redirect(url_for("search_results"), )
 
     # todo
     # collect fields
@@ -132,7 +136,6 @@ def home():
     #   change get to render with params
     #   change html to create/fill new data ("you searched for...", "total #results..")
     #   consider running the functions in "search-result" and NOT "home"
-    # return redirect(url_for("search_results"), )
 
     # change projection to include entire entry instead of indexa alone
     # add fuzzy (returns things *like* but not necessarily the same) / regex search on the query
@@ -140,23 +143,23 @@ def home():
     #   split creation of tables function in db-migration into multiple function
     #   appropriate normalization
 
-    get_c_from_form = request.form[fields[0]]
-    if get_c_from_form == "":
+    search_word = request.form[fields[0]]
+    if search_word == "":
         pass
 
     # db = None
 
     dds = []
-    if get_c_from_form:
-        c2 = "'%" + get_c_from_form + "%'"
+    if search_word:
+        c2 = "'%" + search_word + "%'"
         # sql_for_df_sub = "SELECT * FROM texts_subjects WHERE subject like " + c2
 
-        results = db.session.query(TextsSubjectsEntry).filter_by(subject=get_c_from_form)
+        results = db.session.query(TextsSubjectsEntry).filter_by(subject=search_word)
 
         # texts_subjects2 = texts_subjects1[
-        #     texts_subjects1["subject"].str.contains('\\b' + get_c_from_form + '\\b', case=False, na=False)]
+        #     texts_subjects1["subject"].str.contains('\\b' + search_word + '\\b', case=False, na=False)]
         # # texts_subjects3 = texts_subjects1[
-        #     # texts_subjects1["subject"].str.contains('\\b' + get_c_from_form + 's\\b', case=False, na=False)]
+        #     # texts_subjects1["subject"].str.contains('\\b' + search_word + 's\\b', case=False, na=False)]
         # texts_subjects1 = pd.concat([texts_subjects2, texts_subjects3])
         # subjects = texts_subjects1['subject'].values.tolist()
         # # texts_subjects1["C"] = texts_subjects1["C"].apply(hyphenate)
@@ -173,12 +176,11 @@ def home():
         #     ds = d_texts_subjects['C'].values.tolist()
         #     dds = [item for sublist in ds for item in sublist]
 
-        # return redirect(url_for("search_results"), )
-        from flask import jsonify
-
         print(results.all())
-        return ""
-        # return jsonify(list(results))
+
+        return redirect(url_for("search_results"), )
+
+
 
 @app.errorhandler(404)
 def not_found(error):
