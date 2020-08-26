@@ -5,6 +5,7 @@ from flask import render_template, make_response, redirect, url_for, request
 from flask_wtf import FlaskForm
 
 import random  # todo remove
+from sqlalchemy.orm import Query # mainly for autocomplete
 
 app = Flask(__name__)
 
@@ -31,7 +32,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(app)
+db = SQLAlchemy(app) # the type is SQLAlchemy.orm ?
 
 
 # example table module todo move to a different file (aux/migration/once_off)
@@ -40,44 +41,6 @@ class ExampleEntry(db.Model):
 
     int_value_col = db.Column(db.Integer, primary_key=True)
     text_value_col = db.Column(db.String(4096))
-
-
-# class Login(Form):
-#     login_user = TextField('Username', [validators.Required()])
-#     login_pass = PasswordField('Password', [validators.Required()])
-
-
-# ++++++++++++  dbg page ++++++++++++
-@app.route('/check', methods=['GET', 'POST'])
-def check_check():
-    if request.method == 'GET':
-        return render_template('check.html', comments=ExampleEntry.query.all())
-    print(request.form.get("contents"))
-    print(request.form.get("contents2"))
-    if "contents2" in request.form:
-        comment_contents = request.form["contents2"] + " (from 2nd field)"
-    else:
-        comment_contents = request.form["contents"] + " (from 1st field)"
-    comment = ExampleEntry(text_value_col=comment_contents, int_value_col=random.randint(3, 9))
-    db.session.add(comment)
-    db.session.commit()
-    return redirect('/check')
-
-
-@app.route('/search-results', methods=['GET', 'POST'])
-def search_results():
-    return render_template('search-results.html')
-
-
-@app.route('/book-indices')
-def book_indices():
-    return render_template('book-indices.html')
-
-
-@app.route('/subject-list')
-def subject_list():
-    return render_template('subject-list.html')
-    # return render_template(url_for('subject_list')+'.html')
 
 
 # example table module todo move to a different file (aux/migration/once_off)
@@ -98,11 +61,6 @@ def home():
     if 'GET' == request.method:
         print('INDEX - GET')
         return render_template('index.html')
-
-    print('INDEX - POST')
-    # print(request.form.to_dict())
-    # print(request.form)
-
     fields = [
         "search-subject",
         "second-keyword",
@@ -110,50 +68,44 @@ def home():
         "search-work",
         "search-reference"
     ]
-    print(request.form.get("search-subject"))
+
     for i in range(len(fields)):
         if fields[i] in request.form:
             print()
-            # print("index() - field [", i, "]")
             # print(request.form.get(fields[i]))
-        else:
-            print()
-            # print("whhhhhhtttttttt")
-
-    # return redirect(url_for("search_results"), )
 
     # todo
-    # collect fields
-    # depending on which fields/form filled - choose a search function
-    # next page should receive the results of the function as params
-    # like so:         return render_template('check.html', comments=ExampleEntry.query.all())
-    # but first try like this         redirect(url_for("search_results", comments=ExampleEntry.query.all()))
+    #  - DONE - collect fields
+    #  - DONE - depending on which fields/form filled - choose a search function
+    #  next page should receive the results of the function as params
+    #  like so:         return render_template('search_results', comments=ExampleEntry.query.all())
+    #  but first try like this         redirect(url_for("search_results", comments=ExampleEntry.query.all()))
 
-    # create a class for the forms?
-    # you MUST make sure to be safe from SQL injection and other X
+    # todo
+    #  create a class for the forms?
+    #  you MUST make sure to be safe from SQL injection and other X
 
-    # in the search-results do
-    #   change get to render with params
-    #   change html to create/fill new data ("you searched for...", "total #results..")
-    #   consider running the functions in "search-result" and NOT "home"
+    # todo
+    #  in the search-results do
+    #    change get to render with params
+    #    change html to create/fill new data ("you searched for...", "total #results..")
+    #    consider running the functions in "search-result" and NOT "home"
+    #    make some sort "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
 
-    # change projection to include entire entry instead of indexa alone
-    # add fuzzy (returns things *like* but not necessarily the same) / regex search on the query
-    # clean data before:
-    #   split creation of tables function in db-migration into multiple function
-    #   appropriate normalization
+    # todo
+    #  change projection to include entire entry instead of indexa alone
+    #  add fuzzy (returns things *like* but not necessarily the same) / regex search on the query
+    #  clean data before:
+    #    split creation of tables function in db-migration into multiple function
+    #    appropriate normalization
 
-    search_word = request.form[fields[0]]
-    if search_word == "":
-        pass
+    print(request.form.to_dict())
+    search_word = request.form[fields[0]] if (fields[0] in request.form) else None
+    search_reference = request.form[fields[2]] if (fields[2] in request.form) else None
 
-    # db = None
-
-    dds = []
-    if search_word:
-        c2 = "'%" + search_word + "%'"
-        # sql_for_df_sub = "SELECT * FROM texts_subjects WHERE subject like " + c2
-
+    if search_word: # the search by Subject button was clicked
+        if search_word == "":
+            pass  # todo handle "empty searches"
         results = db.session.query(TextsSubjectsEntry).filter_by(subject=search_word)
 
         # texts_subjects2 = texts_subjects1[
@@ -178,8 +130,11 @@ def home():
 
         print(results.all())
 
-        return redirect(url_for("search_results"), )
+    else: # the search by Reference button was clicked
+        if search_reference == "":
+            pass  # todo handle "empty searches"
 
+    return redirect(url_for("search_results"), )
 
 
 @app.errorhandler(404)
@@ -188,3 +143,57 @@ def not_found(error):
     resp.headers['X-Something'] = 'A value'
     print(error)
     return resp
+
+
+# ++++++++++++  search results and filtering page ++++++++++++
+@app.route('/search-results', methods=['GET', 'POST'])
+def search_results():
+    return render_template('search-results.html')
+
+# class Title(db.Model):
+#     __tablename__ = "titlesa"
+#
+#     indexa = db.Column(db.String(4096))
+#     index  = db.Column(db.String(4096))
+#     author1  = db.Column(db.String(4096))
+#     centend  = db.Column(db.String(4096))
+#     centstart  = db.Column(db.String(4096))
+#     joined  = db.Column(db.String(4096))
+#     language  = db.Column(db.String(4096))
+#     number  = db.Column(db.String(4096))
+#     title1  = db.Column(db.String(4096))
+#     # ldslkf =  Query()
+
+# ++++++++++++  list of books page ++++++++++++
+@app.route('/book-indices')
+def book_indices():
+    # results = Query(Title).all().options()
+
+    # table = Title.query.all()
+    # return render_template('book-indices.html', titles=table)
+    # FKSDJF = db.session.query().
+    return render_template('book-indices.html', titles=["titile", "titile1", "titile2", "titile3", "titile4"])
+
+
+# ++++++++++++  list of "subjects" in tje db page ++++++++++++
+@app.route('/subject-list')
+def subject_list():
+    return render_template('subject-list.html')
+    # return render_template(url_for('subject_list')+'.html')
+
+
+# ++++++++++++  dbg page ++++++++++++
+@app.route('/check', methods=['GET', 'POST'])
+def check_check():
+    if request.method == 'GET':
+        return render_template('check.html', comments=ExampleEntry.query.all())
+    print(request.form.get("contents"))
+    print(request.form.get("contents2"))
+    if "contents2" in request.form:
+        comment_contents = request.form["contents2"] + " (from 2nd field)"
+    else:
+        comment_contents = request.form["contents"] + " (from 1st field)"
+    comment = ExampleEntry(text_value_col=comment_contents, int_value_col=random.randint(3, 9))
+    db.session.add(comment)
+    db.session.commit()
+    return redirect('/check')

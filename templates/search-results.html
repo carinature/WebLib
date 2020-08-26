@@ -59,11 +59,11 @@
         <form class="">
             <div class="container-fluid padding ">
                 <!--            <div class="row text-center ">--> <!--todo dont delete this yet-->
-                <div class="row text-center inner-form">
+                <div class="row text-center inner-form ">
                     <!--                    <div class="col-sm-12 col-md-6" style="text-align: right; ">-->
                     <!--sub-subject filtering options-->
                     <div class="col-sm-12 col-md-6">
-                        <h5 class="welcome text-center" style="float: top; vertical-align: top">Filter by Sub-subject</h5>
+                        <h5 class="welcome text-center col-form-label-lg" style="float: top; vertical-align: top">Filter by Sub-subject</h5>
                         <hr>
                         <label style="float: right" for="include">Including:
                             <input id="include" type="text" placeholder="Subject"> </label>
@@ -164,14 +164,15 @@
 
 <br><br><br>
 <!--the FETCH button-->
-<button type="button" class=" btn btn-lg btn-primary"
-        style="float: right; margin-right: 5%; padding:1rem 4rem 1rem 4rem;"
+<button type="button" class=" btn btn-lg btn-primary col-3"
+{#        style="float: right; margin-right: 5%; padding:1rem 4rem 1rem 4rem;"#}
+        style="margin-right: 5%; padding:1rem 4rem 1rem 4rem; position: sticky; float: right"
         onclick="alert('Fetching Data...')">Fetch Results
 </button>
 
 <!--check box filtering options -->
-<div class="form-group padding" style="margin-left: 5%">
-    <div class="custom-control custom-switch" style="text-align: left">
+<div class="form-group padding col-9" style="margin-left: 5%">
+    <div class="custom-control custom-switch " style="text-align: left">
         <input type="checkbox" class="custom-control-input" id="checkAll" onClick="filter_check_all(this)">
         <label class="custom-control-label padding" for="checkAll">
             <b>All the Results</b><br>

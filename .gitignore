@@ -1,12 +1,10 @@
 venv
 .idea
-images
-pies
 misc
-misc/*.py
-misc/*.js
+#misc/*.py
+#misc/*.js
 #misc/fonts-and-icons
 #misc/getfromdb
 __pycache__
-/utils.py
+utils.py
 raw_data

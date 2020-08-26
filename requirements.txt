@@ -1,4 +1,4 @@
-flask
+flask~=1.1.2
 Flask-SQLAlchemy
 
 mysql-connector-python # this is for the option to run 'db.createall()' which is a one-off
@@ -26,3 +26,6 @@ flask-wtf
 #     <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>-->
 #     <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
 #     <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+
+pandas~=1.1.1
+SQLAlchemy~=1.3.19

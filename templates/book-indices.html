@@ -37,7 +37,17 @@
 </div>
 <h1 class="display-3 col-12 s01" style="background-color: var(--secondary-color-light); padding-left: 5%">Book indices
     included in the database</h1>
-<div style="padding: 5%">
+
+    {% for title in titles %}
+        <div class="row">
+            {{ title }}
+{#            {{ title.text_value_col }}#}
+        </div>
+    {% endfor %}
+
+
+
+{#<div style="padding: 5%">
 
     <h6 style="color: var(--accent-color);">The authors of these books are in no way responsible for errors on this
         database or website. </h6>
@@ -485,7 +495,7 @@
         in
         Ancient Divination. Leiden: Brill, 2005. </p>
 
-</div>
+</div>#}
 
 <!--Footer-->
 {% include 'footer.html' %}
