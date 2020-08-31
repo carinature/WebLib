@@ -50,3 +50,36 @@ if __name__ == '__main__':
         engine=engine,
         if_exists='replace',
     )
+
+    t = time()
+
+    #Create the database
+    engine = create_engine('sqlite:///csv_test.db')
+    Base.metadata.create_all(engine)
+
+    #Create the session
+    session = sessionmaker()
+    session.configure(bind=engine)
+    s = session()
+
+    try:
+        file_name = "t.csv" #sample CSV file used:  http://www.google.com/finance/historical?q=NYSE%3AT&ei=W4ikVam8LYWjmAGjhoHACw&output=csv
+        data = Load_Data(file_name)
+
+        for i in data:
+            record = Price_History(**{
+                'date' : datetime.strptime(i[0], '%d-%b-%y').date(),
+                'opn' : i[1],
+                'hi' : i[2],
+                'lo' : i[3],
+                'close' : i[4],
+                'vol' : i[5]
+            })
+            s.add(record) #Add all the records
+
+        s.commit() #Attempt to commit all the records
+    except:
+        s.rollback() #Rollback the changes on error
+    finally:
+        s.close() #Close the connection
+    print "Time elapsed: " + str(time() - t) + " s."

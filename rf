@@ -5,9 +5,11 @@ export FLASK_ENV=development
 export FLASK_DEBUG=1
 
 #sudo docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=123 -d mysql:5
-docker-compose start -f mysql-docker-compose.yml #(3)
+#
+# docker-compose start -f mysql-docker-compose.yml #(3)
 
-#docker-machine start default (1)
+docker-machine start default  # (1)
+docker-compose -f mysql-docker-compose.yml up -d #doesn't "override" the terminal with log (2)
 #sudo docker-compose -f mysql-docker-compose.yml up -d #doesn't "override" the terminal with log (2)
 #sudo docker-compose -f mysql-docker-compose.yml up #show logs of the DB #usefull (2)
 # sudo docker ps
@@ -16,3 +18,18 @@ docker-compose start -f mysql-docker-compose.yml #(3)
 
 flask run
 
+
+#   If the message "Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?" shows
+# sudo dockerd
+#   If the message "failed to start daemon: pid file found, ensure docker is not running or delete /var/run/docker.pid" shows
+# sudo rm /var/run/docker.pid -rf
+# sudo systemctl start docker
+# sudo dockerd
+
+
+
+#sudo usermod -aG docker $USER
+#ps axf | grep docker | grep -v grep | awk '{print "kill -9 " $1}' | sudo sh
+#sudo service docker stop
+
+# cat /var/run/docker.pid
