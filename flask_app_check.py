@@ -131,7 +131,7 @@ dtype_dic_py2sql = {int: Integer, str: Text}
 # print('******************')
 # print(dataframe.to_dict())
 
-models = [BookRef] #, TextSubject, TextText] #fixme change to generic list (use Metadate...?)
+models = [Title] #, TextSubject, TextText] #fixme change to generic list (use Metadate...?)
 # models = [BookRef, Title, TextSubject, TextText] #fixme change to generic list (use Metadate...?)
 for model in models:
     for src_file in model.src_scv:

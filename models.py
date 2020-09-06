@@ -50,56 +50,56 @@ Base = declarative_base()
 
 
 # corresponds to the bookreferences2.csv
-class BookRef(Base):
-    __tablename__ = 'book_references'
-    src_scv = ['raw_data/bookreferences2.csv']
-    dtype_dic_csv2py = {'book_bibliographic_info': int, 'file': str, 'titleref': str, 'gcode': str}
-
-    # todo see if possible to name the fields differently from  their csv name
-    #   answer: names of columns here in the model class dont have to be the same as in the original file
-    # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
-    book_bibliographic_info = Column(Integer, primary_key=True, nullable=False)
-    file = Column(String(100), default='non',
-                  nullable=True)  # fixme find a better default val or handle empty field. try the option below
-    # besides what does it mean to have a column that both nullable and has a default value
-    # file = Column(String(100), default=None, nullable=True) todo try this one
-    titleref = Column(String(100), nullable=True)
-    gcode = Column(Text, nullable=True)
-
-    # gcode = Column(Text, nullable=True ,unique=True)
-
-    def __repr__(self):
-        return f'<BookRef model file: {self.file},  title ref: {self.titleref}, index: {self.book_bibliographic_info}>'
-
-    # def __init__(self, bib_info, file, titleref, gcode):
-    #     super().__init__(self)
-    #     self.book_bibliographic_info = bib_info
-    #     self.file = file
-    #     self.titleref = titleref
-    #     self.gcode = gcode
+# class BookRef(Base):
+#     __tablename__ = 'book_references'
+#     src_scv = ['raw_data/bookreferences2.csv']
+#     dtype_dic_csv2py = {'book_bibliographic_info': int, 'file': str, 'titleref': str, 'gcode': str}
+#
+#     # todo see if possible to name the fields differently from  their csv name
+#     #   answer: names of columns here in the model class dont have to be the same as in the original file
+#     # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
+#     book_bibliographic_info = Column(Integer, primary_key=True, nullable=False)
+#     file = Column(String(100), default='non',
+#                   nullable=True)  # fixme find a better default val or handle empty field. try the option below
+#     # besides what does it mean to have a column that both nullable and has a default value
+#     # file = Column(String(100), default=None, nullable=True) todo try this one
+#     titleref = Column(String(100), nullable=True)
+#     gcode = Column(Text, nullable=True)
+#
+#     # gcode = Column(Text, nullable=True ,unique=True)
+#
+#     def __repr__(self):
+#         return f'<BookRef model file: {self.file},  title ref: {self.titleref}, index: {self.book_bibliographic_info}>'
+#
+#     # def __init__(self, bib_info, file, titleref, gcode):
+#     #     super().__init__(self)
+#     #     self.book_bibliographic_info = bib_info
+#     #     self.file = file
+#     #     self.titleref = titleref
+#     #     self.gcode = gcode
 
 
 # corresponds to the bookreferences2.csv
 
 # corresponds to the titlesa.csv
-# class Title(Base):  # todo make sure what each fields
-#     __tablename__ = 'titles_new'  # fixme
-#     src_scv = ['raw_data/titlesa.csv']
-#
-#     dbg_index = Column(Integer, autoincrement=True,primary_key=True, )
-#     # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
-#     index1 = Column(Integer,primary_key=True,default='non')  # , nullable=False)
-#     author = Column(String(100))  # , nullable=False)
-#     centend = Column(Integer, default='non')  # , nullable=True)
-#     centstart = Column(Integer, default='non')  # , nullable=True)
-#     joined = Column(String(10), default='non')  # fixme this ) #seems to be alwayws null
-#     language = Column(String(100), default='non')  # , nullable=True)
-#     number = Column(Integer)  # , nullable=False)
-#     title = Column(String(100))  # , nullable=False)
-#
-#     def __repr__(self):
-#         # return '<Person model {}>'.format(self.id)
-#         return f'<Title model title: {self.title},  author: {self.author}, index: {self.index}>'
+class Title(Base):  # todo make sure what each fields
+    __tablename__ = 'titles_new'  # fixme
+    src_scv = ['raw_data/titlesa.csv']
+
+    dbg_index = Column(Integer, autoincrement=True,primary_key=True, )
+    # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
+    index1 = Column(Integer,primary_key=True,default='non')  # , nullable=False)
+    author = Column(String(100))  # , nullable=False)
+    centend = Column(Integer, default='non')  # , nullable=True)
+    centstart = Column(Integer, default='non')  # , nullable=True)
+    joined = Column(String(10), default='non')  # fixme this ) #seems to be alwayws null
+    language = Column(String(100), default='non')  # , nullable=True)
+    number = Column(Integer)  # , nullable=False)
+    title = Column(String(100))  # , nullable=False)
+
+    def __repr__(self):
+        # return '<Person model {}>'.format(self.id)
+        return f'<Title model title: {self.title},  author: {self.author}, index: {self.index}>'
 
 # corresponds to the text_subjects2.csv
 # class TextSubject(Base):
