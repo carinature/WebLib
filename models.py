@@ -16,37 +16,6 @@ SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostnam
 Base = declarative_base()
 
 
-# class UserModel(Base):
-#     """Data model example."""
-#     __tablename__ = "example_table"
-#     # __table_args__ = {"schema": "example"} # for postrgres
-#
-#     id = Column(Integer, primary_key=True, nullable=False)
-#     name = Column(String(100), nullable=False)
-#     description = Column(Text, nullable=True)
-#     join_date = Column(DateTime, nullable=True)
-#     vip = Column(Boolean, nullable=True)
-#     number = Column(Float, nullable=True)
-#     data = Column(PickleType, nullable=True)
-#
-#     def __repr__(self):
-#         return f'<UserModel model id: {self.id},  name: {self.name}, >'
-
-
-class Entry(Base):
-    __tablename__ = 'check'
-
-    # next fields have to have the same names as the fields in the original table
-    int_value_col = Column(Integer, primary_key=True, unique=True, autoincrement=True)
-    text_value_col = Column(String(80), nullable=False)
-
-    # email = Column(String(120), unique=True, nullable=False)
-    # joined = Column(Datetime, unique=False, nullable=False)
-
-    def __repr__(self):
-        return f'<Entry {self.text_value_col}>'
-
-
 # class TeamModel(Base):
 #     """Data model for teams."""
 #     __tablename__ = "sqlalchemy_tutorial_teams"
@@ -77,48 +46,30 @@ class Entry(Base):
 #     def __repr__(self):
 #         return '<Person model {}>'.format(self.id)
 
-
-class Title(Base):  # todo see if possible to name the fields differently from  their csv name
-    __tablename__ = 'titles_new'
-
-    # indexa    bigint null,
-    # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
-    index = Column(Float, primary_key=True, nullable=False)  # value of the 'index' column in the original source csv
-    author1 = Column(Text, nullable=False)
-    centend = Column(Text, nullable=True)
-    centstart = Column(Text, nullable=True)
-    joined = Column(Text, nullable=True)
-    language = Column(Text, nullable=True)
-    number = Column(Text, nullable=False)
-    title1 = Column(Text, nullable=False)
-
-    def __repr__(self):
-        # return '<Person model {}>'.format(self.id)
-        return f'<Title model title: {self.title1},  author: {self.author1}, index: {self.index}>'
+# corresponds to the titilesa.csv
 
 
-class BookRef(Base):  # todo see if possible to name the fields differently from  their csv name
+# corresponds to the bookreferences2.csv
+class BookRef(Base):
     __tablename__ = 'book_references'
-    # names of columns here in the model class dont have to be the same as in the original file
+    src_scv = ['raw_data/bookreferences2.csv']
+    dtype_dic_csv2py = {'book_bibliographic_info': int, 'file': str, 'titleref': str, 'gcode': str}
+
+    # todo see if possible to name the fields differently from  their csv name
+    #   answer: names of columns here in the model class dont have to be the same as in the original file
     # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
-    book_bibliographic_info = Column(Integer,
-                                     # default=-1,
-                                     primary_key=True,
-                                     nullable=False)  # value of the 'index' column in the original source csv
-                                     # nullable=True)  # value of the 'index' column in the original source csv
-    file = Column(Text,
-                  # server_default='non-non',
-                  default='non',
-                  nullable=True)
-    titleref = Column(Text,
-                      # default="non",
-                      nullable=True)
-    gcode = Column(Text,
-                   # default="non",
-                   nullable=True)
+    book_bibliographic_info = Column(Integer, primary_key=True, nullable=False)
+    file = Column(String(100), default='non',
+                  nullable=True)  # fixme find a better default val or handle empty field. try the option below
+    # besides what does it mean to have a column that both nullable and has a default value
+    # file = Column(String(100), default=None, nullable=True) todo try this one
+    titleref = Column(String(100), nullable=True)
+    gcode = Column(Text, nullable=True)
+
+    # gcode = Column(Text, nullable=True ,unique=True)
 
     def __repr__(self):
-        return f'<Title model file: {self.file},  title ref: {self.titleref}, index: {self.book_bibliographic_info}>'
+        return f'<BookRef model file: {self.file},  title ref: {self.titleref}, index: {self.book_bibliographic_info}>'
 
     # def __init__(self, bib_info, file, titleref, gcode):
     #     super().__init__(self)
@@ -127,3 +78,59 @@ class BookRef(Base):  # todo see if possible to name the fields differently from
     #     self.titleref = titleref
     #     self.gcode = gcode
 
+
+# corresponds to the bookreferences2.csv
+
+# corresponds to the titlesa.csv
+# class Title(Base):  # todo make sure what each fields
+#     __tablename__ = 'titles_new'  # fixme
+#     src_scv = ['raw_data/titlesa.csv']
+#
+#     dbg_index = Column(Integer, autoincrement=True,primary_key=True, )
+#     # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
+#     index1 = Column(Integer,primary_key=True,default='non')  # , nullable=False)
+#     author = Column(String(100))  # , nullable=False)
+#     centend = Column(Integer, default='non')  # , nullable=True)
+#     centstart = Column(Integer, default='non')  # , nullable=True)
+#     joined = Column(String(10), default='non')  # fixme this ) #seems to be alwayws null
+#     language = Column(String(100), default='non')  # , nullable=True)
+#     number = Column(Integer)  # , nullable=False)
+#     title = Column(String(100))  # , nullable=False)
+#
+#     def __repr__(self):
+#         # return '<Person model {}>'.format(self.id)
+#         return f'<Title model title: {self.title},  author: {self.author}, index: {self.index}>'
+
+# corresponds to the text_subjects2.csv
+# class TextSubject(Base):
+#     # todo fixme
+#     #  file structure not fully understood
+#     #  plus what happens when there are miultiple commas
+#     #   or a subject that contains a comma within brackets(', ")
+#     __tablename__ = "text_subjects_new"  # fixme
+#     src_scv = ['raw_data/texts_subjects2.csv']
+#
+#     # next fields have to have the same names as the fields in the original table
+#     dbg_index = Column(Integer, primary_key=True, autoincrement=True)
+#     C = Column(Text)
+#     subject = Column(String(120), nullable=False)
+#     # subject = Column(Text, nullable=False, primary_key=True)
+#
+#     def __repr__(self):
+#         return f'<TextSubject subject: {self.subject}, C: {self.C} >'
+
+
+# # corresponds to the textsa1.csv textsa2.csv textsa19.csv textsa1.csv
+# class TextText(Base):
+#     __tablename__ = "text_texts"  # fixme
+#     src_scv = ['raw_data/textsa1.csv', 'raw_data/textsa2.csv', 'raw_data/textsa19.csv']
+#
+#     subject = Column(String(100), nullable=False)
+#     ref = Column(Float, primary_key=True, nullable=False)
+#     page = Column(Integer, primary_key=True, nullable=False)
+#     book_bibliographic_info = Column(Integer, primary_key=True, nullable=False)
+#     number = Column(Integer, primary_key=True, nullable=False)
+#     C = Column(Integer, primary_key=True, nullable=False)
+#
+#     def __repr__(self):
+#         return f'<TextText model subject: {self.subject},  C: {self.C}, >'
