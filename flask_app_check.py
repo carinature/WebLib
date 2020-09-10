@@ -6,17 +6,12 @@
 # # DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 # # """:type: sqlalchemy.orm.Session"""
 #
-import os
-from datetime import datetime
 
 # for the type_dict
-import sqlalchemy
-import decimal
 
-from models import *
+from utilities.models import *
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from os import environ
 
 # Create engine
 engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False)
@@ -104,49 +99,5 @@ session = Session()
 #     db.session.commit()
 #     return ""
 
-from sqlalchemy.types import Integer, String, Text, DateTime, Float, Boolean, PickleType
 
-import pandas as pd
-from flask_app import db
-from flask_sqlalchemy import SQLAlchemy
 
-dtype_dic_csv2py = {'book_bibliographic_info': int, 'file': str, 'titleref': str, 'gcode': str}
-dtype_dic_py2sql = {int: Integer, str: Text}
-
-# csv_file_path = 'raw_data/bookreferences2.csv'
-# print('-----------------')
-# with open(csv_file_path, 'r') as csv_file:
-#     # dataframe = pd.read_csv(file, usecols=['file', 'titleref'])[['titleref', 'file']]  # , 'gcode'])
-#     # dataframe = pd.read_csv(csv_file, header=0, names=['kaka', 'pipi'])[['pipi', 'kaka']]
-#     dataframe = pd.read_csv(csv_file, header=0, dtype=dtype_dic_csv2py) #dtype=BookRef)
-#     # dataframe = pd.read_csv(csv_file, header=0)
-#     print(dataframe)
-# # DO NOT DELETE THE NEXT 2 (3) LINES
-# db.engine.execute(BookRef.__table__.insert(), dataframe.to_dict('records'))
-#
-# print('~~~~~~~~~~~~')
-# print(dataframe.to_dict('records'))
-# print('===============')
-# print(dataframe.to_dict('index'))
-# print('******************')
-# print(dataframe.to_dict())
-
-models = [Title] #, TextSubject, TextText] #fixme change to generic list (use Metadate...?)
-# models = [BookRef, Title, TextSubject, TextText] #fixme change to generic list (use Metadate...?)
-for model in models:
-    for src_file in model.src_scv:
-        with open(src_file) as csv_file:
-            dataframe = pd.read_csv(csv_file) #, header=0)
-            # todo consider this option
-            # dataframe = pd.read_csv(csv_file, header=0, dtype=dtype_dic_csv2py)  # dtype=BookRef)
-            dataframe.fillna('non')
-            # db.engine.execute(model.__table__.insert(), dataframe.to_dict('records'))
-            # todo the next one is anpther good WORKING option - find out which of the 2 (or 3) is faster
-            dataframe.to_sql(name=model.__tablename__, con=engine, if_exists='replace', index=False,
-                             index_label='book_bibliographic_info', dtype=dtype_dic_py2sql) #this one workd! dont delte
-            # fixme the next one should be the best option but it doesn't work. WHY??
-            # session.bulk_insert_mappings(model, dataframe.to_dict(orient='records'))  # should work but doesnt. why?! dont delete
-            # new_mapper = sqlalchemy.orm.mapper(model, local_table=BookRef.__table__, non_primary=True)  # should work but doesnt
-            # session.bulk_insert_mappings(new_mapper, dataframe.to_dict('records'))  # should work but doesnt. why?! dont delete
-
-session.close()
