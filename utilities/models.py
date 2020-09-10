@@ -144,7 +144,7 @@ class TextText(Base):
     subject = Column(String(120), nullable=True)
     # ref = Column(String(100), nullable=True, server_default='non', default='non')
     ref = Column(String(100), nullable=True)
-    page = Column(Integer, primary_key=True, nullable=False, default=-100)
+    page = Column(String(10), primary_key=True, nullable=False, default=-100)
     book_bibliographic_info = Column(String(10), primary_key=True, nullable=True, default='')
     number = Column(Integer, primary_key=True, nullable=False)
     C = Column(String(10), primary_key=True, nullable=False)
