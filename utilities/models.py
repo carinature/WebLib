@@ -1,22 +1,15 @@
+import os
+
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
-from sqlalchemy.types import Integer, Text, String
 from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float, Boolean, PickleType
 
 from sqlalchemy.ext.declarative import declarative_base
 
 from properties import RAW_DATA_DIR
 
-SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{db_name}".format(
-    username="root",
-    password="123",
-    hostname="localhost",
-    db_name="tryout",
-)
-
 Base = declarative_base()
-
 
 # class TeamModel(Base):
 #     """Data model for teams."""
@@ -50,11 +43,15 @@ Base = declarative_base()
 
 
 # corresponds to the bookreferences2.csv
+
 class BookRef(Base):
     __tablename__ = 'book_references'
-    src_scv = [f'{RAW_DATA_DIR}/bookreferences2.csv']
+
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
+               for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('book_references')]
+
     # dtype_dic_csv2py = {'book_bibliographic_info': int, 'file': str, 'titleref': str, 'gcode': str}
-    dtype_dic_csv2py = {'book_bibliographic_info':str,'file':str,'titleref':str,'gcode':str}
+    dtype_dic_csv2py = {'book_bibliographic_info': str, 'file': str, 'titleref': str, 'gcode': str}
     dtype_dic_py2sql = {int: Integer, str: Text}
 
     # todo see if possible to name the fields differently from  their csv name
@@ -62,12 +59,13 @@ class BookRef(Base):
     # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
     dbg_index = Column(Integer, autoincrement=True, primary_key=True, )
     book_bibliographic_info = Column(String(10), primary_key=True, nullable=False)
-    file = Column(String(100), default='non',
-                  nullable=True)  # fixme find a better default val or handle empty field. try the option below
-    # besides what does it mean to have a column that both nullable and has a default value
-    # file = Column(String(100), default=None, nullable=True) todo try this one
+    file = Column(String(100), default='non', nullable=True)
     titleref = Column(String(100), nullable=True)
     gcode = Column(Text, nullable=True)
+
+    # fixme find a better default val or handle empty field. try the option below
+    # todo what does it mean to have a column that is both nullable and has a default value
+    # file = Column(String(100), default=None, nullable=True) todo try this one
 
     # gcode = Column(Text, nullable=True ,unique=True)
 
@@ -77,8 +75,10 @@ class BookRef(Base):
 
 # corresponds to the titlesa.csv
 class Title(Base):  # todo make sure what each fields
-    __tablename__ = 'titles_new'  # fixme
-    src_scv = [f'{RAW_DATA_DIR}/titlesa.csv']
+    __tablename__ = 'titles'  # fixme
+
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
+               for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('title')]
 
     dtype_dic_csv2py = {'index1': str,
                         ' author1': str,
@@ -93,13 +93,13 @@ class Title(Base):  # todo make sure what each fields
     dbg_index = Column(Integer, autoincrement=True, primary_key=True, )
     # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
     index1 = Column(String(100), primary_key=True, default='non')  # , nullable=False)
-    author = Column(String(100))  # , nullable=False)
-    centend = Column(String(100), default='non')  # , nullable=True)
-    centstart = Column(String(100), default='non')  # , nullable=True)
+    author = Column(String(100))
+    centend = Column(String(100), default='non')
+    centstart = Column(String(100), default='non')
     joined = Column(String(200), nullable=True)  # fixme this ) #seems to be alwayws null
-    language = Column(String(100), default='non')  # , nullable=True)
-    number = Column(String(100))  # , nullable=False)
-    title = Column(String(100))  # , nullable=False)
+    language = Column(String(100), default='non')
+    number = Column(String(100))
+    title = Column(String(100))
 
     def __repr__(self):
         # return '<Person model {}>'.format(self.id)
@@ -112,16 +112,16 @@ class TextSubject(Base):
     #  file structure not fully understood
     #  plus what happens when there are miultiple commas
     #   or a subject that contains a comma within brackets(', ")
-    __tablename__ = "text_subjects_new"  # fixme
-    src_scv = [f'{RAW_DATA_DIR}/texts_subjects2.csv']
+    __tablename__ = 'text_subjects'  # fixme
+
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
+               for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('text_subjects')]
     dtype_dic_csv2py = {'subject': str, 'C': str}
     dtype_dic_py2sql = {int: Integer, str: Text}
 
-    # next fields have to have the same names as the fields in the original table
     dbg_index = Column(Integer, primary_key=True, autoincrement=True)
     subject = Column(String(200), nullable=False)
-    C = Column(Text) #longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
-    # subject = Column(Text, nullable=False, primary_key=True)
+    C = Column(Text)  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
 
     def __repr__(self):
         return f'<TextSubject subject: {self.subject}, C: {self.C} >'
@@ -129,8 +129,10 @@ class TextSubject(Base):
 
 # corresponds to the textsa1.csv textsa2.csv textsa19.csv textsa1.csv
 class TextText(Base):
-    __tablename__ = "text_texts"  # fixme
-    src_scv = [f'{RAW_DATA_DIR}/textsa1.csv', f'{RAW_DATA_DIR}/textsa2.csv', f'{RAW_DATA_DIR}/textsa19.csv']
+    __tablename__ = "texts"  # fixme
+
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
+               for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
 
     dtype_dic_csv2py = {'subject': str,
                         'ref': str,
@@ -139,7 +141,7 @@ class TextText(Base):
                         'number': str,
                         'C': str}  # {col:str for col in col_names}
     # dtype_dic_py2sql = {int: Integer, str: Text}
-    # index_dbg = Column(Integer, autoincrement=True, primary_key=True)
+    index_dbg = Column(Integer, autoincrement=True, primary_key=True)
 
     subject = Column(String(120), nullable=True)
     # ref = Column(String(100), nullable=True, server_default='non', default='non')
