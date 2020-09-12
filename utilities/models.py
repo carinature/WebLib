@@ -142,10 +142,10 @@ class TextText(Base):
     __tablename__ = "texts"
 
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa1.csv']
-    src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa2.csv']
+    # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa2.csv']
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa19.csv']
-    # src_scv = [f'{RAW_DATA_DIR}/{textsfile}' fixme should work
-    #            for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}' #fixme should work
+               for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
 
     col_names = ['subject', 'ref', 'page', 'book_biblio_info', 'number', 'C']
 
