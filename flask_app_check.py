@@ -10,8 +10,9 @@
 # for the type_dict
 
 from utilities.models import *
+from properties import SQLALCHEMY_DATABASE_URI
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 # Create engine
 engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False)
@@ -22,6 +23,7 @@ Base.metadata.create_all(engine)
 # Create the session
 Session = sessionmaker(bind=engine)
 session = Session()
+# session = scoped_session(Session())
 
 # user = UserModel(name='todd', description='im testing this', vip=True, id=datetime.now().microsecond,
 #                  join_date=datetime.now())
@@ -62,42 +64,4 @@ session = Session()
 #   offset([INTEGER]): Begins the query at row n.
 #   "Group by" aggregation
 #   records = session.query(func.count(Customer.first_name)).group_by(Customer.first_name).all()
-
-
-#  ~~~~~~~~~~~~ READ THIS!!!
-# The engine is what allows you to use connection pooling. By default, it will persist connections across requests. The basic usage (without fancy things like scoped_session or sessionmaker) is like this:
-# engine = create_engine(...)
-#
-# @app.route(...)
-# def foo():
-#     session = Session(bind=engine)
-#     try:
-#         session.query(...)
-#         session.commit()
-#     finally:
-#         session.close()
-#     return ""
-# On top of this, you can add scoped_session and sessionmaker:
-# engine = create_engine(...)
-# Session = sessionmaker(bind=engine)
-# session = scoped_session(Session, scopefunc=...)
-#
-# @app.route(...)
-# def foo():
-#     try:
-#         session.query(...)
-#         session.commit()
-#     finally:
-#         session.close()
-#     return ""
-# flask-sqlalchemy makes your life easier by providing all of this:
-# db = SQLAlchemy(app)
-#
-# @app.route(...)
-# def foo():
-#     db.session.query(...)
-#     db.session.commit()
-#     return ""
-
-
 

@@ -1,60 +1,30 @@
-# A very simple Flask Hello World app for you to get started with...
-
 from flask import Flask, jsonify
 from flask import render_template, make_response, redirect, url_for, request
 from flask_wtf import FlaskForm
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import Query  # mainly for autocomplete
 
+from utilities.models import *
+from properties import *
 import random  # todo remove
-from sqlalchemy.orm import Query # mainly for autocomplete
 
 app = Flask(__name__)
-
 # Also, just to help in case you’ve made a typo in the code somewhere, add this line just after the line that says
 # app = Flask(__name__)
 app.config["DEBUG"] = True  # todo fixme remove this in production!!!
-
-from flask_sqlalchemy import SQLAlchemy
-
-# SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{db_name}".format(
-#     username="karinature",
-#     password="dsmiUw2sn",
-#     hostname="karinature.mysql.pythonanywhere-services.com",
-#     db_name="karinature$tryout",
-# )
-SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{db_name}".format(
-    username="root",
-    password="123",
-    hostname="localhost",
-    db_name="tryout",
-)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(app) # the type is SQLAlchemy.orm ?
+db = SQLAlchemy(app)  # the type is SQLAlchemy.orm ?
 
 
-# example table module todo move to a different file (aux/migration/once_off)
-class ExampleEntry(db.Model):
-    __tablename__ = "check"
-
-    int_value_col = db.Column(db.Integer, primary_key=True)
-    text_value_col = db.Column(db.String(4096))
+# engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False, pool_recycle=3600)
 
 
-# example table module todo move to a different file (aux/migration/once_off)
-class TextsSubjectsEntry(db.Model):
-    __tablename__ = "texts_subjects"
-
-    indexa = db.Column(db.Integer, primary_key=True)
-    subject = db.Column(db.String(4096))
-    C = db.Column(db.String(4096))
-    # i
-
-
-# @app.route('/#', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
+# @app.route('/#', methods=['GET', 'POST'])
 # @app.route('/index', methods=['GET', 'POST'])
 # @app.route('/index#', methods=['GET', 'POST'])
 def home():
@@ -93,7 +63,7 @@ def home():
     #    make some sort "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
 
     # todo
-    #  change projection to include entire entry instead of indexa alone
+    #  change projection to include entire entry instead of index alone
     #  add fuzzy (returns things *like* but not necessarily the same) / regex search on the query
     #  clean data before:
     #    split creation of tables function in db-migration into multiple function
@@ -103,10 +73,10 @@ def home():
     search_word = request.form[fields[0]] if (fields[0] in request.form) else None
     search_reference = request.form[fields[2]] if (fields[2] in request.form) else None
 
-    if search_word: # the search by Subject button was clicked
+    if search_word:  # the search by Subject button was clicked
         if search_word == "":
             pass  # todo handle "empty searches"
-        results = db.session.query(TextsSubjectsEntry).filter_by(subject=search_word)
+        results = db.session.query(TextSubject).filter_by(subject=search_word)
 
         # texts_subjects2 = texts_subjects1[
         #     texts_subjects1["subject"].str.contains('\\b' + search_word + '\\b', case=False, na=False)]
@@ -130,7 +100,7 @@ def home():
 
         print(results.all())
 
-    else: # the search by Reference button was clicked
+    else:  # the search by Reference button was clicked
         if search_reference == "":
             pass  # todo handle "empty searches"
 
@@ -150,19 +120,6 @@ def not_found(error):
 def search_results():
     return render_template('search-results.html')
 
-# class Title(db.Model):
-#     __tablename__ = "titlesa"
-#
-#     indexa = db.Column(db.String(4096))
-#     index  = db.Column(db.String(4096))
-#     author1  = db.Column(db.String(4096))
-#     centend  = db.Column(db.String(4096))
-#     centstart  = db.Column(db.String(4096))
-#     joined  = db.Column(db.String(4096))
-#     language  = db.Column(db.String(4096))
-#     number  = db.Column(db.String(4096))
-#     title1  = db.Column(db.String(4096))
-#     # ldslkf =  Query()
 
 # ++++++++++++  list of books page ++++++++++++
 @app.route('/book-indices')
@@ -171,8 +128,8 @@ def book_indices():
 
     # table = Title.query.all()
     # return render_template('book-indices.html', titles=table)
-    # FKSDJF = db.session.query().
-    return render_template('book-indices.html', titles=["titile", "titile1", "titile2", "titile3", "titile4"])
+    # q = db.session.query().
+    return render_template('book-indices.html', titles=["title", "title1", "title2", "title3", "title4"])
 
 
 # ++++++++++++  list of "subjects" in tje db page ++++++++++++
@@ -186,14 +143,14 @@ def subject_list():
 @app.route('/check', methods=['GET', 'POST'])
 def check_check():
     if request.method == 'GET':
-        return render_template('check.html', comments=ExampleEntry.query.all())
+        return render_template('check.html', bookrefs=BookRef.query.all())
     print(request.form.get("contents"))
     print(request.form.get("contents2"))
     if "contents2" in request.form:
-        comment_contents = request.form["contents2"] + " (from 2nd field)"
+        field_contents = request.form["contents2"] + " (from 2nd field)"
     else:
-        comment_contents = request.form["contents"] + " (from 1st field)"
-    comment = ExampleEntry(text_value_col=comment_contents, int_value_col=random.randint(3, 9))
-    db.session.add(comment)
+        field_contents = request.form["contents"] + " (from 1st field)"
+    bookref = BookRef(titleref=field_contents, book_biblio_info=str(random.randint(3, 9)))
+    db.session.add(bookref)
     db.session.commit()
     return redirect('/check')

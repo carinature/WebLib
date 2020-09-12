@@ -15,9 +15,8 @@ SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostnam
 
 # global ROOT_DIR
 # global RAW_DATA_DIR
-ROOT_DIR = os.path.dirname(os.path.realpath(__file__)) #FIXME - find absolute path
+ROOT_DIR = os.path.dirname(os.path.realpath(__file__))  # todo - find absolute path
 RAW_DATA_DIR = os.path.join(ROOT_DIR, 'raw_data')
 TEMPLATES_DIR = os.path.join(ROOT_DIR, 'templates')
 STATIC_DIR = os.path.join(ROOT_DIR, 'templates')
 UTILS_DIR = os.path.join(ROOT_DIR, 'utilities')
-
