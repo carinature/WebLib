@@ -5,10 +5,10 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from flask_app import db
+# from flask_app import db
 
 from utilities.models import *
-from properties import SQLALCHEMY_DATABASE_URI
+from properties import SQLALCHEMY_DATABASE_URI, CHUNK_SIZE_DB
 
 from time import time
 
@@ -22,6 +22,7 @@ def csv_to_mysql():  # todo consider NOT using try
 
     # Create All Tables
     Base.metadata.create_all(engine)
+    # db.create_all(engine)
 
     # Create the session
     Session = sessionmaker(bind=engine)
@@ -70,3 +71,10 @@ if __name__ == '__main__':
 
     # Load all CSV files to the DB
     csv_to_mysql()
+
+
+# printout:
+#     /home/fares/.virtualenvs/WebLib/bin/python /home/fares/PycharmProjects/WebLib/utilities/db_migration.py
+#     Time elapsed: 243.15527486801147 s.
+#
+#     Process finished with exit code 0

@@ -1,13 +1,3 @@
-# engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False)
-# # engine: Engine  # fixme - remove! only for autocomplete
-# connection = engine.connect()
-
-# # todo DO NOT REMOVE
-# # DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
-# # """:type: sqlalchemy.orm.Session"""
-#
-
-# for the type_dict
 
 from utilities.models import *
 from properties import SQLALCHEMY_DATABASE_URI
@@ -16,9 +6,6 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 
 # Create engine
 engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False)
-
-# Create All Tables
-Base.metadata.create_all(engine)
 
 # Create the session
 Session = sessionmaker(bind=engine)
@@ -68,14 +55,22 @@ print('--------------------')
 #   "Group by" aggregation
 #   records = session.query(func.count(Customer.first_name)).group_by(Customer.first_name).all()
 
-print('--------------------')
-records = session.query(BookRef).filter(BookRef.book_biblio_info.like('3%')).all()
-print("like")
-for record in records:
-    print(record)
+# print('--------------------')
+# records = session.query(BookRef).filter(BookRef.book_biblio_info.like('3%')).all()
+# print("like")
+# for record in records:
+#     print(record)
+#
+# print('--------------------')
+# records = session.query(BookRef).paginate.filter(BookRef.book_biblio_info.like('3%')).with_entities(BookRef.titleref).all()
+# print("like")
+# for record in records:
+#     print(record)
+# print(records)
+
 
 print('--------------------')
-records = session.query(BookRef).filter(BookRef.book_biblio_info.like('3%')).with_entities(BookRef.titleref).all()
+records = BookRef.query.paginate(1,3,False).items
 print("like")
 for record in records:
     print(record)

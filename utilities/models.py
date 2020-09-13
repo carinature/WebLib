@@ -1,17 +1,19 @@
 import os
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, ForeignKey, Table, MetaData
+from sqlalchemy.orm import relationship, mapper
 from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float, Boolean, PickleType
 
 from sqlalchemy.ext.declarative import declarative_base
 
 from properties import RAW_DATA_DIR
 
-Base = declarative_base()
+from flask_app import db
+Base = db.Model
+# Base = declarative_base()
 
-
+# ---------- RelationShip Example ----------
 # class TeamModel(Base):
 #     """Data model for teams."""
 #     __tablename__ = "sqlalchemy_tutorial_teams"
@@ -43,7 +45,41 @@ Base = declarative_base()
 #         return '<Person model {}>'.format(self.id)
 
 
-# corresponds to the bookreferences2.csv
+# ---------- Mapping Example ----------
+# metadata = MetaData()
+#
+# test = Table('test', metadata,
+#              Column('dbg_index', Integer, autoincrement=True, primary_key=True),
+#              Column('book_biblio_info', String(10), primary_key=True, nullable=False, default='non'),
+#              Column('file', String(100), default='non', nullable=True),
+#              Column('titleref', String(100), nullable=True),
+#              Column('gcode', Text, nullable=True),  # ,unique=True),
+#              keep_existing=True
+#              )
+#
+#
+# class Test(object):
+#     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
+#                for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('bookreferences')]
+#
+#     col_names = ['book_biblio_info', 'file', 'titleref', 'gcode']
+#     dtype_dic_py2sql = {int: Integer, str: Text}
+#     dtype_dic_csv2py = {'book bibliographic info': str,  # :int ???
+#                         'file': str,
+#                         'titleref': str,
+#                         'gcode': str}
+#
+#     def __init__(self, dbg_index, book_biblio_info, file, titleref, gcode):
+#         self.dbg_index = dbg_index
+#         self.book_biblio_info = book_biblio_info
+#         self.file = file
+#         self.titleref = titleref
+#         self.gcode = gcode
+#
+#
+# mapper(Test, test)
+
+
 class BookRef(Base):
     __tablename__ = 'book_references'
 
@@ -51,31 +87,28 @@ class BookRef(Base):
                for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('bookreferences')]
 
     col_names = ['book_biblio_info', 'file', 'titleref', 'gcode']
-
+    dtype_dic_py2sql = {int: Integer, str: Text}
     dtype_dic_csv2py = {'book bibliographic info': str,  # :int ???
                         'file': str,
                         'titleref': str,
                         'gcode': str}
-    dtype_dic_py2sql = {int: Integer, str: Text}
 
-    # todo see if possible to name the fields differently from  their csv name
-    #   answer: names of columns here in the model class dont have to be the same as in the original file
     # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
     dbg_index = Column(Integer, autoincrement=True, primary_key=True, )
     book_biblio_info = Column(String(10), primary_key=True, nullable=False, default='non')
     file = Column(String(100), default='non', nullable=True)
     titleref = Column(String(100), nullable=True)
-    gcode = Column(Text, nullable=True)
+    gcode = Column(Text, nullable=True)  # ,unique=True)
 
     # fixme find a better default val or handle empty field. try the option below
     # todo what does it mean to have a column that is both nullable and has a default value
     # file = Column(String(100), default=None, nullable=True) todo try this one
 
-    # gcode = Column(Text, nullable=True ,unique=True)
-
     def __repr__(self):
-        return f'<BookRef model file: {self.file},  title ref: {self.titleref}, index: {self.book_bibliographic_info}>'
-
+        return \
+            f'< (BookRef) - file: {self.file}, ' \
+            f' title ref: {self.titleref}, ' \
+            f' book_biblio_info: {self.book_biblio_info}>'
 
 # corresponds to the titlesa.csv
 class Title(Base):  # todo make sure what each fields
@@ -99,13 +132,13 @@ class Title(Base):  # todo make sure what each fields
     dbg_index = Column(Integer, autoincrement=True, primary_key=True)
     # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
     index_org = Column(String(10), primary_key=True, nullable=False, default='non')  # , nullable=False)
+    title = Column(String(500))
     author = Column(String(100))
     centend = Column(String(100))
     centstart = Column(String(100))
-    joined = Column(String(200))  # fixme this seems to be alwayws null
+    joined = Column(String(200))  # fixme this seems to be always null
     language = Column(String(100))
     number = Column(String(100))
-    title = Column(String(500))
 
     def __repr__(self):
         # todo rename column names
@@ -144,7 +177,7 @@ class TextText(Base):
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa1.csv']
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa2.csv']
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa19.csv']
-    src_scv = [f'{RAW_DATA_DIR}/{textsfile}' #fixme should work
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'  # fixme should work
                for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
 
     col_names = ['subject', 'ref', 'page', 'book_biblio_info', 'number', 'C']
@@ -159,7 +192,6 @@ class TextText(Base):
     index_dbg = Column(Integer, autoincrement=True, primary_key=True, nullable=False)
 
     subject = Column(String(120))
-    # ref = Column(String(100), nullable=True, server_default='non', default='non')
     ref = Column(String(100))
     page = Column(String(10))
     book_biblio_info = Column(String(10))
