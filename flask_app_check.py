@@ -25,36 +25,39 @@ Session = sessionmaker(bind=engine)
 session = Session()
 # session = scoped_session(Session())
 
-# user = UserModel(name='todd', description='im testing this', vip=True, id=datetime.now().microsecond,
-#                  join_date=datetime.now())
-# session.add(user)
-# session.commit()
-# print("user")
-# print(user)
-
+print('--------------------')
 # for i in range(13):
-#     entry = Entry(text_value_col=f'{i}'+f'{i}'+f'{i}'+f'{i}')
+#     entry = BookRef(text_value_col=f'{i}'+f'{i}'+f'{i}'+f'{i}')
 #     session.add(entry)
 #     print("entry")
 #     print(entry)
 #     session.commit()
 
 
-# records = session.query(Entry).all()
-# # create your own object instead to receive only the columns you want/need:
+# records = session.query(BookRef).all()
+# create your own object instead to receive only the columns you want/need:
 # for record in records:
-#     recordObject = {'id': record.int_value_col, 'text': record.text_value_col}
-#     # , 'team_name': record.team.name, 'team_city': record.team.city}
-#     print(recordObject)
+#     print(record)
+
+# records = session.query(BookRef).filter(BookRef.book_biblio_info > 140).all()
+# print("bigger than ")
+# for record in records:
+#     print(record)
+
+# records = session.query(BookRef).filter_by(book_biblio_info=3).all()
+# print("equals =")
+# for record in records:
+#     print(record)
 #
-# records = session.query(Entry).filter(Entry.int_value_col == 3).all()
-# print(records)
+# records = session.query(BookRef).filter(BookRef.book_biblio_info == 3).all()
+# print("equals ==")
+# for record in records:
+#     print(record)
 #
-# records = session.query(Entry).filter_by(int_value_col=3).all()
-# print(records)
-#
-# records = session.query(Entry).filter(Entry.int_value_col.like('1%')).all()
-# print(records)
+# records = session.query(BookRef).filter(BookRef.book_biblio_info.like('1%')).all()
+# print("like")
+# for record in records:
+#     print(record)
 
 # todo
 #   In addition to filter(), there are a few basic methods we should absolutely be familiar with.
@@ -64,4 +67,18 @@ session = Session()
 #   offset([INTEGER]): Begins the query at row n.
 #   "Group by" aggregation
 #   records = session.query(func.count(Customer.first_name)).group_by(Customer.first_name).all()
+
+print('--------------------')
+records = session.query(BookRef).filter(BookRef.book_biblio_info.like('3%')).all()
+print("like")
+for record in records:
+    print(record)
+
+print('--------------------')
+records = session.query(BookRef).filter(BookRef.book_biblio_info.like('3%')).with_entities(BookRef.titleref).all()
+print("like")
+for record in records:
+    print(record)
+print(records)
+
 
