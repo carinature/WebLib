@@ -32,8 +32,8 @@ def csv_to_mysql():  # todo consider NOT using try
 
 
     # try:
-    # models = Base.__subclasses__()
-    models = [TextText]
+    models = Base.__subclasses__()
+    # models = [TextText]
     for model in models:
         for src_file in model.src_scv:
             with open(src_file) as csv_file:
@@ -41,7 +41,7 @@ def csv_to_mysql():  # todo consider NOT using try
                                         dtype=model.dtype_dic_csv2py,
                                         header=0,
                                         names=model.col_names,
-                                        chunksize=1000
+                                        chunksize=CHUNK_SIZE_DB
                                         ):
                     # next line is to handle cases of empty cell (e.g when val,val,,val in csv file
                     df_nonone = dataframe.replace(np.nan, '', regex=True)
@@ -67,7 +67,6 @@ def csv_to_mysql():  # todo consider NOT using try
 
 
 if __name__ == '__main__':
-
 
     # Load all CSV files to the DB
     csv_to_mysql()
