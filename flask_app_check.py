@@ -1,6 +1,7 @@
+from flask import request, render_template
 
-from utilities.models import *
-from properties import SQLALCHEMY_DATABASE_URI
+# from utilities.models import *
+from config import SQLALCHEMY_DATABASE_URI
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
@@ -68,12 +69,33 @@ print('--------------------')
 #     print(record)
 # print(records)
 
+from utilities.models import BookRef
 
 print('--------------------')
-records = BookRef.query.paginate(1,3,False).items
+records = BookRef.query.paginate(1, 3, False).items
 print("like")
 for record in records:
     print(record)
 print(records)
 
+from flask_app import app
 
+
+# # @app.route('/', methods=['GET', 'POST'])
+@app.route('/kaka', methods=['GET', 'POST'])
+# @login_required
+def kaka():
+    # ...
+    page = request.args.get('page', 1, type=int)
+    bookrefs = BookRef.query.paginate(page, app.config['POSTS_PER_PAGE'], False)
+    print('bookrefs')
+    print(bookrefs)
+    return render_template('book-indices.html', titles=bookrefs.items)
+
+# @app.route('/explore')
+# # @login_required
+# def explore():
+#     page = request.args.get('page', 1, type=int)
+#     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
+#         page, app.config['POSTS_PER_PAGE'], False)
+#     return render_template("index.html", title='Explore', posts=posts.items)

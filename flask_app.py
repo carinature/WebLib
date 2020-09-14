@@ -5,22 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Query  # mainly for autocomplete
 
 from utilities.models import *
-from properties import *
+from config import *
+# from config import *
 import random  # todo remove
-
-app = Flask(__name__)
-# Also, just to help in case you’ve made a typo in the code somewhere, add this line just after the line that says
-# app = Flask(__name__)
-app.config["DEBUG"] = True  # todo fixme remove this in production!!!
-
-app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
-app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-app.config['SQLALCHEMY_POOL_RECYCLE'] = 280
-
-
-db = SQLAlchemy(app)  # the type is SQLAlchemy.orm ?
 
 
 # engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False, pool_recycle=3600)
@@ -127,12 +114,11 @@ def search_results():
 # ++++++++++++  list of books page ++++++++++++
 @app.route('/book-indices')
 def book_indices():
-    # results = Query(Title).all().options()
-
-    # table = Title.query.all()
-    # return render_template('book-indices.html', titles=table)
-    # q = db.session.query().
-    return render_template('book-indices.html', titles=["title", "title1", "title2", "title3", "title4"])
+    page = request.args.get('page', 1, type=int)
+    bookrefs = BookRef.query.paginate(page, app.config['POSTS_PER_PAGE'], False)
+    print('bookrefs')
+    print(bookrefs)
+    return render_template('book-indices.html', titles=bookrefs.items)
 
 
 # ++++++++++++  list of "subjects" in tje db page ++++++++++++
