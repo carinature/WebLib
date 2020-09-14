@@ -7,9 +7,9 @@ from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float
 
 from sqlalchemy.ext.declarative import declarative_base
 
-from properties import RAW_DATA_DIR
+from config import RAW_DATA_DIR
 
-from flask_app import db
+from config import *
 Base = db.Model
 # Base = declarative_base()
 

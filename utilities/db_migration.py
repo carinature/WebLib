@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 # from flask_app import db
 
 from utilities.models import *
-from properties import SQLALCHEMY_DATABASE_URI, CHUNK_SIZE_DB
+from config import SQLALCHEMY_DATABASE_URI, CHUNK_SIZE_DB
 
 from time import time
 

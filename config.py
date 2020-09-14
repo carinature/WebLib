@@ -22,3 +22,23 @@ SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostnam
     hostname="localhost",
     db_name="tryout",
 )
+
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+
+class Config(object):
+    SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI
+    SQLALCHEMY_POOL_RECYCLE = 299
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_POOL_RECYCLE = 280
+
+    DEBUG = True  # todo fixme remove this in production!!!
+    # ...
+    POSTS_PER_PAGE = 3
+
+
+app = Flask(__name__)
+app.config.from_object(Config)
+
+db = SQLAlchemy(app)  # the type is SQLAlchemy.orm ?

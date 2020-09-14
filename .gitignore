@@ -6,5 +6,5 @@ misc
 #misc/fonts-and-icons
 #misc/getfromdb
 __pycache__
-properties.py
+config.py
 raw_data
