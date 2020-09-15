@@ -31,9 +31,20 @@
 {% include 'navbar-element.html' %}
 
 <h1>Tiresias Subjects</h1>
-<div style="height: 5rem">
+<h4>Current Number of Subjects in Database: {{ total }} </h4><br>
+<div >
+    {% for subject in subjects %}
+        <div class="row">
+            {{ subject }}
+            {{ subject.subject }}
+            {{ subject.C }} {# displays it like so :    Richlin (2018) Richlin (2018)  #}
+            {{ subject.newc }} {# displays it like so :    Richlin (2018) Richlin (2018)  #}
+            {#        {{ subject.subject , subject.subject }} {# displays it like so :   ('Richlin (2018)', 'Richlin (2018)')   #}
+        </div>
+    {% endfor %}
 
 </div>
+
 
 <!--Footer-->
 {% include 'footer.html' %}

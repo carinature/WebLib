@@ -31,7 +31,7 @@
 
 <!-- Navigation -->
 {% include 'navbar-element.html' %}
-
+{#
 <!-- results for ... -->
 <div class="container-fluid padding">
     <!--    <div class="row welcome text-center">-->
@@ -165,13 +165,46 @@
 <br><br><br>
 <!--the FETCH button-->
 <button type="button" class=" btn btn-lg btn-primary col-3"
-{#        style="float: right; margin-right: 5%; padding:1rem 4rem 1rem 4rem;"#}
+#}{#        style="float: right; margin-right: 5%; padding:1rem 4rem 1rem 4rem;"#}{#
         style="margin-right: 5%; padding:1rem 4rem 1rem 4rem; position: sticky; float: right"
         onclick="alert('Fetching Data...')">Fetch Results
-</button>
+</button>#}
+{% block content%}
+<h1>Tiresias Subjects</h1>
+{#<h4>Current Number of Subjects in Database: {{ total }} </h4><br>#}
+<div>
+    {{ results }}
+    {% for subject in results %}
+        <div class="row">
+            1{{ subject }}
+            <br>
+            2{{ subject.subject }}
+            <br>
+            3{{ subject.C }} {# displays it like so :    Richlin (2018) Richlin (2018)  #} <br>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+</div>
+{#<div>
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flash>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+</div>#}
+
+
+<h1>Tiresias Subjects</h1>
 
 <!--check box filtering options -->
-<div class="form-group padding col-9" style="margin-left: 5%">
+{#<div class="form-group padding col-9" style="margin-left: 5%">
     <div class="custom-control custom-switch " style="text-align: left">
         <input type="checkbox" class="custom-control-input" id="checkAll" onClick="filter_check_all(this)">
         <label class="custom-control-label padding" for="checkAll">
@@ -226,7 +259,7 @@
             Option 8<br>
         </label>
     </div>
-</div>
+</div>#}
 <!--attempt to fetch all-->
 
 <!-- Footer -->

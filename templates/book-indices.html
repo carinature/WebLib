@@ -37,13 +37,15 @@
 </div>
 <h1 class="display-3 col-12 s01" style="background-color: var(--secondary-color-light); padding-left: 5%">Book indices
     included in the database</h1>
+<h4>Current Number of Books in Database: {{ total }} </h4><br>
 
-    {% for title in titles %}
-        <div class="row">
-            {{ title.titleref }}
-{#            {{ title.text_value_col }}#}
-        </div>
-    {% endfor %}
+{% for title in titles %}
+    <div class="row">
+        {{ title.titleref }}
+        {{ title.titleref }}    {# displays it like so :    Richlin (2018) Richlin (2018)
+{#        {{ title.titleref , title.titleref }} {# displays it like so :   ('Richlin (2018)', 'Richlin (2018)')   #}
+    </div>
+{% endfor %}
 
 
 

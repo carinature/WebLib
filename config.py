@@ -2,6 +2,9 @@ import os
 
 # global ROOT_DIR
 # global RAW_DATA_DIR
+import sqlalchemy
+from flask_sqlalchemy import Model, SQLAlchemy
+
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))  # todo - find absolute path
 RAW_DATA_DIR = os.path.join(ROOT_DIR, 'raw_data')
 TEMPLATES_DIR = os.path.join(ROOT_DIR, 'templates')
@@ -35,10 +38,25 @@ class Config(object):
 
     DEBUG = True  # todo fixme remove this in production!!!
     # ...
-    POSTS_PER_PAGE = 3
+    POSTS_PER_PAGE = 10
 
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
 db = SQLAlchemy(app)  # the type is SQLAlchemy.orm ?
+# db:SQLAlchemy = SQLAlchemy(app)  # the type is SQLAlchemy.orm ?
+
+
+def _include_sqlalchemy(obj):
+    for module in sqlalchemy, sqlalchemy.orm:
+        for key in module.__all__:
+            if not hasattr(obj, key):
+                setattr(obj, key, getattr(module, key))
+
+# class Test(object):
+#     def __init__(self):
+#         _include_sqlalchemy(self, self.__class__)
+
+
+# db:SQLAlchemy = Test() # <-- add a type hint to let pycharm know what db is.

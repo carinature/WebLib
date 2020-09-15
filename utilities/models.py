@@ -10,7 +10,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from config import RAW_DATA_DIR
 
 from config import *
-Base = db.Model
+# Base:SQLAlchemy.Query = db.Model
+Base:SQLAlchemy.__base__ = db.Model
+# Base:sqlalchemy.orm = db.Model
+# Base:SQLAlchemy = db.Model
+
+
 # Base = declarative_base()
 
 # ---------- RelationShip Example ----------

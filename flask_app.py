@@ -1,4 +1,6 @@
-from flask import Flask, jsonify
+from typing import List
+
+from flask import Flask, jsonify, flash
 from flask import render_template, make_response, redirect, url_for, request
 from flask_wtf import FlaskForm
 from flask_sqlalchemy import SQLAlchemy
@@ -9,14 +11,13 @@ from config import *
 # from config import *
 import random  # todo remove
 
+from sqlalchemy.orm import Query
+
 
 # engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False, pool_recycle=3600)
 
 
 @app.route('/', methods=['GET', 'POST'])
-# @app.route('/#', methods=['GET', 'POST'])
-# @app.route('/index', methods=['GET', 'POST'])
-# @app.route('/index#', methods=['GET', 'POST'])
 def home():
     if 'GET' == request.method:
         print('INDEX - GET')
@@ -62,39 +63,25 @@ def home():
     print(request.form.to_dict())
     search_word = request.form[fields[0]] if (fields[0] in request.form) else None
     search_reference = request.form[fields[2]] if (fields[2] in request.form) else None
+    new_result: List[TextSubject] = []
 
+    # db.Session.query(TextSubject).filter().
+    # TextSubject.query.
     if search_word:  # the search by Subject button was clicked
         if search_word == "":
             pass  # todo handle "empty searches"
-        results = db.session.query(TextSubject).filter_by(subject=search_word)
-
-        # texts_subjects2 = texts_subjects1[
-        #     texts_subjects1["subject"].str.contains('\\b' + search_word + '\\b', case=False, na=False)]
-        # # texts_subjects3 = texts_subjects1[
-        #     # texts_subjects1["subject"].str.contains('\\b' + search_word + 's\\b', case=False, na=False)]
-        # texts_subjects1 = pd.concat([texts_subjects2, texts_subjects3])
-        # subjects = texts_subjects1['subject'].values.tolist()
-        # # texts_subjects1["C"] = texts_subjects1["C"].apply(hyphenate)
-        # cs = texts_subjects1['C'].values.tolist()
-        # ccs = [item for sublist in cs for item in sublist]
-        # lccs = len(ccs)
-        # pd.set_option('display.max_colwidth', -1)
-        # if option == "and":
-        #     # d2 = "'%" + get_d_from_form + "%'"
-        #     # sql_for_df_sub_d = "SELECT * FROM texts_subjects WHERE subject like " + d2
-        #     d_texts_subjects = pd.read_sql_query(sql_for_df_sub_d, db)
-        #     d_subjects = d_texts_subjects['subject'].values.tolist()
-        #     d_texts_subjects["C"] = d_texts_subjects["C"].apply(hyphenate)
-        #     ds = d_texts_subjects['C'].values.tolist()
-        #     dds = [item for sublist in ds for item in sublist]
-
-        print(results.all())
+        results = TextSubject.query.filter(TextSubject.subject.like(search_word)).paginate(1, 1, False).items
+        for result in results:
+            new_result.append(result)
+            print('result.subject: ', result.subject, '\nres: ', result, '\nnew_result: ', new_result)
 
     else:  # the search by Reference button was clicked
         if search_reference == "":
             pass  # todo handle "empty searches"
 
-    return redirect(url_for("search_results"), )
+    return redirect(url_for("search_results", results=results))
+    # return redirect(url_for("search_results", results=results), code=307) #https://stackoverflow.com/questions/15473626/make-a-post-request-while-redirecting-in-flask #todo DO NOT DELTEE BEFORE YOU CHECKOUT
+    # return redirect('/search_results', results)
 
 
 @app.errorhandler(404)
@@ -104,10 +91,24 @@ def not_found(error):
     print(error)
     return resp
 
-
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 # ++++++++++++  search results and filtering page ++++++++++++
 @app.route('/search-results', methods=['GET', 'POST'])
 def search_results():
+    flash('You doing great GRRRLLLL')
+    if 'GET' == request.method:
+        # print(request.args)
+        # print(request.values)
+        # print(request)
+        flash('You \'GET\' this')
+        print('get')
+        print(request.args['results'])
+        results = request.args['results']
+        return render_template('search-results.html', results=[results])
+    flash('You\'re \'POST\' on!')
+    print('post')
+    print(request.args['results'])
+    results = request.args['results']
     return render_template('search-results.html')
 
 
@@ -115,16 +116,34 @@ def search_results():
 @app.route('/book-indices')
 def book_indices():
     page = request.args.get('page', 1, type=int)
-    bookrefs = BookRef.query.paginate(page, app.config['POSTS_PER_PAGE'], False)
-    print('bookrefs')
-    print(bookrefs)
-    return render_template('book-indices.html', titles=bookrefs.items)
+    ordered_titles = BookRef.query.order_by(BookRef.titleref.asc())
+    paginated_titiles = ordered_titles.paginate(page, app.config['POSTS_PER_PAGE'], False)
+    return render_template('book-indices.html', titles=paginated_titiles.items, total=paginated_titiles.total)
 
 
 # ++++++++++++  list of "subjects" in tje db page ++++++++++++
 @app.route('/subject-list')
 def subject_list():
-    return render_template('subject-list.html')
+    class SubjectEnum(TextSubject):
+        newc = TextSubject.C
+        # __tablename__ = 'text_subjects'  # fixme
+        # dbg_index = Column(Integer)
+        # subject = Column(String(200))
+        # C = Column(Text)
+
+        # kaka = newc.__getitem__(1)
+        # # pipi = kaka + kaka
+        # # newc = pipi
+        # newc = kaka
+        # def __init__(self):
+        #     super.__init__(self)
+        #     # newc = TextSubject.C
+        #     # self.newc = str(newc) + str(newc)
+        #     self.C = self.newc + self.newc
+
+    page = request.args.get('page', 1, type=int)
+    subjects = SubjectEnum.query.paginate(page, app.config['POSTS_PER_PAGE'], False)
+    return render_template('subject-list.html', subjects=subjects.items, total=subjects.total)
     # return render_template(url_for('subject_list')+'.html')
 
 
@@ -140,6 +159,6 @@ def check_check():
     else:
         field_contents = request.form["contents"] + " (from 1st field)"
     bookref = BookRef(titleref=field_contents, book_biblio_info=str(random.randint(3, 9)))
-    db.session.add(bookref)
-    db.session.commit()
-    return redirect('/check')
+    # db.session.add(bookref)
+    # db.session.commit()
+    return redirect('/check', bookref)
