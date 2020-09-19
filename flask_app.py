@@ -118,9 +118,9 @@ def search_results(search_word=''):
         # print(request.args['results'])
         # results = request.args['results']
         # return render_template('search-results.html', results=results)
-        return render_template('search-results.html', title=f'Search Result for: {search_word}',
+        return render_template('search-results.html', title=f'Search Results for: {search_word}',
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               results=['pipi'])  # , results=results)
+                               results=['pipi'], total=0)  # , results=results)
 
     flash('You\'re \'POST\' on!')
     print('post')
@@ -128,7 +128,7 @@ def search_results(search_word=''):
     # results = request.args['results']
     return render_template('search-results.html', title=f'Search Result for: {search_word}',
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                           results=['pupu'])
+                           results=['pupu'], total=0)
 
 
 # ++++++++++++  list of books page ++++++++++++
@@ -137,7 +137,8 @@ def book_indices():
     page = request.args.get('page', 1, type=int)
     ordered_titles = BookRef.query.order_by(BookRef.titleref.asc())
     paginated_titiles = ordered_titles.paginate(page, app.config['POSTS_PER_PAGE'], False)
-    return render_template('book-indices.html', title="Tiresias Project",  # todo different title
+    return render_template('book-indices.html',
+                           title="Books Included in the Tiresias Project Database",                            # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            titles_list=paginated_titiles.items, total=paginated_titiles.total)
 

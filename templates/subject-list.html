@@ -1,8 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
 
-    <h1>{{ title }}</h1>
-    <h4>Current Number of Subjects in Database: {{ total }} </h4><br>
+{#    <h1>{{ title }}</h1>#}
+    <h4 style="background-color: var(--secondary-color-light); padding-left: 5%">Total Number of Subjects Currently Included in Database: {{ total }} </h4><br>
     <div>
         {% for subject in subjects %}
             <div class="row">

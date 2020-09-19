@@ -2,16 +2,8 @@
 
 {% block content %}
 
-    <div class="col-12">  <!--DO NOT DELETE THIS! -->
-        <h1 class="display-4" style="text-align: center">Tiresias</h1>
-        {#    <h1 class="display-1" style="text-align: center">#}
-        <h1 style="text-align: center">
-            The Ancient Mediterranean Religions Source Database</h1>
-    </div>
-    <hr>
-    <br><br>
-
     <!-- Radio search buttons -->
+    <br><br>
     <div style="text-align: center">
     <span style="margin-left: 2rem; display: inline-block;" class="padding">
        <input class="inline-radio" type="radio" id="chkYes" name="search-radio" onclick="ShowHideDiv()" checked/>
@@ -26,71 +18,31 @@
     <!------------------------------------------->
     <!-- ------- Search Forms -------- -->
     <!--- search by Subject  -->
-    <div class="row" id="search-subject">
-        <div class="s01">
-            {#        <form action="{{ url_for('search_results') }}" method="POST">#}
-            <form action="{{ url_for('home') }}" method="POST">
-                <div class="inner-form">
-                    <div class="input-field first-wrap">
-                        <input name="search-subject" type="text" placeholder="What subject are you looking for?"/>
-                    </div>
-                    <div class="input-field second-wrap">
-                        <input name="second-keyword" type="text" placeholder="Optional: another keyword maybe?"/>
-                    </div>
-                    <div class="input-field third-wrap">
-                        <button class="btn-search btn-primary" type="submit">
-                            <!--                    <button class="btn btn-primary" type="button">-->
-                            <i class="fas fa-search" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!--- search by Reference - hidden Section -->
-    <div class="row" id="search-ref" style="display: none">
-        <div class="s01">
-            {#        <form action="{{ url_for('search_results') }}" method="POST">#}
-            <form action="{{ url_for('home') }}" method="POST">
-
-                <div class="inner-form">
-                    <div class="input-field first-wrap">
-                        <input name="search-author" type="text" placeholder="Author's Name"/>
-                    </div>
-                    <div class="input-field second-wrap">
-                        <input name="search-work" type="text" placeholder="Work"/>
-                    </div>
-                    <div class="input-field second-wrap">
-                        <input name="search-reference" type="text" placeholder="Reference"/>
-                    </div>
-                    <div class="input-field third-wrap">
-                        <button class="btn-search btn-primary" type="submit">
-                            <!--                    <button class="btn btn-primary" type="button">-->
-                            <i class="fas fa-search" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="s01 ">
-            <p class="lead" style="color: var(--accent-color);">If you have a specific reference to ancient
-                text, enter it here to receive a list of subjects relevant to it.<br>
-                Most author/title styles are accepted. for reference style, please use arabic numerals separated by a
-                period:<br>
-                e.g., 1.5 for book 1, line 5 (or chapter 1, verse 5).<br>
-                Leave reference box empty to search for a whole book.</p>
-        </div>
-    </div>
-    <br><br><br>
+    {% include 'search-bar.html' %}
+    {% include 'filtering.html' %}
 
 
     <!------------------------------------------->
+    <!---------- Fixed background --------------->
+
+    <br id="about-hook">
+    <br>
+    <br>
+    <figure>
+        <div class="fixed-wrap">
+            <div id="fixed" style="background-image: url('../static/images/lib-4-noncom-reuse.jpg')">
+                <!--            this stays empty so you can see the pages background, and feel like you're sliding over it-->
+            </div>
+        </div>
+    </figure>
+    <br><br><br>
+    <!------------------------------------------->
     <!-- ------- 'About' Section -------- -->
-    <span id="about"><br><br><br><br><br></span>
     <div class="container-fluid padding">
 
         <div class="col-12" style="background-color: var(--secondary-color-light)"> <!--todo move the style to css-->
-            <h1 class="display-4 welcome text-center">Tiresias: The Ancient Mediterranean Religions Source Database</h1>
+            <h1 class="display-4 welcome text-center">About the Tiresias Project</h1>
+{#            <h1 class="display-4 welcome text-center">Tiresias: The Ancient Mediterranean Religions Source Database</h1>#}
         </div>
         <div class="s01 welcome text-center">
             <!--        <hr> &lt;!&ndash; horizantal rule &ndash;&gt;-->

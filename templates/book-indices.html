@@ -2,13 +2,9 @@
 
 {% block content %}
 
-    <div class="container-fluid padding">
-        <h1 class="welcome text-center">Tiresias: The Ancient Mediterranean Religions Source Database</h1>
-    </div>
-    <h1 class="display-4 col-12 s01" style="background-color: var(--secondary-color-light); padding-left: 5%">Book
-        indices
-        included in the database</h1>
-    <h4>Current Number of Books in Database: {{ total }} </h4><br>
+
+    {#    <h4>Current Number of Books in Database: {{ total }} </h4><br>#}
+    <h4 style="background-color: var(--secondary-color-light); padding-left: 5%">Totoal of: {{ total }} </h4><br>
 
     {% for title in titles_list %}
         <div class="row">
