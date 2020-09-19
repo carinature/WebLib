@@ -3,14 +3,12 @@
 html, body {
     height: 100%;
     width: 100%;
-    font-family: 'popins', sans-serif;
+    /*font-family: 'popins', sans-serif;*/
     color: #222; /*  a little softer than black*/
 }
 
 .navbar {
     padding: .8rem; /*****    NOTE: bootstrap uses rem as a default    ?? ********/
-    /*background-color: pink;*/
-
 }
 
 .navbar-nav li {
@@ -72,14 +70,14 @@ html, body {
 .welcome {
     width: 75%;
     margin: 0 auto;
-    padding-top: 2rem;
+    padding-top: .5rem;
 }
 
 .welcome hr {
     border-top: 2px solid #b4b4b4;
-    width: 95%;
-    margin-top: .3rem;
-    margin-bottom: 1rem;
+    width: 90%;
+    /*margin-top: .3rem;*/
+    /*margin-bottom: .5rem;*/
 }
 
 .fa-code {
