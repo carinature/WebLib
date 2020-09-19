@@ -16,6 +16,15 @@ from sqlalchemy.orm import Query
 
 # engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False, pool_recycle=3600)
 
+@app.route("/kaka")
+def kaka():
+    headers = {"Content-Type": "application/kaka"}
+    return make_response(
+        'Test worked!',
+        200,
+        headers
+
+    )
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -79,36 +88,36 @@ def home():
         if search_reference == "":
             pass  # todo handle "empty searches"
 
-    return redirect(url_for("search_results", results=results))
+    # return redirect(url_for("search_results"))
+    return redirect(url_for("search_results", search_word=search_word))
     # return redirect(url_for("search_results", results=results), code=307) #https://stackoverflow.com/questions/15473626/make-a-post-request-while-redirecting-in-flask #todo DO NOT DELTEE BEFORE YOU CHECKOUT
     # return redirect('/search_results', results)
 
 
-@app.errorhandler(404)
-def not_found(error):
-    resp = make_response(render_template('page_not_found.html'), 404)
-    resp.headers['X-Something'] = 'A value'
-    print(error)
-    return resp
-
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+
 # ++++++++++++  search results and filtering page ++++++++++++
+@app.route('/search-results/<string:search_word>', methods=['GET', 'POST'])
 @app.route('/search-results', methods=['GET', 'POST'])
-def search_results():
+def search_results(search_word=''):
     flash('You doing great GRRRLLLL')
+    # search_word = search_word if search_word else request.args['search_word']
+    print(search_word)
     if 'GET' == request.method:
         # print(request.args)
         # print(request.values)
         # print(request)
-        flash('You \'GET\' this')
-        print('get')
-        print(request.args['results'])
-        results = request.args['results']
-        return render_template('search-results.html', results=[results])
+        # flash('You \'GET\' this')
+        # print('get')
+        # print(request.args['results'])
+        # results = request.args['results']
+        # return render_template('search-results.html', results=results)
+        return render_template('search-results.html') #, results=results)
     flash('You\'re \'POST\' on!')
     print('post')
-    print(request.args['results'])
-    results = request.args['results']
+    # print(request.args['results'])
+    # results = request.args['results']
     return render_template('search-results.html')
 
 
@@ -162,3 +171,17 @@ def check_check():
     # db.session.add(bookref)
     # db.session.commit()
     return redirect('/check', bookref)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    resp = make_response(render_template('page_not_found.html'), 404)
+    resp.headers['X-Something'] = 'A value'
+    print(error)
+    return resp
+
+# @login_required https://flask-login.readthedocs.io/en/latest/ todo use this to protect from logged-off users
+# @app.route('/insert-data')
+# def insert_data():
+#     print('congrats on the new addition')
+
