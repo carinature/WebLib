@@ -1,53 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tiresias Subjects</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <meta name="author" content="Karina">
+{% extends 'layout.html' %}
+{% block content %}
 
-    <!--    bootstrap related scripts -->
-    <script src="../static/js/jquery-3.5.1.min.js"></script>
-    <script src="../static/js/popper.min.js"></script>
-    <script src="../static/js/bootstrap.min.js"></script>
-    <!--    for extra fonts and icons  --> {#only needed for the "share" buttons#}
-    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <h1>{{ title }}</h1>
+    <h4>Current Number of Subjects in Database: {{ total }} </h4><br>
+    <div>
+        {% for subject in subjects %}
+            <div class="row">
+                {{ subject }}
+                {{ subject.subject }}
+                {{ subject.C }} {# displays it like so :    Richlin (2018) Richlin (2018)  #}
+                {{ subject.newc }} {# displays it like so :    Richlin (2018) Richlin (2018)  #}
+                {#        {{ subject.subject , subject.subject }} {# displays it like so :   ('Richlin (2018)', 'Richlin (2018)')   #}
+            </div>
+        {% endfor %}
 
-    <!--    your own scripts  -->
-    <script src="../static/js/gui.js"></script>
+    </div>
+{% endblock %}
 
-    <!--    bootstrap related stylesheets -->
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-
-    <!--    your stylesheets  -->
-    <link href="../static/css/search-engine-main.css" rel="stylesheet"/>
-    <link href="../static/css/bs4-style.css" rel="stylesheet">
-    <link href="../static/css/style.css" rel="stylesheet">
-</head>
-<body>
-
-<!-- Navigation -->
-{% include 'navbar-element.html' %}
-
-<h1>Tiresias Subjects</h1>
-<h4>Current Number of Subjects in Database: {{ total }} </h4><br>
-<div >
-    {% for subject in subjects %}
-        <div class="row">
-            {{ subject }}
-            {{ subject.subject }}
-            {{ subject.C }} {# displays it like so :    Richlin (2018) Richlin (2018)  #}
-            {{ subject.newc }} {# displays it like so :    Richlin (2018) Richlin (2018)  #}
-            {#        {{ subject.subject , subject.subject }} {# displays it like so :   ('Richlin (2018)', 'Richlin (2018)')   #}
-        </div>
-    {% endfor %}
-
-</div>
-
-
-<!--Footer-->
-{% include 'footer.html' %}
 
 <script src="../static/js/script.js"></script>
 </body>

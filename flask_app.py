@@ -26,11 +26,15 @@ def kaka():
 
     )
 
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if 'GET' == request.method:
         print('INDEX - GET')
-        return render_template('index.html')
+        return render_template('index.html',
+                               title="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               description="Tiresias: The Ancient Mediterranean Religions Source Database"
+                               )
     fields = [
         "search-subject",
         "second-keyword",
@@ -86,6 +90,7 @@ def home():
 
     else:  # the search by Reference button was clicked
         if search_reference == "":
+            # resp.headers['X-Something'] = 'A value'
             pass  # todo handle "empty searches"
 
     # return redirect(url_for("search_results"))
@@ -113,12 +118,17 @@ def search_results(search_word=''):
         # print(request.args['results'])
         # results = request.args['results']
         # return render_template('search-results.html', results=results)
-        return render_template('search-results.html') #, results=results)
+        return render_template('search-results.html', title=f'Search Result for: {search_word}',
+                               description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               results=['pipi'])  # , results=results)
+
     flash('You\'re \'POST\' on!')
     print('post')
     # print(request.args['results'])
     # results = request.args['results']
-    return render_template('search-results.html')
+    return render_template('search-results.html', title=f'Search Result for: {search_word}',
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           results=['pupu'])
 
 
 # ++++++++++++  list of books page ++++++++++++
@@ -127,7 +137,9 @@ def book_indices():
     page = request.args.get('page', 1, type=int)
     ordered_titles = BookRef.query.order_by(BookRef.titleref.asc())
     paginated_titiles = ordered_titles.paginate(page, app.config['POSTS_PER_PAGE'], False)
-    return render_template('book-indices.html', titles=paginated_titiles.items, total=paginated_titiles.total)
+    return render_template('book-indices.html', title="Tiresias Project",  # todo different title
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           titles_list=paginated_titiles.items, total=paginated_titiles.total)
 
 
 # ++++++++++++  list of "subjects" in tje db page ++++++++++++
@@ -152,7 +164,10 @@ def subject_list():
 
     page = request.args.get('page', 1, type=int)
     subjects = SubjectEnum.query.paginate(page, app.config['POSTS_PER_PAGE'], False)
-    return render_template('subject-list.html', subjects=subjects.items, total=subjects.total)
+    return render_template('subject-list.html',
+                           title="Tiresias Subjects",  # todo different title
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           subjects=subjects.items, total=subjects.total)
     # return render_template(url_for('subject_list')+'.html')
 
 
@@ -175,8 +190,8 @@ def check_check():
 
 @app.errorhandler(404)
 def not_found(error):
-    resp = make_response(render_template('page_not_found.html'), 404)
-    resp.headers['X-Something'] = 'A value'
+    resp = make_response(render_template('page_not_found.html', title="Tiresias Project - Page not Found",
+                                         description=str(error)), 404)
     print(error)
     return resp
 
@@ -184,4 +199,3 @@ def not_found(error):
 # @app.route('/insert-data')
 # def insert_data():
 #     print('congrats on the new addition')
-
