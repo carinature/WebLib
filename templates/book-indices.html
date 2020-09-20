@@ -6,15 +6,17 @@
     {#    <h4>Current Number of Books in Database: {{ total }} </h4><br>#}
     <h4 style="background-color: var(--secondary-color-light); padding-left: 5%">Totoal of: {{ total }} </h4><br>
 
-    {% for title in titles_list %}
-        <div class="row">
-            {{ title.titleref }}
-            {{ title.titleref }} {# displays it like so :    Richlin (2018) Richlin (2018)
+    <div class="container">
+        {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
+        {% for title in titles_list %}
+            <div class="row">
+                {{ title.titleref }}
+                {{ title.titleref }} {# displays it like so :    Richlin (2018) Richlin (2018)
 {#        {{ title.titleref , title.titleref }} {# displays it like so :   ('Richlin (2018)', 'Richlin (2018)')   #}
-        </div>
-    {% endfor %}
+            </div>
+        {% endfor %}
 
-
+    </div>
 
 
     {#<div style="padding: 5%">

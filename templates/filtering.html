@@ -1,11 +1,10 @@
-
 <!------------------------------------------->
 <!-------------------Filtering---------------------->
 <!------------------------------------------->
 
 <!--the button-->
-<button class="s01 btn-primary" data-toggle="collapse" data-target="#filtering">Advanced Search Options &nbsp; (click
-    me)
+<button class="s01 btn-primary" data-toggle="collapse" data-target="#filtering">A
+    dvanced Search Options &nbsp; (click me)
 </button>
 
 <!--hidden filtering section-->
@@ -14,14 +13,15 @@
     <!--todo instead of relying on existing consider just making your own class for this case-->
     <div id="filtering" class="collapse ">
         <form class="">
-            <div class="container-fluid padding ">
-                <!--            <div class="row text-center ">--> <!--todo dont delete this yet-->
+            <div class="container-fluid padding container">
+                {# <div class="row text-center "> <!--todo dont delete this yet-->#}
                 <div class="row text-center inner-form ">
-                    <!--                    <div class="col-sm-12 col-md-6" style="text-align: right; ">-->
+
                     <!--sub-subject filtering options-->
+                    {# <div class="col-sm-12 col-md-6" style="text-align: right; ">#}
                     <div class="col-sm-12 col-md-6">
-                        <h5 class="welcome text-center col-form-label-lg" style="float: top; vertical-align: top">Filter
-                            by Sub-subject</h5>
+                        <h5 class="welcome text-center col-form-label-lg" style="float: top; vertical-align: top">
+                            Filter by Sub-subject</h5>
                         <hr>
                         <label style="float: right" for="include">Including:
                             <input id="include" type="text" placeholder="Subject"> </label>
@@ -30,10 +30,12 @@
                         <br><label>or check and uncheck in the list below</label>
 
                     </div>
-                    <!--                    <div class="col-sm-12 col-md-6" style="text-align: right; ">-->
+
                     <!--text and reference filtering options-->
+                    {# <div class="col-sm-12 col-md-6" style="text-align: right; ">#}
                     <div class="col-sm-12 col-md-6">
-                        <h5 class="welcome text-center">Filter by Text</h5>
+                        <h5 class="welcome text-center col-form-label-lg">
+                            Filter by Text</h5>
                         <hr>
                         <!--from century-->
                         <label style="float: right;">From:
@@ -58,8 +60,9 @@
                         </datalist>
                         <!--to century-->
                         <!--                        <label style="float: right; margin-left: 10px">To: <input list="to-century-dl" name="browser"-->
-                        <label style="float: right;">To: <input list="to-century-dl" name="browser"
-                                                                placeholder="Any Century"></label>
+                        <label style="float: right;">
+                            To:
+                            <input list="to-century-dl" name="browser" placeholder="Any Century"></label>
                         <datalist id="to-century-dl">
                             <option value="8 BCE">
                             <option value="7 BCE">
@@ -90,7 +93,7 @@
                             <option value="Syriac">
                         </datalist>
                         <br><br><br><br><br> <!--todo change br to normal css styling-->
-                        <h5 class="welcome text-center">Filter by Reference</h5>
+                        <h5 class="welcome text-center col-form-label-lg">Filter by Reference</h5>
                         <hr>
                         <label style="float: right" for="ancient-author">Ancient Author:
                             <input id="ancient-author" type="text" placeholder=" (In English)"> </label>
@@ -113,7 +116,6 @@
                         <!--                        </form>-->
                     </div>
                 </div>
-                <!--            </div>-->
             </div>
 
         </form>

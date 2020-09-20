@@ -25,15 +25,17 @@
     {% include 'filtering.html' %}
     <br><br><br>
 
-    <div>
+
+    <div class="container">
+        {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
         {{ results }}
         {% for subject in results %}
             <div class="row">
-                1{{ subject }}
+                1 {{ subject }}
                 <br>
-                2{{ subject.subject }}
+                2 {{ subject.subject }}
                 <br>
-                3{{ subject.C }} {# displays it like so :    Richlin (2018) Richlin (2018)  #} <br>
+                3 {{ subject.C }} {# displays it like so :    Richlin (2018) Richlin (2018)  #} <br>
             </div>
         {% endfor %}
 

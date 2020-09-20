@@ -1,60 +1,64 @@
-
 <!------------------------------------------->
 <!-------------------Search Bar ---------------------->
 <!------------------------------------------->
-<div class="row" id="search-subject">
-    <div class="s01">
-        {#        <form action="{{ url_for('search_results') }}" method="POST">#}
-        <form action="{{ url_for('home') }}" method="POST">
-            <div class="inner-form">
-                <div class="input-field first-wrap">
-                    <input name="search-subject" type="text" placeholder="What subject are you looking for?"/>
-                </div>
-                <div class="input-field second-wrap">
-                    <input name="second-keyword" type="text" placeholder="Optional: another keyword maybe?"/>
-                </div>
-                <div class="input-field third-wrap">
-                    <button class="btn-search btn-primary" type="submit">
-                        <!--                    <button class="btn btn-primary" type="button">-->
-                        <i class="fas fa-search" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<!--- search by Reference - hidden Section -->
-<div class="row" id="search-ref" style="display: none">
-    <div class="s01">
-        {#        <form action="{{ url_for('search_results') }}" method="POST">#}
-        <form action="{{ url_for('home') }}" method="POST">
 
-            <div class="inner-form">
-                <div class="input-field first-wrap">
-                    <input name="search-author" type="text" placeholder="Author's Name"/>
-                </div>
-                <div class="input-field second-wrap">
-                    <input name="search-work" type="text" placeholder="Work"/>
-                </div>
-                <div class="input-field second-wrap">
-                    <input name="search-reference" type="text" placeholder="Reference"/>
-                </div>
-                <div class="input-field third-wrap">
-                    <button class="btn-search btn-primary" type="submit">
-                        <!--                    <button class="btn btn-primary" type="button">-->
-                        <i class="fas fa-search" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="s01 ">
-        <p class="lead" style="color: var(--accent-color);">If you have a specific reference to ancient
-            text, enter it here to receive a list of subjects relevant to it.<br>
-            Most author/title styles are accepted. for reference style, please use arabic numerals separated by a
-            period:<br>
-            e.g., 1.5 for book 1, line 5 (or chapter 1, verse 5).<br>
-            Leave reference box empty to search for a whole book.</p>
-    </div>
-</div>
+<div class="container">
+    {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
 
+    <div class="row" id="search-subject">
+        <div class="s01">
+            {#        <form action="{{ url_for('search_results') }}" method="POST">#}
+            <form action="{{ url_for('home') }}" method="POST">
+                <div class="inner-form">
+                    <div class="input-field first-wrap">
+                        <input name="search-subject" type="text" placeholder="What subject are you looking for?"/>
+                    </div>
+                    <div class="input-field second-wrap">
+                        <input name="second-keyword" type="text" placeholder="Optional: another keyword maybe?"/>
+                    </div>
+                    <div class="input-field third-wrap">
+                        <button class="btn-search btn-primary" type="submit">
+                            <!--                    <button class="btn btn-primary" type="button">-->
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--- search by Reference - hidden Section -->
+    <div class="row" id="search-ref" style="display: none">
+        <div class="s01">
+            {#        <form action="{{ url_for('search_results') }}" method="POST">#}
+            <form action="{{ url_for('home') }}" method="POST">
+
+                <div class="inner-form">
+                    <div class="input-field first-wrap">
+                        <input name="search-author" type="text" placeholder="Author's Name"/>
+                    </div>
+                    <div class="input-field second-wrap">
+                        <input name="search-work" type="text" placeholder="Work"/>
+                    </div>
+                    <div class="input-field second-wrap">
+                        <input name="search-reference" type="text" placeholder="Reference"/>
+                    </div>
+                    <div class="input-field third-wrap">
+                        <button class="btn-search btn-primary" type="submit">
+                            <!--                    <button class="btn btn-primary" type="button">-->
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="s01 ">
+            <p class="lead" style="color: var(--accent-color);">If you have a specific reference to ancient
+                text, enter it here to receive a list of subjects relevant to it.<br>
+                Most author/title styles are accepted. for reference style, please use arabic numerals separated by a
+                period:<br>
+                e.g., 1.5 for book 1, line 5 (or chapter 1, verse 5).<br>
+                Leave reference box empty to search for a whole book.</p>
+        </div>
+    </div>
+
+</div>

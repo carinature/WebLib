@@ -1,9 +1,11 @@
 {% extends 'layout.html' %}
 {% block content %}
 
-{#    <h1>{{ title }}</h1>#}
-    <h4 style="background-color: var(--secondary-color-light); padding-left: 5%">Total Number of Subjects Currently Included in Database: {{ total }} </h4><br>
-    <div>
+    {#    <h1>{{ title }}</h1>#}
+    <h4 style="background-color: var(--secondary-color-light); padding-left: 5%">Total Number of Subjects Currently
+        Included in Database: {{ total }} </h4><br>
+    <div class="container">
+        {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
         {% for subject in subjects %}
             <div class="row">
                 {{ subject }}
