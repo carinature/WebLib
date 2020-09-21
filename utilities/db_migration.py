@@ -1,14 +1,12 @@
 
 import pandas as pd
 import numpy as np
-import sqlalchemy
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker
 
 # from flask_app import db
 
-from utilities.models import *
-from config import SQLALCHEMY_DATABASE_URI, CHUNK_SIZE_DB
+from app.models import *
+from config import CHUNK_SIZE_DB
 
 from time import time
 

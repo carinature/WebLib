@@ -6,4 +6,4 @@ misc
 #misc/fonts-and-icons
 #misc/getfromdb
 __pycache__
-raw_data
+app/raw_data

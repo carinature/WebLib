@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+    {#    <h1>{{ title }}</h1>#}
+    <h4 style="background-color: var(--secondary-color-light); padding-left: 5%">Total Number of Subjects Currently
+        Included in Database: {{ total }} </h4><br>
+    <div class="container">
+        {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
+        {% for subject in subjects %}
+            <div class="row">
+                {{ subject }}
+                {{ subject.subject }}
+                {{ subject.C }} {# displays it like so :    Richlin (2018) Richlin (2018)  #}
+                {{ subject.newc }} {# displays it like so :    Richlin (2018) Richlin (2018)  #}
+                {#        {{ subject.subject , subject.subject }} {# displays it like so :   ('Richlin (2018)', 'Richlin (2018)')   #}
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}
+
+
+<script src="../static/js/script.js"></script>
+</body>
+</html>

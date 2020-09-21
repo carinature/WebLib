@@ -3,7 +3,7 @@ from flask import request, render_template
 # from utilities.models import *
 from config import SQLALCHEMY_DATABASE_URI
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker
 
 # Create engine
 engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False)
@@ -69,7 +69,7 @@ print('--------------------')
 #     print(record)
 # print(records)
 
-from utilities.models import BookRef
+from app.models import BookRef
 
 print('--------------------')
 records = BookRef.query.paginate(1, 3, False).items
@@ -78,7 +78,7 @@ for record in records:
     print(record)
 print(records)
 
-from flask_app import app
+from app.routes import app
 
 
 # # @app.route('/', methods=['GET', 'POST'])

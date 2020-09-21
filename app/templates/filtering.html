@@ -1,0 +1,135 @@
+<!------------------------------------------->
+<!-------------------Filtering---------------------->
+<!------------------------------------------->
+
+<!--the button-->
+<button class="s01 btn-primary" data-toggle="collapse" data-target="#filtering">A
+    dvanced Search Options &nbsp; (click me)
+</button>
+
+<!--hidden filtering section-->
+<div class="s01">
+    <!-- s01 should appear in a parent element of collapse, so it would use the correct css rule for form-->
+    <!--todo instead of relying on existing consider just making your own class for this case-->
+    <div id="filtering" class="collapse ">
+        <form class="">
+            <div class="container-fluid padding container">
+                {# <div class="row text-center "> <!--todo dont delete this yet-->#}
+                <div class="row text-center inner-form ">
+
+                    <!--sub-subject filtering options-->
+                    {# <div class="col-sm-12 col-md-6" style="text-align: right; ">#}
+                    <div class="col-sm-12 col-md-6">
+                        <h5 class="welcome text-center col-form-label-lg" style="float: top; vertical-align: top">
+                            Filter by Sub-subject</h5>
+                        <hr>
+                        <label style="float: right" for="include">Including:
+                            <input id="include" type="text" placeholder="Subject"> </label>
+                        <label style="float: right" for="exclude">Excluding:
+                            <input id="exclude" type="text" placeholder="Subject"> </label>
+                        <br><label>or check and uncheck in the list below</label>
+
+                    </div>
+
+                    <!--text and reference filtering options-->
+                    {# <div class="col-sm-12 col-md-6" style="text-align: right; ">#}
+                    <div class="col-sm-12 col-md-6">
+                        <h5 class="welcome text-center col-form-label-lg">
+                            Filter by Text</h5>
+                        <hr>
+                        <!--from century-->
+                        <label style="float: right;">From:
+                            <input list="from-century-dl" name="browser" placeholder="Any Century"></label>
+                        <datalist id="from-century-dl">
+                            <option value="8 BCE">8 BCE</option>
+                            <option value="7 BCE">7 BCE</option>
+                            <option value="6 BCE">6 BCE</option>
+                            <option value="5 BCE">5 BCE</option>
+                            <option value="4 BCE">4 BCE</option>
+                            <option value="3 BCE">3 BCE</option>
+                            <option value="2 BCE">2 BCE</option>
+                            <option value="1 BCE">1 BCE</option>
+                            <option value="1 CE">1 CE</option>
+                            <option value="2 CE">2 CE</option>
+                            <option value="3 CE">3 CE</option>
+                            <option value="4 CE">4 CE</option>
+                            <option value="5 CE">5 CE</option>
+                            <option value="6 CE">6 CE</option>
+                            <option value="7 CE">7 CE</option>
+                            <option value="8 CE">8 CE</option>
+                        </datalist>
+                        <!--to century-->
+                        <!--                        <label style="float: right; margin-left: 10px">To: <input list="to-century-dl" name="browser"-->
+                        <label style="float: right;">
+                            To:
+                            <input list="to-century-dl" name="browser" placeholder="Any Century"></label>
+                        <datalist id="to-century-dl">
+                            <option value="8 BCE">
+                            <option value="7 BCE">
+                            <option value="6 BCE">
+                            <option value="5 BCE">
+                            <option value="4 BCE">
+                            <option value="3 BCE">
+                            <option value="2 BCE">
+                            <option value="1 BCE">
+                            <option value="1 CE">
+                            <option value="2 CE">
+                            <option value="3 CE">
+                            <option value="4 CE">
+                            <option value="5 CE">
+                            <option value="6 CE">
+                            <option value="7 CE">
+                            <option value="8 CE">
+                        </datalist>
+                        <!-- Language-->
+                        <label style="float: right">Language: <input list="language-dl" name="browser"
+                                                                     placeholder="All"></label>
+                        <datalist id="language-dl">
+                            <option value="Aramaic">
+                            <option value="Arabic">
+                            <option value="Greek">
+                            <option value="Hebrew">
+                            <option value="Latin">
+                            <option value="Syriac">
+                        </datalist>
+                        <br><br><br><br><br> <!--todo change br to normal css styling-->
+                        <h5 class="welcome text-center col-form-label-lg">Filter by Reference</h5>
+                        <hr>
+                        <label style="float: right" for="ancient-author">Ancient Author:
+                            <input id="ancient-author" type="text" placeholder=" (In English)"> </label>
+                        <label style="float: right" for="ancient-title">Ancient Work-Title:
+                            <input id="ancient-title" type="text" placeholder=" (In English)"> </label>
+                        <label style="float: right" for="ancient-reference">Reference:
+                            <input id="ancient-reference" type="text"
+                                   placeholder=" (e.g., 1.1 for chapter 1 verse 1, or leave empty for whole work)"></label>
+                        <br><br><br><br><br><br>
+                        <br><br><br>
+                        <!--                        <form>-->
+                        <div class="custom-control custom-switch" style="text-align: left">
+                            <input type="checkbox" class="custom-control-input" id="switch">
+                            <label class="custom-control-label padding" for="switch">
+                                Fetch full text<br>
+                                (Attention: Check this box will to attempt full text fetching, which can result in very
+                                highly
+                                loading times.)</label>
+                        </div>
+                        <!--                        </form>-->
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+{#
+<br><br><br>
+<!--the FETCH button-->
+<button type="button" class=" btn btn-lg btn-primary col-3"
+        #}{#
+#}
+{#        style="float: right; margin-right: 5%; padding:1rem 4rem 1rem 4rem;"#}{#
+#}
+{#
+        style="margin-right: 5%; padding:1rem 4rem 1rem 4rem; position: sticky; float: right"
+        onclick="alert('Fetching Data...')">Fetch Results
+</button>#}

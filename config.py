@@ -6,23 +6,29 @@ import sqlalchemy
 from flask_sqlalchemy import Model, SQLAlchemy
 
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))  # todo - find absolute path?
-# ROOT_DIR = path.abspath(path.dirname(__file__))
-RAW_DATA_DIR = os.path.join(ROOT_DIR, 'raw_data')
-# TEMPLATES_DIR = os.path.join(ROOT_DIR, 'templates')
-# STATIC_DIR = os.path.join(ROOT_DIR, 'templates')
-UTILS_DIR = os.path.join(ROOT_DIR, 'utilities')
-# from dotenv import load_dotenv
-# load_dotenv(path.join(basedir, '.env'))
+# # ROOT_DIR = path.abspath(path.dirname(__file__))
+RAW_DATA_DIR = os.path.join(ROOT_DIR, 'app/raw_data')
+# # TEMPLATES_DIR = os.path.join(ROOT_DIR, 'templates')
+# # STATIC_DIR = os.path.join(ROOT_DIR, 'templates')
+# UTILS_DIR = os.path.join(ROOT_DIR, 'utilities')
+# # from dotenv import load_dotenv
+# # load_dotenv(path.join(basedir, '.env'))
 
-CHUNK_SIZE_DB = 1000  # used in DB migration for chunking huge amounts of data
+
+# from flask import current_app
+# app = current_app
+# from wsgi import app
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 
 class Config(object):
-    # Flask base config variables
+    EXPLAIN_TEMPLATE_LOADING = True
+    # General Flask config variables
     SECRET_KEY = os.environ.get('SECRET_KEY')
+    # STATIC_FOLDER = 'app/static'
+    # TEMPLATES_FOLDER = 'app/templates'
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
     # SESSION_COOKIE_NAME = os.environ.get('SESSION_COOKIE_NAME')
@@ -30,7 +36,8 @@ class Config(object):
     # Database
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_POOL_RECYCLE = 299
-    # SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ECHO = False  # if True log all database activity to Python's stderr
+    CHUNK_SIZE_DB = 1000  # used in DB migration for chunking huge amounts of data
 
     # # AWS Secrets
     # AWS_SECRET_KEY = os.environ.get('AWS_SECRET_KEY')
@@ -73,21 +80,6 @@ class ProdConfig(Config):
 
     # MISC
     POSTS_PER_PAGE = 10
-    CHUNK_SIZE_DB = 1000  # used in DB migration for chunking huge amounts of data
-
-
-app = Flask(__name__)
-
-# Using a production configuration
-app.config.from_object('config.ProdConfig')
-
-# Using a development configuration
-app.config.from_object('config.DevConfig')
-
-
-db = SQLAlchemy(app)  # the type is SQLAlchemy.orm ?
-# db:SQLAlchemy = SQLAlchemy(app)  # the type is SQLAlchemy.orm ?
-
 
 # def _include_sqlalchemy(obj):
 #     for module in sqlalchemy, sqlalchemy.orm:
