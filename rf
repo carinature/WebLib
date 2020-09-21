@@ -1,8 +1,10 @@
 
 #export FLASK_APP=application.py
 export FLASK_APP=flask_app.py
-export FLASK_ENV=development
-export FLASK_DEBUG=1
+#export FLASK_ENV=development
+#export FLASK_DEBUG=1
+
+export SECRET_KEY=b'_5#y2L"F4Q8z\n\xec]/'
 
 #sudo docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=123 -d mysql:5
 #
@@ -17,6 +19,7 @@ docker-compose -f mysql-docker-compose.yml up -d #doesn't "override" the termina
 # eval $(sudo docker-machine env default)
 
 flask run
+
 
 
 #   If the message "Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?" shows

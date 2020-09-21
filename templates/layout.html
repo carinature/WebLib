@@ -61,6 +61,18 @@
 {#    The Ancient Mediterranean Religions Source Database</h1>#}
 {#</div>#}
 
+{#
+<div class="status">
+  {% if status.active %}
+    <p>Activated.</p>
+  {% elif status.disabled %}
+    <p>Disabled.</p>
+  {% else %}
+    <p>OH GOD WHAT IS THE STATUS?!</p>
+  {% endif %}
+</div>
+#}
+{#{% if status == 1 %} and {% if "active" in status %} are both valid#}
 
 {% block content %}{% endblock %}
 {% include 'footer.html' %}

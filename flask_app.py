@@ -13,7 +13,6 @@ import random  # todo remove
 
 from sqlalchemy.orm import Query
 
-
 # engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False, pool_recycle=3600)
 
 @app.route("/kaka")
@@ -23,7 +22,6 @@ def kaka():
         'Test worked!',
         200,
         headers
-
     )
 
 
@@ -97,9 +95,6 @@ def home():
     return redirect(url_for("search_results", search_word=search_word))
     # return redirect(url_for("search_results", results=results), code=307) #https://stackoverflow.com/questions/15473626/make-a-post-request-while-redirecting-in-flask #todo DO NOT DELTEE BEFORE YOU CHECKOUT
     # return redirect('/search_results', results)
-
-
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
 # ++++++++++++  search results and filtering page ++++++++++++
