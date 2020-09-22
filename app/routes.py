@@ -35,43 +35,19 @@ def home():
         "search-reference"
     ]
 
-    for i in range(len(fields)):
-        if fields[i] in request.form:
-            print()
+    # for i in range(len(fields)):
+    #     if fields[i] in request.form:
+    #         print()
             # print(request.form.get(fields[i]))
-
-    # todo
-    #  - DONE - collect fields
-    #  - DONE - depending on which fields/form filled - choose a search function
-    #  next page should receive the results of the function as params
-    #  like so:         return render_template('search_results', comments=ExampleEntry.query.all())
-    #  but first try like this         redirect(url_for("search_results", comments=ExampleEntry.query.all()))
-
-    # todo
-    #  create a class for the forms?
-    #  you MUST make sure to be safe from SQL injection and other X
-
-    # todo
-    #  in the search-results do
-    #    change get to render with params
-    #    change html to create/fill new data ("you searched for...", "total #results..")
-    #    consider running the functions in "search-result" and NOT "home"
-    #    make some sort "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
-
-    # todo
-    #  change projection to include entire entry instead of index alone
-    #  add fuzzy (returns things *like* but not necessarily the same) / regex search on the query
-    #  clean data before:
-    #    split creation of tables function in db-migration into multiple function
-    #    appropriate normalization
 
     print(request.form.to_dict())
     search_word = request.form[fields[0]] if (fields[0] in request.form) else None
+    # second_keyword = request.form[fields[2]] if (fields[2] in request.form) else None
+    # search_author = request.form[fields[2]] if (fields[2] in request.form) else None
+    # search_work = request.form[fields[2]] if (fields[2] in request.form) else None
     search_reference = request.form[fields[2]] if (fields[2] in request.form) else None
     new_result: List[TextSubject] = []
 
-    # db.Session.query(TextSubject).filter().
-    # TextSubject.query.
     if search_word:  # the search by Subject button was clicked
         if search_word == "":
             pass  # todo handle "empty searches"
@@ -79,11 +55,12 @@ def home():
         for result in results:
             new_result.append(result)
             print('result.subject: ', result.subject, '\nres: ', result, '\nnew_result: ', new_result)
-
+    elif search_reference:
+        pass
     else:  # the search by Reference button was clicked
-        if search_reference == "":
+        # if search_reference == "":
             # resp.headers['X-Something'] = 'A value'
-            pass  # todo handle "empty searches"
+        pass  # todo handle "empty searches"
 
     # return redirect(url_for("search_results"))
     return redirect(url_for("search_results", search_word=search_word))
@@ -118,6 +95,16 @@ def search_results(search_word=''):
     return render_template('search-results.html', title=f'Search Result for: {search_word}',
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            results=['pupu'], total=0)
+
+    # todo
+    #  in the search-results do
+    #    consider running the functions in "search-result" and NOT "home"
+    #    make some sort "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
+    #  change projection to include entire entry instead of index alone
+    #  add fuzzy (returns things *like* but not necessarily the same) / regex search on the query
+    #  clean data before:
+    #    split creation of tables function in db-migration into multiple function
+    #    appropriate normalization
 
 
 # ++++++++++++  list of books page ++++++++++++

@@ -6,13 +6,10 @@ from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float
 
 from config import RAW_DATA_DIR
 
-# from config import *
 from . import db
 
-# Base:SQLAlchemy.Query = db.Model
 Base: SQLAlchemy.__base__ = db.Model
-
-
+# Base:SQLAlchemy.Query = db.Model
 # Base:sqlalchemy.orm = db.Model
 # Base:SQLAlchemy = db.Model
 

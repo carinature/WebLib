@@ -1,34 +1,15 @@
 import os
 
-# global ROOT_DIR
-# global RAW_DATA_DIR
-import sqlalchemy
-from flask_sqlalchemy import Model, SQLAlchemy
-
-ROOT_DIR = os.path.dirname(os.path.realpath(__file__))  # todo - find absolute path?
 # # ROOT_DIR = path.abspath(path.dirname(__file__))
+ROOT_DIR = os.path.dirname(os.path.realpath(__file__))  # todo - find absolute path?
 RAW_DATA_DIR = os.path.join(ROOT_DIR, 'app/raw_data')
-# # TEMPLATES_DIR = os.path.join(ROOT_DIR, 'templates')
-# # STATIC_DIR = os.path.join(ROOT_DIR, 'templates')
 # UTILS_DIR = os.path.join(ROOT_DIR, 'utilities')
-# # from dotenv import load_dotenv
-# # load_dotenv(path.join(basedir, '.env'))
-
-
-# from flask import current_app
-# app = current_app
-# from wsgi import app
-
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 
 
 class Config(object):
     EXPLAIN_TEMPLATE_LOADING = True
     # General Flask config variables
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    # STATIC_FOLDER = 'app/static'
-    # TEMPLATES_FOLDER = 'app/templates'
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
     # SESSION_COOKIE_NAME = os.environ.get('SESSION_COOKIE_NAME')
@@ -61,7 +42,7 @@ class DevConfig(Config):
 
     # MISC
     POSTS_PER_PAGE = 10  # used for pagination of the DB-query results
-    CHUNK_SIZE_DB = 1000  # used in DB migration for chunking huge amounts of data
+    CHUNK_SIZE_DB = 10000  # used in DB migration for chunking huge amounts of data
 
 
 class ProdConfig(Config):
@@ -80,6 +61,7 @@ class ProdConfig(Config):
 
     # MISC
     POSTS_PER_PAGE = 10
+
 
 # def _include_sqlalchemy(obj):
 #     for module in sqlalchemy, sqlalchemy.orm:
