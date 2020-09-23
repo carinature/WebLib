@@ -1,22 +1,43 @@
+from flask import render_template, make_response, redirect, url_for, request
+from flask import current_app as app
+from .models import *
+import email_validator
+
+from .forms import *
+
+import random  # todo remove
 from typing import List
 
 from flask import flash
-from flask import render_template, make_response, redirect, url_for, request
 
-from .models import *
 
-import random  # todo remove
-
-from flask import current_app as app
-
-@app.route("/kaka")
+@app.route("/kaka", methods=['GET', 'POST'])
 def kaka():
-    headers = {"Content-Type": "app/kaka"}
-    return make_response(
-        'Test worked!',
-        200,
-        headers
-    )
+    # headers = {"Content-Type": "app/kaka"}
+    # return make_response(
+    #     'Test worked!',
+    #     200,
+    #     headers
+    # )
+
+    form = SearchSubject(request.form)
+    if form.validate_on_submit():
+        print('Great Success')
+        return redirect(url_for('success'))
+    # return redirect(url_for('success'))
+        # return render_template('kaka.html', title='Great Success', form=form)
+    print('what happend')
+    flash(form.errors)
+    print("form.errors")
+    print(form.errors)
+    return render_template('kaka.html', title='kaka', form=form)
+
+
+@app.route("/success", methods=['GET', 'POST'])
+def success():
+    sform = SearchSubject()
+    return '<h1>Great Success</h1>'
+    # return render_template('kaka.html', title='Great Success', sform=sform)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -38,7 +59,7 @@ def home():
     # for i in range(len(fields)):
     #     if fields[i] in request.form:
     #         print()
-            # print(request.form.get(fields[i]))
+    # print(request.form.get(fields[i]))
 
     print(request.form.to_dict())
     search_word = request.form[fields[0]] if (fields[0] in request.form) else None
@@ -59,7 +80,7 @@ def home():
         pass
     else:  # the search by Reference button was clicked
         # if search_reference == "":
-            # resp.headers['X-Something'] = 'A value'
+        # resp.headers['X-Something'] = 'A value'
         pass  # todo handle "empty searches"
 
     # return redirect(url_for("search_results"))
@@ -167,7 +188,8 @@ def check_check():
 
 @app.errorhandler(404)
 def not_found(error):
-    resp = make_response(render_template('page_not_found.html', title="Tiresias Project - Page not Found",
+    resp = make_response(render_template('page_not_found.html',
+                                         title="Tiresias Project - Page not Found",
                                          description=str(error)), 404)
     print(error)
     return resp

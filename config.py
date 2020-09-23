@@ -26,9 +26,9 @@ class Config(object):
 
 
 class DevConfig(Config):
-    FLASK_ENV = 'development'
-    DEBUG = True
-    TESTING = True
+    FLASK_ENV = 'development' #fixme should work with the config.py instead
+    DEBUG = True #fixme should work with the config.py instead
+    # TESTING = True #fixme should work with the config.py instead
 
     # Database
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{db_name}".format(

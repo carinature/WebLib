@@ -1,9 +1,7 @@
 
 export FLASK_APP=wsgi.py
-#export FLASK_APP=app/__init__.py
-#export FLASK_APP=app/routes.py
-#export FLASK_ENV=development
-#export FLASK_DEBUG=1
+export FLASK_ENV=development #fixme should work with the config.py instead
+export FLASK_DEBUG=1 #fixme should work with the config.py instead
 
 export SECRET_KEY=b'_5#y2L"F4Q8z\n\xec]/'
 
