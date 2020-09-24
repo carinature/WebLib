@@ -1,52 +1,118 @@
 {% extends 'layout.html' %}
 
-
 {% block content %}
-    <div class="formwrapper">
-        <h2 class="title">Contact</h2>
-        <form method="POST" action="{{ url_for('kaka') }}">
-            {#  <form method="POST" action="">#}
-{#            Flask wtform forms.validate_on_submit() is always false#}
-            {#  The problem is with wtf not finding the CSRF Tokens as part of your form data. Add {{ form.hidden_tag() }} or {{ form.csrf_token }} as the top element of your form.#}
-{#            {{ form.hidden_tag() }}#}
-            {{ form.csrf_token }}
-            <div class="form-field">{{ form.search_keyword_1.label }} {{ form.search_keyword_1 }}
-                {% if form.search_keyword_1.errors %}
-                    <ul class="errors">
-                        {% for error in form.search_keyword_1.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </div>
-            <div class="form-field">{{ form.search_keyword_2.label }} {{ form.search_keyword_2 }}
-                {#      {% if form.search_keyword_2.errors %}#}
-                {#        <ul class="errors">#}
-                {#          {% for error in form.search_keyword_2.errors %}#}
-                {#            <li>{{ error }}</li>#}
-                {#          {% endfor %}#}
-                {#        </ul>#}
-                {#      {% endif %}#}
-            </div>
-            <div class="form-field">{{ form.title.label }} {{ form.title }}
-                {% if form.title.errors %}
-                    <ul class="errors">
-                        {% for error in form.title.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </div>
-            <div class="form-field">{{ form.body.label }} {{ form.body }}
-                {% if form.body.errors %}
-                    <ul class="errors">
-                        {% for error in form.body.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </div>
-            {{ form.submit }}
-        </form>
+
+    <!-- Radio search buttons -->
+    <br><br>
+    <div style="text-align: center">
+    <span style="margin-left: 2rem; display: inline-block;" class="padding">
+       <input class="inline-radio" type="radio" id="chkYes" name="search-radio" onclick="ShowHideDiv()" checked/>
+       <label for="chkYes" style="vertical-align: middle; font-size: 1.5rem">Search by Subject</label>
+    </span>
+        <span style="margin-left: 2rem; display: inline-block;" class="padding">
+       <input class="inline-radio" type="radio" id="chkNo" name="search-radio" onclick="ShowHideDiv()"/>
+        <label for="chkNo" style="vertical-align: middle; font-size: 1.5em">Search by Reference</label>
+    </span>
+    </div>
+
+    <div class="formwrapper container">
+        {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
+        {#        <h2 class="title">Contact</h2>#}
+        <!--- search by Subject  -->
+        <div class="row s01" id="search-subject">
+            <form method="POST" action="{{ url_for('kaka') }}">
+                {#
+            Flask wtform forms.validate_on_submit() is always false?
+            The problem is with wtf not finding the CSRF Tokens as part of your form data.
+            Add {{ form.hidden_tag() }} or {{ form.csrf_token }} as the top element of your form.
+            #}
+                {{ form.csrf_token }} {#            {{ form.hidden_tag() }}#}
+                <div class="inner-form">
+                    {#                    <div class="form-field input-field first-wrap">#}
+                    <div class="form-field input-field second-wrap">
+                        {#                {{ form.subject_keyword_1.label }}#}
+                        {{ form.subject_keyword_1 }}
+                        {% if form.subject_keyword_1.errors %}
+                            <ul class="errors">
+                                {% for error in form.subject_keyword_1.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-field input-field second-wrap">
+                        {#                {{ form.subject_keyword_2.label }} #}
+                        {{ form.subject_keyword_2 }}
+                        {% if form.subject_keyword_2.errors %}
+                            <ul class="errors">
+                                {% for error in form.subject_keyword_2.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="input-field third-wrap ">
+{#                        <div class="btn-search btn-primary">#}
+{#                            <i class="fas fa-search" aria-hidden="true">#}
+                                {{ form.submit_subject }}
+{#                            </i>#}
+{#                        </div>#}
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--- search by Reference - hidden Section -->
+        <div class="row s01" id="search-ref" style="display: none">
+            <form method="POST" action="{{ url_for('kaka') }}">
+                {#
+            Flask wtform forms.validate_on_submit() is always false?
+            The problem is with wtf not finding the CSRF Tokens as part of your form data.
+            Add {{ form2.hidden_tag() }} or {{ form2.csrf_token }} as the top element of your form2.
+            #}
+                {{ form2.csrf_token }} {#            {{ form2.hidden_tag() }}#}
+                <div class="inner-form">
+                    {#                    <div class="form-field input-field first-wrap">#}
+                    <div class="form-field input-field second-wrap">
+                        {{ form2.search_author.label }}
+                        {{ form2.search_author }}
+                        {% if form2.search_author.errors %}
+                            <ul class="errors">
+                                {% for error in form2.search_author.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-field input-field second-wrap">
+                        {{ form2.search_work.label }}
+                        {{ form2.search_work }}
+                        {% if form2.search_work.errors %}
+                            <ul class="errors">
+                                {% for error in form2.search_work.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-field input-field second-wrap">
+                        {{ form2.search_reference.label }}
+                        {{ form2.search_reference }}
+                        {% if form2.search_reference.errors %}
+                            <ul class="errors">
+                                {% for error in form2.search_reference.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="input-field third-wrap"> {{ form2.submit_reference }} </div>
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock %}

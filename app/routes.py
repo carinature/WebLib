@@ -20,33 +20,40 @@ def kaka():
     #     headers
     # )
 
-    form = SearchSubject(request.form)
-    if form.validate_on_submit():
+    subject_form = SearchSubject(request.form)
+    reference_form = SearchReference(request.form)
+    if subject_form.submit_subject.data and subject_form.validate_on_submit():
         print('Great Success')
-        return redirect(url_for('success'))
-    # return redirect(url_for('success'))
-        # return render_template('kaka.html', title='Great Success', form=form)
+        return redirect(url_for('success', title='subject_form'))
+    if reference_form.submit_reference.data and reference_form.validate_on_submit():
+        print('Great Success')
+        return redirect(url_for('success', title='reference_form'))
+        # return render_template('kaka.html', title='Great Success', subject_form=subject_form)
     print('what happend')
-    flash(form.errors)
-    print("form.errors")
-    print(form.errors)
-    return render_template('kaka.html', title='kaka', form=form)
+    print("subject_form.errors")
+    print(subject_form.errors)
+    flash(subject_form.errors)
+    return render_template('kaka.html', title='Search', form=subject_form, form2=reference_form)
 
 
-@app.route("/success", methods=['GET', 'POST'])
-def success():
+@app.route("/success/<title>", methods=['GET', 'POST'])
+def success(title):
     sform = SearchSubject()
-    return '<h1>Great Success</h1>'
+    return '<h1>' + title + ' Great Success</h1>'
     # return render_template('kaka.html', title='Great Success', sform=sform)
+
 
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if 'GET' == request.method:
         print('INDEX - GET')
+        subject_form = SearchSubject(request.form)
+        reference_form = SearchReference(request.form)
         return render_template('index.html',
                                title="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               description="Tiresias: The Ancient Mediterranean Religions Source Database"
+                               description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               form=subject_form, form2=reference_form,
                                )
     fields = [
         "search-subject",
@@ -94,6 +101,10 @@ def home():
 @app.route('/search-results', methods=['GET', 'POST'])
 def search_results(search_word=''):
     flash('You doing great GRRRLLLL')
+
+    subject_form = SearchSubject(request.form)
+    reference_form = SearchReference(request.form)
+
     # search_word = search_word if search_word else request.args['search_word']
     print(search_word)
     if 'GET' == request.method:
@@ -107,7 +118,9 @@ def search_results(search_word=''):
         # return render_template('search-results.html', results=results)
         return render_template('search-results.html', title=f'Search Results for: {search_word}',
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               results=['pipi'], total=0)  # , results=results)
+                               results=['pipi'], total=0,
+                               form=subject_form, form2=reference_form,
+                               )  # , results=results)
 
     flash('You\'re \'POST\' on!')
     print('post')

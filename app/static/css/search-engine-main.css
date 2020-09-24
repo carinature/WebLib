@@ -501,6 +501,7 @@ legend {
 }
 
 .s01 form .inner-form .input-field {
+    margin-top: 30px; /*KT*/
     margin-right: 30px;
     height: 68px;
 }
@@ -548,6 +549,9 @@ legend {
 }
 
 .s01 form .inner-form .input-field.third-wrap {
+    /*float: bottom; !*KT*!*/
+    /*alignment: bottom; !*KT*!*/
+    /*bottom: auto; !*KT*!*/
     width: 180px;
     margin-right: 0;
 }
