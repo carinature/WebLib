@@ -20,7 +20,7 @@ natsort~=7.0.1
 DateTime~=4.3
 Pillow~=7.2.0
 email_validator
-
+# WTForms-Components
 #     <!--original-->
 #     <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
 #     <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>-->

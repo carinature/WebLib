@@ -33,7 +33,7 @@ def kaka():
     print("subject_form.errors")
     print(subject_form.errors)
     flash(subject_form.errors)
-    return render_template('kaka.html', title='Search', form=subject_form, form2=reference_form)
+    return render_template('kaka.html', title='Search', form1=subject_form, form2=reference_form)
 
 
 @app.route("/success/<title>", methods=['GET', 'POST'])
@@ -43,17 +43,18 @@ def success(title):
     # return render_template('kaka.html', title='Great Success', sform=sform)
 
 
-
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if 'GET' == request.method:
         print('INDEX - GET')
         subject_form = SearchSubject(request.form)
         reference_form = SearchReference(request.form)
+        filter_form = FilterForm(request.form)
+        radio = SearchTypeChoice(request.form)
         return render_template('index.html',
                                title="Tiresias: The Ancient Mediterranean Religions Source Database",
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               form=subject_form, form2=reference_form,
+                               form1=subject_form, form2=reference_form, form3=filter_form, radio=radio
                                )
     fields = [
         "search-subject",
@@ -102,9 +103,6 @@ def home():
 def search_results(search_word=''):
     flash('You doing great GRRRLLLL')
 
-    subject_form = SearchSubject(request.form)
-    reference_form = SearchReference(request.form)
-
     # search_word = search_word if search_word else request.args['search_word']
     print(search_word)
     if 'GET' == request.method:
@@ -116,10 +114,15 @@ def search_results(search_word=''):
         # print(request.args['results'])
         # results = request.args['results']
         # return render_template('search-results.html', results=results)
+
+        subject_form = SearchSubject(request.form)
+        reference_form = SearchReference(request.form)
+        filter_form = FilterForm(request.form)
+
         return render_template('search-results.html', title=f'Search Results for: {search_word}',
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               results=['pipi'], total=0,
-                               form=subject_form, form2=reference_form,
+                               results=['res1', 'res2', 'res3', 'res4'], total=0,
+                               form1=subject_form, form2=reference_form, form3=filter_form,
                                )  # , results=results)
 
     flash('You\'re \'POST\' on!')
