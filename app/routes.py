@@ -147,13 +147,19 @@ def search_results(search_word=''):
 # ++++++++++++  list of books page ++++++++++++
 @app.route('/book-indices')
 def book_indices():
-    page = request.args.get('page', 1, type=int)
-    ordered_titles = BookRef.query.order_by(BookRef.titleref.asc())
-    paginated_titiles = ordered_titles.paginate(page, app.config['POSTS_PER_PAGE'], False)
+    page = request.headers
+    print("-------------- page")
+    print(page)
+    # page = request.args.get('page', 1, type=int)
+    # ordered_titles = BookRef.query.order_by(BookRef.titleref.asc())
+    # paginated_titiles = ordered_titles.paginate(page, app.config['POSTS_PER_PAGE'], False)
+    # return render_template('book-indices.html',
+    #                        title="Books Included in the Tiresias Project Database",  # todo different title
+    #                        description="Tiresias: The Ancient Mediterranean Religions Source Database",
+    #                        titles_list=paginated_titiles.items, total=paginated_titiles.total)
     return render_template('book-indices.html',
                            title="Books Included in the Tiresias Project Database",  # todo different title
-                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                           titles_list=paginated_titiles.items, total=paginated_titiles.total)
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database",)
 
 
 # ++++++++++++  list of "subjects" in tje db page ++++++++++++
@@ -178,10 +184,14 @@ def subject_list():
 
     page = request.args.get('page', 1, type=int)
     subjects = SubjectEnum.query.paginate(page, app.config['POSTS_PER_PAGE'], False)
+    print("---------- subjects.items")
+    print(subjects.items)
+    print("---------- subjects")
+    print(subjects)
     return render_template('subject-list.html',
                            title="Tiresias Subjects",  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                           subjects=subjects.items, total=subjects.total)
+                           subjects=subjects, total=subjects.total)
     # return render_template(url_for('subject_list')+'.html')
 
 

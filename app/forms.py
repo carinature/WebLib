@@ -31,10 +31,10 @@ class SearchSubject(FlaskForm):
         [Optional(), validators.Regexp('^\w+$', message="Field accepts one search word")],
         render_kw={'placeholder': '(Optional) Subject'})
     submit_subject = SubmitField('Submit',
-                         # render_kw={'class': 'btn btn-lg btn-primary',
-                         #            # 'style': 'float: right',
-                         #            # 'onclick': "alert('Fetching Data...')"
-                         #            }
+                                 # render_kw={'class': 'btn btn-lg btn-primary',
+                                 #            # 'style': 'float: right',
+                                 #            # 'onclick': "alert('Fetching Data...')"
+                                 #            }
                                  )
 
 
@@ -64,6 +64,7 @@ class SearchReference(FlaskForm):
                                    #            # 'onclick': "alert('Fetching Data...')"
                                    #            }
                                    )
+
 
 centuries = [('Any Century', 'any'),
              ('8 BCE', '8 BCE'),

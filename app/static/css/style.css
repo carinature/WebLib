@@ -230,8 +230,10 @@ body {
     /*border-block-color: #00aced;*/
     /*background-color: var(--accent-color);*/
     /*color: var(--accent-color);*/
-
+    /* https://stackoverflow.com/questions/5903112/is-it-really-impossible-to-make-a-div-fit-its-size-to-its-content */
+    /* http://jsfiddle.net/XgErJ/4 */
 }
-#submit-subject{
-        /*background-color: var(--accent-color);*/
+
+#submit-subject {
+    /*background-color: var(--accent-color);*/
 }
