@@ -196,5 +196,42 @@ body {
 /*}*/
 
 .refsite-logos { /*the logos on the first page in the if you build it section*/
-    max-height: 4rem
+    max-height: 2rem
+}
+
+.search-bar {
+    display: inline-block;
+}
+
+.search-bar-content {
+    width: fit-content;
+    background-color: var(--secondary-color-light);
+    /*position: absolute;*/
+    /*width: auto; !* optional *!*/
+    /*height: auto; !* optional *!*/
+}
+
+.list-inline-item input
+    /*.search-bar-item*/
+{
+    height: 3em;
+    margin: 10px;
+    display: block;
+    position: relative;
+    /*border-color: var(--secondary-color-light);*/
+    /*border-color: var(--secondary-color-dark);*/
+    /*border-color: var(--primary-color-dark);*/
+    /*border-color: var(--primary-color-light);*/
+    border-radius: 5px;
+    /*-webkit-border-radius: 5%;*/
+    /*border-width: 2px;*/
+    /*-moz-outline-radius: 5%;*/
+    /*border: none;*/
+    /*border-block-color: #00aced;*/
+    /*background-color: var(--accent-color);*/
+    /*color: var(--accent-color);*/
+
+}
+#submit-subject{
+        /*background-color: var(--accent-color);*/
 }

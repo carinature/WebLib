@@ -15,7 +15,7 @@ function scrollFunction() {
 
         // logo.style.padding = "5px 10px 5px 10px";
         // logo.style.margin = "5px 10px 5px 10px";
-        logo.style.height = "7.5rem";
+        logo.style.height = "3rem";
         // logo.style.margin = "0";
         // logo.style.width = "5em";
         title.style.transform = "scale(0.5)";
@@ -30,7 +30,7 @@ function scrollFunction() {
 
         // logo.style.padding = "30px 10px 30px 10px";
         // logo.style.margin = "30px 10px 30px 10px";
-        logo.style.height = "10rem";
+        logo.style.height = "3rem";
         // logo.style.width = "10em";
 
         title.style.transform = "scale(1)";

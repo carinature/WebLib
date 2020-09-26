@@ -35,3 +35,13 @@ flask run
 #sudo service docker stop
 
 # cat /var/run/docker.pid
+
+# IF ERROR:
+#   .0.0.0:3306: bind: address already in use
+#
+#   ERROR: for db  Cannot start service db: driver failed programming external connectivity on endpoint weblib_db_1 (42f5653eb71ada8190e2f93d8e78672e0b5d4fe0ae1b44ccc4b99ef0a286674e): Error starting userland proxy: listen tcp 0.0.0.0:3306: bind: address already in use
+#   ERROR: Encountered errors while bringing up the project.
+# DO
+#   $ sudo netstat -laputen | grep ':3306'
+#   $ sudo systemctl stop PROGRAM_NAME
+#TODO move this to the readme file ?

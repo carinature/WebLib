@@ -18,12 +18,13 @@
     </span>
     </div>
 
-{#    <div style="text-align: center; ">#}
-{#        <span style="margin-left: 2rem; display: inline-block;" class="padding">#}
-{#            {{ radio.r_field }}#}
-{#        </span>#}
-{#    </div>#}
+    {#    <div style="text-align: center; ">#}
+    {#        <span style="margin-left: 2rem; display: inline-block;" class="padding">#}
+    {#            {{ radio.r_field }}#}
+    {#        </span>#}
+    {#    </div>#}
 
+    {# Search Fields #}
     <div class="formwrapper">
         <!--- search by Subject  -->
         <div class="row" id="search-subject">
@@ -38,7 +39,7 @@
                     {{ form1.csrf_token }} {#            {{ form1.hidden_tag() }}#}
                     <div class="inner-form">
                         {#                    <div class="form-field input-field first-wrap">#}
-                        <div class="form-field input-field second-wrap">
+                        <div class="form-field input-field first-wrap">
                             {#                {{ form1.subject_keyword_1.label }}#}
                             {{ form1.subject_keyword_1 }}
                             {% if form1.subject_keyword_1.errors %}
@@ -62,7 +63,7 @@
                             {% endif %}
                         </div>
 
-                        <div class="input-field third-wrap ">
+                        <div class="input-field third-wrap btn-search">
                             {#                        <div class="btn-search btn-primary">#}
                             {#                            <i class="fas fa-search" aria-hidden="true">#}
                             {{ form1.submit_subject }}
@@ -73,6 +74,7 @@
                 </form>
             </div>
         </div>
+
         <!--- search by Reference - hidden Section -->
         <div class="row" id="search-ref" style="display: none">
             <div class="s01">
@@ -80,15 +82,16 @@
                 <form action="{{ url_for('home') }}" method="POST">
 
                     {#
-            Flask wtform forms.validate_on_submit() is always false?
-            The problem is with wtf not finding the CSRF Tokens as part of your form data.
-            Add {{ form2.hidden_tag() }} or {{ form2.csrf_token }} as the top element of your form2.
-            #}
+                    Flask wtform forms.validate_on_submit() is always false?
+                    The problem is with wtf not finding the CSRF Tokens as part of your form data.
+                    Add {{ form2.hidden_tag() }} or {{ form2.csrf_token }} as the top element of your form2.
+                    #}
                     {{ form2.csrf_token }} {#            {{ form2.hidden_tag() }}#}
-                    <div class="inner-form">
-                        {#                    <div class="form-field input-field first-wrap">#}
-                        <div class="form-field input-field second-wrap">
-                            {{ form2.search_author.label }}
+                    <div class="inner-form ">
+                        {#                    <div class="inner-form ">#}
+                        <div class="list-inline-item search-bar-item input-field">
+{#                        <div class="list-inline-item search-bar-item">#}
+                            {#                            {{ form2.search_author.label }}#}
                             {{ form2.search_author }}
                             {% if form2.search_author.errors %}
                                 <ul class="errors">
@@ -99,8 +102,8 @@
                             {% endif %}
                         </div>
 
-                        <div class="form-field input-field second-wrap">
-                            {{ form2.search_work.label }}
+                        <div class="list-inline-item search-bar-item input-field">
+                            {#                            {{ form2.search_work.label }}#}
                             {{ form2.search_work }}
                             {% if form2.search_work.errors %}
                                 <ul class="errors">
@@ -111,8 +114,8 @@
                             {% endif %}
                         </div>
 
-                        <div class="form-field input-field second-wrap">
-                            {{ form2.search_reference.label }}
+                        <div class="list-inline-item search-bar-item input-field">
+                            {#                            {{ form2.search_reference.label }}#}
                             {{ form2.search_reference }}
                             {% if form2.search_reference.errors %}
                                 <ul class="errors">
@@ -123,7 +126,9 @@
                             {% endif %}
                         </div>
 
-                        <div class="input-field third-wrap"> {{ form2.submit_reference }} </div>
+                        <div class="list-inline-item search-bar-item input-field">
+                            {#                                     <br>#}
+                            {{ form2.submit_reference }}</div>
                     </div>
                 </form>
             </div>

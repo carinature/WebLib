@@ -21,19 +21,19 @@ def kaka():
     # )
 
     subject_form = SearchSubject(request.form)
-    reference_form = SearchReference(request.form)
-    if subject_form.submit_subject.data and subject_form.validate_on_submit():
-        print('Great Success')
-        return redirect(url_for('success', title='subject_form'))
-    if reference_form.submit_reference.data and reference_form.validate_on_submit():
-        print('Great Success')
-        return redirect(url_for('success', title='reference_form'))
-        # return render_template('kaka.html', title='Great Success', subject_form=subject_form)
-    print('what happend')
-    print("subject_form.errors")
-    print(subject_form.errors)
-    flash(subject_form.errors)
-    return render_template('kaka.html', title='Search', form1=subject_form, form2=reference_form)
+    # reference_form = SearchReference(request.form)
+    # if subject_form.submit_subject.data and subject_form.validate_on_submit():
+    #     print('Great Success')
+    #     return redirect(url_for('success', title='subject_form'))
+    # if reference_form.submit_reference.data and reference_form.validate_on_submit():
+    #     print('Great Success')
+    #     return redirect(url_for('success', title='reference_form'))
+    #     # return render_template('kaka.html', title='Great Success', subject_form=subject_form)
+    # print('what happend')
+    # print("subject_form.errors")
+    # print(subject_form.errors)
+    # flash(subject_form.errors)
+    return render_template('kaka.html', form1=subject_form)  # , form2=reference_form)
 
 
 @app.route("/success/<title>", methods=['GET', 'POST'])
