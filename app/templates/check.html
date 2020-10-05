@@ -1,42 +1,22 @@
 {% extends 'layout.html' %}
 
+{% block content %}
+    {#  container-fluid #}
 
 
-
-<div class="container">
-
-    {% for bookref in bookrefs %}
-        <div class="row">
-            {{ bookref.titleref }}
+    <div class="form-inline container-fluid search-bar">
+        <div class="s01 container flex-wrap search-bar-content">
+            {#            <div style="  margin: 10px;" class="list-inline-item">{{ form1.subject_keyword_1 }}</div>#}
+            <div class="list-inline-item search-bar-item">
+                {{ form1.subject_keyword_2 }}
+            </div>
+            <div class="list-inline-item search-bar-item">
+                {{ form1.subject_keyword_2 }}
+            </div>
+            <div class="list-inline-item search-bar-item">
+                {{ form1.submit_subject }}
+            </div>
         </div>
-    {% endfor %}
-
-
-    <div class="row">
-        <!--        <form action="." method="POST">-->
-        <form action="{{ url_for('check_check') }}" method="POST">
-            <label>
-                <textarea class="form-control" name="contents" placeholder="Enter a comment"></textarea>
-            </label>
-            <input type="submit" class="btn btn-success" value="Post comment">
-        </form>
     </div>
 
-    <div class="row">
-        <!--        <form action="." method="POST">-->
-        <form id="new-comment2" name="new-comment-name2" action="{{ url_for('check_check') }}" method="POST">
-            <label>
-                <textarea class="form-control" name="contents2" placeholder="Enter a comment"></textarea>
-            </label>
-            <input type="submit" class="btn btn-success" value="Post comment">
-        </form>
-    </div>
-
-{##}
-</div>
-
-{% include 'footer.html' %}
-
-
-</body>
-</html>
+{% endblock %}
