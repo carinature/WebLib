@@ -10,6 +10,10 @@ from dotenv import load_dotenv
 # project_folder = os.path.expanduser('~/my-project-dir')  # adjust as appropriate
 load_dotenv(os.path.join(ROOT_DIR, '.env'))
 
+from dotenv import load_dotenv
+# project_folder = os.path.expanduser('~/my-project-dir')  # adjust as appropriate
+load_dotenv(os.path.join(ROOT_DIR, '.env'))
+
 class Config(object):
     EXPLAIN_TEMPLATE_LOADING = True
     # General Flask config variables
