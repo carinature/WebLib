@@ -2,6 +2,7 @@ import os
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, ForeignKey, Table, MetaData
+from sqlalchemy.orm import column_property
 from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float, Boolean, PickleType
 
 from config import RAW_DATA_DIR
@@ -9,6 +10,8 @@ from config import RAW_DATA_DIR
 from . import db
 
 Base: SQLAlchemy.__base__ = db.Model
+
+
 # Base:SQLAlchemy.Query = db.Model
 # Base:sqlalchemy.orm = db.Model
 # Base:SQLAlchemy = db.Model
@@ -82,7 +85,33 @@ Base: SQLAlchemy.__base__ = db.Model
 #
 # mapper(Test, test)
 
+# class Deb(Base):
+#     __tablename__ = 'deb'
+#
+#     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
+#                for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('deb')]
+#
+#     col_names = ['ccc']
+#     dtype_dic_py2sql = {int: Integer, str: String(10)}
+#     dtype_dic_csv2py = {'ccc': str}
+#
+#     dbg_index = Column(Integer, primary_key=True, autoincrement=True)
+#     ccc = Column(String(100), )
+#     test_field = Column(String(100), )
+#     # test_field1 = column_property(dbg_index)
+#     test_field2 = Column(Integer, )
+#
+#     def __init__(self):
+#         super().__init__('BookRef', Base, self.dtype_dic_py2sql)
+#         res = column_property(self.ccc)
+#         # self.test_field = String(Integer(res) * 5)
+#         # self.test_field1 = String(int(res) * 5)
+#         # self.test_field2 = str(int(res) * 5)
+#         self.test_field = String('slkfd')
+#         # self.test_field1 = column_property(self.dbg_index)
+#         self.test_field2 = 3
 
+# corresponds to the bookrefernces.csv
 class BookRef(Base):
     __tablename__ = 'book_references'
 
@@ -102,6 +131,10 @@ class BookRef(Base):
     file = Column(String(100), default='non', nullable=True)
     titleref = Column(String(100), nullable=True)
     gcode = Column(Text, nullable=True)  # ,unique=True)
+    # C_total = column_property(book_biblio_info.title())  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
+    # C_total1 = column_property(book_biblio_info)  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
+    # kaka = 'kaka'  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
+    # C_total2 = column_property(book_biblio_info.isnumeric())  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
 
     # fixme find a better default val or handle empty field. try the option below
     # todo what does it mean to have a column that is both nullable and has a default value
@@ -169,6 +202,7 @@ class TextSubject(Base):
     dbg_index = Column(Integer, primary_key=True, autoincrement=True)
     subject = Column(String(200), nullable=False)
     C = Column(Text)  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
+    Csum = Column(Integer)  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
 
     def __repr__(self):
         return f'<TextSubject subject: {self.subject}, C: {self.C} >'

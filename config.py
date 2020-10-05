@@ -37,11 +37,11 @@ class DevConfig(Config):
         hostname="localhost",
         db_name="tryout",
     )
-    SQLALCHEMY_ECHO = True
+    # SQLALCHEMY_ECHO = True
     # SQLALCHEMY_ENGINE_OPTIONS =  # options to pass to SQLAlchemy-engine which holds your app's DB connection.
 
     # MISC
-    POSTS_PER_PAGE = 10  # used for pagination of the DB-query results
+    POSTS_PER_PAGE = 3  # used for pagination of the DB-query results
     CHUNK_SIZE_DB = 10000  # used in DB migration for chunking huge amounts of data
 
 
@@ -61,6 +61,8 @@ class ProdConfig(Config):
 
     # MISC
     POSTS_PER_PAGE = 10
+    SUBJECTS_POSTS_PER_PAGE = 100
+
 
 
 # def _include_sqlalchemy(obj):

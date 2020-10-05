@@ -6,12 +6,12 @@
         Included in Database: {{ total }} </h4><br>
     <div class="container">
         {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
-        {% for subject in subjects %}
+        {% for subject in subjects.items %}
             <div class="row">
-                {{ subject }}
-                {{ subject.subject }}
-                {{ subject.C }} {# displays it like so :    Richlin (2018) Richlin (2018)  #}
-                {{ subject.newc }} {# displays it like so :    Richlin (2018) Richlin (2018)  #}
+                <br>subject {{ subject }}
+                <br>subject.subject {{ subject.subject }}
+                <br>subject.C {{ subject.C }} {# displays it like so :    Richlin (2018) Richlin (2018)  #}
+                <br>subject.Csum {{ subject.Csum }} {# displays it like so :    Richlin (2018) Richlin (2018)#}
                 {#        {{ subject.subject , subject.subject }} {# displays it like so :   ('Richlin (2018)', 'Richlin (2018)')   #}
             </div>
         {% endfor %}

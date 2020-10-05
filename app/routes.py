@@ -1,5 +1,12 @@
-from flask import render_template, make_response, redirect, url_for, request
+import json
+from datetime import time
+
+from flask import render_template, make_response, redirect, url_for, request, jsonify
 from flask import current_app as app
+from sqlalchemy import cast
+from sqlalchemy.orm import sessionmaker
+
+from utilities.db_migration import csv_to_mysql
 from .models import *
 import email_validator
 
@@ -9,6 +16,8 @@ import random  # todo remove
 from typing import List
 
 from flask import flash
+
+print('~' * 113)
 
 
 @app.route("/kaka", methods=['GET', 'POST'])
@@ -34,6 +43,13 @@ def kaka():
     # print(subject_form.errors)
     # flash(subject_form.errors)
     return render_template('kaka.html', form1=subject_form)  # , form2=reference_form)
+
+
+@app.route("/pipi", methods=['GET', 'POST'])
+def pipi():
+    csv_to_mysql()
+    return 'OK'
+    # return render_template('kaka.html', form1=subject_form)  # , form2=reference_form)
 
 
 @app.route("/success/<title>", methods=['GET', 'POST'])
@@ -159,35 +175,27 @@ def book_indices():
     #                        titles_list=paginated_titiles.items, total=paginated_titiles.total)
     return render_template('book-indices.html',
                            title="Books Included in the Tiresias Project Database",  # todo different title
-                           description="Tiresias: The Ancient Mediterranean Religions Source Database",)
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database", )
 
 
-# ++++++++++++  list of "subjects" in tje db page ++++++++++++
+import pandas as pd
+import numpy as np
+
+# ++++++++++++  list of "subjects" in the db page ++++++++++++
 @app.route('/subject-list')
 def subject_list():
-    class SubjectEnum(TextSubject):
-        newc = TextSubject.C
-        # __tablename__ = 'text_subjects'  # fixme
-        # dbg_index = Column(Integer)
-        # subject = Column(String(200))
-        # C = Column(Text)
+    print('lasjfd')
+    # Create the session
+    Session = sessionmaker(bind=db.engine)
+    session = Session()  # todo or? session = scoped_session(Session())
 
-        # kaka = newc.__getitem__(1)
-        # # pipi = kaka + kaka
-        # # newc = pipi
-        # newc = kaka
-        # def __init__(self):
-        #     super.__init__(self)
-        #     # newc = TextSubject.C
-        #     # self.newc = str(newc) + str(newc)
-        #     self.C = self.newc + self.newc
+    t = time()
 
     page = request.args.get('page', 1, type=int)
-    subjects = SubjectEnum.query.paginate(page, app.config['POSTS_PER_PAGE'], False)
-    print("---------- subjects.items")
-    print(subjects.items)
-    print("---------- subjects")
-    print(subjects)
+    subjects = TextSubject.query.paginate(page, app.config['POSTS_PER_PAGE'], False)
+    print('=' * 20)
+    # for s in subjects.items:
+
     return render_template('subject-list.html',
                            title="Tiresias Subjects",  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
