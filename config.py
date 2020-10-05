@@ -65,18 +65,3 @@ class ProdConfig(Config):
     # MISC
     POSTS_PER_PAGE = 10
     SUBJECTS_POSTS_PER_PAGE = 100
-
-
-
-# def _include_sqlalchemy(obj):
-#     for module in sqlalchemy, sqlalchemy.orm:
-#         for key in module.__all__:
-#             if not hasattr(obj, key):
-#                 setattr(obj, key, getattr(module, key))
-
-# class Test(object):
-#     def __init__(self):
-#         _include_sqlalchemy(self, self.__class__)
-
-
-# db:SQLAlchemy = Test() # <-- add a type hint to let pycharm know what db is.

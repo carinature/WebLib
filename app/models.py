@@ -1,10 +1,12 @@
 import os
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column
-from sqlalchemy.types import Integer, String, Text
+from sqlalchemy import Column, ForeignKey, Table, MetaData
+from sqlalchemy.orm import column_property
+from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float, Boolean, PickleType
 
 from config import RAW_DATA_DIR
+
 from . import db
 
 Base: SQLAlchemy.__base__ = db.Model
