@@ -1,5 +1,4 @@
 from flask_wtf import FlaskForm, RecaptchaField
-import email_validator
 from wtforms import *
 from wtforms.validators import *
 
