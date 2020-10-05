@@ -1,21 +1,13 @@
-import json
 from datetime import time
-
-from flask import render_template, make_response, redirect, url_for, request, jsonify
-from flask import current_app as app
-from sqlalchemy import cast
-from sqlalchemy.orm import sessionmaker
-
-from utilities.db_migration import csv_to_mysql
-from .models import *
-import email_validator
-
-from .forms import *
-
-import random  # todo remove
 from typing import List
 
+from flask import current_app as app
 from flask import flash
+from flask import render_template, make_response, redirect, url_for, request
+
+from utilities.db_migration import csv_to_mysql
+from .forms import *
+from .models import *
 
 print('~' * 113)
 
