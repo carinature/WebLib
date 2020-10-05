@@ -1,8 +1,8 @@
-from flask import current_app as app
+from flask import current_app as application
 from sqlalchemy import create_engine
 
-from app import create_app
-from app.models import *
+from application import create_app
+from application.models import *
 
 import pandas as pd
 import numpy as np

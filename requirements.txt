@@ -1,25 +1,25 @@
-flask~=1.1.2
-Flask-SQLAlchemy
+# flask~=1.1.2
+# Flask-SQLAlchemy
 mysql-connector-python # this is for the option to run 'db.createall()' which is a one-off
-pandas~=1.1.2
-SQLAlchemy~=1.3.19
-numpy~=1.19.2
-flask_wtf~=0.14.3
+pandas
+# SQLAlchemy~=1.3.19
+numpy
+# flask_wtf~=0.14.3
 
 # all the next are for wtf forms
 # # should run these before 'pip install mysqlclient' :
 # #   sudo apt-get install mysql-server
 # #   sudo apt-get install libmysqlclient-dev
 
-WTForms~=2.3.3
-mysqlclient~=2.0.1
-PyMySQL~=0.10.1
-regex~=2020.9.27
-requests~=2.24.0
-natsort~=7.0.1
-DateTime~=4.3
-Pillow~=7.2.0
-email_validator
+# WTForms~=2.3.3
+mysqlclient
+# PyMySQL~=0.10.1
+# regex~=2020.9.27
+# requests~=2.24.0
+# natsort
+# DateTime~=4.3
+Pillow
+# email_validator
 # WTForms-Components
 #     <!--original-->
 #     <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
@@ -27,4 +27,4 @@ email_validator
 #     <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
 #     <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
 
-
+python-dotenv

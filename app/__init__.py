@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+# from flask_wtf import CSRFProtect
 
 db = SQLAlchemy()
 
@@ -14,6 +15,9 @@ def create_app():
     # app.config.from_object('config.ProdConfig')  # production configuration
 
     db.init_app(app)
+
+    # csrf = CSRFProtect(app)
+    # csrf.init_app(app)
 
     with app.app_context():
         # print(' - App CTX - ')
