@@ -2,21 +2,73 @@
 {% block content %}
 
     {#    <h1>{{ title }}</h1>#}
-    <h4 style="background-color: var(--secondary-color-light); padding-left: 5%">Total Number of Subjects Currently
-        Included in Database: {{ total }} </h4><br>
+    <h4 class="s01 welcome">
+        {#    <h4 style="background-color: var(--secondary-color-light); padding: 5%">#}
+        Total Number of Subjects Currently Included in Database:
+        <em style='color: var(--accent-color)'>&nbsp {{ total }}</em>
+    </h4><br>
+
+
     <div class="container">
         {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
-        {% for subject in subjects.items %}
-            <div class="row">
-                <br>subject {{ subject }}
-                <br>subject.subject {{ subject.subject }}
-                <br>subject.C {{ subject.C }} {# displays it like so :    Richlin (2018) Richlin (2018)  #}
-                <br>subject.Csum {{ subject.Csum }} {# displays it like so :    Richlin (2018) Richlin (2018)#}
-                {#        {{ subject.subject , subject.subject }} {# displays it like so :   ('Richlin (2018)', 'Richlin (2018)')   #}
-            </div>
-        {% endfor %}
+
+
+        <table class=' table '>
+            {#   <thead style='  background-color: var(--accent-color); text-align: right;'>#}
+            <thead style='  background-color: var(--secondary-color-light)'>
+            <tr>
+                {#   <th></th> {# this column is for the index #}
+                <th>Subject</th>
+                <th>Number of References in DB</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in subjects.items %}
+                <tr>
+                    {#     <th>{{ loop.index0 }}</th>#}
+                    <td>{{ row.subject }}</td>
+                    <td style="text-align: center">{{ row.Csum }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+        {% if prev_url %}
+            <a href="{{ prev_url }}">Prev</a>
+        {% endif %}
+        &nbsp &nbsp
+        {% if next_url %}
+            <a href="{{ next_url }}">Next</a>
+        {% endif %}
+
 
     </div>
+
+    {#
+    {% macro table(header, rows, columns) %}
+#}
+    {#    {% macro table(header, rows, columns, ) %}#}{#
+
+    \begin{tabular}{(formatting, later)}
+      {{ row(header) }}
+      {% for row in rows %}
+        {% for column in columns %}
+        {{ caller(row, column) }} {% if loop.last %}\\{% else %}&{%endif%}
+        {% endfor %}
+      {% endfor %}
+    \end{tabular}
+    {% endmacro %}
+
+    {% call(row, column) table.table(header, rows, columns) %}
+  Content at row = {{row}}, column = {{column}}
+{% endcall %}
+#}
+
+    {#    <table border="1" class="dataframe">#}
+
+
+
 {% endblock %}
 
 

@@ -42,6 +42,7 @@ class DevConfig(Config):
 
     # MISC
     POSTS_PER_PAGE = 3  # used for pagination of the DB-query results
+    SUBJECTS_POSTS_PER_PAGE = 10
     CHUNK_SIZE_DB = 10000  # used in DB migration for chunking huge amounts of data
 
 

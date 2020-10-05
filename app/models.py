@@ -131,14 +131,10 @@ class BookRef(Base):
     file = Column(String(100), default='non', nullable=True)
     titleref = Column(String(100), nullable=True)
     gcode = Column(Text, nullable=True)  # ,unique=True)
-    # C_total = column_property(book_biblio_info.title())  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
-    # C_total1 = column_property(book_biblio_info)  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
-    # kaka = 'kaka'  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
-    # C_total2 = column_property(book_biblio_info.isnumeric())  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
 
     # fixme find a better default val or handle empty field. try the option below
-    # todo what does it mean to have a column that is both nullable and has a default value
     # file = Column(String(100), default=None, nullable=True) todo try this one
+    # todo what does it mean to have a column that is both nullable and has a default value
 
     def __repr__(self):
         return \

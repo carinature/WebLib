@@ -42,6 +42,9 @@ def kaka():
     # print("subject_form.errors")
     # print(subject_form.errors)
     # flash(subject_form.errors)
+    # page = request.args.get('page', 1, type=int)
+    # table = TextSubject.query.paginate(page, app.config['POSTS_PER_PAGE'], False).items
+    # return render_template('kaka.html',mydata=table, form1=subject_form)  # , form2=reference_form)
     return render_template('kaka.html', form1=subject_form)  # , form2=reference_form)
 
 
@@ -178,28 +181,29 @@ def book_indices():
                            description="Tiresias: The Ancient Mediterranean Religions Source Database", )
 
 
-import pandas as pd
-import numpy as np
-
 # ++++++++++++  list of "subjects" in the db page ++++++++++++
 @app.route('/subject-list')
 def subject_list():
-    print('lasjfd')
-    # Create the session
-    Session = sessionmaker(bind=db.engine)
-    session = Session()  # todo or? session = scoped_session(Session())
-
     t = time()
 
     page = request.args.get('page', 1, type=int)
-    subjects = TextSubject.query.paginate(page, app.config['POSTS_PER_PAGE'], False)
+    subjects = TextSubject.query.paginate(page, app.config['SUBJECTS_POSTS_PER_PAGE'], False)
+    # there is not enough memory to do the next, but maybe consider the idea
+    # subjects = TextSubject.query.order_by(
+    #   TextSubject.subject.asc()).paginate(page, app.config['SUBJECTS_POSTS_PER_PAGE'], False)
     print('=' * 20)
     # for s in subjects.items:
+
+    next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
+    prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
 
     return render_template('subject-list.html',
                            title="Tiresias Subjects",  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                           subjects=subjects, total=subjects.total)
+                           subjects=subjects, total=subjects.total,
+                           next_url=next_url,
+                           prev_url=prev_url
+                           )
     # return render_template(url_for('subject_list')+'.html')
 
 
