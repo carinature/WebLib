@@ -3,7 +3,8 @@
 <!------------------------------------------->
 
 <div class="container">
-    {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
+    {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and
+    padding. #}
 
     <!-- Radio search buttons -->
     <br><br>
@@ -18,125 +19,139 @@
     </span>
     </div>
 
-    {#    <div style="text-align: center; ">#}
-    {#        <span style="margin-left: 2rem; display: inline-block;" class="padding">#}
+    {#
+    <div style="text-align: center; ">#}
+        {# <span style="margin-left: 2rem; display: inline-block;" class="padding">#}
     {#            {{ radio.r_field }}#}
     {#        </span>#}
-    {#    </div>#}
+        {#
+    </div>
+    #}
 
     {# Search Fields #}
     <div class="formwrapper">
         <!--- search by Subject  -->
         <div class="row" id="search-subject">
             <div class="s01">
-                {#        <form action="{{ url_for('search_results') }}" method="POST">#}
-                {% if form %}
+                {#
+                <form action="{{ url_for('search_results') }}" method="POST">#}
+                    {% if form %}
                     {#To prevent the template from crashing when it tries to render a web form that does not exist#}
                     <form action="{{ url_for('home') }}" method="POST">
                         {#
-            Flask wtform forms.validate_on_submit() is always false?
-            The problem is with wtf not finding the CSRF Tokens as part of your form data.
-            Add {{ form1.hidden_tag() }} or {{ form1.csrf_token }} as the top element of your form1.
-            #}
-                        {{ form1.csrf_token }} {#            {{ form1.hidden_tag() }}#}
+                        Flask wtform forms.validate_on_submit() is always false?
+                        The problem is with wtf not finding the CSRF Tokens as part of your form data.
+                        Add {{ form1.hidden_tag() }} or {{ form1.csrf_token }} as the top element of your form1.
+                        If your form has multiple hidden fields, you can render them in one block using hidden_tag().
+                        #}
+                        {{ form1.csrf_token }} {# {{ form1.hidden_tag() }}#}
                         <div class="inner-form">
-                            {#                    <div class="form-field input-field first-wrap">#}
-                            <div class="form-field input-field first-wrap">
-                                {#                {{ form1.subject_keyword_1.label }}#}
-                                {{ form1.subject_keyword_1 }}
-                                {% if form1.subject_keyword_1.errors %}
+                            {#
+                            <div class="form-field input-field first-wrap">#}
+                                <div class="form-field input-field first-wrap">
+                                    {# {{ form1.subject_keyword_1.label }}#}
+                                    {{ form1.subject_keyword_1 }}
+                                    {% if form1.subject_keyword_1.errors %}
                                     <ul class="errors">
                                         {% for error in form1.subject_keyword_1.errors %}
-                                            <li>{{ error }}</li>
+                                        <li>{{ error }}</li>
                                         {% endfor %}
                                     </ul>
-                                {% endif %}
-                            </div>
+                                    {% endif %}
+                                </div>
 
-                            <div class="form-field input-field second-wrap">
-                                {#                {{ form1.subject_keyword_2.label }} #}
-                                {{ form1.subject_keyword_2 }}
-                                {% if form1.subject_keyword_2.errors %}
+                                <div class="form-field input-field second-wrap">
+                                    {# {{ form1.subject_keyword_2.label }} #}
+                                    {{ form1.subject_keyword_2 }}
+                                    {% if form1.subject_keyword_2.errors %}
                                     <ul class="errors">
                                         {% for error in form1.subject_keyword_2.errors %}
-                                            <li>{{ error }}</li>
+                                        <li>{{ error }}</li>
                                         {% endfor %}
                                     </ul>
-                                {% endif %}
-                            </div>
+                                    {% endif %}
+                                </div>
 
-                            <div class="input-field third-wrap btn-search">
-                                {#                        <div class="btn-search btn-primary">#}
-                                {#                            <i class="fas fa-search" aria-hidden="true">#}
-                                {{ form1.submit_subject }}
-                                {#                            </i>#}
-                                {#                        </div>#}
+                                <div class="input-field third-wrap btn-search">
+                                    {#
+                                    <div class="btn-search btn-primary">#}
+                                        {# <i class="fas fa-search" aria-hidden="true">#}
+                                            {{ form1.submit_subject }}
+                                            {# </i>#}
+                                        {#
+                                    </div>
+                                    #}
+                                </div>
                             </div>
-                        </div>
                     </form>
-                {% endif %}
+                    {% endif %}
             </div>
         </div>
 
         <!--- search by Reference - hidden Section -->
         <div class="row" id="search-ref" style="display: none">
             <div class="s01">
-                {#        <form action="{{ url_for('search_results') }}" method="POST">#}
-                {% if form %}
+                {#
+                <form action="{{ url_for('search_results') }}" method="POST">#}
+                    {% if form %}
                     {#To prevent the template from crashing when it tries to render a web form that does not exist#}
                     <form action="{{ url_for('home') }}" method="POST">
 
                         {#
-                    Flask wtform forms.validate_on_submit() is always false?
-                    The problem is with wtf not finding the CSRF Tokens as part of your form data.
-                    Add {{ form2.hidden_tag() }} or {{ form2.csrf_token }} as the top element of your form2.
-                    #}
-                        {{ form2.csrf_token }} {#            {{ form2.hidden_tag() }}#}
+                        Flask wtform forms.validate_on_submit() is always false?
+                        The problem is with wtf not finding the CSRF Tokens as part of your form data.
+                        Add {{ form2.hidden_tag() }} or {{ form2.csrf_token }} as the top element of your form2.
+                        If your form has multiple hidden fields, you can render them in one block using hidden_tag().
+                        #}
+                        {{ form2.csrf_token }} {# {{ form2.hidden_tag() }}#}
                         <div class="inner-form ">
-                            {#                    <div class="inner-form ">#}
-                            <div class="list-inline-item search-bar-item input-field">
-                                {#                        <div class="list-inline-item search-bar-item">#}
-                                {#                            {{ form2.search_author.label }}#}
-                                {{ form2.search_author }}
-                                {% if form2.search_author.errors %}
-                                    <ul class="errors">
-                                        {% for error in form2.search_author.errors %}
+                            {#
+                            <div class="inner-form ">#}
+                                <div class="list-inline-item search-bar-item input-field">
+                                    {#
+                                    <div class="list-inline-item search-bar-item">#}
+                                        {# {{ form2.search_author.label }}#}
+                                        {{ form2.search_author }}
+                                        {% if form2.search_author.errors %}
+                                        <ul class="errors">
+                                            {% for error in form2.search_author.errors %}
                                             <li>{{ error }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            </div>
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                    </div>
 
-                            <div class="list-inline-item search-bar-item input-field">
-                                {#                            {{ form2.search_work.label }}#}
-                                {{ form2.search_work }}
-                                {% if form2.search_work.errors %}
-                                    <ul class="errors">
-                                        {% for error in form2.search_work.errors %}
+                                    <div class="list-inline-item search-bar-item input-field">
+                                        {# {{ form2.search_work.label }}#}
+                                        {{ form2.search_work }}
+                                        {% if form2.search_work.errors %}
+                                        <ul class="errors">
+                                            {% for error in form2.search_work.errors %}
                                             <li>{{ error }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            </div>
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                    </div>
 
-                            <div class="list-inline-item search-bar-item input-field">
-                                {#                            {{ form2.search_reference.label }}#}
-                                {{ form2.search_reference }}
-                                {% if form2.search_reference.errors %}
-                                    <ul class="errors">
-                                        {% for error in form2.search_reference.errors %}
+                                    <div class="list-inline-item search-bar-item input-field">
+                                        {# {{ form2.search_reference.label }}#}
+                                        {{ form2.search_reference }}
+                                        {% if form2.search_reference.errors %}
+                                        <ul class="errors">
+                                            {% for error in form2.search_reference.errors %}
                                             <li>{{ error }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            </div>
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                    </div>
 
-                            <div class="list-inline-item search-bar-item input-field">
-                                {#                                     <br>#}
-                                {{ form2.submit_reference }}</div>
-                        </div>
+                                    <div class="list-inline-item search-bar-item input-field">
+                                        {# <br>#}
+                                        {{ form2.submit_reference }}
+                                    </div>
+                                </div>
                     </form>
-                {% endif %}
+                    {% endif %}
             </div>
             <div class="s01 ">
                 <p class="lead" style="color: var(--accent-color);">If you have a specific reference to ancient

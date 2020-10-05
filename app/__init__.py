@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import CSRFProtect
 
 db = SQLAlchemy()
 
@@ -15,10 +16,11 @@ def create_app():
 
     db.init_app(app)
 
+    csrf = CSRFProtect(app)
+    csrf.init_app(app)
+
     with app.app_context():
         # print(' - App CTX - ')
-        from . import routes  # Import routes
         # db.create_all()  # Create sql tables for our data models
-        from utilities.db_migration import csv_to_mysql
         # csv_to_mysql()
         return app

@@ -5,7 +5,7 @@ from flask import current_app as app
 from flask import flash
 from flask import render_template, make_response, redirect, url_for, request
 
-from utilities.db_migration import csv_to_mysql
+from db_migration import csv_to_mysql
 from .forms import *
 from .models import *
 
