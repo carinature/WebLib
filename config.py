@@ -1,7 +1,8 @@
 import os
 
-# # ROOT_DIR = path.abspath(path.dirname(__file__))
-ROOT_DIR = os.path.dirname(os.path.realpath(__file__))  # todo - find absolute path?
+# ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
+# ROOT_DIR = os.path.dirname(os.path.realpath(__file__))  # todo - find absolute path?
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))  # todo - find absolute path?
 RAW_DATA_DIR = os.path.join(ROOT_DIR, 'app/raw_data')
 # UTILS_DIR = os.path.join(ROOT_DIR, 'utilities')
 
@@ -10,7 +11,8 @@ class Config(object):
     EXPLAIN_TEMPLATE_LOADING = True
     # General Flask config variables
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    STATIC_FOLDER = 'static'
+    static_folder = 'dlf/static'
+    # STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
     # SESSION_COOKIE_NAME = os.environ.get('SESSION_COOKIE_NAME')
 
