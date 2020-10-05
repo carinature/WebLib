@@ -1,0 +1,281 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+    <!------------------------------------------->
+    <!-- ------- Search Forms -------- -->
+    <!--- search by Subject  -->
+    {% include 'search-bar.html' %}
+    {% include 'filtering.html' %}
+
+
+    <!------------------------------------------->
+    <!---------- Fixed background --------------->
+
+    <br id="about-hook">
+    <br>
+    <br>
+    <figure>
+        <div class="fixed-wrap">
+            <div id="fixed" style="background-image: url('../static/images/lib-4-noncom-reuse.jpg')">
+                <!--            this stays empty so you can see the pages background, and feel like you're sliding over it-->
+            </div>
+        </div>
+    </figure>
+    <br><br><br>
+    <!------------------------------------------->
+    <!-- ------- 'About' Section -------- -->
+    <div class="container-fluid padding">
+
+        <div class="col-12" style="background-color: var(--secondary-color-light)"> <!--todo move the style to css-->
+            <h1 class="display-4 welcome text-center">About the Tiresias Project</h1>
+            {#            <h1 class="display-4 welcome text-center">Tiresias: The Ancient Mediterranean Religions Source Database</h1>#}
+        </div>
+        <div class="s01 welcome text-center">
+            <!--        <hr> &lt;!&ndash; horizantal rule &ndash;&gt;-->
+            <div class="col-12"><br>
+                <p class="lead">
+                    Tiresias: The Ancient Mediterranean Religions Source Database provides access to references to
+                    ancient
+                    texts according to topic, mostly on religion, c. -800 BCE to 800 CE in the Mediterranean area. In
+                    some
+                    cases, direct access to full text is also available. Topic tagging is based on existing subject
+                    indices
+                    from scholarly books, allowing highly detailed topic resolution. The site is in development, and
+                    currently includes 4,671,592 keyed to 53,097 subjects.</p>
+                <p class="lead collapse-p">
+                    The construction of the database is based on the following method. Many research volumes in ancient
+                    history are published with two indices: one for subjects, topics or terms, and one for ancient text
+                    references (the latter is also known as an index locorum). Using these indices, each page of the
+                    indexed
+                    book can be identified as relating to specific subjects as well as specific ancient texts,
+                    indicating
+                    with a certain probability that these text references can be tagged as related to these subjects. In
+                    order to bring this probability closer to 100%, we assess the overlap from a number of books of this
+                    connection between text reference and subject. These tags are combined to create a general database
+                    of
+                    subjects of ancient texts. The database is thus based on existing expert-made indices, unified and
+                    assisted by digital means.</p>
+                <p class="lead collapse-p">
+                    The results for each search are divided into three: highly validated results, where the reference is
+                    tagged with the subject in more than one book; validated results, where the reference is tagged with
+                    the
+                    subject only in one book, but more than once; and non-validated results, where the reference is
+                    tagged
+                    with the subject only once, in one book.</p>
+                <p class="lead collapse-p">
+                    The database includes general subjects, ideas, names and places, almost all in English; the subjects
+                    are
+                    the same you would find in a good subject index of a book.
+                </p>
+            </div>
+        </div>
+        <span id="contact"><br><br></span>
+    </div>
+
+
+    <!------------------------------------------->
+    <!-- -------  This site .. (Jumbotron) ------>
+    <div class="container-fluid">
+        <div class="row jumbotron" style="padding: 5%">
+            <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10"><br>
+                <p class="lead">This site attempts to provide full-text (in source language and English) for highly
+                    validated
+                    results. <br>Full texts for Hebrew Bible and rabbinic texts is kindly supplied by Sefaria; <br>
+                    Greek
+                    and
+                    Latin texts, supplied by Perseus Scaife, <br>The Quran, supplied by Tanzil.net.<br>
+                    The site is part of a digital humanities research project investigating innovative methods for text
+                    topic retrieval, conducted by Moshe Blidstein of the General History Department and the Haifa Center
+                    for
+                    Mediterranean History and Daphne Raban, the Department of Information & Knowledge Management, both
+                    at
+                    the University of Haifa.
+
+                </p>
+                <p class=" ">
+                    For information and suggestions, please contact mblidstei@univ.haifa.ac.il.
+                </p>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-2"><br><br>
+                <!--            <a href="#" class="s01">-->
+                <button type="button" class="s01 btn btn-ouline-secondery btn-lg btn-primary"
+                        onclick="alert('More Details at the bottom of the page')">Contact Us
+                </button>
+                <!--            </a>-->
+            </div>
+        </div>
+    </div>
+
+
+    <!------------------------------------------->
+    <!------- Acknowledge, icons Section -------->
+    <div class="container-fluid padding"><br><br>
+        <div class="row text-center padding">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <a href="https://www.sefaria.org.il/"><img src="../static/images/sefaria-logo.jpg"
+                                                           class="refsite-logos"/></a>
+                <h3>Sefaria</h3>
+                <p> some short description
+                </p>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <a href="https://scaife.perseus.org/"><img src="../static/images/scaife-logo.png"
+                                                           class="refsite-logos"/></a>
+                <h3>Scaife Viewer</h3>
+                <p> some short description
+                </p>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <a href="http://tanzil.net/"><img src="../static/images/tanzil-logo.jpg" class="refsite-logos"/></a>
+                <h3>Tanzil.net</h3>
+                <p> some short description
+                </p>
+            </div>
+        </div>
+        <hr class="my-4">
+    </div>
+
+
+    <!------------------------------------------->
+    <!---------- Fixed background --------------->
+    <figure>
+        <div class="fixed-wrap">
+            <div id="fixed" style="background-image: url('../static/images/lib-4-noncom-reuse.jpg')">
+                <!--            this stays empty so you can see the pages background, and feel like you're sliding over it-->
+            </div>
+        </div>
+    </figure>
+    <br>
+    <br>
+    <br>
+
+
+    <!--------------------------------------------------------------->
+    <!--Note of caution Section (previous: Two Column Section) -->
+    <div class="container-fluid padding">
+        <div class="row padding">
+            <div class="col-lg-6" style="padding: 5em">
+                <!--   should be the same as     <div class="col-md-12 col-lg-6">-->
+                <h2>If you build it...</h2>
+                <h5>Note:</h5>
+                <p>The database is in its early stages of development, with many errors. Please use with caution.
+                    References
+                    are to texts between the 8th century BCE and the 8th century CE.
+                    The site is part of a digital humanities research project, conducted by Moshe Blidstein of the
+                    General
+                    History Department and the Haifa Center for Mediterranean History and Daphne Raban, the Department
+                    of
+                    Information & Knowledge Management, both at the University of Haifa. For information and
+                    suggestions,
+                    please contact mblidstei@univ.haifa.ac.il.</p>
+
+            </div>
+            <div class="col-lg-6" style="padding: 5em">
+                <!--            <img class="img-fluid" src="https://assets.hongkiat.com/uploads/programming-jokes/joke-algorithm-is.jpg">-->
+                <h2><br></h2> <!--for alignment properties -->
+                <h5><br></h5>
+                <p>If you would like to receive updates on the development of the project, please enter your email and
+                    click
+                    "submit":</p>
+                <label for="user-email">Email Address:</label><br>
+                <input type="text" id="user-email" name="user-email" placeholder="username@email.edu"><br><br>
+                <a href="#" class="btn btn-primary" onclick="alert('This feature is TBD (KarinaT)')">Submit</a>
+                <br><br>
+                <p>For more information, see About</p>
+            </div>
+        </div>
+    </div>
+    <hr class="my-4">
+
+
+    <!------------------------------------------->
+    <!--------- word graph Column Section ------->
+    <div class="container-fluid padding">
+        <div class="row welcome text-center">
+            <div class="col-12">
+                <h1 class="display-4">word graph</h1>
+            </div>
+            <hr>
+            <h3>This is an image of the main subjects in the database.
+                Subjects are arranged by the number of references they share: subjects sharing many references are
+                graphed
+                close to
+                each other, while subjects sharing few references are far apart.
+                Colors show general clusters of subjects.
+                Download the image to view at greater resolution.</h3><br><br><br>
+        </div>
+    </div>
+
+
+    <!--<div class="container-fluid padding">-->
+    <!--    <div class="row"><img src="http://tiresias.haifa.ac.il/static/large13.1.png" style="max-width: 90%; padding-left: 7em">-->
+    <!--    </div>-->
+    <!--</div>-->
+    <!-- - Image Slider-->
+
+    <div id="slides" class="carousel slide" data-ride="carousel">
+        <ul class="carousel-indicators">
+            <li data-target="#slides" data-slide-to="0" class="active"></li>
+            <li data-target="#slides" data-slide-to="1"></li>
+            <li data-target="#slides" data-slide-to="2"></li>
+        </ul>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <!--            <img class="size-20" src="../images/bg-bluish.png"/>-->
+                <a target="_blank" href="http://tiresias.haifa.ac.il/static/large13.1.png">
+                    <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
+                         style="max-width: 90%; padding-left: 7em"/></a>
+                <div class="carousel-caption">
+                    <h1 class="display-2">This is an image of the main subjects in the database.</h1>
+                    <h3>
+                        Subjects are arranged by the number of references they share: subjects sharing many references
+                        are
+                        graphed close to each other, while subjects sharing few references are far apart.
+                        Colors show general clusters of subjects.
+                        Download the image to view at greater resolution.</h3>
+                    <button type="button" class="btn">Analise</button>
+                    <button type="button" class="btn btn-primary btm-lg">More</button>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <!--            <img src="../images/bg-dark-cream.png"/>-->
+                <a target="_blank" href="http://tiresias.haifa.ac.il/static/large13.1.png">
+                    <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
+                         style="max-width: 90%; padding-left: 7em"/></a>
+            </div>
+            <div class="carousel-item">
+                <!--            <img src="../images/lib-1.jpg"/>-->
+                <a target="_blank" href="http://tiresias.haifa.ac.il/static/large13.1.png">
+                    <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
+                         style="max-width: 90%; padding-left: 7em"/></a>
+            </div>
+        </div>
+    </div>
+
+    <!------------------------------------------->
+    <!--------------  Connect ------------------>
+    <div class="container-fluid padding"><br><br><br><br>
+        <div class="row padding text-center">
+            <div class="col-12"><h2>Share</h2></div>
+            <div class="col-12 social padding">
+                <a href="https://www.facebook.com/sharer/sharer.php?u=Tiresias"><i class="fab fa-facebook"></i> </a>
+                <a href="#"><i class="fab fa-google-plus-g"></i> </a>
+                <a href="https://twitter.com/home?status=Tiresias"><i class="fab fa-twitter"></i> </a>
+                <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=Tiresias&amp;title=&amp;summary=&amp;source="><i
+                        class="fab fa-linkedin"></i> </a>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../static/js/script.js"></script>
+
+{% endblock %}
+
+
+<p style="text-align: center; font-size: 11px">Many thanks to Drew from &copy; w3newbie.com (He's a real champ!)</p>
+
+

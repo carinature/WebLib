@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<html>
+
+<head>
+    <title>{{ title }}</title>
+    <meta charset="utf-8">
+    <meta name="description" content={{ description }}>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Karina">
+
+    <!--    bootstrap related scripts -->
+    <script src="../static/js/jquery-3.5.1.min.js"></script>
+    <script src="../static/js/popper.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+
+    <!--    for extra fonts and icons  --> {#only needed for the "share" buttons#}
+    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+    <!--    your own scripts  -->
+    <script src="../static/js/gui.js"></script>
+
+    <!--    bootstrap related stylesheets -->
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+
+    <!--    your stylesheets  -->
+    <link href="../static/css/search-engine-main.css" rel="stylesheet"/>
+    <link href="../static/css/bs4-style.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+
+    {#   css for index   #}
+    {% block css %} {% endblock %}
+
+
+</head>
+
+<!--<body style="background-color: cornsilk">-->
+<body>
+
+{% include 'navigation.html' %}
+
+{#  ----------  title ---------- #}
+<div class="container-fluid padding">
+    <!--    <div class="row welcome text-center">-->
+    <div class="row welcome ">
+        <div class="col-12">
+            <h1 class="display-4" style="text-align: center">
+                {#            <h1 class="display-4">#}
+                {{ title }}
+                {% block index_title %} {% endblock %}
+            </h1>
+        </div>
+    </div>
+</div>
+<hr>
+
+{#<div class="col-12">  <!--DO NOT DELETE THIS! -->#}
+{#    <h1 class="display-4" style="text-align: center">Tiresias</h1>#}
+{#    <h1 class="display-1" style="text-align: center">#}
+{#    The Ancient Mediterranean Religions Source Database</h1>#}
+{#</div>#}
+
+{#
+<div class="status">
+  {% if status.active %}
+    <p>Activated.</p>
+  {% elif status.disabled %}
+    <p>Disabled.</p>
+  {% else %}
+    <p>OH GOD WHAT IS THE STATUS?!</p>
+  {% endif %}
+</div>
+#}
+{#{% if status == 1 %} and {% if "active" in status %} are both valid#}
+
+{% block content %}{% endblock %}
+{% include 'footer.html' %}
+
+</body>
+
+</html>

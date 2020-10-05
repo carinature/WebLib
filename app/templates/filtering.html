@@ -1,0 +1,80 @@
+<!------------------------------------------->
+<!-------------------Filtering---------------------->
+<!------------------------------------------->
+
+<!--the button-->
+<button class="s01 btn-primary" data-toggle="collapse" data-target="#filtering">A
+    dvanced Search Options &nbsp; (click me)
+</button>
+
+<!--hidden filtering section-->
+<div class="s01">
+    <!-- s01 should appear in a parent element of collapse, so it would use the correct css rule for form-->
+    <!--todo instead of relying on existing consider just making your own class for this case-->
+    <div id="filtering" class="collapse ">
+        <form class="">
+            <div class="container-fluid padding container">
+                {# <div class="row text-center "> <!--todo dont delete this yet-->#}
+                <div class="row text-center inner-form ">
+                    <!--sub-subject filtering options-->
+                    <div class="col-md-6 col-lg-4">
+                        <h5 class="welcome text-center col-form-label-lg" style="float: top; vertical-align: top">
+                            Filter by<br>Sub-subject
+                        </h5>
+                        <hr>
+                        {{ form3.include.label }} <br>
+                        {{ form3.include }}
+                        <br><br>
+                        {{ form3.exclude.label }} <br>
+                        {{ form3.exclude }}
+                        <br><br><br>
+                        <label>or check and uncheck in the list below</label>
+                    </div>
+
+                    <!--text and reference filtering options-->
+                    <div class="col-md-6 col-lg-4" style="padding: 1em;">
+                        <h5 class="welcome text-center col-form-label-lg">
+                            Filter by<br>Text
+                        </h5>
+                        <hr>
+                        <br>
+                        {{ form3.from_century.label }} {{ form3.from_century }}
+                        {#                        {% if SMALL_SCREEN %}#}
+                        {#                            <br><br>#}
+                        {#                        {% endif %}#}
+                        {{ form3.to_century.label }} {{ form3.to_century }}
+                        <br><br>
+                        {{ form3.language.label }} {{ form3.language }}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <h5 class="welcome text-center col-form-label-lg">
+                            Filter by<br>Reference
+                        </h5>
+                        <hr>
+                        {{ form3.ancient_author.label }} <br>
+                        {{ form3.ancient_author }}
+                        <br><br>
+                        {{ form3.ancient_title.label }} <br>
+                        {{ form3.ancient_title }}
+                        <br><br>
+                        {{ form3.reference.label }} <br>
+                        {{ form3.reference }}
+                        <div class="" style="text-align: left">
+                            <br><br><br><br>
+                            {{ form3.fetch_full }} {{ form3.fetch_full.label }} <br>
+                            {{ form3.attention_label }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ form3.submit }}
+        </form>
+    </div>
+</div>
+<br><br><br>
+
+<!--the FETCH button-->
+<button type="button" class=" btn btn-lg btn-primary col-3"
+        style="margin-right: 5%; padding:1rem 4rem 1rem 4rem; position: sticky; float: right"
+        onclick="alert('Fetching Data...')">Fetch Results
+</button>

@@ -1,12 +1,15 @@
 venv
 .idea
-images
-pies
-misc/*.py
-misc/*.js
-misc/fonts-and-icons
-misc/getfromdb
+misc
+#misc/*.py
+#misc/*.js
+#misc/fonts-and-icons
+#misc/getfromdb
 __pycache__
+<<<<<<< HEAD
 
 
 venv
+=======
+app/raw_data
+>>>>>>> f53f569288eacdbe96346c14978edafe281b426e

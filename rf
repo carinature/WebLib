@@ -1,6 +1,47 @@
 
-#export FLASK_APP=application.py
-export FLASK_APP=flask_app.py
-export FLASK_ENV=development
-export FLASK_DEBUG=1
+export FLASK_APP=wsgi.py
+export FLASK_ENV=development #fixme should work with the config.py instead
+export FLASK_DEBUG=1 #fixme should work with the config.py instead
+
+export SECRET_KEY=b'_5#y2L"F4Q8z\n\xec]/'
+
+#sudo docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=123 -d mysql:5
+#
+# docker-compose start -f mysql-docker-compose.yml #(3)
+
+docker-machine start default  # (1)
+docker-compose -f mysql-docker-compose.yml up -d #doesn't "override" the terminal with log (2)
+#sudo docker-compose -f mysql-docker-compose.yml up -d #doesn't "override" the terminal with log (2)
+#sudo docker-compose -f mysql-docker-compose.yml up #show logs of the DB #usefull (2)
+# sudo docker ps
+# sudo docker-machine restart default
+# eval $(sudo docker-machine env default)
+
 flask run
+
+
+
+#   If the message "Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?" shows
+# sudo dockerd
+#   If the message "failed to start daemon: pid file found, ensure docker is not running or delete /var/run/docker.pid" shows
+# sudo rm /var/run/docker.pid -rf
+# sudo systemctl start docker
+# sudo dockerd
+
+
+
+#sudo usermod -aG docker $USER
+#ps axf | grep docker | grep -v grep | awk '{print "kill -9 " $1}' | sudo sh
+#sudo service docker stop
+
+# cat /var/run/docker.pid
+
+# IF ERROR:
+#   .0.0.0:3306: bind: address already in use
+#
+#   ERROR: for db  Cannot start service db: driver failed programming external connectivity on endpoint weblib_db_1 (42f5653eb71ada8190e2f93d8e78672e0b5d4fe0ae1b44ccc4b99ef0a286674e): Error starting userland proxy: listen tcp 0.0.0.0:3306: bind: address already in use
+#   ERROR: Encountered errors while bringing up the project.
+# DO
+#   $ sudo netstat -laputen | grep ':3306'
+#   $ sudo systemctl stop PROGRAM_NAME
+#TODO move this to the readme file ?

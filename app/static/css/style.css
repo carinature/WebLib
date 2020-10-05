@@ -1,0 +1,239 @@
+
+:root {
+    /* defining global vars */
+    --primary-color-light: #FCF46D;
+    --secondary-color-light: #FEFABA;
+    /*same but reversed the two colors*/
+    /*--primary-color-light: #FEFABA;*/
+    /*--secondary-color-light: #FCF46D;*/
+
+    /*--primary-color-light: #35A; !*todo try these two!!*!*/
+    /*--secondary-color-light: #295;*/
+
+    --accent-color: #6D75FC;
+
+    --primary-color-dark: #596e79;
+    --secondary-color-dark: #255873;
+
+    --misc-color: #c7b198;
+
+    --font-color: #444; /*fixme font color not updating*/
+
+}
+
+@font-face {
+    font-family: spectral;  /*todo consider Georgia for font family*/
+    src: url("Spectral-Regular.ttf");
+    /*src: url("/app/static/css/Spectral-Regular.ttf");*/
+}
+
+body {
+    height: 100%;
+    /*background-color: var(--primary-color);*/
+    padding-top: 15em;
+    /*background-color: var(--primary-color-light);*/ /*  !important;*/
+    font-family: spectral, sans-serif;
+    color: var(--font-color);
+    font-size: large; /*todo*/
+    /*font: */
+}
+
+/*img {*/ /*DONT DO IT*/
+/*    max-width: 90%;*/
+/*    padding-left: 5rem;*/
+/*}*/
+
+.bgn-light {
+    background-color: var(--primary-color-light); /*!important;*/
+    /*background-color: var(--secondary-color-light);*/ /* !important;*/
+}
+
+.bgn-dark {
+    background-color: var(--primary-color-light) /*!important;*/
+}
+
+/*todo consider changing*/
+/*a.bg-light:hover, a.bg-light:focus,*/
+/*button.bg-light:hover,*/
+/*button.bg-light:focus {*/
+/*  background-color: #dae0e5 !important;*/
+/*}*/
+
+/*todo consider changing*/
+/*a.bg-dark:hover, a.bg-dark:focus,*/
+/*button.bg-dark:hover,*/
+/*button.bg-dark:focus {*/
+/*  background-color: #1d2124 !important;*/
+/*}*/
+
+
+.btn-primary {
+    background-color: var(--accent-color);
+    border: 1px solid var(--misc-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--misc-color);
+    border: 1px solid var(--misc-color);
+}
+
+
+/*.jumbotron {*/
+/*    max-height: 13em !important;*/
+/*    !*padding: 5em;!* inherit;*!*!*/
+/*    !*    height: 20%  !important;*!*/
+/*    !*    width: 20%  !important;*!*/
+
+/*}*/
+
+/*.size-20 {*/
+/*  height: 20%;*/
+/*  !*background: #aaa;*!*/
+/*}*/
+
+
+/* Create a sticky/fixed navbar */
+.navbar {
+    /*overflow: hidden;*/
+    padding: 10px 10px 10px 10px; /* Large padding which will shrink on scroll (using JS) */
+    transition: 0.2s; /* Adds a transition effect when the padding is decreased */
+    position: fixed; /* Sticky/fixed navbar */
+    width: 100%;
+    top: 0; /* At the top */
+    z-index: 99;
+    text-align: left;
+    display: inline-block;
+    float: left;
+}
+
+/* Style the logo */
+.navbar #logo {
+    max-height: 10rem;
+    /*margin-right: 2em;*/
+    /*margin-left: 1em;*/
+    margin: 1rem;
+    /*font-size: 35px;*/
+    /*font-weight: bold;*/
+    transition: 0.2s;
+}
+
+.navbar-collapse h1 #navbar-subtitle {
+    display: none;
+}
+
+.navbar-collapse h1 #navbar-title-h1-id {
+    font-size: 3rem;
+!important;
+    /*transform: scale(2);*/
+    /*}*/
+    /*    !*-ms-flex-preferred-size: 100%;*!*/
+    /*    !*flex-basis: 100%;*!*/
+    /*    !*-webkit-box-flex: 1;*!*/
+    /*    !*-ms-flex-positive: 1;*!*/
+    /*    !*flex-grow: 1;*!*/
+    /*    !*-webkit-box-align: center;*!*/
+    /*    !*-ms-flex-align: center;*!*/
+    align-items: center;
+}
+
+/*#search-subject {*/
+/*    padding-top: 15em;*/
+/*}*/
+
+.inline-radio:hover {
+    background-color: var(--misc-color);
+}
+
+.inline-radio {
+    /*display:  inline;*/
+    /*padding-right: 2rem;*/
+    vertical-align: middle;
+    /*float: left;*/
+    transform: scale(2);
+    /*margin: 1em;*/
+    /*background-color: var(--accent-color);*/
+    margin-right: 1em
+}
+
+.inline-label {
+
+    padding-right: 2rem;
+    vertical-align: middle;
+    /*float: left;*/
+    transform: scale(2);
+}
+
+.fun { /*the button for the hidden section*/
+    /*width: 90%;*/
+    /*margin-bottom: 2rem;*/
+    /*align-content: center;*/
+    /*alignment: center;*/
+    /*align-items: center;*/
+    /*align-self: center;*/
+    padding-left: 5rem;
+    background-color: var(--accent-color);
+}
+
+.lead {
+    text-align: justify;
+}
+
+.jumbotron {
+    background-color: var(--secondary-color-light);
+}
+
+.s01 form .inner-form .input-field.third-wrap .btn-search {
+    background-color: var(--accent-color);
+
+}
+
+.filter-form {
+    display: inline;
+}
+
+/*#switch{ !*for the 'Fetch full text' checkbox in the filter form*!*/
+/*    margin: 10px;*/
+/*}*/
+
+.refsite-logos { /*the logos on the first page in the if you build it section*/
+    max-height: 2rem
+}
+
+.search-bar {
+    display: inline-block;
+}
+
+.search-bar-content {
+    width: fit-content;
+    background-color: var(--secondary-color-light);
+    /*position: absolute;*/
+    /*width: auto; !* optional *!*/
+    /*height: auto; !* optional *!*/
+}
+
+.list-inline-item input
+    /*.search-bar-item*/
+{
+    height: 3em;
+    margin: 10px;
+    display: block;
+    position: relative;
+    /*border-color: var(--secondary-color-light);*/
+    /*border-color: var(--secondary-color-dark);*/
+    /*border-color: var(--primary-color-dark);*/
+    /*border-color: var(--primary-color-light);*/
+    border-radius: 5px;
+    /*-webkit-border-radius: 5%;*/
+    /*border-width: 2px;*/
+    /*-moz-outline-radius: 5%;*/
+    /*border: none;*/
+    /*border-block-color: #00aced;*/
+    /*background-color: var(--accent-color);*/
+    /*color: var(--accent-color);*/
+    /* https://stackoverflow.com/questions/5903112/is-it-really-impossible-to-make-a-div-fit-its-size-to-its-content */
+    /* http://jsfiddle.net/XgErJ/4 */
+}
+
+#submit-subject {
+    /*background-color: var(--accent-color);*/
+}
