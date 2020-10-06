@@ -5,14 +5,6 @@ import os
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))  # todo - find absolute path?
 RAW_DATA_DIR = os.path.join(ROOT_DIR, 'app/raw_data')
 # UTILS_DIR = os.path.join(ROOT_DIR, 'utilities')
-import os
-from dotenv import load_dotenv
-# project_folder = os.path.expanduser('~/my-project-dir')  # adjust as appropriate
-load_dotenv(os.path.join(ROOT_DIR, '.env'))
-
-from dotenv import load_dotenv
-# project_folder = os.path.expanduser('~/my-project-dir')  # adjust as appropriate
-load_dotenv(os.path.join(ROOT_DIR, '.env'))
 
 class Config(object):
     EXPLAIN_TEMPLATE_LOADING = True
