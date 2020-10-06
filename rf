@@ -3,7 +3,7 @@ export FLASK_APP=wsgi.py
 export FLASK_ENV=development #fixme should work with the config.py instead
 export FLASK_DEBUG=1 #fixme should work with the config.py instead
 
-export SECRET_KEY=b'_5#y2L"F4Q8z\n\xec]/'
+#export SECRET_KEY=b'_5#y2L"F4Q8z\n\xec]/'
 
 #sudo docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=123 -d mysql:5
 #
