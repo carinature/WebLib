@@ -6,8 +6,10 @@ from flask import flash
 from flask import render_template, make_response, redirect, url_for, request
 
 from db_migration import csv_to_mysql
-from .forms import *
-from .models import *
+from . import forms
+from . import models
+# from forms import *
+# from models import *
 
 print('~' * 113)
 
@@ -30,9 +32,9 @@ def search_results(search_word=''):
         # results = request.args['results']
         # return render_template('search-results.html', results=results)
 
-        subject_form = SearchSubject(request.form)
-        reference_form = SearchReference(request.form)
-        filter_form = FilterForm(request.form)
+        subject_form = forms.SearchSubject(request.form)
+        reference_form = forms.SearchReference(request.form)
+        filter_form = forms.FilterForm(request.form)
 
         return render_template('search-results.html', title=f'Search Results for: {search_word}',
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
@@ -129,7 +131,7 @@ def subject_list():
     t = time()
 
     page = request.args.get('page', 1, type=int)
-    subjects = TextSubject.query.paginate(page, app.config['SUBJECTS_POSTS_PER_PAGE'], False)
+    subjects = models.TextSubject.query.paginate(page, app.config['SUBJECTS_POSTS_PER_PAGE'], False)
     # there is not enough memory to do the next, but maybe consider the idea
     # subjects = TextSubject.query.order_by(
     #   TextSubject.subject.asc()).paginate(page, app.config['SUBJECTS_POSTS_PER_PAGE'], False)
@@ -148,7 +150,7 @@ def subject_list():
 # ++++++++++++  dbg pages ++++++++++++
 @app.route('/check', methods=['GET', 'POST'])
 def check_check():
-    subject_form = SearchSubject(request.form)
+    subject_form = forms.SearchSubject(request.form)
     # reference_form = SearchReference(request.form)
     # if subject_form.submit_subject.data and subject_form.validate_on_submit():
     #     print('Great Success')
@@ -188,7 +190,7 @@ def pipi():
 
 @app.route("/success/<title>", methods=['GET', 'POST'])
 def success(title):
-    sform = SearchSubject()
+    sform = forms.SearchSubject()
     return '<h1>' + title + ' Great Success</h1>'
     # return render_template('kaka.html', title='Great Success', sform=sform)
 
