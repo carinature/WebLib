@@ -73,7 +73,8 @@ def home():
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
                                form1=subject_form, form2=reference_form, form3=filter_form, radio=radio
                                )
-    fields = [
+
+    form_fields = [
         "search-subject",
         "second-keyword",
         "search-author",
@@ -87,11 +88,11 @@ def home():
     # print(request.form.get(fields[i]))
 
     print(request.form.to_dict())
-    search_word = request.form[fields[0]] if (fields[0] in request.form) else None
+    search_word = request.form[form_fields[0]] if (form_fields[0] in request.form) else None
     # second_keyword = request.form[fields[2]] if (fields[2] in request.form) else None
     # search_author = request.form[fields[2]] if (fields[2] in request.form) else None
     # search_work = request.form[fields[2]] if (fields[2] in request.form) else None
-    search_reference = request.form[fields[2]] if (fields[2] in request.form) else None
+    search_reference = request.form[form_fields[2]] if (form_fields[2] in request.form) else None
     new_result: List[TextSubject] = []
 
     if search_word:  # the search by Subject button was clicked
@@ -117,16 +118,7 @@ def home():
 # ++++++++++++  list of books page ++++++++++++
 @app.route('/book-indices')
 def book_indices():
-    page = request.headers
-    print("-------------- page")
-    print(page)
-    # page = request.args.get('page', 1, type=int)
-    # ordered_titles = BookRef.query.order_by(BookRef.titleref.asc())
-    # paginated_titiles = ordered_titles.paginate(page, app.config['POSTS_PER_PAGE'], False)
-    # return render_template('book-indices.html',
-    #                        title="Books Included in the Tiresias Project Database",  # todo different title
-    #                        description="Tiresias: The Ancient Mediterranean Religions Source Database",
-    #                        titles_list=paginated_titiles.items, total=paginated_titiles.total)
+    print('whaaaaaaa..?')
     return render_template('book-indices.html',
                            title="Books Included in the Tiresias Project Database",  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database", )

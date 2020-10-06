@@ -7,17 +7,17 @@ RAW_DATA_DIR = os.path.join(ROOT_DIR, 'app/raw_data')
 # UTILS_DIR = os.path.join(ROOT_DIR, 'utilities')
 
 
-from dotenv import load_dotenv
-# project_folder = os.path.expanduser('~/my-project-dir')  # adjust as appropriate
-load_dotenv(os.path.join(ROOT_DIR, '.env'))
+# from dotenv import load_dotenv
+# load_dotenv(os.path.join(ROOT_DIR, '.env'))
+
 
 class Config(object):
     EXPLAIN_TEMPLATE_LOADING = True
     # General Flask config variables
-    # SECRET_KEY = os.environ.get('SECRET_KEY')
-    SECRET_KEY = os.getenv("SECRET_KEY")
-    static_folder = 'dlf/static'
-    # STATIC_FOLDER = 'static'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    # SECRET_KEY = os.getenv("SECRET_KEY")
+    # static_folder = 'static'
+    STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
     # SESSION_COOKIE_NAME = os.environ.get('SESSION_COOKIE_NAME')
 
