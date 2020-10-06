@@ -13,7 +13,6 @@ from . import models
 
 print('~' * 113)
 
-
 # ++++++++++++  search results and filtering page ++++++++++++
 @app.route('/search-results/<string:search_word>', methods=['GET', 'POST'])
 @app.route('/search-results', methods=['GET', 'POST'])
