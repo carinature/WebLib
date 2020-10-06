@@ -65,7 +65,7 @@ class SearchReference(FlaskForm):
                                    )
 
 
-centuries = [('Any Century', 'any'),
+centuries = [('Any', 'Any'),
              ('8 BCE', '8 BCE'),
              ('7 BCE', '7 BCE'),
              ('6 BCE', '6 BCE'),
