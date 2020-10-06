@@ -118,7 +118,6 @@ def home():
 # ++++++++++++  list of books page ++++++++++++
 @app.route('/book-indices')
 def book_indices():
-    print('whaaaaaaa..?')
     return render_template('book-indices.html',
                            title="Books Included in the Tiresias Project Database",  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database", )
