@@ -15,7 +15,6 @@
         <form class="">
             <div class="container-fluid padding container">
                 <div class="row text-center inner-form ">
-{#
                     <!--sub-subject filtering options-->
                     <div class="col-md-6 col-lg-4">
                         <h5 class="welcome text-center col-form-label-lg" style="float: top; vertical-align: top">
@@ -38,13 +37,18 @@
                         </h5>
                         <hr>
                         <br>
+                        {#
                         {{ form3.from_century.label }} {{ form3.from_century }}
                                                 {% if SMALL_SCREEN %}
                                                     <br><br>
                                                 {% endif %}
                         {{ form3.to_century.label }} {{ form3.to_century }}
+                        #}
                         <br><br>
-                        {{ form3.language.label }} {{ form3.language }}
+                        {{ form3.language.label }}
+
+                        {{ form3.language }}
+
                     </div>
                     <div class="col-md-6 col-lg-4">
                         <h5 class="welcome text-center col-form-label-lg">
@@ -65,7 +69,6 @@
                             {{ form3.attention_label }}
                         </div>
                     </div>
-#}
                 </div>
             </div>
             {{ form3.submit }}

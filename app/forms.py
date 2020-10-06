@@ -83,12 +83,12 @@ centuries = [('Any Century', 'any'),
              ('7 CE', '7 CE'),
              ('8 CE', '8 CE')]
 languages = [
-    "Aramaic",
-    "Arabic",
-    "Greek",
-    "Hebrew",
-    "Latin",
-    "Syriac",
+    ('Aramaic', 'Aramaic'),
+    ('Arabic', 'Arabic'),
+    ('Greek', 'Greek'),
+    ('Hebrew', 'Hebrew'),
+    ('Latin', 'Latin'),
+    ('Syriac', 'Syriac')
 ]
 
 
