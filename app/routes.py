@@ -6,6 +6,7 @@ from flask import flash
 from flask import render_template, make_response, redirect, url_for, request
 
 from db_migration import csv_to_mysql
+# from forms import SearchSubject, SearchReference, FilterForm, SearchTypeChoice
 from . import forms
 from . import models
 # from forms import *
@@ -66,10 +67,10 @@ def search_results(search_word=''):
 def home():
     if 'GET' == request.method:
         print('INDEX - GET')
-        # subject_form = SearchSubject(request.form)
-        # reference_form = SearchReference(request.form)
-        # filter_form = FilterForm(request.form)
-        # radio = SearchTypeChoice(request.form)
+        subject_form = forms.SearchSubject(request.form)
+        reference_form = forms.SearchReference(request.form)
+        filter_form = forms.FilterForm(request.form)
+        radio = forms.SearchTypeChoice(request.form)
         return render_template('index.html',
                                # title="Tiresias: The Ancient Mediterranean Religions Source Database",
                                # description="Tiresias: The Ancient Mediterranean Religions Source Database",
