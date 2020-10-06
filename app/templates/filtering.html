@@ -13,8 +13,8 @@
     <!--todo instead of relying on existing consider just making your own class for this case-->
     <div id="filtering" class="collapse ">
         <form class="">
-            <div class="container-fluid padding container">
-                {# <div class="row text-center "> <!--todo dont delete this yet-->#}
+   {#         <div class="container-fluid padding container">
+                #}{# <div class="row text-center "> <!--todo dont delete this yet-->#}{#
                 <div class="row text-center inner-form ">
                     <!--sub-subject filtering options-->
                     <div class="col-md-6 col-lg-4">
@@ -39,9 +39,9 @@
                         <hr>
                         <br>
                         {{ form3.from_century.label }} {{ form3.from_century }}
-                        {#                        {% if SMALL_SCREEN %}#}
-                        {#                            <br><br>#}
-                        {#                        {% endif %}#}
+                        #}{#                        {% if SMALL_SCREEN %}#}{#
+                        #}{#                            <br><br>#}{#
+                        #}{#                        {% endif %}#}{#
                         {{ form3.to_century.label }} {{ form3.to_century }}
                         <br><br>
                         {{ form3.language.label }} {{ form3.language }}
@@ -67,7 +67,7 @@
                     </div>
                 </div>
             </div>
-            {{ form3.submit }}
+            {{ form3.submit }}#}
         </form>
     </div>
 </div>
