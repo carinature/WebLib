@@ -21,15 +21,32 @@ site is published at https://karinature.pythonanywhere.com/
 ## structure and file summery
 **rf** - shell scrypt running the website/application on the local machine paste in the bash console: `cd {project_root} && ./rf`
 
+**.env** - contains the secrets (variables such as SECRET_KEY)
+
+**config**.py - configurations for the app and initialization 
+
+**\_\_init__**.py - containing the definition of _create_app_
+
+**wsgi**.py - this is where the website application actually created
+
 **mysqldocker-compose.yml** - container with a mysql server
 
 **requirements**.txt - python libs required for the functionality
 
-**flask_app**.py - main website application
+**db_migration**.py - a scrypt that creates the DB and only needs to be used once - when launching the website 
 
-**one_off**.py - a scrypt that creates the DB and only needs to be used once - when launching the website 
 
-**templates** - contains html templates, for the static content
+#### The Following files and folders are within the app folder
+
+**routs**.py - defines the views 
+
+**models**.py - defines the table structures in the DB 
+
+**forms**.py - defines the form structures, eg: search-bar and filter 
+
+**raw_data** - contains the csv files from which the SQL DB is created
+
+**templates** - contains the html templates rendered in _routs.py_
 
 **static** - contains rest of the static files:
     ***css*** - 
