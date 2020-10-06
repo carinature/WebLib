@@ -72,9 +72,9 @@ def home():
         filter_form = forms.FilterForm(request.form)
         radio = forms.SearchTypeChoice(request.form)
         return render_template('index.html',
-                               # title="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               # description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               # form1=subject_form, form2=reference_form, form3=filter_form, radio=radio
+                               title="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               form1=subject_form, form2=reference_form, form3=filter_form, radio=radio
                                )
 
     # form_fields = [
