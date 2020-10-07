@@ -9,8 +9,9 @@ from db_migration import csv_to_mysql
 # from forms import SearchSubject, SearchReference, FilterForm, SearchTypeChoice
 from . import forms
 from . import models
-# from forms import *
-# from models import *
+
+# from .forms import *
+# from .models import *
 
 print('~' * 113)
 
@@ -21,26 +22,18 @@ print('~' * 113)
 def search_results(search_word=''):
     flash('You doing great GRRRLLLL')
 
+    subject_form = forms.SearchSubject(request.form)
+    reference_form = forms.SearchReference(request.form)
+    filter_form = forms.FilterForm(request.form)
+
     # search_word = search_word if search_word else request.args['search_word']
+
     print(search_word)
     if 'GET' == request.method:
-        # print(request.args)
-        # print(request.values)
-        # print(request)
-        # flash('You \'GET\' this')
-        # print('get')
-        # print(request.args['results'])
-        # results = request.args['results']
-        # return render_template('search-results.html', results=results)
-
-        subject_form = forms.SearchSubject(request.form)
-        reference_form = forms.SearchReference(request.form)
-        filter_form = forms.FilterForm(request.form)
-
         return render_template('search-results.html', title=f'Search Results for: {search_word}',
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
                                results=['res1', 'res2', 'res3', 'res4'], total=0,
-                               # form1=subject_form, form2=reference_form, form3=filter_form,
+                               form1=subject_form, form2=reference_form, form3=filter_form,
                                )  # , results=results)
 
     flash('You\'re \'POST\' on!')
@@ -49,6 +42,7 @@ def search_results(search_word=''):
     # results = request.args['results']
     return render_template('search-results.html', title=f'Search Result for: {search_word}',
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           form1=subject_form, form2=reference_form, form3=filter_form, radio=radio,
                            results=['pupu'], total=0)
 
     # todo
@@ -65,37 +59,37 @@ def search_results(search_word=''):
 # ++++++++++++  Home page ++++++++++++
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    subject_form = forms.SearchSubject(request.form)
+    reference_form = forms.SearchReference(request.form)
+    filter_form = forms.FilterForm(request.form)
+    radio = forms.SearchTypeChoice(request.form)
     if 'GET' == request.method:
-        print('INDEX - GET')
-        subject_form = forms.SearchSubject(request.form)
-        reference_form = forms.SearchReference(request.form)
-        filter_form = forms.FilterForm(request.form)
-        radio = forms.SearchTypeChoice(request.form)
+        print('~' * 15, ' home() - GET ', '~' * 15)
         return render_template('index.html',
                                title="Tiresias: The Ancient Mediterranean Religions Source Database",
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
                                form1=subject_form, form2=reference_form, form3=filter_form, radio=radio
                                )
+    print(subject_form.subject_keyword_1.raw_data)
+    print(subject_form.subject_keyword_1.data)
+    print(subject_form.subject_keyword_2.raw_data)
+    print(subject_form.subject_keyword_2.data)
+    print(reference_form.search_author.raw_data)
+    print(reference_form.search_author.data)
+    print(reference_form.search_work.raw_data)
+    print(reference_form.search_work.data)
+    print(reference_form.search_reference.raw_data)
+    print(reference_form.search_reference.data)
+    if subject_form.validate():
+        print('subject_form')
+    if reference_form.validate():
+        print('reference_form')
+    if subject_form.validate_on_submit():
+        print('subject_form')
+    if reference_form.validate_on_submit():
+        print('reference_form')
+    return 'OKOK'
 
-    # form_fields = [
-    #     "search-subject",
-    #     "second-keyword",
-    #     "search-author",
-    #     "search-work",
-    #     "search-reference"
-    # ]
-    #
-    # # for i in range(len(fields)):
-    # #     if fields[i] in request.form:
-    # #         print()
-    # # print(request.form.get(fields[i]))
-    #
-    # print(request.form.to_dict())
-    # search_word = request.form[form_fields[0]] if (form_fields[0] in request.form) else None
-    # # second_keyword = request.form[fields[2]] if (fields[2] in request.form) else None
-    # # search_author = request.form[fields[2]] if (fields[2] in request.form) else None
-    # # search_work = request.form[fields[2]] if (fields[2] in request.form) else None
-    # search_reference = request.form[form_fields[2]] if (form_fields[2] in request.form) else None
     # new_result: List[TextSubject] = []
     #
     # if search_word:  # the search by Subject button was clicked
