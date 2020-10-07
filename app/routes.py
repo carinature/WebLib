@@ -17,32 +17,33 @@ print('~' * 113)
 
 
 # ++++++++++++  search results and filtering page ++++++++++++
+def init_search_bar():
+    return {'subject_form': forms.SearchSubject(request.form),
+            'reference_form': forms.SearchReference(request.form),
+            'filter_form': forms.FilterForm(request.form),
+            'radio_buttons': forms.SearchTypeChoice(request.form)}
+
+
 @app.route('/search-results/<string:search_word>', methods=['GET', 'POST'])
 @app.route('/search-results', methods=['GET', 'POST'])
 def search_results(search_word=''):
     flash('You doing great GRRRLLLL')
-
-    subject_form = forms.SearchSubject(request.form)
-    reference_form = forms.SearchReference(request.form)
-    filter_form = forms.FilterForm(request.form)
-
-    # search_word = search_word if search_word else request.args['search_word']
-
     print(search_word)
+
+    search_bar = init_search_bar()
+
     if 'GET' == request.method:
         return render_template('search-results.html', title=f'Search Results for: {search_word}',
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
                                results=['res1', 'res2', 'res3', 'res4'], total=0,
-                               form1=subject_form, form2=reference_form, form3=filter_form,
-                               )  # , results=results)
+                               search_bar=search_bar
+                               )  
 
-    flash('You\'re \'POST\' on!')
-    print('post')
     # print(request.args['results'])
     # results = request.args['results']
     return render_template('search-results.html', title=f'Search Result for: {search_word}',
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                           form1=subject_form, form2=reference_form, form3=filter_form, radio=radio,
+                           search_bar=search_bar,
                            results=['pupu'], total=0)
 
     # todo
@@ -59,34 +60,27 @@ def search_results(search_word=''):
 # ++++++++++++  Home page ++++++++++++
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    subject_form = forms.SearchSubject(request.form)
-    reference_form = forms.SearchReference(request.form)
-    filter_form = forms.FilterForm(request.form)
-    radio = forms.SearchTypeChoice(request.form)
+    search_bar = init_search_bar()
+
     if 'GET' == request.method:
         print('~' * 15, ' home() - GET ', '~' * 15)
         return render_template('index.html',
                                title="Tiresias: The Ancient Mediterranean Religions Source Database",
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               form1=subject_form, form2=reference_form, form3=filter_form, radio=radio
+                               search_bar=search_bar
                                )
-    print(subject_form.subject_keyword_1.raw_data)
-    print(subject_form.subject_keyword_1.data)
-    print(subject_form.subject_keyword_2.raw_data)
-    print(subject_form.subject_keyword_2.data)
-    print(reference_form.search_author.raw_data)
-    print(reference_form.search_author.data)
-    print(reference_form.search_work.raw_data)
-    print(reference_form.search_work.data)
-    print(reference_form.search_reference.raw_data)
-    print(reference_form.search_reference.data)
-    if subject_form.validate():
+    print(search_bar['subject_form'].subject_keyword_1.raw_data)
+    print(search_bar['subject_form'].subject_keyword_2.data)
+    print(search_bar['reference_form'].search_author.raw_data)
+    print(search_bar['reference_form'].search_work.data)
+    print(search_bar['reference_form'].search_reference.data)
+    if search_bar['subject_form'].validate():
         print('subject_form')
-    if reference_form.validate():
+    if search_bar['reference_form'].validate():
         print('reference_form')
-    if subject_form.validate_on_submit():
+    if search_bar['subject_form'].validate_on_submit():
         print('subject_form')
-    if reference_form.validate_on_submit():
+    if search_bar['reference_form'].validate_on_submit():
         print('reference_form')
     return 'OKOK'
 
