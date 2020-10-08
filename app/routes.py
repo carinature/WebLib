@@ -1,55 +1,52 @@
 from datetime import time
-from typing import List
+from typing import List, Dict
 
 from flask import current_app as app
-from flask import flash
 from flask import render_template, make_response, redirect, url_for, request
 
 from db_migration import csv_to_mysql
-# from forms import SearchSubject, SearchReference, FilterForm, SearchTypeChoice
+
 from . import forms
 from . import models
+from . import utilities as utils
 
-# from .forms import *
-# from .models import *
-
-print('~' * 113)
+print('~' * 100)
 
 
 # ++++++++++++  search results and filtering page ++++++++++++
-def init_search_bar():
-    return {'subject_form': forms.SearchSubject(request.form),
-            'reference_form': forms.SearchReference(request.form),
-            'filter_form': forms.FilterForm(request.form),
-            'radio_buttons': forms.SearchTypeChoice(request.form)}
-
-
 @app.route('/search-results/<string:search_word>', methods=['GET', 'POST'])
 @app.route('/search-results', methods=['GET', 'POST'])
 def search_results(search_word=''):
-    flash('You doing great GRRRLLLL')
-    print(search_word)
-
-    search_bar = init_search_bar()
+    search_bar: Dict = utils.init_search_bar()
+    if not search_word:
+        search_word = search_bar['subject_form'].subject_keyword_1.data
+    print(search_bar['subject_form'].subject_keyword_1.raw_data)
+    print(search_bar['subject_form'].subject_keyword_2.raw_data)
 
     if 'GET' == request.method:
+        # todo put here the "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
+
+        # if search_bar['subject_form'].validate():
+        #     print('subject_form')
+        if search_bar['subject_form'].validate_on_submit():
+            print('subject_form valid')
+
         return render_template('search-results.html', title=f'Search Results for: {search_word}',
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               results=['res1', 'res2', 'res3', 'res4'], total=0,
+                               results=['res1', 'res2', 'res3', 'res4'],
+                               total=0,
                                search_bar=search_bar
-                               )  
+                               )
 
-    # print(request.args['results'])
+        # print(request.args['results'])
     # results = request.args['results']
+
     return render_template('search-results.html', title=f'Search Result for: {search_word}',
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            search_bar=search_bar,
                            results=['pupu'], total=0)
 
     # todo
-    #  in the search-results do
-    #    consider running the functions in "search-result" and NOT "home"
-    #    make some sort "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
     #  change projection to include entire entry instead of index alone
     #  add fuzzy (returns things *like* but not necessarily the same) / regex search on the query
     #  clean data before:
@@ -60,50 +57,17 @@ def search_results(search_word=''):
 # ++++++++++++  Home page ++++++++++++
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    search_bar = init_search_bar()
-
-    if 'GET' == request.method:
-        print('~' * 15, ' home() - GET ', '~' * 15)
-        return render_template('index.html',
-                               title="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               search_bar=search_bar
-                               )
-    print(search_bar['subject_form'].subject_keyword_1.raw_data)
-    print(search_bar['subject_form'].subject_keyword_2.data)
-    print(search_bar['reference_form'].search_author.raw_data)
-    print(search_bar['reference_form'].search_work.data)
-    print(search_bar['reference_form'].search_reference.data)
-    if search_bar['subject_form'].validate():
-        print('subject_form')
-    if search_bar['reference_form'].validate():
-        print('reference_form')
-    if search_bar['subject_form'].validate_on_submit():
-        print('subject_form')
-    if search_bar['reference_form'].validate_on_submit():
-        print('reference_form')
-    return 'OKOK'
-
-    # new_result: List[TextSubject] = []
-    #
-    # if search_word:  # the search by Subject button was clicked
-    #     if search_word == "":
-    #         pass  # todo handle "empty searches"
-    #     results = TextSubject.query.filter(TextSubject.subject.like(search_word)).paginate(1, 1, False).items
-    #     for result in results:
-    #         new_result.append(result)
-    #         print('result.subject: ', result.subject, '\nres: ', result, '\nnew_result: ', new_result)
-    # elif search_reference:
-    #     pass
-    # else:  # the search by Reference button was clicked
-    #     # if search_reference == "":
-    #     # resp.headers['X-Something'] = 'A value'
-    #     pass  # todo handle "empty searches"
-    #
-    # # return redirect(url_for("search_results"))
-    # return redirect(url_for("search_results", search_word=search_word))
-    # return redirect(url_for("search_results", results=results), code=307) #https://stackoverflow.com/questions/15473626/make-a-post-request-while-redirecting-in-flask #todo DO NOT DELTEE BEFORE YOU CHECKOUT
-    # return redirect('/search_results', results)
+    search_bar: Dict = utils.init_search_bar()
+    search_word = search_bar['subject_form'].subject_keyword_1.data
+    return render_template('index.html',
+                           title="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           search_bar=search_bar
+                           )
+    # if 'GET' == request.method:
+    #     print('~' * 15, ' home() - GET ', '~' * 15)
+    # print('~' * 15, ' home() - POST ', '~' * 15)
+    # return redirect(url_for(search_results,search_word))
 
 
 # ++++++++++++  list of books page ++++++++++++
@@ -130,10 +94,27 @@ def subject_list():
     return render_template('subject-list.html',
                            title="Tiresias Subjects",  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                           subjects=subjects, total=subjects.total,
+                           subjects=subjects,
+                           total=subjects.total,
                            next_url=next_url,
                            prev_url=prev_url
                            )
+
+
+# ++++++++++++  Error Handling ++++++++++++
+@app.errorhandler(404)
+def not_found(error):
+    resp = make_response(render_template('page_not_found.html',
+                                         title="Tiresias Project - Page not Found",
+                                         description=str(error)), 404)
+    print(error)
+    return resp
+
+
+# @login_required https://flask-login.readthedocs.io/en/latest/ todo use this to protect from logged-off users
+# @app.route('/insert-data')
+# def insert_data():
+#     print('congrats on the new addition')
 
 
 # ++++++++++++  dbg pages ++++++++++++
@@ -182,18 +163,3 @@ def success(title):
     sform = forms.SearchSubject()
     return '<h1>' + title + ' Great Success</h1>'
     # return render_template('kaka.html', title='Great Success', sform=sform)
-
-
-# ++++++++++++  Error Handling ++++++++++++
-@app.errorhandler(404)
-def not_found(error):
-    resp = make_response(render_template('page_not_found.html',
-                                         title="Tiresias Project - Page not Found",
-                                         description=str(error)), 404)
-    print(error)
-    return resp
-
-# @login_required https://flask-login.readthedocs.io/en/latest/ todo use this to protect from logged-off users
-# @app.route('/insert-data')
-# def insert_data():
-#     print('congrats on the new addition')

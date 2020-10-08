@@ -7,6 +7,7 @@
     padding. #}
 
     <!-- Radio search buttons -->
+    {#
     <br><br>
     <div style="text-align: center">
     <span style="margin-left: 2rem; display: inline-block;" class="padding">
@@ -18,6 +19,7 @@
         <label for="chkNo" style="vertical-align: middle; font-size: 1.5em">Search by Reference</label>
     </span>
     </div>
+#}
 
     {#
     <div style="text-align: center; ">#}
@@ -33,10 +35,12 @@
         <!--- search by Subject  -->
         <div class="row" id="search-subject">
             <div class="s01">
-                 <form action="{{ url_for('search_results') }}" method="POST">
-{#                <form action="{{ url_for('home') }}" method="POST">#}
-{#                    {{ search_bar['subject_form'].csrf_token }} #}
-                     {{ search_bar['subject_form'].hidden_tag() }}
+                <form action='{{ url_for('search_results') }}' method="POST">
+                {# todo try changing the action to JS ro else#}
+{#                <form action='../static/js/gui.js' method="POST" onsubmit="">#}
+                    {#                <form action="{{ url_for('home') }}" method="POST">#}
+                    {#                    {{ search_bar['subject_form'].csrf_token }} #}
+                    {{ search_bar['subject_form'].hidden_tag() }}
                     <div class="inner-form">
                         {# <div class="form-field input-field first-wrap">#}
                         <div class="form-field input-field first-wrap">
@@ -76,20 +80,20 @@
                 </form>
             </div>
         </div>
-
+{#
         <!--- search by Reference - hidden Section -->
         <div class="row" id="search-ref" style="display: none">
             <div class="s01">
-                  <form action="{{ url_for('search_results') }}" method="POST">
-{#                <form action="{{ url_for('home') }}" method="POST">#}
-{#                    {{ search_bar['reference_form'].csrf_token }} #}
-                     {{ search_bar['reference_form'].hidden_tag() }}
+                <form action="{{ url_for('search_results') }}" method="POST">
+                    #}{#                <form action="{{ url_for('home') }}" method="POST">#}{#
+                    #}{#                    {{ search_bar['reference_form'].csrf_token }} #}{#
+                    {{ search_bar['reference_form'].hidden_tag() }}
                     <div class="inner-form ">
-                        {# <div class="inner-form ">#}
+                        #}{# <div class="inner-form ">#}{#
                         <div class="list-inline-item search-bar-item input-field">
-                            {#
-                                    <div class="list-inline-item search-bar-item">#}
-                            {# {{ search_bar['reference_form'].search_author.label }}#}
+                            #}{#
+                                    <div class="list-inline-item search-bar-item">#}{#
+                            #}{# {{ search_bar['reference_form'].search_author.label }}#}{#
                             {{ search_bar['reference_form'].search_author }}
                             {% if search_bar['reference_form'].search_author.errors %}
                                 <ul class="errors">
@@ -101,7 +105,7 @@
                         </div>
 
                         <div class="list-inline-item search-bar-item input-field">
-                            {# {{ search_bar['reference_form'].search_work.label }}#}
+                            #}{# {{ search_bar['reference_form'].search_work.label }}#}{#
                             {{ search_bar['reference_form'].search_work }}
                             {% if search_bar['reference_form'].search_work.errors %}
                                 <ul class="errors">
@@ -113,7 +117,7 @@
                         </div>
 
                         <div class="list-inline-item search-bar-item input-field">
-                            {# {{ search_bar['reference_form'].search_reference.label }}#}
+                            #}{# {{ search_bar['reference_form'].search_reference.label }}#}{#
                             {{ search_bar['reference_form'].search_reference }}
                             {% if search_bar['reference_form'].search_reference.errors %}
                                 <ul class="errors">
@@ -125,7 +129,7 @@
                         </div>
 
                         <div class="list-inline-item search-bar-item input-field">
-                            {# <br>#}
+                            #}{# <br>#}{#
                             {{ search_bar['reference_form'].submit_reference }}
                         </div>
                     </div>
@@ -139,5 +143,7 @@
                     Leave reference box empty to search for a whole book.</p>
             </div>
         </div>
+   #}
+
     </div>
 </div>

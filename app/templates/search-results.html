@@ -39,29 +39,11 @@
             </div>
         {% endfor %}
 
-    {% for i in [1,2,3] %}
-        {{ i }}
-    {% endfor %}
+        {% for i in [1,2,3] %}
+            {{ i }}
+        {% endfor %}
 
     </div>
-
-{#    {{ form.text(id="some_id", class="some_class") }}#}
-
-    {#<div>
-{% block content %}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class=flash>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-{% endblock %}
-</div>#}
-
-
 
     <!--check box filtering options -->
     {#<div class="form-group padding col-9" style="margin-left: 5%">
@@ -120,6 +102,27 @@
         </label>
     </div>
 </div>#}
+
+
+
+    {#    {{ form.text(id="some_id", class="some_class") }}#}
+
+    {#<div>
+    {% block content %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flash>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    {% endblock %}
+    </div>#}
+
+
+
     <!--attempt to fetch all-->
 
     <!-- scripts -->
