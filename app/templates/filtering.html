@@ -22,11 +22,11 @@
                             Filter by<br>Sub-subject
                         </h5>
                         <hr>
-                        {{ form3.include.label }} <br>
-                        {{ form3.include }}
+                        {{ search_bar['filter_form'].include.label }} <br>
+                        {{ search_bar['filter_form'].include }}
                         <br><br>
-                        {{ form3.exclude.label }} <br>
-                        {{ form3.exclude }}
+                        {{ search_bar['filter_form'].exclude.label }} <br>
+                        {{ search_bar['filter_form'].exclude }}
                         <br><br><br>
                         <label>or check and uncheck in the list below</label>
                     </div>
@@ -38,17 +38,14 @@
                         </h5>
                         <hr>
                         <br>
-                        {#
-                        {{ form3.from_century.label }} {{ form3.from_century }}
+
+                        {{ search_bar['filter_form'].from_century.label }} {{ search_bar['filter_form'].from_century }}
                                                 {% if SMALL_SCREEN %}
                                                     <br><br>
                                                 {% endif %}
-                        {{ form3.to_century.label }} {{ form3.to_century }}
-                        #}
+                        {{ search_bar['filter_form'].to_century.label }} {{ search_bar['filter_form'].to_century }}
                         <br><br>
-                        {{ form3.language.label }}
-
-                        {{ form3.language }}
+                        {{ search_bar['filter_form'].language.label }} {{ search_bar['filter_form'].language }}
 
                     </div>
                     <div class="col-md-6 col-lg-4">
@@ -56,23 +53,23 @@
                             Filter by<br>Reference
                         </h5>
                         <hr>
-                        {{ form3.ancient_author.label }} <br>
-                        {{ form3.ancient_author }}
+                        {{ search_bar['filter_form'].ancient_author.label }} <br>
+                        {{ search_bar['filter_form'].ancient_author }}
                         <br><br>
-                        {{ form3.ancient_title.label }} <br>
-                        {{ form3.ancient_title }}
+                        {{ search_bar['filter_form'].ancient_title.label }} <br>
+                        {{ search_bar['filter_form'].ancient_title }}
                         <br><br>
-                        {{ form3.reference.label }} <br>
-                        {{ form3.reference }}
+                        {{ search_bar['filter_form'].reference.label }} <br>
+                        {{ search_bar['filter_form'].reference }}
                         <div class="" style="text-align: left">
                             <br><br><br><br>
-                            {{ form3.fetch_full }} {{ form3.fetch_full.label }} <br>
-                            {{ form3.attention_label }}
+                            {{ search_bar['filter_form'].fetch_full }} {{ search_bar['filter_form'].fetch_full.label }} <br>
+                            {{ search_bar['filter_form'].attention_label }}
                         </div>
                     </div>
                 </div>
             </div>
-            {{ form3.submit }}
+            {{ search_bar['filter_form'].submit }}
         </form>
     </div>
 </div>
