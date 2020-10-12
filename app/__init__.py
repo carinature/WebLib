@@ -1,9 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
 # from flask_wtf import CSRFProtect
 
 db = SQLAlchemy()
-
+bootstrap = Bootstrap()
 
 def create_app():
     app = Flask(__name__, instance_relative_config=False)
@@ -14,6 +15,7 @@ def create_app():
     # app.config.from_object('config.ProdConfig')  # production configuration
 
     db.init_app(app)
+    bootstrap.init_app(app)
 
     # csrf = CSRFProtect(app)
     # csrf.init_app(app)

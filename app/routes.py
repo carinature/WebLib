@@ -18,37 +18,41 @@ print('~' * 100)
 @app.route('/search-results/<string:search_word>', methods=['GET', 'POST'])
 @app.route('/search-results', methods=['GET', 'POST'])
 def search_results(search_word=''):
+    # todo put here the "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
     search_bar: Dict = utils.init_search_bar()
+
+    if 'GET' == request.method:
+        print('-' * 13, ' GET ', '-' * 13)
+        return render_template('search-results.html',
+                               title=f'Search Results for: {search_word}',
+                               description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               results=['THIS', 'SHOULD', 'BE', 'SOMETHING', 'ELSE'],
+                               total=0,
+                               search_bar=search_bar
+                               )
+
+    print('-'*13, ' POST ', '-'*13)
+    if search_bar['subject_form'].validate_on_submit():
+        print('subject_form valid')
+    if search_bar['subject_form'].validate():
+            print('subject_form validate')
+
     if not search_word:
         search_word = search_bar['subject_form'].subject_keyword_1.data
-    print(search_bar['subject_form'].subject_keyword_1.raw_data)
-    print(search_bar['subject_form'].subject_keyword_2.raw_data)
-    search = "%{}%".format(search_word)
 
-    print('^' * 15)
-    print(search_word)
+    search = "%{}%".format(search_word)
     page = request.args.get('page', 1, type=int)
     subjectsQuery: Query = m.TextSubject.query
 
     subjects = subjectsQuery.filter(m.TextSubject.subject.like(search))
     subjectsPage = subjects.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
 
-    if 'GET' == request.method:
-        # todo put here the "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
+    # print(search_bar['subject_form'].subject_keyword_1.raw_data)
+    # print(search_bar['subject_form'].subject_keyword_2.raw_data)
+    # print('^' * 15)
+    # print(search_word)
 
-        # if search_bar['subject_form'].validate():
-        #     print('subject_form')
-        if search_bar['subject_form'].validate_on_submit():
-            print('subject_form valid')
-
-        return render_template('search-results.html', title=f'Search Results for: {search_word}',
-                               description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               results=subjectsPage,
-                               total=subjectsPage.total,
-                               search_bar=search_bar
-                               )
-
-        # print(request.args['results'])
+    # print(request.args['results'])
     # results = request.args['results']
 
     return render_template('search-results.html', title=f'Search Result for: {search_word}',
@@ -72,8 +76,9 @@ def home():
     search_bar: Dict = utils.init_search_bar()
     search_word = search_bar['subject_form'].subject_keyword_1.data
     return render_template('index.html',
-                           title="Tiresias: The Ancient Mediterranean Religions Source Database",
-                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           title='Tiresias',
+                           index_title='The Ancient Mediterranean Religions Source Database',
+                           description='Tiresias: The Ancient Mediterranean Religions Source Database',
                            search_bar=search_bar
                            )
     # if 'GET' == request.method:
@@ -139,38 +144,40 @@ def check_check():
     # if reference_form.submit_reference.data and reference_form.validate_on_submit():
     #     print('Great Success')
     #     return redirect(url_for('success', title='reference_form'))
-    #     # return render_template('kaka.html', title='Great Success', subject_form=subject_form)
+    #     # return render_template('try_bs.html', title='Great Success', subject_form=subject_form)
     # print('what happend')
     # print("subject_form.errors")
     # print(subject_form.errors)
     # flash(subject_form.errors)
     # page = request.args.get('page', 1, type=int)
     # table = TextSubject.query.paginate(page, app.config['ITEMS_PER_PAGE'], False).items
-    # return render_template('kaka.html',mydata=table, form1=subject_form)  # , form2=reference_form)
-    return render_template('kaka.html', form1=subject_form)  # , form2=reference_form)
+    # return render_template('try_bs.html',mydata=table, form1=subject_form)  # , form2=reference_form)
+    return render_template('try_bs.html', form1=subject_form)  # , form2=reference_form)
 
 
-@app.route("/kaka", methods=['GET', 'POST'])
-def kaka():
+@app.route("/try_bs", methods=['GET', 'POST'])
+def try_bs():
     # headers = {"Content-Type": "app/kaka"}
     # return make_response(
     #     'Test worked!',
     #     200,
     #     headers
     # )
+    from flask import flash
+    flash('mamase mamasa mamakusa')
 
-    return render_template('kaka.html')
+    return render_template('try_bs.html', title='TRY', range=range(25))
 
 
 @app.route("/pipi", methods=['GET', 'POST'])
 def pipi():
     csv_to_mysql()
     return 'OK'
-    # return render_template('kaka.html', form1=subject_form)  # , form2=reference_form)
+    # return render_template('try_bs.html', form1=subject_form)  # , form2=reference_form)
 
 
 @app.route("/success/<title>", methods=['GET', 'POST'])
 def success(title):
     sform = f.SearchSubject()
     return '<h1>' + title + ' Great Success</h1>'
-    # return render_template('kaka.html', title='Great Success', sform=sform)
+    # return render_template('try_bs.html', title='Great Success', sform=sform)

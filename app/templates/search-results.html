@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% include 'search-bar.html' %}
-{% block content %}
+{% block app_content %}
 
 
     <!-- results for ... -->
@@ -46,7 +46,7 @@
         {% endif %}
 
 
-        {% for i in [1,2,3] %}
+        {% for i in range(11) %}
             {{ i }}
         {% endfor %}
 
@@ -115,7 +115,7 @@
     {#    {{ form.text(id="some_id", class="some_class") }}#}
 
     {#<div>
-    {% block content %}
+    {% block app_content %}
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <ul class=flash>
