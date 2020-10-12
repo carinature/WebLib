@@ -171,6 +171,7 @@ hr.light-100 {
         font-size: 3rem;
         padding-left: 3rem;
         transition: 400ms;
+        /*font-size: initial;*/
     }
 
     #navbar-subtitle { /*KT*/
@@ -209,19 +210,18 @@ hr.light-100 {
         padding: 1.2rem;
     }
 
-
     #logo { /*KT*/
         /*max-height: 5em;*/
         /*max-width: 10%;*/
         /*max-height: 10%;*/
-        height: 5em;
+        /*height: 5em;*/
         /*height: auto\9;*/
         /*transition: 0.2s;*/
         /*display: none;*/
-        display: block;
-        transition: 400ms;
-        transform: scale(1);
-        margin-top: 0;
+        /*display: block;*/
+        /*transition: 400ms;*/
+        /*transform: scale(1);*/
+        /*margin-top: 0;*/
 
 
     }
@@ -235,7 +235,7 @@ hr.light-100 {
     #navbar-subtitle { /*KT*/
         /*font-size: 0.75rem;*/
         display: none;
-        transition: 400ms;
+        /*transition: 400ms;*/
 
     }
 }
@@ -278,9 +278,9 @@ hr.light-100 {
         /*/*height: 10%;*/
         /*height: auto\9;*/
         /*    transition: 0.2s;*/
-        display: none;
+        /*display: none;*/
         /*transform: scale(0.5);*/
-        transition: 400ms;
+        /*transition: 400ms;*/
     }
 
     #navbar-title-h1-id { /*KT*/
@@ -291,7 +291,7 @@ hr.light-100 {
     }
 
     #navbar-subtitle { /*KT*/
-                transform: scale(0.5);
+                /*transform: scale(0.5);*/
 
         /*font-size: 1rem;*/
         /*margin-left: 1rem;*/

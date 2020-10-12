@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% include 'search-bar.html' %}
-{% block content %}
+{% block app_content %}
 
 
     <!-- results for ... -->
@@ -28,18 +28,25 @@
 
     <div class="container">
         {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
-        {{ results }}
-        {% for subject in results %}
+        {% for subject in results.items %}
             <div class="row">
-                1 {{ subject }}
-                <br>
-                2 {{ subject.subject }}
-                <br>
-                3 {{ subject.C }} {# displays it like so :    Richlin (2018) Richlin (2018)  #} <br>
+                {#                {{ subject }}#}
+                {{ subject.subject }}
+                {{ subject.C }} {# displays it like so :    Richlin (2018) Richlin (2018)  #} <br>
             </div>
         {% endfor %}
 
-        {% for i in [1,2,3] %}
+
+        {% if prev_url %}
+            <a href="{{ prev_url }}">Prev</a>
+        {% endif %}
+        &nbsp &nbsp
+        {% if next_url %}
+            <a href="{{ next_url }}">Next</a>
+        {% endif %}
+
+
+        {% for i in range(11) %}
             {{ i }}
         {% endfor %}
 
@@ -108,7 +115,7 @@
     {#    {{ form.text(id="some_id", class="some_class") }}#}
 
     {#<div>
-    {% block content %}
+    {% block app_content %}
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <ul class=flash>
