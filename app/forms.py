@@ -19,6 +19,41 @@ from wtforms.validators import *
 EMPTY_LABEL = ''
 
 
+class Chkbx(FlaskForm):
+    bla = BooleanField(label='remember_me', default=False)
+    # def __init__(self):
+    #     super(Chkbx, self).__init__(*args, **kwargs)
+
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+
+class SimpleForm(FlaskForm):
+    string_of_files = ['one\r\ntwo\r\nthree\r\n']
+    list_of_files = string_of_files[0].split()
+    # create a list of value/description tuples
+    checkbox = BooleanField('Select All')
+    # files = [(1,1),(2,2),(3,3)]
+    files = [(x, x) for x in list_of_files]
+    example = MultiCheckboxField('Label', choices=files)
+
+
+# class PurchaseForm(Form):
+#     item_class = ItemForm
+#     transaction_items = FieldList(FormField(item_class),
+#                                   label='items',
+#                                   min_entries=1)
+#
+#     def __init__(self, item_class, *args, **kwargs):
+#        super().__init__(*args, **kwargs)
+#        self.item_class = item_class
+#        self.transaction_items = FieldList(FormField(self.item_class),
+#                                            label='items',
+#                                            min_entries=1)
+
+
 class SearchSubject(FlaskForm):
     subject_keyword_1 = StringField(
         EMPTY_LABEL,

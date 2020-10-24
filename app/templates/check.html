@@ -3,20 +3,32 @@
 {% block app_content %}
     {#  container-fluid #}
 
+    <form method="post" action='{{ url_for('check_check') }}'>
+        {{ form1.hidden_tag() }}
+        {{ form1.checkbox }}
+        {{ form1.checkbox.label }}
+        {{ form1.example }}
+        <button type="submit">Submit</button>
+    </form>
 
-    <div class="form-inline container-fluid search-bar">
-        <div class="s01 container flex-wrap search-bar-content">
-            {#            <div style="  margin: 10px;" class="list-inline-item">{{ form1.subject_keyword_1 }}</div>#}
-            <div class="list-inline-item search-bar-item">
-                {{ form1.subject_keyword_1 }}
-            </div>
-            <div class="list-inline-item search-bar-item">
-                {{ form1.subject_keyword_2 }}
-            </div>
-            <div class="list-inline-item search-bar-item">
-                {{ form1.submit_subject }}
-            </div>
-        </div>
-    </div>
+    {{ data }}
+
+{#    <form method="POST" action="">#}
+        {#                 {{ form.hidden_tag() }}#}
+{#        <div class="form-inline container-fluid search-bar">#}
+{#            <div class="s01 container flex-wrap search-bar-content">#}
+                {#            <div style="  margin: 10px;" class="list-inline-item">{{ form1.subject_keyword_1 }}</div>#}
+{#                <div class="list-inline-item search-bar-item">#}
+                    {#                {{ form1 }}#}
+{#                </div>#}
+{#                <div class="list-inline-item search-bar-item">#}
+                    {#                    {{ form1.choices }}#}
+{#                </div>#}
+{#                <div class="list-inline-item search-bar-item">#}
+                    {#                {{ form1.SubmitField }}#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+    </form>
 
 {% endblock %}
