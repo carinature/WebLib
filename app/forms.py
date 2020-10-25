@@ -16,9 +16,60 @@ from wtforms.validators import *
 #                                 EqualTo,
 #                                 Length,
 #                                 URL, Optional)
-from wtforms.widgets import html_params
+from wtforms.widgets import html_params, TextInput
 
 EMPTY_LABEL = ''
+
+
+
+class MyTextInput(TextInput):
+    def __init__(self, error_class=u'has_errors'):
+        super(MyTextInput, self).__init__()
+        self.error_class = error_class
+
+    def __call__(self, field, **kwargs):
+        if field.errors:
+            c = kwargs.pop('class', '') or kwargs.pop('class_', '')
+            kwargs['class'] = u'%s %s' % (self.error_class, c)
+        return super(MyTextInput, self).__call__(field, **kwargs)
+
+
+def select_multi_checkbox(field, ul_class='', **kwargs):
+    kwargs.setdefault('type', 'checkbox')
+    field_id = kwargs.pop('id', field.id)
+    html = [u'<ul %s>' % html_params(id=field_id, class_=ul_class)]
+    for value, label, checked in field.iter_choices():
+        choice_id = u'%s-%s' % (field_id, value)
+        options = dict(kwargs, name=field.name, value=value, id=choice_id)
+        if checked:
+            options['checked'] = 'checked'
+        html.append(u'<li><input %s /> ' % html_options(**options))
+        html.append(u'<label %s>%s</label></li>')
+    html.append(u'</ul>')
+    return u''.join(html)
+
+class TelephoneForm(Form):
+    # country_code = IntegerField('Country Code', [validators.required()])
+    # area_code = IntegerField('Area Code/Exchange', [validators.required()])
+    # number = StringField('Number')
+    check:BooleanField = BooleanField('check')
+    bla = Label(text='lbl', field_id='ls')
+
+    def __init__(self, name='name___', **kwargs):
+        super().__init__(**kwargs)
+        self.check = BooleanField(label=name)
+        self.bla = Label(text=name, field_id=kwargs)
+
+
+class ContactForm(FlaskForm):
+    first_name = StringField()
+    last_name = StringField()
+    mobile_phone = FormField(TelephoneForm)
+    office_phone = FormField(TelephoneForm)
+    # authors = FieldList(StringField('Name', [validators.required()]))
+    # authors = FieldList(FormField(BooleanField))
+
+    telephoneForm = FieldList(FormField(TelephoneForm))
 
 
 class ListWidget(object):
@@ -57,7 +108,7 @@ class MultiCheckboxField(SelectMultipleField):
 class SimpleForm(FlaskForm):
     checkbox = BooleanField('Select All')
 
-    def __init__(self,string_of_files):
+    def __init__(self, string_of_files):
         super().__init__()
 
         # string_of_files = kwargs['choices']
@@ -69,19 +120,22 @@ class SimpleForm(FlaskForm):
         # files = [(x, x) for x in list_of_files]
         self.example = MultiCheckboxField('Label', choices=string_of_files)
 
+    files = [(1,1),(2,2),(3,3)]
+    example = MultiCheckboxField('Label', choices=files)
 
-# class PurchaseForm(Form):
-#     item_class = ItemForm
-#     transaction_items = FieldList(FormField(item_class),
-#                                   label='items',
-#                                   min_entries=1)
-#
-#     def __init__(self, item_class, *args, **kwargs):
-#        super().__init__(*args, **kwargs)
-#        self.item_class = item_class
-#        self.transaction_items = FieldList(FormField(self.item_class),
-#                                            label='items',
-#                                            min_entries=1)
+
+class PurchaseForm(Form):
+    item_class = widgets.CheckboxInput()
+    transaction_items = FieldList(FormField(item_class),
+                                  label='items',
+                                  min_entries=1)
+
+    def __init__(self, item_class, *args, **kwargs):
+       super().__init__(*args, **kwargs, field=FormField(self.item_class))
+       self.item_class = item_class
+       self.transaction_items = FieldList(FormField(self.item_class),
+                                           label='items',
+                                           min_entries=1)
 
 
 class SearchSubject(FlaskForm):

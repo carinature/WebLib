@@ -4,7 +4,7 @@ from typing import List, Dict
 from flask import current_app as app
 from flask import render_template, make_response, redirect, url_for, request
 from sqlalchemy.orm import Query
-from wtforms import BooleanField
+from wtforms import BooleanField, StringField
 from wtforms.widgets import CheckboxInput
 
 from db_migration import csv_to_mysql
@@ -164,9 +164,21 @@ def not_found(error):
 # ++++++++++++  dbg pages ++++++++++++
 @app.route('/check', methods=['GET', 'POST'])
 def check_check():
-    # subject_form = f.SearchSubject(request.form)
+    from wtforms import widgets
+    subject_form = f.ContactForm(request.form)
+    # subject_form.authors.append_entry(BooleanField(label='Name', active=False))
+    # subject_form.authors.append_entry(BooleanField(label='Name', active=False))
+    # subject_form.authors.append_entry(BooleanField(label='Name', active=False))
+    # subject_form.telephoneForm.append_entry(f.TelephoneForm(name='label=ldfls'))
+    # subject_form.telephoneForm.append_entry(f.TelephoneForm(name='label=ldfls'))
+    # subject_form.telephoneForm.append_entry(f.TelephoneForm(name='label=ldfls'))
+    subject_form.telephoneForm.append_entry('label=ldfls')
+    subject_form.telephoneForm.append_entry()
+    # subject_form.telephoneForm.append_entry(name='nana-banana')
+    # subject_form.telephoneForm.append_entry('label=ldfls')
+    # subject_form.telephoneForm.append_entry('label=ldfls')
     fdict = {'one':'one' ,'two':'two' }
-    subject_form = f.SimpleForm(fdict)
+    # subject_form = f.PurchaseForm(fdict)
     # reference_form = SearchReference(request.form)
     # if subject_form.submit_subject.data and subject_form.validate_on_submit():
     #     print('Great Success')
@@ -178,10 +190,10 @@ def check_check():
     # if 'GET' == request.method:
     if not subject_form.validate_on_submit():
         print('-' * 13, ' GET ', '-' * 13)
-        return render_template('check.html', form1=subject_form)
+        return render_template('check.html', title='sldkfjslf' , form1=subject_form)
 
     print('-' * 13, ' POST ', '-' * 13)
-    return render_template("check.html", form1=subject_form, data=subject_form.example.data)
+    return render_template("check.html", form1=subject_form)#, data=subject_form.example.data)
 
 
 @app.template_filter("clean_date")

@@ -5,13 +5,31 @@
 
     <form method="post" action='{{ url_for('check_check') }}'>
         {{ form1.hidden_tag() }}
-        {{ form1.checkbox }}
-        {{ form1.checkbox.label }}
-        {{ form1.example }}
+{#        {{ form1.checkbox }}#}
+{#        {{ form1.checkbox.label }}#}
+{#        {{ form1.example }}#}
+        {{ form1.mobile_phone }}
+{#        {{ form1.authors }}#}
+        {{ form1.telephoneForm() }}
+{#        ^^^^^^^^^^^^^^^^^^^^^^^^^ <br>#}
+{#        {{ form1.telephoneForm.data }}#}
+{#        ********************* <br>#}
+{#        {{ form1.telephoneForm.label }}#}
+{#        ------------------ <br>#}
+{#        {{ form1.telephoneForm.check }}#}
+        ********************* <br>
+        {% for x in form1.telephoneForm  %}
+                check: {{ x.form.check }}
+            <br>.................. <br>
+                bla: {{ x.bla }}
+            <br>------------------ <br>
+
+        {% endfor %}
+
         <button type="submit">Submit</button>
     </form>
 
-    {{ data }}
+{#    {{ data }}#}
 
 {#    <form method="POST" action="">#}
         {#                 {{ form.hidden_tag() }}#}
