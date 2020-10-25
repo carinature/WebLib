@@ -111,8 +111,8 @@ MACRO
 <br>
 {% macro input(label="", type="text", id="", name="", placeholder="") -%}
   <div class="form-group">
-    <label for="{{ id }}">{{ label }}</label>
     <input type="{{ type }}" class="form-control" id="{{ id }}" name="{{ name }}" placeholder="{{ placeholder }}">
+    <label for="{{ id }}">{{ label }}</label>
   </div>
 {%- endmacro %}
 
@@ -125,6 +125,21 @@ macro_name(**args, **kwargs)
     {{ input(label="Email", type="email", id="email", name="email", placeholder="Enter your email") }}
     {{ input(label="Password", id="password", name="password", placeholder="Enter your password") }}
 </form>
+
+<br>
+<br>
+
+
+
+{#  set form    #}
+{#{% set new_repo = ListForm(#}
+{#        name=item,#}
+{#        description=item,#}
+{#        domain=item)#}
+{#    %}#}
+{#      for loop on list    #}
+{#          set sub-form        #}
+{#          self.add_item       #}
 
 
 </body>

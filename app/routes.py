@@ -55,7 +55,6 @@ def search_results(search_word=''):
     print('.' * 13)
     print(subjects_ordered)
 
-
     subjects = subjects_ordered.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
     # subjects = subjects_ordered.all()
 
@@ -84,7 +83,7 @@ def search_results(search_word=''):
                            search_bar=search_bar,
                            next_url=next_url,
                            prev_url=prev_url,
-                           chkbx_class = BooleanField,
+                           chkbx_class=BooleanField,
                            # chkbx_class = f.Chkbx,
 
                            # listlist=listlist
@@ -164,20 +163,6 @@ def not_found(error):
 # ++++++++++++  dbg pages ++++++++++++
 @app.route('/check', methods=['GET', 'POST'])
 def check_check():
-    from wtforms import widgets
-    subject_form = f.ContactForm(request.form)
-    # subject_form.authors.append_entry(BooleanField(label='Name', active=False))
-    # subject_form.authors.append_entry(BooleanField(label='Name', active=False))
-    # subject_form.authors.append_entry(BooleanField(label='Name', active=False))
-    # subject_form.telephoneForm.append_entry(f.TelephoneForm(name='label=ldfls'))
-    # subject_form.telephoneForm.append_entry(f.TelephoneForm(name='label=ldfls'))
-    # subject_form.telephoneForm.append_entry(f.TelephoneForm(name='label=ldfls'))
-    subject_form.telephoneForm.append_entry('label=ldfls')
-    subject_form.telephoneForm.append_entry()
-    # subject_form.telephoneForm.append_entry(name='nana-banana')
-    # subject_form.telephoneForm.append_entry('label=ldfls')
-    # subject_form.telephoneForm.append_entry('label=ldfls')
-    fdict = {'one':'one' ,'two':'two' }
     # subject_form = f.PurchaseForm(fdict)
     # reference_form = SearchReference(request.form)
     # if subject_form.submit_subject.data and subject_form.validate_on_submit():
@@ -187,13 +172,32 @@ def check_check():
     # print("subject_form.errors")
     # flash(subject_form.errors)
 
-    # if 'GET' == request.method:
-    if not subject_form.validate_on_submit():
+    if 'GET' == request.method:
+        # if not subject_form.validate_on_submit():
         print('-' * 13, ' GET ', '-' * 13)
-        return render_template('check.html', title='sldkfjslf' , form1=subject_form)
+        return render_template("check.html")  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
 
     print('-' * 13, ' POST ', '-' * 13)
-    return render_template("check.html", form1=subject_form)#, data=subject_form.example.data)
+
+    print("request.values")
+    print(request.values)
+    print("request.form")
+    print(request.form)
+    print("getlist")
+    print(request.form.getlist('item'))
+    print("getlistgetlistgetlist")
+    for item in request.form.getlist('item'):
+        print(item)
+    print("items")
+    for item in request.form.items():
+        print(item)
+    printout = [request.values, request.form, request.form.getlist('item'), request.form.getlist('item'), request.form.items()]
+    # print("request.data")
+    # print(request.data)
+    # print("request.args")
+    # print(request.args)
+    # results = request.args['results']
+    return render_template("check.html", printout=printout)  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
 
 
 @app.template_filter("clean_date")
@@ -257,7 +261,7 @@ def try_jinja():
 
     return render_template(
         "try_jinja.html", _str=_str, _int=_int, _list=_list,
-        _dict=_dict, _tuple=_tuple, _bool=_bool, _class=_class,
+        _dict=_dict, _tuple=_tuple, _bool=_bool, _class=BooleanField,
         _class_obj=_class_obj, _function=_function, date=date,
         my_html=my_html
     )
