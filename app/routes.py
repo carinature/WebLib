@@ -165,7 +165,8 @@ def not_found(error):
 @app.route('/check', methods=['GET', 'POST'])
 def check_check():
     # subject_form = f.SearchSubject(request.form)
-    subject_form = f.SimpleForm()
+    fdict = {'one':'one' ,'two':'two' }
+    subject_form = f.SimpleForm(fdict)
     # reference_form = SearchReference(request.form)
     # if subject_form.submit_subject.data and subject_form.validate_on_submit():
     #     print('Great Success')
@@ -174,19 +175,13 @@ def check_check():
     # print("subject_form.errors")
     # flash(subject_form.errors)
 
-    if 'GET' == request.method:
+    # if 'GET' == request.method:
+    if not subject_form.validate_on_submit():
         print('-' * 13, ' GET ', '-' * 13)
-
         return render_template('check.html', form1=subject_form)
 
     print('-' * 13, ' POST ', '-' * 13)
-    if subject_form.validate_on_submit():
-        print(subject_form.example.data)
-        return render_template("check.html", form1=subject_form, data=subject_form.example.data)
-    else:
-        print("Validation Failed")
-        print(subject_form.errors)
-        return render_template('check.html', form1=subject_form, data=[])  # , form2=reference_form)
+    return render_template("check.html", form1=subject_form, data=subject_form.example.data)
 
 
 @app.template_filter("clean_date")

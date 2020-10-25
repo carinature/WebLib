@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm, RecaptchaField
+from markupsafe import Markup
 from wtforms import *
 from wtforms.validators import *
 
@@ -15,29 +16,58 @@ from wtforms.validators import *
 #                                 EqualTo,
 #                                 Length,
 #                                 URL, Optional)
+from wtforms.widgets import html_params
 
 EMPTY_LABEL = ''
 
 
-class Chkbx(FlaskForm):
-    bla = BooleanField(label='remember_me', default=False)
-    # def __init__(self):
-    #     super(Chkbx, self).__init__(*args, **kwargs)
+class ListWidget(object):
+    """
+    Renders a list of fields as a `ul` list.
+    This is used for fields which encapsulate many inner fields as subfields.
+    The widget will try to iterate the field to get access to the subfields and
+    call them to render them.
+
+    """
+    def __call__(self, field, **kwargs):
+        kwargs.setdefault('id', field.id)
+        html = ['<ul style=\'list-style-type: none;\'  %s >' % (html_params(**kwargs))]
+        for subfield in field:
+            html.append('<li>%s %s</li>' % (subfield(), subfield.label))
+        html.append('</ul>')
+        return Markup(''.join(html))
+
+#
+# class Chkbx(FlaskForm):
+#     bla = BooleanField(label='remember_me', default=False)
+#     # def __init__(self):
+#     #     super(Chkbx, self).__init__(*args, **kwargs)
 
 
 class MultiCheckboxField(SelectMultipleField):
-    widget = widgets.ListWidget(prefix_label=False)
+    def __init__(self, *args, **kwargs):
+        # super(SelectMultipleField, self).__init__()
+        super().__init__(*args, **kwargs)
+        self.choices=kwargs['choices']
+
+    widget = ListWidget()
     option_widget = widgets.CheckboxInput()
 
 
 class SimpleForm(FlaskForm):
-    string_of_files = ['one\r\ntwo\r\nthree\r\n']
-    list_of_files = string_of_files[0].split()
-    # create a list of value/description tuples
     checkbox = BooleanField('Select All')
-    # files = [(1,1),(2,2),(3,3)]
-    files = [(x, x) for x in list_of_files]
-    example = MultiCheckboxField('Label', choices=files)
+
+    def __init__(self,string_of_files):
+        super().__init__()
+
+        # string_of_files = kwargs['choices']
+
+        # string_of_files = ['one\r\ntwo\r\nthree\r\n']
+        # list_of_files = string_of_files[0].split()
+        # # create a list of value/description tuples
+        # files = [(1,1),(2,2),(3,3)]
+        # files = [(x, x) for x in list_of_files]
+        self.example = MultiCheckboxField('Label', choices=string_of_files)
 
 
 # class PurchaseForm(Form):
