@@ -131,11 +131,16 @@ class FilterForm(FlaskForm):
                             render_kw={
                                 'placeholder': '(e.g., 1.1 for chapter 1 verse 1, or leave empty for whole work)'}
                             )
-    fetch_full = BooleanField('Fetch full text',
-                              render_kw={'class': 'inline-radio', 'style': ''}
+    fetch_full = BooleanField('Fetch full text', id='fetch_full_chkbox',
+                              render_kw={'class': 'inline-radio', 'style': '',
+                                         # 'onClick': 'displayWarningFetchAllChkbx()',
+                                         'onClick':  # todo remove alert?
+                                             "alert('Attention! Checking this box will to attempt full text fetching, which can result in very highly loading times.')"}
                               )
-    attention_label = Label(text='(Attention: Check this box will to attempt full text fetching,'
-                                 + ' which can result in very highly loading times.)', field_id=fetch_full)
+    attention_label = Label(
+        text='(Attention: Checking this box will to attempt full text fetching,'
+             '<br>which can result in very highly loading times.)',
+        field_id=fetch_full)
     # submit = SubmitField('Fetch Results',
     #                      render_kw={'class': 'btn btn-lg btn-primary',
     #                      'style': 'margin-right: 5%; padding:1rem 4rem 1rem 4rem; position: sticky; float: right',

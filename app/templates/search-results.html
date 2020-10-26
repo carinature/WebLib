@@ -1,10 +1,13 @@
 {% extends 'layout.html' %}
 
-{% macro checkbox_input(label='', id='', name='') -%}
+<!------------------------------------------->
+<!---- Result Checkbox List Item Macro ------>
+<!------------------------------------------->
+{% macro checkbox_input(label='', id='', name='', value='') -%}
     <div class='form-group custom-control custom-switch ' style='text-align: left'>
         {#        <input type='{{ type }}' class='form-control' id='{{ id }}' name='{{ name }}'#}
         <input type='checkbox' class='custom-control-input' id='{{ id }}' name='{{ name }}'
-               value=''>
+               value="{{ value }}" checked>
         <label for='{{ id }}' class='custom-control-label padding'>{{ label }}</label>
     </div>
 {%- endmacro %}
@@ -40,42 +43,32 @@
     <!------------------------------------------->
     <!------ Result Subject Checkbox List ------->
     <!------------------------------------------->
-    <div class='container'>
-        <div class='form-group padding col-9' style='margin-left: 5%'>
+    {% if total %}
+        <div class='container'>
+            <div class='form-group padding col-9' style='margin-left: 5%'>
+                {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
+                <form action='#' method='POST'>
+                    {#  -----   Select All  -----   #}
+                    <div class='custom-control custom-switch ' style='text-align: left'>
+                        <input type='checkbox' class='custom-control-input' id='checkAll' checked
+                               onClick='filter_check_all(this)'>
+                        <label class='custom-control-label padding' for='checkAll'>
+                            <em><b>Select All the Results</b></em><br>
+                        </label>
+                    </div>
+                    <br><br>
+                    {#  -----   The Result subjects  -----   #}
+                    {% for item in results %}
+                        {#                        {% set c = item.C %}  <br>#}
+                        {{ checkbox_input(label=item.subject, id=item.subject, name='filter-opt', value=item.C) }}<br>
+                        {#                        {{ c }}#}
+                    {% endfor %}
 
-            {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
-            <form action='#' method='POST'>
-                <div class='custom-control custom-switch ' style='text-align: left'>
-                    <input type='checkbox' class='custom-control-input' id='checkAll' onClick='filter_check_all(this)'>
-                    <label class='custom-control-label padding' for='checkAll'>
-                        <b>All the Results</b><br>
-                    </label>
-                </div>
-                <br><br><br>
-
-                {% for item in results %}
-                    {{ checkbox_input(label=item.subject, id=item.subject, name='filter-opt') }}
-                    <br>
-                {% endfor %}
-
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
 
-
-    {% if prev_url %}
-        <a href='{{ prev_url }}'>Prev</a>
     {% endif %}
-    &nbsp &nbsp
-    {% if next_url %}
-        <a href='{{ next_url }}'>Next</a>
-    {% endif %}
-
-    <br><br><br><br><br>
-    {% for i in range(11) %}
-        {{ i }}
-    {% endfor %}
-
 
     {#<div>
     {% block app_content %}

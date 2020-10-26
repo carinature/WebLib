@@ -33,15 +33,22 @@
             </tbody>
         </table>
 
-{# todo make bigger #}
+        {# todo make bigger #}
+        <!------------------------------------------->
+        <!---------- Prev & Next Buttons ------------>
+        <!------------------------------------------->
         {% if prev_url %}
-            <a href="{{ prev_url }}">Prev</a>
+            <a href='{{ prev_url }}'>Prev</a>
         {% endif %}
         &nbsp &nbsp
         {% if next_url %}
-            <a href="{{ next_url }}">Next</a>
+            <a href='{{ next_url }}'>Next</a>
         {% endif %}
 
+        <br><br><br><br><br>
+        {% for i in range(11) %}
+            {{ i }}
+        {% endfor %}
 
     </div>
 

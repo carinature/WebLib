@@ -34,8 +34,8 @@ def search_results(search_word=''):
         return render_template('search-results.html',
                                title='',
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               results=['THIS', 'SHOULD', 'BE', 'SOMETHING', 'ELSE'],
-                               total=13,
+                               results=[],
+                               total=0,
                                search_bar=search_bar
                                )
 
@@ -47,7 +47,7 @@ def search_results(search_word=''):
     page = request.args.get('page', 1, type=int)
     subjects_query: Query = m.TextSubject.query
     subjects_filter: Query = subjects_query.filter(m.TextSubject.subject.like(search))
-    subjects_ordered: Query = subjects_filter.order_by(m.TextSubject.Csum)
+    subjects_ordered: Query = subjects_filter.order_by(m.TextSubject.Csum.desc())
     print('*' * 13)
     print(subjects_query)
     print('*' * 13)
@@ -55,17 +55,17 @@ def search_results(search_word=''):
     print('.' * 13)
     print(subjects_ordered)
 
-    subjects = subjects_ordered.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
-    # subjects = subjects_ordered.all()
+    # subjects = subjects_ordered.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
+    subjects = subjects_ordered.all()
 
     print('=' * 13)
-    for s in subjects.items:
-        print(s)
+    for s in subjects:
+        print(s.subject, ' ', s.Csum)
 
     # subjects_paginated = subjects_ordered.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
     # subjects = [f.MultiCheckboxField() for sp in subjects_paginated]
-    next_url = url_for('search_results', search_word=search_word, page=subjects.next_num) if subjects.has_next else None
-    prev_url = url_for('search_results', search_word=search_word, page=subjects.prev_num) if subjects.has_prev else None
+    # next_url = url_for('search_results', search_word=search_word, page=subjects.next_num) if subjects.has_next else None
+    # prev_url = url_for('search_results', search_word=search_word, page=subjects.prev_num) if subjects.has_prev else None
 
     # print(search_bar['subject_form'].subject_keyword_1.raw_data)
     # print(search_bar['subject_form'].subject_keyword_2.raw_data)
@@ -78,11 +78,11 @@ def search_results(search_word=''):
     return render_template('search-results.html', title=f'Search Result for: {search_word}',
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            method='post',
-                           results=subjects.items,
-                           total=subjects.total,
+                           results=subjects,
+                           total=len(subjects),
                            search_bar=search_bar,
-                           next_url=next_url,
-                           prev_url=prev_url,
+                           # next_url=next_url,
+                           # prev_url=prev_url,
                            chkbx_class=BooleanField,
                            # chkbx_class = f.Chkbx,
 
