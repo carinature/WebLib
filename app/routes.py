@@ -17,76 +17,70 @@ print('~' * 100)
 
 
 # ++++++++++++  search results and filtering page ++++++++++++
+# @app.route('/search-results/<string:search_word>/<int:page>', methods=['GET', 'POST'])
+# @app.route('/search-results/<int:page>', methods=['GET', 'POST'])
 @app.route('/search-results/<string:search_word>', methods=['GET', 'POST'])
 @app.route('/search-results', methods=['GET', 'POST'])
-def search_results(search_word=''):
+def search_results(search_word='', page=''):
+    print('.' * 13)
+    print(page)
+
     # todo put here the "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
     search_bar: Dict = utils.init_search_bar()
     subject_form = search_bar['subject_form']
     filter_form = search_bar['filter_form']
 
-    # if 'GET' == request.method:
     if not subject_form.validate_on_submit():
-        #     # print('^' * 13, ' not validated on submit ', '^' * 13)
-        #     redirect(url_for('not_found'))
-
-        print('-' * 13, ' GET ', '-' * 13)
         return render_template('search-results.html',
-                               title='',
-                               description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                               results=[],
-                               total=0,
-                               search_bar=search_bar
-                               )
+                           title='',
+                           # description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           results=[],
+                           total=0,
+                           search_bar=search_bar
+                           )
+
+    # if 'GET' == request.method:
+    # if not subject_form.validate_on_submit():
+    #     print('-' * 13, ' GET ', '-' * 13)
+    #     if not search_word:
+    #         print('=' * 13)
+    #         print('not search_word')
+    #     print('^' * 13, ' not validated on submit ', '^' * 13)
+    #     print('^' * 13, search_word, '^' * 13)
+    #     print('^' * 13, page, '^' * 13)
+    #     redirect(url_for('not_found'))
 
     print('-' * 13, ' POST ', '-' * 13)
     search_word = subject_form.subject_keyword_1.data
-    print(search_word)
+    # print(search_word)
+    # print(search_bar['subject_form'].subject_keyword_1.raw_data)
+
     # search = f'%{search_word}%'
     search = '%{}%'.format(search_word)
     page = request.args.get('page', 1, type=int)
     subjects_query: Query = m.TextSubject.query
     subjects_filter: Query = subjects_query.filter(m.TextSubject.subject.like(search))
     subjects_ordered: Query = subjects_filter.order_by(m.TextSubject.Csum.desc())
-    print('*' * 13)
-    print(subjects_query)
-    print('*' * 13)
-    print(subjects_filter)
     print('.' * 13)
-    print(subjects_ordered)
+    # print(request.args['results'])
+    # results = request.args['results']
 
-    # subjects = subjects_ordered.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
-    subjects = subjects_ordered.all()
-
-    print('=' * 13)
-    for s in subjects:
-        print(s.subject, ' ', s.Csum)
-
-    # subjects_paginated = subjects_ordered.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
-    # subjects = [f.MultiCheckboxField() for sp in subjects_paginated]
+    # subjects = subjects_ordered.paginate(page, app.config['ITEMS_PER_PAGE'], False)
     # next_url = url_for('search_results', search_word=search_word, page=subjects.next_num) if subjects.has_next else None
     # prev_url = url_for('search_results', search_word=search_word, page=subjects.prev_num) if subjects.has_prev else None
 
-    # print(search_bar['subject_form'].subject_keyword_1.raw_data)
-    # print(search_bar['subject_form'].subject_keyword_2.raw_data)
-    # print('^' * 15)
-    # print(search_word)
-
-    # print(request.args['results'])
-    # results = request.args['results']
-    # listlist = [CheckboxInput(label='bla', )]
+    subjects = subjects_ordered.all()
     return render_template('search-results.html', title=f'Search Result for: {search_word}',
-                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           # description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            method='post',
                            results=subjects,
                            total=len(subjects),
+                           # results=subjects.items,
+                           # total=len(subjects_filter.all()),
                            search_bar=search_bar,
                            # next_url=next_url,
                            # prev_url=prev_url,
-                           chkbx_class=BooleanField,
-                           # chkbx_class = f.Chkbx,
-
-                           # listlist=listlist
+                           search_word=search_word
                            )
 
     # todo
@@ -145,6 +139,7 @@ def subject_list():
 
 # ++++++++++++  Error Handling ++++++++++++
 @app.errorhandler(404)
+@app.route('/page-not-found')
 def not_found(error):
     resp = make_response(render_template('page_not_found.html',
                                          title="Tiresias Project - Page not Found",
