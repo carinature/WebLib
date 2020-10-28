@@ -11,7 +11,6 @@ from . import db
 
 Base: SQLAlchemy.__base__ = db.Model
 
-
 # Base:SQLAlchemy.Query = db.Model
 # Base:sqlalchemy.orm = db.Model
 # Base:SQLAlchemy = db.Model

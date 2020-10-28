@@ -3,7 +3,7 @@
 * */
 function filter_check_all(source) {
     checkboxes = document.getElementsByName('filter-opt');
-    for (var i = 0, n = checkboxes.length; i < n; i++) {
+    for (let i = 0, n = checkboxes.length; i < n; i++) {
         checkboxes[i].checked = source.checked;
     }
 }
@@ -13,15 +13,47 @@ function filter_check_all(source) {
 * */
 function displayWarningFetchAllChkbx() {
   // Get the checkbox
-  var checkBox = document.getElementById("fetch_full_chkbox");
+  let checkBox = document.getElementById("fetch_full_chkbox");
   // Get the output text
-  var text = document.getElementById("fetch_full_warn");
+  let text = document.getElementById("fetch_full_warn");
 
   // If the checkbox is checked, display the output text
   if (checkBox.checked){
     text.style.display = "block";
   } else {
     text.style.display = "none";
+  }
+}
+
+
+function toggle_show_element_by_id(elm_id) {
+  // Get the element
+  let elm = document.getElementById(elm_id);
+
+  // If the element is shown, hide it. Otherwise, display
+  if ('none'===elm.style.display){
+    elm.style.display = "block";
+  } else {
+    elm.style.display = "none";
+  }
+}
+
+
+
+
+function more_less_info(btn_id, elm_id) {
+  // Get the checkbox
+  let btn = document.getElementById(btn_id);
+  // Get the element
+  let elm = document.getElementById(elm_id);
+
+  // If the element is shown, hide it. Otherwise, display
+  if ('none'===elm.style.display){
+    elm.style.display = "block";
+    btn.childNodes[0].nodeValue = 'Show Less'
+  } else {
+    elm.style.display = "none";
+    btn.childNodes[0].nodeValue = 'Show More'
   }
 }
 

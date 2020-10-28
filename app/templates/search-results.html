@@ -1,17 +1,5 @@
 {% extends 'layout.html' %}
 
-<!------------------------------------------->
-<!---- Result Checkbox List Item Macro ------>
-<!------------------------------------------->
-{% macro checkbox_input(label='', id='', name='', value='') -%}
-    <div class='form-group custom-control custom-switch ' style='text-align: left; '>
-        {#        <input type='{{ type }}' class='form-control' id='{{ id }}' name='{{ name }}'#}
-        <input type='checkbox' class='custom-control-input' id='{{ id }}' name='{{ name }}'
-               value="{{ value }}" checked>
-        <label for='{{ id }}' class='custom-control-label padding'>{{ label }}</label>
-    </div>
-{%- endmacro %}
-
 {% block app_content %}
 
     <!------------------------------------------->
@@ -89,3 +77,15 @@
     <!-- scripts -->
     <script src='../static/js/script.js'></script>
 {% endblock %}
+
+<!------------------------------------------->
+<!---- Result Checkbox List Item Macro ------>
+<!------------------------------------------->
+{% macro checkbox_input(label='', id='', name='', value='') -%}
+    <div class='form-group custom-control custom-switch ' style='text-align: left; '>
+        {#        <input type='{{ type }}' class='form-control' id='{{ id }}' name='{{ name }}'#}
+        <input type='checkbox' class='custom-control-input' id='{{ id }}' name='{{ name }}'
+               value="{{ value }}" checked>
+        <label for='{{ id }}' class='custom-control-label padding'>{{ label }}</label>
+    </div>
+{%- endmacro %}

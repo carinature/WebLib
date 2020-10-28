@@ -13,11 +13,12 @@
         {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
 
 
+{#        <table border="1" class="dataframe">#}
         <table class='table table-hover'>
             {#   <thead style='  background-color: var(--accent-color); text-align: right;'>#}
             <thead style='  background-color: var(--secondary-color-light)'>
             <tr>
-                {#   <th></th> {# this column is for the index #}
+                {#  this column is for the index #}
                 <th>Subject</th>
                 <th>Number of References in DB</th>
             </tr>
@@ -25,7 +26,7 @@
             <tbody>
             {% for row in subjects.items %}
                 <tr>
-                    {#     <th>{{ loop.index0 }}</th>#}
+                    {# {{ loop.index0 }}</th>#}
                     <td>{{ row.subject }}</td>
                     <td style="text-align: center">{{ row.Csum }}</td>
                 </tr>
@@ -52,31 +53,10 @@
 
     </div>
 
-    {#
-    {% macro table(header, rows, columns) %}
-#}
-    {#    {% macro table(header, rows, columns, ) %}#}{#
-
-    \begin{tabular}{(formatting, later)}
-      {{ row(header) }}
-      {% for row in rows %}
-        {% for column in columns %}
-        {{ caller(row, column) }} {% if loop.last %}\\{% else %}&{%endif%}
-        {% endfor %}
-      {% endfor %}
-    \end{tabular}
-    {% endmacro %}
-
-    {% call(row, column) table.table(header, rows, columns) %}
-  Content at row = {{row}}, column = {{column}}
-{% endcall %}
-#}
-
-    {#    <table border="1" class="dataframe">#}
-
-
-
 {% endblock %}
 
+{#<script src="../static/js/script.js"></script>#}
 
-<script src="../static/js/script.js"></script>
+
+
+

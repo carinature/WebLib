@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+{% block app_content %}
+
+{#    {% for  clist in  result_clists %}#}
+{#        ==========================<br>{{ clist }}#}
+{#    {% endfor %}#}
+
+    {% for res in results %}
+     {{ temp_result_item(
+                item_index=loop.index,
+                subject=res.subject,
+                csum=res.Csum,
+                clist=result_clists[loop.index],
+                clist_full=res.C ) }}<br>
+    {% endfor %}
+
+
+
+
+    <div class="container-fluid padding">
+        <div class="row welcome text-center">
+            <div class="col-12">
+                <h1 class="display-4 welcome text-center padding">There are {{ x|value_or_zero }} results.</h1>
+                <h6>{{ y|value_or_zero }} are highly validates results.</h6>
+                <h6>{{ z|value_or_zero }} are highly validates results.</h6>
+                <h6>{{ w|value_or_zero }} are highly validates results.</h6>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+
+    {% for category in categories %}
+        {{ category_head(category['name']) }}
+        {% for res in category['results'] %}
+            {{ result_item(loop.index, res['author'], res['title'], res['refs_num'], res['refs']) }}
+            {#            {{ temp_result_item(item_index=loop.index,#}
+            {#            subject=res.subject,#}
+            {#            csum=res.Csum,#}
+            {#            clist='soon',#}
+            {#            clist_full=res.C) }}<br> #}
+        {% endfor %}
+    {% endfor %}
+
+    <script src='../static/js/script.js'></script>
+
+{% endblock %}
+
+
+{% macro category_head(category='', res_num='', name='', value='') -%}
+    <div class="container-fluid padding">
+        <div class="col-12" style="background-color: var(--secondary-color-light)"> <!--todo move the style to css-->
+            <h1 class="">{{ category }} {{ res_num }}</h1>
+            {#            <h1 class="display-4 welcome text-center">Tiresias: The Ancient Mediterranean Religions Source Database</h1>#}
+        </div>
+    </div>
+{%- endmacro %}
+
+{% macro result_item(item_index='', author='', title='', refs_num='', ref='', name='', value='') -%}
+    <div class="container-fluid padding">
+        {#        <div class="col-12" style="background-color: var(--secondary-color-light)"> <!--todo move the style to css-->#}
+        <h3 class="">{{ item_index }} {{ author }}, <em>{{ title }}</em>, {{ ref }} </h3>
+        {#        </div>#}
+    </div>
+{%- endmacro %}
+
+{% macro temp_result_item(item_index='', subject='', csum='', clist='', clist_full='' ) -%}
+    <div class="container-fluid ">
+        {#        <div class="col-12" style="background-color: var(--secondary-color-light)"> <!--todo move the style to css-->#}
+        <h3 class="" style="padding-bottom: 10px;">{{ item_index }}. <em>{{ subject }}</em></h3>
+
+        {% set elm_id=item_index~csum %}
+
+        {% set btn_id=item_index~item_index~csum %}
+
+        <button id={{ btn_id }} class="" style="padding:.5em; background-color: var(--accent-color)"
+                onclick="more_less_info('{{ btn_id}}','{{elm_id }}')">Show More
+        </button>
+        <br><br>
+        <p style="display: none" id={{ elm_id }}>
+            csum: {{ csum }} <br>
+            {{ clist_full }} <br>
+            clist: {{ clist }} <br>
+
+        </p>
+    </div>
+{%- endmacro %}
+
+{#<script src="../static/js/script.js"></script>#}

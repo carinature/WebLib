@@ -3,7 +3,9 @@ from typing import List, Dict
 
 from flask import current_app as app
 from flask import render_template, make_response, redirect, url_for, request
+from sqlalchemy import func
 from sqlalchemy.orm import Query
+from sqlalchemy.sql.functions import count
 from wtforms import BooleanField, StringField
 from wtforms.widgets import CheckboxInput
 
@@ -14,6 +16,116 @@ from . import models as m
 from . import utilities as utils
 
 print('~' * 100)
+
+
+# ++++++++++++  final (filtered) results page ++++++++++++
+@app.route('/results', methods=['GET', 'POST'])
+def final_results(search_word='', page=''):
+    categories = [
+        {'name': 'Highly Validated',
+         'results': [
+             {'title': 'title',
+              'author': 'Author',
+              'ref_num': 'ref_num',
+              'refs': 'refs'
+              }
+         ]
+         },
+        {'name': 'Validated',
+         'results': [
+             {'title': 'title',
+              'author': 'Author',
+              'ref_num': 'ref_num',
+              'refs': 'refs'
+              }
+         ]
+         },
+        {'name': 'Unvalidated',
+         'results': [
+             {'title': 'title',
+              'author': 'Author',
+              'ref_num': 'ref_num',
+              'refs': 'refs'
+              }
+         ]
+         }
+    ]
+    search = '%{}%'.format('woman')
+
+    # todo this shoult be replaced by results from the previous page
+    table: m.Base = m.TextSubject
+    subject_col = m.TextSubject.subject
+    C_col = m.TextSubject.C
+    Csum_col = m.TextSubject.Csum
+    txt_subj_query: Query = m.TextSubject.query
+    # q_with_ent: Query = txt_subj_query.with_entities(subject_col, count())
+    q_with_ent: Query = txt_subj_query
+    q_with_ent_filter: Query = q_with_ent.filter(subject_col.like(search))
+    q_with_ent_filter_group: Query = q_with_ent_filter
+    # q_with_ent_filter_group: Query = q_with_ent_filter.group_by(subject_col)
+    q_with_ent_filter_group_order: Query = q_with_ent_filter_group.order_by(Csum_col.desc())
+
+
+    texts_query: Query = m.TextText.query
+    txts_subject_col = m.TextText.subject
+    txts_C_col = m.TextText.C
+    txts_Csum_col = m.TextText.Csum
+    txts_q_with_ent: Query = txt_subj_query.with_entities(txts_Csum_col, count())
+    # txts_q_with_ent: Query = texts_query.with_entities(txts_subject_col, txts_C_col, txts_Csum_col)
+    txts_q_with_ent_filter: Query = txts_q_with_ent.filter(subject_col.like(search))
+    txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter
+    # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter.group_by(subject_col)
+    txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(Csum_col.desc())
+
+    # print('\ntable:\n', table)
+    # print('\nsubject_col:\n', subject_col)
+    # print('\nC_col:\n', C_col)
+    # print('\ntxt_subj_query:\n', txt_subj_query)
+    # print('\nq_with_ent:\n', q_with_ent)
+    # print('\nq_with_ent_filter:\n', q_with_ent_filter)
+    # print('\nq_with_ent_filter_group:\n', q_with_ent_filter_group)
+    # print('\nq_with_ent_filter_group_order:\n', q_with_ent_filter_group_order)
+
+    subjects = q_with_ent_filter_group_order.all()
+    subjects_clists = []
+    for subject in subjects:
+        temp_clist = str(subject.C).split(',')
+        clist: List[str] = []  # splitting the C list into single Cs
+        for i in range(len(temp_clist)):
+            c = temp_clist[i]
+            if '-' in c:
+                cc = c.split('-')
+                for i in range(int(cc[0]), int(cc[1]) + 1):
+                    clist.append(i)
+            else:
+                clist.append(int(c))
+        # print(clist)
+        subjects_clists.append(clist)
+    # print(subjects_clists)
+        # if subject.Csum == len(clist):
+        #     print('#'*20)
+        #     print(temp_clist)
+        #     print(clist)
+        #     print(subject.Csum)
+
+        # for c in clist:
+
+    results = q_with_ent_filter_group_order.all()
+    result_clists = subjects_clists
+    res_dict: Dict = {}
+    for i in range(len(results)):
+        res_dict[results[i].subject] = result_clists[i]
+        # for c in result_clists[i]:
+
+
+    return render_template('full-results.html',
+                           # title='Final Results',
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           categories=categories,
+                           results=results,
+                           result_clists=result_clists,
+                           res_dict = res_dict
+                           )
 
 
 # ++++++++++++  search results and filtering page ++++++++++++
@@ -32,12 +144,12 @@ def search_results(search_word='', page=''):
 
     if not subject_form.validate_on_submit():
         return render_template('search-results.html',
-                           title='',
-                           # description="Tiresias: The Ancient Mediterranean Religions Source Database",
-                           results=[],
-                           total=0,
-                           search_bar=search_bar
-                           )
+                               title='',
+                               # description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               results=[],
+                               total=0,
+                               search_bar=search_bar
+                               )
 
     # if 'GET' == request.method:
     # if not subject_form.validate_on_submit():
@@ -186,18 +298,25 @@ def check_check():
     print("items")
     for item in request.form.items():
         print(item)
-    printout = [request.values, request.form, request.form.getlist('item'), request.form.getlist('item'), request.form.items()]
+    printout = [request.values, request.form, request.form.getlist('item'), request.form.getlist('item'),
+                request.form.items()]
     # print("request.data")
     # print(request.data)
     # print("request.args")
     # print(request.args)
     # results = request.args['results']
-    return render_template("check.html", printout=printout)  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
+    return render_template("check.html",
+                           printout=printout)  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
 
 
 @app.template_filter("clean_date")
 def clean_date(dt):
     return dt.strftime("%d %b %Y")
+
+
+@app.template_filter("value_or_zero")
+def value_or_zero(val):
+    return val if val else 0
 
 
 @app.route("/try_jinja")
