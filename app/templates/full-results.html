@@ -7,7 +7,7 @@
                 item_index=loop.index,
                 subject=res.subject,
                 csum=res.Csum,
-                clist=result_clists[loop.index],
+                clist=result_clists[loop.index0],
                 clist_full=res.C ) }}<br>
     {% endfor %}
 
@@ -34,7 +34,7 @@
             {#            {{ temp_result_item(item_index=loop.index,#}
             {#            subject=res.subject,#}
             {#            csum=res.Csum,#}
-            {#            clist='soon',#}
+{#                clist=result_clists[loop.index0],#}
             {#            clist_full=res.C) }}<br> #}
         {% endfor %}
     {% endfor %}

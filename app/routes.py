@@ -69,8 +69,8 @@ def final_results(search_word='', page=''):
     texts_query: Query = m.TextText.query
     txts_subject_col = m.TextText.subject
     txts_C_col = m.TextText.C
-    txts_Csum_col = m.TextText.Csum
-    txts_q_with_ent: Query = txt_subj_query.with_entities(txts_Csum_col, count())
+    txts_num_col = m.TextText.number
+    txts_q_with_ent: Query = txt_subj_query.with_entities(txts_num_col, count())
     # txts_q_with_ent: Query = texts_query.with_entities(txts_subject_col, txts_C_col, txts_Csum_col)
     txts_q_with_ent_filter: Query = txts_q_with_ent.filter(subject_col.like(search))
     txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter
