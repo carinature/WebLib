@@ -1,4 +1,5 @@
 from datetime import time
+from itertools import groupby
 from typing import List, Dict
 
 from flask import current_app as app
@@ -50,98 +51,132 @@ def final_results(search_word='', page=''):
          ]
          }
     ]
-    search = '%{}%'.format('woman')
+    # search = '%{}%'.format('woman')
+    search = '%{}%'.format('divination')
 
     # todo this shoult be replaced by results from the previous page
-    # ------------  search subject in TextSubject, return C (list)
-    table: m.Base = m.TextSubject
-    subject_col = m.TextSubject.subject
-    C_col = m.TextSubject.C
-    Csum_col = m.TextSubject.Csum
-    txt_subj_query: Query = m.TextSubject.query
-    # ............  return C (list)
-    # q_with_ent: Query = txt_subj_query.with_entities(subject_col, count())
-    q_with_ent: Query = txt_subj_query
-    q_with_ent_filter: Query = q_with_ent.filter(subject_col.like(search))
-    q_with_ent_filter_group: Query = q_with_ent_filter
-    # q_with_ent_filter_group: Query = q_with_ent_filter.group_by(subject_col)
-    q_with_ent_filter_group_order: Query = q_with_ent_filter_group.order_by(Csum_col.desc())
-    # print('\ntable:\n', table)
-    # print('\nsubject_col:\n', subject_col)
-    # print('\nC_col:\n', C_col)
-    # print('\ntxt_subj_query:\n', txt_subj_query)
-    # print('\nq_with_ent:\n', q_with_ent)
-    # print('\nq_with_ent_filter:\n', q_with_ent_filter)
-    # print('\nq_with_ent_filter_group:\n', q_with_ent_filter_group)
-    # print('\nq_with_ent_filter_group_order:\n', q_with_ent_filter_group_order)
 
+    # ---------------------------------------------------------------------
+    # -------- search subject in TextSubject, return C (list) ------------
+    # -------------------------------------------------------------------
+    # print('@' * 20)
+    # table: m.Base = m.TextSubject
+    # subject_col = m.TextSubject.subject
+    # C_col = m.TextSubject.C
+    # Csum_col = m.TextSubject.Csum
+    # txt_subj_query: Query = m.TextSubject.query
+    # # ............  return C (list)
+    # # q_with_ent: Query = txt_subj_query.with_entities(subject_col, count())
+    # q_with_ent: Query = txt_subj_query
+    # q_with_ent_filter: Query = q_with_ent.filter(subject_col.like(search))
+    # q_with_ent_filter_group: Query = q_with_ent_filter
+    # # q_with_ent_filter_group: Query = q_with_ent_filter.group_by(subject_col)
+    # q_with_ent_filter_group_order: Query = q_with_ent_filter_group.order_by(Csum_col.desc())
+    # # print('\ntable:\n', table)
+    # # print('\nsubject_col:\n', subject_col)
+    # # print('\nC_col:\n', C_col)
+    # # print('\ntxt_subj_query:\n', txt_subj_query)
+    # # print('\nq_with_ent:\n', q_with_ent)
+    # # print('\nq_with_ent_filter:\n', q_with_ent_filter)
+    # # print('\nq_with_ent_filter_group:\n', q_with_ent_filter_group)
+    # # print('\nq_with_ent_filter_group_order:\n', q_with_ent_filter_group_order)
+    #
+    # subjects = q_with_ent_filter_group_order.all()
+    # subjects_clists = []
+    # for subject in subjects:
+    #     temp_clist = str(subject.C).split(',')
+    #     clist: List[str] = []  # splitting the C list into single Cs
+    #     for i in range(len(temp_clist)):
+    #         c = temp_clist[i]
+    #         if '-' in c:
+    #             cc = c.split('-')
+    #             for i in range(int(cc[0]), int(cc[1]) + 1):
+    #                 clist.append(i)
+    #         else:
+    #             clist.append(int(c))
+    #     # print(clist)
+    #     subjects_clists.append(clist)
+    # # print(subjects_clists)
+    # # if subject.Csum == len(clist):
+    # #     print('#'*20)
+    # #     print(temp_clist)
+    # #     print(clist)
+    # #     print(subject.Csum)
+    #
+    # # for c in clist:
 
-    # ------------  search subject in TextText
-
+    # ---------------------------------------------------------------
+    # ---------------  search subject in TextText -------------------
+    # ---------------------------------------------------------------
+    txts_table = m.TextText
     txts_subject_col = m.TextText.subject
     txts_C_col = m.TextText.C
-    txts_num_col = m.TextText.number
-    txts_ref_col = m.TextText.ref
-    txts_bib_info_col = m.TextText.book_biblio_info
-    txts_page_col = m.TextText.page
-    
+    num_col = m.TextText.number
+    ref_col = m.TextText.ref
+    bib_info_col = m.TextText.book_biblio_info
+    page_col = m.TextText.page
+
     # ............  return C (list)
     texts_query: Query = m.TextText.query
-    # txts_q_with_ent: Query = texts_query.with_entities(txts_num_col, count())
-    txts_q_with_ent: Query = texts_query.with_entities(txts_subject_col, txts_C_col)
-    txts_q_with_ent_filter: Query = txts_q_with_ent.filter(subject_col.like(search))
+    # txts_q_with_ent: Query = texts_query.with_entities(txts_subject_col, count(txts_subject_col),
+    # txts_q_with_ent: Query = texts_query.with_entities(num_col, txts_subject_col, ref_col, count(bib_info_col), page_col)  # count())
+    txts_q_with_ent: Query = texts_query.with_entities(num_col, txts_subject_col, ref_col, bib_info_col, page_col)  # count())
+    txts_q_with_ent_filter: Query = txts_q_with_ent.filter(txts_subject_col.like(search))
     txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter
-    # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter.group_by(subject_col)
-    txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(Csum_col.desc())
+    # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter.group_by(txts_num_col, txts_subject_col)
+    # txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(num_col)
+    txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(num_col, bib_info_col)
 
-    # print('\ntable:\n', table)
-    # print('\nsubject_col:\n', subject_col)
-    # print('\nC_col:\n', C_col)
-    # print('\ntxt_subj_query:\n', txt_subj_query)
-    # print('\nq_with_ent:\n', q_with_ent)
-    # print('\nq_with_ent_filter:\n', q_with_ent_filter)
-    # print('\nq_with_ent_filter_group:\n', q_with_ent_filter_group)
-    # print('\nq_with_ent_filter_group_order:\n', q_with_ent_filter_group_order)
+    # print('#' * 20)
+    # scalar = txts_q_with_ent_filter_group_order.as_scalar()
+    # # print(txts_q_with_ent_filter_group_order)
+    # # print(scalar)
+    # print(txts_table.number)
+    resdict: Dict = {}
+    resdict2: Dict = {}
+    iterator_groupby = \
+        groupby(txts_q_with_ent_filter_group_order, key=lambda txts_table: (txts_table.number))#, txts_table.book_biblio_info))
+    for k, g in iterator_groupby:
+        resdict[k] = [(txts_table.subject, txts_table.book_biblio_info, txts_table.ref) for txts_table in g]
+        # thelist=[txts_table.subject for txts_table in g]
+        # resdict2[k] = list(thelist)
+        # print('{}: {}'.format(k, '\n\t\t'.join( thelist)))
+        # print('{}: {}'.format(k, '\n\t\t'.join(txts_table.subject for txts_table in g)))
+        # print('-' * 20)
+        # print(k, g)
+        # print('.' * 20)
+        # print(k, resdict[k])
 
-    subjects = q_with_ent_filter_group_order.all()
-    subjects_clists = []
-    for subject in subjects:
-        temp_clist = str(subject.C).split(',')
-        clist: List[str] = []  # splitting the C list into single Cs
-        for i in range(len(temp_clist)):
-            c = temp_clist[i]
-            if '-' in c:
-                cc = c.split('-')
-                for i in range(int(cc[0]), int(cc[1]) + 1):
-                    clist.append(i)
-            else:
-                clist.append(int(c))
-        # print(clist)
-        subjects_clists.append(clist)
-    # print(subjects_clists)
-        # if subject.Csum == len(clist):
-        #     print('#'*20)
-        #     print(temp_clist)
-        #     print(clist)
-        #     print(subject.Csum)
+    # for k, g in groupby(session.query(Stuff).order_by(Stuff.column1, Stuff.column2), key=lambda stuff: stuff.column1):
+    #     print('{}: {}'.format(k, ','.join(stuff.column2 for stuff in g)))
 
-        # for c in clist:
+    # return str(scalar + '              ' + txts_q_with_ent_filter_group_order + '           ' + scalar)
 
-    results = q_with_ent_filter_group_order.all()
-    result_clists = subjects_clists
-    res_dict: Dict = {}
-    for i in range(len(results)):
-        res_dict[results[i].subject] = result_clists[i]
-        # for c in result_clists[i]:
-
-
+    # print('\ntxts_subject_col:\n', txts_subject_col)
+    # print('\ntxts_C_col:\n', txts_C_col)
+    # print('\ntxts_subject_col:\n', txts_subject_col)
+    # print('\ntexts_query:\n', texts_query)
+    # print('\ntxts_q_with_ent_filter:\n', txts_q_with_ent_filter)
+    # print('\ntxts_q_with_ent_filter_group:\n', txts_q_with_ent_filter_group)
+    # print('\ntxts_q_with_ent_filter_group_order:\n', txts_q_with_ent_filter_group_order)
+    #
+    #
+    # results = txts_q_with_ent_filter_group_order.all()
+    #
+    # # result_clists = subjects_clists
+    # # res_dict: Dict = {}
+    # # for i in range(len(results)):
+    # #     res_dict[results[i].subject] = result_clists[i]
+    # #     # for c in result_clists[i]:
+    #
+    #
     return render_template('full-results.html',
                            # title='Final Results',
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            categories=categories,
-                           results=results,
-                           result_clists=result_clists,
-                           res_dict = res_dict
+                           results=resdict,
+                           # result_clists=result_clists,
+                           # res_dict = res_dict
                            )
 
 

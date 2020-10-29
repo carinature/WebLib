@@ -2,16 +2,23 @@
 
 {% block app_content %}
 
-    {% for res in results %}
-     {{ temp_result_item(
-                item_index=loop.index,
-                subject=res.subject,
-                csum=res.Csum,
-                clist=result_clists[loop.index0],
-                clist_full=res.C ) }}<br>
+    {% for res, list in results.items() %}
+        res: <br>
+        {{ res }} <br>
+
+        {% for field in list %}
+            {{ field }}
+            <br>
+        {% endfor %}
+        <br><br><br>
+        {#     {{ temp_result_item(#}
+        {#                item_index=loop.index,#}
+        {#                subject=res.subject,#}
+        {#                csum=res.Csum,#}
+        {#                clist=result_clists[loop.index0],#}
+        {#                clist_full=res.C ) }}<br>#}
+
     {% endfor %}
-
-
 
 
     <div class="container-fluid padding">
@@ -34,7 +41,7 @@
             {#            {{ temp_result_item(item_index=loop.index,#}
             {#            subject=res.subject,#}
             {#            csum=res.Csum,#}
-{#                clist=result_clists[loop.index0],#}
+            {#                clist=result_clists[loop.index0],#}
             {#            clist_full=res.C) }}<br> #}
         {% endfor %}
     {% endfor %}
@@ -67,15 +74,33 @@
         <h3 class="" style="padding-bottom: 10px;">{{ item_index }}. <em>{{ subject }}</em></h3>
 
         {% set elm_id=item_index~csum %}
-
         {% set btn_id=item_index~item_index~csum %}
-
         <button id={{ btn_id }} class="" style="padding:.5em; background-color: var(--accent-color)"
-                onclick="more_less_info('{{ btn_id}}','{{elm_id }}')">Show More
+                onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">Show More
         </button>
         <br><br>
         <p style="display: none" id={{ elm_id }}>
             csum: {{ csum }} <br>
+            {{ clist_full }} <br>
+            clist: {{ clist }} <br>
+
+        </p>
+    </div>
+{%- endmacro %}
+
+{% macro temp_txt_item(item_index='', subject='', num='', clist='', clist_full='' ) -%}
+    <div class="container-fluid ">
+        {#        <div class="col-12" style="background-color: var(--secondary-color-light)"> <!--todo move the style to css-->#}
+        <h3 class="" style="padding-bottom: 10px;">{{ item_index }}. <em>{{ subject }}</em></h3>
+
+        {% set elm_id=item_index~num %}
+        {% set btn_id=item_index~item_index~num %}
+        <button id={{ btn_id }} class="" style="padding:.5em; background-color: var(--accent-color)"
+                onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">Show More
+        </button>
+        <br><br>
+        <p style="display: none" id={{ elm_id }}>
+            csum: {{ num }} <br>
             {{ clist_full }} <br>
             clist: {{ clist }} <br>
 
