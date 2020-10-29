@@ -51,8 +51,8 @@ def final_results(search_word='', page=''):
          ]
          }
     ]
-    # search = '%{}%'.format('woman')
-    search = '%{}%'.format('divination')
+    search = '%{}%'.format('woman')
+    # search = '%{}%'.format('divination')
 
     # todo this shoult be replaced by results from the previous page
 
@@ -120,7 +120,8 @@ def final_results(search_word='', page=''):
     texts_query: Query = m.TextText.query
     # txts_q_with_ent: Query = texts_query.with_entities(txts_subject_col, count(txts_subject_col),
     # txts_q_with_ent: Query = texts_query.with_entities(num_col, txts_subject_col, ref_col, count(bib_info_col), page_col)  # count())
-    txts_q_with_ent: Query = texts_query.with_entities(num_col, txts_subject_col, ref_col, bib_info_col, page_col)  # count())
+    txts_q_with_ent: Query = texts_query.with_entities(num_col, ref_col, txts_subject_col, bib_info_col,
+                                                       page_col)  # count())
     txts_q_with_ent_filter: Query = txts_q_with_ent.filter(txts_subject_col.like(search))
     txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter
     # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter.group_by(txts_num_col, txts_subject_col)
@@ -134,18 +135,41 @@ def final_results(search_word='', page=''):
     # print(txts_table.number)
     resdict: Dict = {}
     resdict2: Dict = {}
-    iterator_groupby = \
-        groupby(txts_q_with_ent_filter_group_order, key=lambda txts_table: (txts_table.number))#, txts_table.book_biblio_info))
-    for k, g in iterator_groupby:
-        resdict[k] = [(txts_table.subject, txts_table.book_biblio_info, txts_table.ref) for txts_table in g]
-        # thelist=[txts_table.subject for txts_table in g]
-        # resdict2[k] = list(thelist)
-        # print('{}: {}'.format(k, '\n\t\t'.join( thelist)))
-        # print('{}: {}'.format(k, '\n\t\t'.join(txts_table.subject for txts_table in g)))
-        # print('-' * 20)
-        # print(k, g)
-        # print('.' * 20)
-        # print(k, resdict[k])
+    iterator_groupby = groupby(
+        txts_q_with_ent_filter_group_order,
+        key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
+    # for k, g in iterator_groupby:
+    #     # resdict[k] = [(txts_table.subject, txts_table.book_biblio_info, txts_table.ref) for txts_table in g]
+    #     # resdict[k]=[txts_table for txts_table in g]
+    #     print('@' * 13, k, g)
+    #     i = 0
+    #     for gg in g:
+    #         # for gg in resdict[k]:
+    #         print('\t\t', i, '. ', gg)
+    #         i += 1
+    # print('iterator_groupby')
+    # print(iterator_groupby)
+    iterator_groupby22222 = groupby(
+        iterator_groupby,
+        key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
+
+    for k, g in iterator_groupby22222:
+        # resdict[k] = [(txts_table.subject, txts_table.book_biblio_info, txts_table.ref) for txts_table in g]
+        # resdict[k]=[txts_table for txts_table in g]
+        print('@' * 13, k, g)
+        i = 0
+        for gg in g:
+            # for gg in resdict[k]:
+            print('\t\t', i, '. ', gg)
+            i += 1
+    # print([gg for gg in g])
+    # resdict2[k] = list(thelist)
+    # print('{}: {}'.format(k, '\n\t\t'.join( thelist)))
+    # print('{}: {}'.format(k, '\n\t\t'.join(txts_table.subject for txts_table in g)))
+    # print('-' * 20)
+    # print(k, g)
+    # print('.' * 20)
+    # print(k, resdict[k])
 
     # for k, g in groupby(session.query(Stuff).order_by(Stuff.column1, Stuff.column2), key=lambda stuff: stuff.column1):
     #     print('{}: {}'.format(k, ','.join(stuff.column2 for stuff in g)))

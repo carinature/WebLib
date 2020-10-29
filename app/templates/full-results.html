@@ -3,12 +3,13 @@
 {% block app_content %}
 
     {% for res, list in results.items() %}
+{#            {% for res in results %}#}
+
         res: <br>
         {{ res }} <br>
 
         {% for field in list %}
-            {{ field }}
-            <br>
+            {{ field }} <br>
         {% endfor %}
         <br><br><br>
         {#     {{ temp_result_item(#}

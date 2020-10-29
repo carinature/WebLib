@@ -21,7 +21,7 @@ site is published at https://karinature.pythonanywhere.com/
 ##### If the next error is shown 
     Error starting userland proxy: listen tcp 0.0.0.0:3306: bind: address already in use
 run the next command:
-`sudo netstat -laputen | grep ':3306`
+`sudo netstat -laputen | grep :3306`
 and then:
 `sudo systemctl stop PROGRAM_NAME`
 
