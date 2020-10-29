@@ -53,25 +53,42 @@ def final_results(search_word='', page=''):
     search = '%{}%'.format('woman')
 
     # todo this shoult be replaced by results from the previous page
+    # ------------  search subject in TextSubject, return C (list)
     table: m.Base = m.TextSubject
     subject_col = m.TextSubject.subject
     C_col = m.TextSubject.C
     Csum_col = m.TextSubject.Csum
     txt_subj_query: Query = m.TextSubject.query
+    # ............  return C (list)
     # q_with_ent: Query = txt_subj_query.with_entities(subject_col, count())
     q_with_ent: Query = txt_subj_query
     q_with_ent_filter: Query = q_with_ent.filter(subject_col.like(search))
     q_with_ent_filter_group: Query = q_with_ent_filter
     # q_with_ent_filter_group: Query = q_with_ent_filter.group_by(subject_col)
     q_with_ent_filter_group_order: Query = q_with_ent_filter_group.order_by(Csum_col.desc())
+    # print('\ntable:\n', table)
+    # print('\nsubject_col:\n', subject_col)
+    # print('\nC_col:\n', C_col)
+    # print('\ntxt_subj_query:\n', txt_subj_query)
+    # print('\nq_with_ent:\n', q_with_ent)
+    # print('\nq_with_ent_filter:\n', q_with_ent_filter)
+    # print('\nq_with_ent_filter_group:\n', q_with_ent_filter_group)
+    # print('\nq_with_ent_filter_group_order:\n', q_with_ent_filter_group_order)
 
 
-    texts_query: Query = m.TextText.query
+    # ------------  search subject in TextText
+
     txts_subject_col = m.TextText.subject
     txts_C_col = m.TextText.C
     txts_num_col = m.TextText.number
-    txts_q_with_ent: Query = txt_subj_query.with_entities(txts_num_col, count())
-    # txts_q_with_ent: Query = texts_query.with_entities(txts_subject_col, txts_C_col, txts_Csum_col)
+    txts_ref_col = m.TextText.ref
+    txts_bib_info_col = m.TextText.book_biblio_info
+    txts_page_col = m.TextText.page
+    
+    # ............  return C (list)
+    texts_query: Query = m.TextText.query
+    # txts_q_with_ent: Query = texts_query.with_entities(txts_num_col, count())
+    txts_q_with_ent: Query = texts_query.with_entities(txts_subject_col, txts_C_col)
     txts_q_with_ent_filter: Query = txts_q_with_ent.filter(subject_col.like(search))
     txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter
     # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter.group_by(subject_col)
