@@ -1,6 +1,6 @@
 from datetime import time
 from itertools import groupby
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 from flask import current_app as app
 from flask import render_template, make_response, redirect, url_for, request
@@ -16,7 +16,7 @@ from . import forms as f
 from . import models as m
 from . import utilities as utils
 
-print('~' * 100)
+print('~' * 80)
 
 
 # ++++++++++++  final (filtered) results page ++++++++++++
@@ -120,48 +120,70 @@ def final_results(search_word='', page=''):
     texts_query: Query = m.TextText.query
     # txts_q_with_ent: Query = texts_query.with_entities(txts_subject_col, count(txts_subject_col),
     # txts_q_with_ent: Query = texts_query.with_entities(num_col, txts_subject_col, ref_col, count(bib_info_col), page_col)  # count())
-    txts_q_with_ent: Query = texts_query.with_entities(num_col, ref_col, txts_subject_col, bib_info_col,
-                                                       page_col)  # count())
+    txts_q_with_ent: Query = texts_query.with_entities(
+        num_col, ref_col,
+        txts_subject_col,
+        bib_info_col,
+        page_col,
+        txts_C_col )  # count()) fixme remove C_col in production
     txts_q_with_ent_filter: Query = txts_q_with_ent.filter(txts_subject_col.like(search))
-    txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter
+    # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter
     # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter.group_by(txts_num_col, txts_subject_col)
     # txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(num_col)
-    txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(num_col, bib_info_col)
+    # txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(num_col, bib_info_col)
+    # needs to be ordered for the itertools.groupby() later on,
+    #   since it collects together CONTIGUOUS items with the same key.
+    # todo consider doing the order by bib_info_col after groupby(by num_col)
+    txts_q_with_ent_filter_order: Query = txts_q_with_ent_filter.order_by(num_col)# , bib_info_col)
 
     # print('#' * 20)
     # scalar = txts_q_with_ent_filter_group_order.as_scalar()
     # # print(txts_q_with_ent_filter_group_order)
     # # print(scalar)
     # print(txts_table.number)
-    resdict: Dict = {}
+    titles_dict: Dict = {}
+    numbers_dict: Dict = {}
     resdict2: Dict = {}
-    iterator_groupby = groupby(
-        txts_q_with_ent_filter_group_order,
+    groups_by_number = groupby(
+        txts_q_with_ent_filter_order,
         key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
-    # for k, g in iterator_groupby:
-    #     # resdict[k] = [(txts_table.subject, txts_table.book_biblio_info, txts_table.ref) for txts_table in g]
-    #     # resdict[k]=[txts_table for txts_table in g]
-    #     print('@' * 13, k, g)
-    #     i = 0
-    #     for gg in g:
-    #         # for gg in resdict[k]:
-    #         print('\t\t', i, '. ', gg)
-    #         i += 1
-    # print('iterator_groupby')
-    # print(iterator_groupby)
-    iterator_groupby22222 = groupby(
-        iterator_groupby,
-        key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
-
-    for k, g in iterator_groupby22222:
-        # resdict[k] = [(txts_table.subject, txts_table.book_biblio_info, txts_table.ref) for txts_table in g]
+    for title_number, texts_tuples_group in groups_by_number:
         # resdict[k]=[txts_table for txts_table in g]
-        print('@' * 13, k, g)
-        i = 0
-        for gg in g:
-            # for gg in resdict[k]:
-            print('\t\t', i, '. ', gg)
-            i += 1
+        # texts_tuples_group:List[Tuple]
+        # print('@' * 13, title_number, texts_tuples_group)
+        numbers_dict[title_number]:Dict = {}
+        # i = 0
+        # for txt_tuple in texts_tuples_group:
+            # txt_entry = m.TextText(number=txt_tuple[0], ref=txt_tuple[1], subject=txt_tuple[2], book_biblio_info=txt_tuple[3], page=txt_tuple[4])
+            # print('\t\t', i, '. ', txt_entry)
+            # i += 1
+        
+        # TODO note that after the next line (sorted()) - texts_tuples_group NO LONGER EXISTS
+        #   maybe it's better to use order_by of sql (if slower)
+        texts_tuples_group_ordered = sorted(texts_tuples_group, key=lambda x: x[3])
+
+        group_by_number_n_bibinfo = groupby(
+            texts_tuples_group_ordered, #
+            key=lambda txts_table: txts_table[3])  # , txts_table.book_biblio_info))
+
+        # for k, g in groups_by_number:
+        for biblio_info, texts_tuples_sub_group in group_by_number_n_bibinfo:
+            # print('.' * 13, biblio_info, texts_tuples_sub_group)
+            # j = 0
+            numbers_dict[title_number][biblio_info]:List[m.TextText] = []
+            for gg in texts_tuples_sub_group:
+                txt_entry = m.TextText(number=gg[0], ref=gg[1], subject=gg[2], book_biblio_info=gg[3], page=gg[4], C=gg[5])
+                numbers_dict[title_number][biblio_info].append(txt_entry)
+                # print('\t\t\t', numbers_dict[title_number][biblio_info][j])
+                # j+=1
+
+            # print(numbers_dict[title_number][biblio_info])
+
+                # for gg in resdict[k]:
+                # print('\t\t', j, '. ', gg)
+                # j += 1
+        # print(numbers_dict[title_number])
+
     # print([gg for gg in g])
     # resdict2[k] = list(thelist)
     # print('{}: {}'.format(k, '\n\t\t'.join( thelist)))
@@ -194,11 +216,37 @@ def final_results(search_word='', page=''):
     # #     # for c in result_clists[i]:
     #
     #
+
+                # print('\t\t\t', numbers_dict[title_number][biblio_info][j])
+
+    for num, dic in numbers_dict.items():
+        print('='*16, num)
+        for bibinfo, biblist in dic.items():
+            print('-'*16, bibinfo)
+            for book in biblist:
+                print('\t' , book)
+
+    # lst = []
+    # for s in len(texts_tuples_group.sort(key=lambda x: x[3])):
+    #     lst[s] = texts_tuples_group[s]
+    # sorted(lst, key=lambda x: x[3])
+    # print(lst)
+    #
+    # print('lst'*5)
+    # print(lst)
+    # for k, g in lst:
+    #     print(k)
+    #     print('----------')
+    #     print(g)
+    #     print('.........')
+
+
+    # return str(txts_q_with_ent_filter_order)
     return render_template('full-results.html',
                            # title='Final Results',
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            categories=categories,
-                           results=resdict,
+                           results=numbers_dict,
                            # result_clists=result_clists,
                            # res_dict = res_dict
                            )

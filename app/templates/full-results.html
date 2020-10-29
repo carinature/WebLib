@@ -2,15 +2,19 @@
 
 {% block app_content %}
 
-    {% for res, list in results.items() %}
-{#            {% for res in results %}#}
-
-        res: <br>
-        {{ res }} <br>
-
-        {% for field in list %}
-            {{ field }} <br>
+    {% for num, dic in results.items() %}
+        num : {{ num }}<br>
+        {% for bibinfo, biblist in dic.items() %}
+            bibinfo : {{ bibinfo }}<br>
+            {% for book in biblist %}
+                <br> . . . . {{ book.subject }}
+                <br> . . . . {{ book.ref }}
+                <br> . . . . {{ book.page }}
+                <br> . . . . {{ book.C }}
+                <br>
+            {% endfor %}
         {% endfor %}
+
         <br><br><br>
         {#     {{ temp_result_item(#}
         {#                item_index=loop.index,#}
@@ -106,6 +110,22 @@
             clist: {{ clist }} <br>
 
         </p>
+
+        {% for num, dic in results.items() %}
+            num : {{ num }}<br>
+            {% for bibinfo, biblist in dic.items() %}
+                bibinfo : {{ bibinfo }}<br>
+                {% for book in biblist %}
+                    <br> . . . . {{ book.subject }}
+                    <br> . . . . {{ book.ref }}
+                    <br> . . . . {{ book.page }}
+                    <br> . . . . {{ book.C }}
+                    <br>
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+
+
     </div>
 {%- endmacro %}
 

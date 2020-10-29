@@ -232,4 +232,12 @@ class TextText(Base):
     C = Column(String(10))
 
     def __repr__(self):
-        return f'<TextText model subject: {self.subject},  C: {self.C}, >'
+        return \
+            f'<(TextText) ' \
+               f'#{self.number}, ' \
+               f'subject: {self.subject}, ' \
+               f'ref: {self.ref}, ' \
+               f'bib_info: {self.book_biblio_info} ' \
+               f'pg.{self.page}, ' \
+               f'C: {self.C}, ' \
+               f'>'
