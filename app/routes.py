@@ -109,15 +109,15 @@ def final_results(search_word='', page=''):
     # ---------------  search subject in TextText -------------------
     # ---------------------------------------------------------------
     txts_table = m.TextText
-    txts_subject_col = m.TextText.subject
-    txts_C_col = m.TextText.C
-    num_col = m.TextText.number
-    ref_col = m.TextText.ref
-    bib_info_col = m.TextText.book_biblio_info
-    page_col = m.TextText.page
+    txts_subject_col = txts_table.subject
+    txts_C_col = txts_table.C
+    num_col = txts_table.number
+    ref_col = txts_table.ref
+    bib_info_col = txts_table.book_biblio_info
+    page_col = txts_table.page
 
     # ............  return C (list)
-    texts_query: Query = m.TextText.query
+    texts_query: Query = txts_table.query
     # txts_q_with_ent: Query = texts_query.with_entities(txts_subject_col, count(txts_subject_col),
     # txts_q_with_ent: Query = texts_query.with_entities(num_col, txts_subject_col, ref_col, count(bib_info_col), page_col)  # count())
     txts_q_with_ent: Query = texts_query.with_entities(
@@ -125,63 +125,67 @@ def final_results(search_word='', page=''):
         txts_subject_col,
         bib_info_col,
         page_col,
-        txts_C_col )  # count()) fixme remove C_col in production
+        txts_C_col)  # count()) fixme remove C_col in production
     txts_q_with_ent_filter: Query = txts_q_with_ent.filter(txts_subject_col.like(search))
-    # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter
     # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter.group_by(txts_num_col, txts_subject_col)
-    # txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(num_col)
     # txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(num_col, bib_info_col)
     # needs to be ordered for the itertools.groupby() later on,
     #   since it collects together CONTIGUOUS items with the same key.
     # todo consider doing the order by bib_info_col after groupby(by num_col)
-    txts_q_with_ent_filter_order: Query = txts_q_with_ent_filter.order_by(num_col)# , bib_info_col)
-
-    # print('#' * 20)
-    # scalar = txts_q_with_ent_filter_group_order.as_scalar()
-    # # print(txts_q_with_ent_filter_group_order)
-    # # print(scalar)
-    # print(txts_table.number)
-    titles_dict: Dict = {}
+    txts_q_with_ent_filter_order: Query = txts_q_with_ent_filter.order_by(num_col)  # , bib_info_col)
     numbers_dict: Dict = {}
-    resdict2: Dict = {}
+    res_dict: Dict = {}
+
     groups_by_number = groupby(
         txts_q_with_ent_filter_order,
         key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
+
     for title_number, texts_tuples_group in groups_by_number:
         # resdict[k]=[txts_table for txts_table in g]
-        # texts_tuples_group:List[Tuple]
-        # print('@' * 13, title_number, texts_tuples_group)
-        numbers_dict[title_number]:Dict = {}
-        # i = 0
-        # for txt_tuple in texts_tuples_group:
-            # txt_entry = m.TextText(number=txt_tuple[0], ref=txt_tuple[1], subject=txt_tuple[2], book_biblio_info=txt_tuple[3], page=txt_tuple[4])
-            # print('\t\t', i, '. ', txt_entry)
-            # i += 1
-        
+        numbers_dict[title_number]: Dict = {}
+        print('@' * 33, title_number)
+
+        res = m.ResultByNum(title_number)
+        res_dict[title_number] = res
+        print('@' * 13, res)
+
         # TODO note that after the next line (sorted()) - texts_tuples_group NO LONGER EXISTS
         #   maybe it's better to use order_by of sql (if slower)
         texts_tuples_group_ordered = sorted(texts_tuples_group, key=lambda x: x[3])
-
         group_by_number_n_bibinfo = groupby(
-            texts_tuples_group_ordered, #
+            texts_tuples_group_ordered,  #
             key=lambda txts_table: txts_table[3])  # , txts_table.book_biblio_info))
 
         # for k, g in groups_by_number:
-        for biblio_info, texts_tuples_sub_group in group_by_number_n_bibinfo:
-            # print('.' * 13, biblio_info, texts_tuples_sub_group)
+        for bibinfo, texts_tuples_sub_group in group_by_number_n_bibinfo:
+            print('o' * 13, bibinfo, texts_tuples_sub_group)
+            print('o' * 13, res)
             # j = 0
-            numbers_dict[title_number][biblio_info]:List[m.TextText] = []
+            numbers_dict[title_number][bibinfo]: List[txts_table] = []
+            print('*' * 13, bibinfo)
+            res.add_bib(bibinfo)
+            print('*' * 13, res)
+            # 8255
             for gg in texts_tuples_sub_group:
-                txt_entry = m.TextText(number=gg[0], ref=gg[1], subject=gg[2], book_biblio_info=gg[3], page=gg[4], C=gg[5])
-                numbers_dict[title_number][biblio_info].append(txt_entry)
-                # print('\t\t\t', numbers_dict[title_number][biblio_info][j])
+                txt_entry = m.TextText(number=gg[0],
+                                       ref=gg[1],
+                                       subject=gg[2],
+                                       book_biblio_info=gg[3],
+                                       page=gg[4],
+                                       C=gg[5])
+                numbers_dict[title_number][bibinfo].append(txt_entry)
+                res.add_refs(ref=gg[1],  bibinfo=gg[3])
+                res.add_page(page=gg[4], bibinfo=gg[3])
+                # res.add_refs(ref=gg[1], bibinfo=int(float(gg[3])))
+                # print('\t\t\t', numbers_dict[title_number][bibinfo][j])
                 # j+=1
 
-            # print(numbers_dict[title_number][biblio_info])
+        print('_' * 13, res)
+            # print(numbers_dict[title_number][bibinfo])
 
-                # for gg in resdict[k]:
-                # print('\t\t', j, '. ', gg)
-                # j += 1
+            # for gg in resdict[k]:
+            # print('\t\t', j, '. ', gg)
+            # j += 1
         # print(numbers_dict[title_number])
 
     # print([gg for gg in g])
@@ -217,14 +221,25 @@ def final_results(search_word='', page=''):
     #
     #
 
-                # print('\t\t\t', numbers_dict[title_number][biblio_info][j])
+    # print('\t\t\t', numbers_dict[title_number][bibinfo][j])
 
-    for num, dic in numbers_dict.items():
-        print('='*16, num)
-        for bibinfo, biblist in dic.items():
-            print('-'*16, bibinfo)
-            for book in biblist:
-                print('\t' , book)
+    # for num, dic in numbers_dict.items():
+    #     # q_title: Query = m.Title.query
+    #     # q_title_filter: Query = q_title.filter(m.Title.number == num)
+    #     # title = q_title_filter.value(m.Title.title)
+    #     # author = q_title_filter.value(m.Title.author)
+    #     # print('=' * 16, num, ' - ', title, ' -- ', author)
+    #     # res = m.ResultByNum(num)
+    #     # print(res)
+    #     for bibinfo, biblist in dic.items():
+    #         # q_book_ref: Query = m.BookRef.query
+    #         # q_book_ref_filter: Query = q_book_ref.filter(m.BookRef.book_biblio_info == int(float(bibinfo)))
+    #         # titleref = q_book_ref_filter.value(m.BookRef.titleref)
+    #         # page = biblist.page
+    #         # print('-' * 16, bibinfo, ' - ', titleref, 'page')
+    #         print('-' * 16, bibinfo)
+    #         for book in biblist:
+    #             print('\t', book)
 
     # lst = []
     # for s in len(texts_tuples_group.sort(key=lambda x: x[3])):
@@ -239,7 +254,6 @@ def final_results(search_word='', page=''):
     #     print('----------')
     #     print(g)
     #     print('.........')
-
 
     # return str(txts_q_with_ent_filter_order)
     return render_template('full-results.html',

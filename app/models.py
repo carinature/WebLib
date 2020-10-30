@@ -1,8 +1,9 @@
 import os
+from collections import defaultdict
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, ForeignKey, Table, MetaData
-from sqlalchemy.orm import column_property
+from sqlalchemy.orm import column_property, Query
 from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float, Boolean, PickleType
 
 from config import RAW_DATA_DIR
@@ -10,6 +11,7 @@ from config import RAW_DATA_DIR
 from . import db
 
 Base: SQLAlchemy.__base__ = db.Model
+
 
 # Base:SQLAlchemy.Query = db.Model
 # Base:sqlalchemy.orm = db.Model
@@ -197,7 +199,8 @@ class TextSubject(Base):
     dbg_index = Column(Integer, primary_key=True, autoincrement=True)
     subject = Column(String(200), nullable=False)
     C = Column(Text)  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
-    Csum = Column(Integer)  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
+    Csum = Column(
+        Integer)  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
 
     def __repr__(self):
         return f'<TextSubject subject: {self.subject}, C: {self.C} >'
@@ -234,10 +237,71 @@ class TextText(Base):
     def __repr__(self):
         return \
             f'<(TextText) ' \
-               f'#{self.number}, ' \
-               f'subject: {self.subject}, ' \
-               f'ref: {self.ref}, ' \
-               f'bib_info: {self.book_biblio_info} ' \
-               f'pg.{self.page}, ' \
-               f'C: {self.C}, ' \
-               f'>'
+            f'#{self.number}, ' \
+            f'subject: {self.subject}, ' \
+            f'ref: {self.ref}, ' \
+            f'bib_info: {self.book_biblio_info} ' \
+            f'pg.{self.page}, ' \
+            f'C: {self.C}, ' \
+            f'>'
+
+
+from typing import List, Dict, Set
+
+
+class Book(object):
+    def __init__(self, bibinfo: int):
+        q_book_ref: Query = BookRef.query
+        q_book_ref_filter: Query = q_book_ref.filter(BookRef.book_biblio_info == bibinfo)
+        self.title_full = q_book_ref_filter.value(BookRef.titleref)
+        self.bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
+        self.pages: Set[int] = set()
+        self.refs: List[int] = []
+
+    def __repr__(self):
+        return \
+            f'... The Referencing Book: ' \
+            f'{self.bibinfo} ' \
+            f'{self.title_full} ' \
+            f'pages: {self.pages}'
+
+
+class ResultByNum:
+    def __init__(self, num: int):
+        self.num = num
+        q_title: Query = Title.query
+        q_title_filter: Query = q_title.filter(Title.number == num)
+        self.author = q_title_filter.value(Title.author)
+        self.title = q_title_filter.value(Title.title)
+        # print('.' * 13, self.title, 'by:', self.author)
+        self.refs: Dict = {}
+        self.bibinfo: List[int] = []
+        self.books: Dict[int, Book] = defaultdict()
+
+    def add_bib(self, bibinfo: int):
+        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
+        self.bibinfo.append(bibinfo)
+        self.books[bibinfo] = Book(bibinfo)
+
+    def add_refs(self, ref: str, bibinfo: int):
+        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
+        self.books[bibinfo].refs.append(ref)
+        self.refs[bibinfo] = ref
+
+    def add_page(self, page: int, bibinfo: int):
+        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
+        page = int(float(page)) # todo page should be int in the DB, currentyly str
+        self.books[bibinfo].pages.add(page)
+
+    def __repr__(self):
+        s = '*' * 13
+        # s += f' (The Result-Title): ' \
+        s = f'' \
+            f'#{self.num}, ' \
+            f'{self.title} By: ' \
+            f'{self.author}, ' \
+            f'{self.bibinfo}, ' \
+            f'{self.refs}\n'
+        for k, i in self.books.items():
+            s += f'\t\t{i}\n'
+        return s
