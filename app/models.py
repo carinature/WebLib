@@ -1,3 +1,4 @@
+import collections
 import os
 from collections import defaultdict
 
@@ -251,47 +252,52 @@ from typing import List, Dict, Set
 
 class Book(object):
     def __init__(self, bibinfo: int):
+        self.pages: Set[int] = set()
+        self.refs: List[int] = []
         q_book_ref: Query = BookRef.query
         q_book_ref_filter: Query = q_book_ref.filter(BookRef.book_biblio_info == bibinfo)
         self.title_full = q_book_ref_filter.value(BookRef.titleref)
         self.bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
-        self.pages: Set[int] = set()
-        self.refs: List[int] = []
 
-    def __repr__(self):
-        return \
-            f'... The Referencing Book: ' \
-            f'{self.bibinfo} ' \
-            f'{self.title_full} ' \
-            f'pages: {self.pages}'
+
+    # def __repr__(self):
+    #     return \
+    #         f'... The Referencing Book: ' \
+    #         f'{self.bibinfo} ' \
+    #         f'{self.title_full} ' \
+    #         f'pages: {self.pages}'
 
 
 class ResultByNum:
     def __init__(self, num: int):
         self.num = num
+        self.refs: Dict = {}
+        self.bibinfo: List[int] = []
+        self.books: List[Book] = []
+        # self.books: Dict[int, Book] = collections.defaultdict(Book)
         q_title: Query = Title.query
         q_title_filter: Query = q_title.filter(Title.number == num)
         self.author = q_title_filter.value(Title.author)
         self.title = q_title_filter.value(Title.title)
         # print('.' * 13, self.title, 'by:', self.author)
-        self.refs: Dict = {}
-        self.bibinfo: List[int] = []
-        self.books: Dict[int, Book] = defaultdict()
 
     def add_bib(self, bibinfo: int):
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
         self.bibinfo.append(bibinfo)
-        self.books[bibinfo] = Book(bibinfo)
+        # self.books[bibinfo] = Book(bibinfo)
+        self.books.append(Book(bibinfo))
 
     def add_refs(self, ref: str, bibinfo: int):
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
-        self.books[bibinfo].refs.append(ref)
+        # self.books[bibinfo].refs.append(ref)
+        self.books[-1].refs.append(ref)
         self.refs[bibinfo] = ref
 
     def add_page(self, page: int, bibinfo: int):
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
         page = int(float(page)) # todo page should be int in the DB, currentyly str
-        self.books[bibinfo].pages.add(page)
+        # self.books[bibinfo].pages.add(page)
+        self.books[-1].pages.add(page)
 
     def __repr__(self):
         s = '*' * 13
@@ -302,6 +308,7 @@ class ResultByNum:
             f'{self.author}, ' \
             f'{self.bibinfo}, ' \
             f'{self.refs}\n'
-        for k, i in self.books.items():
+        # for k, i in self.books.items():
+        for i in self.books:
             s += f'\t\t{i}\n'
         return s

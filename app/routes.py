@@ -51,7 +51,7 @@ def final_results(search_word='', page=''):
          ]
          }
     ]
-    search = '%{}%'.format('woman')
+    search = '%{}%'.format('women')
     # search = '%{}%'.format('divination')
 
     # todo this shoult be replaced by results from the previous page
@@ -143,11 +143,10 @@ def final_results(search_word='', page=''):
     for title_number, texts_tuples_group in groups_by_number:
         # resdict[k]=[txts_table for txts_table in g]
         numbers_dict[title_number]: Dict = {}
-        print('@' * 33, title_number)
+        # print('@' * 33, title_number)
 
         res = m.ResultByNum(title_number)
-        res_dict[title_number] = res
-        print('@' * 13, res)
+        # print('@' * 13, res)
 
         # TODO note that after the next line (sorted()) - texts_tuples_group NO LONGER EXISTS
         #   maybe it's better to use order_by of sql (if slower)
@@ -158,13 +157,13 @@ def final_results(search_word='', page=''):
 
         # for k, g in groups_by_number:
         for bibinfo, texts_tuples_sub_group in group_by_number_n_bibinfo:
-            print('o' * 13, bibinfo, texts_tuples_sub_group)
-            print('o' * 13, res)
+            # print('o' * 13, bibinfo, texts_tuples_sub_group)
+            # print('o' * 13, res)
             # j = 0
             numbers_dict[title_number][bibinfo]: List[txts_table] = []
-            print('*' * 13, bibinfo)
+            # print('*' * 13, bibinfo)
             res.add_bib(bibinfo)
-            print('*' * 13, res)
+            # print('*' * 13, res)
             # 8255
             for gg in texts_tuples_sub_group:
                 txt_entry = m.TextText(number=gg[0],
@@ -179,8 +178,9 @@ def final_results(search_word='', page=''):
                 # res.add_refs(ref=gg[1], bibinfo=int(float(gg[3])))
                 # print('\t\t\t', numbers_dict[title_number][bibinfo][j])
                 # j+=1
+        res_dict[title_number] = res
 
-        print('_' * 13, res)
+        # print('_' * 13, res)
             # print(numbers_dict[title_number][bibinfo])
 
             # for gg in resdict[k]:
@@ -256,11 +256,12 @@ def final_results(search_word='', page=''):
     #     print('.........')
 
     # return str(txts_q_with_ent_filter_order)
+    print(res_dict)
     return render_template('full-results.html',
                            # title='Final Results',
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            categories=categories,
-                           results=numbers_dict,
+                           results=res_dict,
                            # result_clists=result_clists,
                            # res_dict = res_dict
                            )
