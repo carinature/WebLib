@@ -40,9 +40,9 @@
                         <br>
 
                         {{ search_bar['filter_form'].from_century.label }} {{ search_bar['filter_form'].from_century }}
-                                                {% if SMALL_SCREEN %}
-                                                    <br><br>
-                                                {% endif %}
+                        {% if SMALL_SCREEN %}
+                            <br><br>
+                        {% endif %}
                         {{ search_bar['filter_form'].to_century.label }} {{ search_bar['filter_form'].to_century }}
                         <br><br>
                         {{ search_bar['filter_form'].language.label }} {{ search_bar['filter_form'].language }}
@@ -63,8 +63,13 @@
                         {{ search_bar['filter_form'].reference }}
                         <div class="" style="text-align: left">
                             <br><br><br><br>
-                            {{ search_bar['filter_form'].fetch_full }} {{ search_bar['filter_form'].fetch_full.label }} <br>
+                            {{ search_bar['filter_form'].fetch_full }} {{ search_bar['filter_form'].fetch_full.label }}
+                            <br>
                             {{ search_bar['filter_form'].attention_label }}
+                            <p id="fetch_full_warn" style="display:none">
+                                (Attention: Checking this box will to attempt full text fetching,
+                                <br>which can result in very highly loading times.)</p>
+
                         </div>
                     </div>
                 </div>

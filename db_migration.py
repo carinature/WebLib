@@ -28,9 +28,9 @@ def csv_to_mysql():  # todo consider NOT using try
     t = time()
 
     # try:
-    # models = Base.__subclasses__()
-    # for model in models:
-    for model in [TextSubject]:
+    models = Base.__subclasses__()
+    for model in models:
+    # for model in [TextSubject]:
         for src_file in model.src_scv:
             with open(src_file) as csv_file:
                 for dataframe in pd.read_csv(csv_file,

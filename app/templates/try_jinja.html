@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> <meta charset="UTF-8">  <title>Tty Jinja</title> </head>
+
+<body>
+
+<strong class="d-block mb-3">Programming languages</strong>
+
+<hr><br>
+BOOLEAN
+{% if _bool %}
+  <br>_bool = {{ _bool }}
+{% endif %}
+
+<hr><br>
+CONDITIONAL
+{% if _int < 18 %}
+<br>No entry
+{% elif _int <= 25 %}
+<br>You may enter
+{% else %}
+<br>Entry denied. You're not _bool enough
+{% endif %}
+
+<hr><br>
+<ul>
+LIST
+  {% for lang in _list %}
+  <li>{{ loop.index }} - {{ lang }}</li>
+  {% endfor %}
+
+<br><br>
+LIST OBJECT
+<br>{{ _list[0] }}
+
+<br><br>
+DICTIONARY
+  {% for name, age in _dict.items() %}
+  <li>{{ name }}: {{ age }}</li>
+  {% endfor %}
+
+<br><br>
+DICT OBJECT
+<br>{{ _dict["Tony"] }}
+
+</ul>
+
+<hr><br>
+TUPLE
+{% set foo, bar = _tuple %}
+
+<hr><br>
+FUNCTION
+<br>{{ _function("just called a function ", 1) }}
+<br>{{ _function("just called a function again ... ", 4) }}
+
+<hr><br>
+CLASS ATTRIBUTE & METHOD
+<br>{{ _class_obj.description }}
+<br>{{ _class_obj.pull() }}
+
+<hr><br>
+ASSIGNMENT
+{% set new_repo = _class(
+    name="The Name",
+    description="Some short description",
+    domain="https://github.com/something-something.git")
+%}
+<br>{{ new_repo.description }}
+
+<hr><br>
+SPECIAL JINJA OPERATORS
+Jinja features some special operators you may not be familiar with and we'll be using later in this guide:
+<br> <em>|</em> -  Applies a filter (Continue reading) For example {{ _list|length }} will return 6
+<br> <em>~</em> - Converts all operands to strings and concatenates them, for example {{ "_bool" ~ "==" ~ _bool }} returns "_bool==True"
+<br> <em>(**args, **kwargs)</em> - Callable. You've seen this used when we called class method
+
+<hr><br>
+TEMPLATE FILTERS
+<br>
+{% if _list|length > 2 %}
+  {% for lang in _list %}
+    {% if lang == "Python" %}
+      <p>{{ lang|upper }}</p>
+    {% else %}
+      <p>{{ lang|reverse }}</p>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+<hr><br>
+JOIN FILTER
+<br>
+<p>Unjoined: {{ _list }}</p>
+<p>Joined: {{ _list|join(", ") }}</p>
+
+<hr><br>
+CUSTOM FILTERS
+<br>
+{{ date  }}
+{{ date | clean_date }}
+
+<hr><br>
+NOT ESCAPED & ESCAPED
+<br>
+{{ my_html }}
+{{ my_html|safe }}
+
+<hr><br>
+MACRO
+<br>
+{% macro input(label="", type="text", id="", name="", placeholder="") -%}
+  <div class="form-group">
+    <input type="{{ type }}" class="form-control" id="{{ id }}" name="{{ name }}" placeholder="{{ placeholder }}">
+    <label for="{{ id }}">{{ label }}</label>
+  </div>
+{%- endmacro %}
+
+the syntax: <br>
+macro_name(**args, **kwargs)
+<br><br>
+
+<form action="#" method="POST">
+    {{ input(label="Name", id="name", name="name", placeholder="Enter your name") }}
+    {{ input(label="Email", type="email", id="email", name="email", placeholder="Enter your email") }}
+    {{ input(label="Password", id="password", name="password", placeholder="Enter your password") }}
+</form>
+
+<br>
+<br>
+
+
+
+{#  set form    #}
+{#{% set new_repo = ListForm(#}
+{#        name=item,#}
+{#        description=item,#}
+{#        domain=item)#}
+{#    %}#}
+{#      for loop on list    #}
+{#          set sub-form        #}
+{#          self.add_item       #}
+
+
+</body>
+</html>
