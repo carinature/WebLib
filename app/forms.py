@@ -38,35 +38,6 @@ class SearchSubject(FlaskForm):
                                  #            }
                                  )
 
-
-class SearchReference(FlaskForm):
-
-    def any_fields_filled(self):
-        return any([self.search_author.data, self.search_work.data, self.search_reference.data])
-
-    def validate(self):
-        return self.any_fields_filled()
-
-    search_author = StringField(
-        'Author\'s name',
-        [Optional()],  # , validators.Regexp('^\w+$', message="Field accepts one search word")],
-        render_kw={'placeholder': 'Author\'s name'})
-    search_work = StringField(
-        'Work',
-        [Optional()],  # , validators.Regexp('^\w+$', message="Field accepts one search word")],
-        render_kw={'placeholder': 'Work'})
-    search_reference = StringField(
-        'Reference',
-        [Optional()],  # , validators.Regexp('^\w+$', message="Field accepts one search word")],
-        render_kw={'placeholder': 'Reference'})
-    submit_reference = SubmitField('Submit',
-                                   # render_kw={'class': 'btn btn-lg btn-primary',
-                                   #            # 'style': 'float: right',
-                                   #            # 'onclick': "alert('Fetching Data...')"
-                                   #            }
-                                   )
-
-
 centuries = [('Any', 'Any'),
              ('8 BCE', '8 BCE'),
              ('7 BCE', '7 BCE'),
@@ -141,11 +112,40 @@ class FilterForm(FlaskForm):
         text='(Attention: Checking this box will to attempt full text fetching,'
              '<br>which can result in very highly loading times.)',
         field_id=fetch_full)
-    # submit = SubmitField('Fetch Results',
-    #                      render_kw={'class': 'btn btn-lg btn-primary',
-    #                      'style': 'margin-right: 5%; padding:1rem 4rem 1rem 4rem; position: sticky; float: right',
-    #                                 'onclick': "alert('Fetching Data...')"}
-    #                      )
+    fetch_results = SubmitField('Fetch Results',
+                                render_kw={'class': 'btn btn-lg btn-primary',
+                         'style': 'margin-right: 5%; padding:1rem 4rem 1rem 4rem; position: sticky; float: right',
+                                    # 'onclick': "alert('Fetching Data...')"
+                                    }
+                                )
+
+
+class SearchReference(FlaskForm):
+
+    def any_fields_filled(self):
+        return any([self.search_author.data, self.search_work.data, self.search_reference.data])
+
+    def validate(self):
+        return self.any_fields_filled()
+
+    search_author = StringField(
+        'Author\'s name',
+        [Optional()],  # , validators.Regexp('^\w+$', message="Field accepts one search word")],
+        render_kw={'placeholder': 'Author\'s name'})
+    search_work = StringField(
+        'Work',
+        [Optional()],  # , validators.Regexp('^\w+$', message="Field accepts one search word")],
+        render_kw={'placeholder': 'Work'})
+    search_reference = StringField(
+        'Reference',
+        [Optional()],  # , validators.Regexp('^\w+$', message="Field accepts one search word")],
+        render_kw={'placeholder': 'Reference'})
+    submit_reference = SubmitField('Submit',
+                                   # render_kw={'class': 'btn btn-lg btn-primary',
+                                   #            # 'style': 'float: right',
+                                   #            # 'onclick': "alert('Fetching Data...')"
+                                   #            }
+                                   )
 
 
 class SearchTypeChoice(FlaskForm):
@@ -158,31 +158,31 @@ class SearchTypeChoice(FlaskForm):
     )
 
 
-class SignupForm(FlaskForm):
-    """Sign up for a user account."""
-    # email = StringField('Email', [
-    #     Email(message='Not a valid email address.'),
-    #     DataRequired()])
-    # background_color = ColorField() # from wtforms_components import If, ColorField
-    password = PasswordField('Password', [
-        DataRequired(message="Please enter a password."),
-    ])
-    confirmPassword = PasswordField('Repeat Password', [
-        EqualTo(password, message='Passwords must match.')
-    ])
-    title = SelectField('Title', [DataRequired()],
-                        choices=[('Farmer', 'farmer'),
-                                 ('Corrupt Politician', 'politician'),
-                                 ('No-nonsense City Cop', 'cop'),
-                                 ('Professional Rocket League Player', 'rocket'),
-                                 ('Lonely Guy At A Diner', 'lonely'),
-                                 ('Pokemon Trainer', 'pokemon')])
-    website = StringField('Website', validators=[URL()])
-    birthday = DateField('Your Birthday')
-    recaptcha = RecaptchaField()
-    body = StringField('Message',
-                       [DataRequired(),
-                        Length(min=4, message='Your message is too short.')])
-    submit = SubmitField('Submit')
-    # ,validators=[
-    # If(lambda form, field: form.user_id.data, Email())])
+# class SignupForm(FlaskForm):
+#     """Sign up for a user account."""
+#     # email = StringField('Email', [
+#     #     Email(message='Not a valid email address.'),
+#     #     DataRequired()])
+#     # background_color = ColorField() # from wtforms_components import If, ColorField
+#     password = PasswordField('Password', [
+#         DataRequired(message="Please enter a password."),
+#     ])
+#     confirmPassword = PasswordField('Repeat Password', [
+#         EqualTo(password, message='Passwords must match.')
+#     ])
+#     title = SelectField('Title', [DataRequired()],
+#                         choices=[('Farmer', 'farmer'),
+#                                  ('Corrupt Politician', 'politician'),
+#                                  ('No-nonsense City Cop', 'cop'),
+#                                  ('Professional Rocket League Player', 'rocket'),
+#                                  ('Lonely Guy At A Diner', 'lonely'),
+#                                  ('Pokemon Trainer', 'pokemon')])
+#     website = StringField('Website', validators=[URL()])
+#     birthday = DateField('Your Birthday')
+#     recaptcha = RecaptchaField()
+#     body = StringField('Message',
+#                        [DataRequired(),
+#                         Length(min=4, message='Your message is too short.')])
+#     submit = SubmitField('Submit')
+#     # ,validators=[
+#     # If(lambda form, field: form.user_id.data, Email())])

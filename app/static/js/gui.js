@@ -1,7 +1,7 @@
 // When the user scrolls down 80px from the top of the document, resize the navbar's padding and the logo's font size
-// window.onscroll = function () {
-//     scrollFunction()
-// };
+window.onscroll = function () {
+    scrollFunction()
+};
 
 function scrollFunction() {
     let navbar = document.getElementsByClassName("navbar")[0];
@@ -11,6 +11,8 @@ function scrollFunction() {
     let title = document.getElementsByClassName("navbar-title")[0];
 
     if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+        document.getElementById("myBtn").style.display = "block";
+
         // scrolled DOWN
         subtitle.style.display = 'none';
         // subtitle.style.transition = '400ms';
@@ -30,6 +32,8 @@ function scrollFunction() {
         title.style.fontSize = '0.5em';
 
     } else {  // scrolled to TOP
+        document.getElementById("myBtn").style.display = "none";
+
         subtitle.style.display = 'block';
         // subtitle.style.transition = '400ms';
 
@@ -44,6 +48,13 @@ function scrollFunction() {
         title.style.padding = "initial";
         title.style.fontSize = 'inherit';
     }
+}
+
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
 }
 
 

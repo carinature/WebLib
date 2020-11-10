@@ -2,12 +2,12 @@ from datetime import time
 from itertools import groupby
 from typing import List, Dict, Tuple
 
-from flask import current_app as app
+from flask import current_app as app, flash, g
 from flask import render_template, make_response, redirect, url_for, request
 from sqlalchemy import func
 from sqlalchemy.orm import Query
 from sqlalchemy.sql.functions import count
-from wtforms import BooleanField, StringField
+from wtforms import BooleanField, StringField, form
 from wtforms.widgets import CheckboxInput
 
 from db_migration import csv_to_mysql
@@ -19,11 +19,28 @@ from . import utilities as utils
 print('~' * 80)
 
 
+def get_flag():
+    if 'flag' not in g:
+        g.flag = False
+    return g.flag
+
+
+@app.teardown_appcontext
+def teardown_db(exception):
+    flag = g.pop('flag', None)
+    if flag is not None:
+        flag = False
+
+
 # ++++++++++++  final (filtered) results page ++++++++++++
 @app.route('/results', methods=['GET', 'POST'])
 def final_results(search_word='', page=''):
+    print('-'*20)
+    print(request.form)
+    print('-'*20)
     categories = [
         {'name': 'Highly Validated',
+         'id': 'high',
          'results': [
              {'title': 'title',
               'author': 'Author',
@@ -33,6 +50,7 @@ def final_results(search_word='', page=''):
          ]
          },
         {'name': 'Validated',
+         'id': 'valid',
          'results': [
              {'title': 'title',
               'author': 'Author',
@@ -42,6 +60,7 @@ def final_results(search_word='', page=''):
          ]
          },
         {'name': 'Unvalidated',
+         'id': 'not',
          'results': [
              {'title': 'title',
               'author': 'Author',
@@ -51,7 +70,7 @@ def final_results(search_word='', page=''):
          ]
          }
     ]
-    search = '%{}%'.format('women')
+    search = '%{}%'.format('woman')
     # search = '%{}%'.format('divination')
 
     # todo this shoult be replaced by results from the previous page
@@ -173,7 +192,7 @@ def final_results(search_word='', page=''):
                                        page=gg[4],
                                        C=gg[5])
                 numbers_dict[title_number][bibinfo].append(txt_entry)
-                res.add_refs(ref=gg[1],  bibinfo=gg[3])
+                res.add_refs(ref=gg[1], bibinfo=gg[3])
                 res.add_page(page=gg[4], bibinfo=gg[3])
                 # res.add_refs(ref=gg[1], bibinfo=int(float(gg[3])))
                 # print('\t\t\t', numbers_dict[title_number][bibinfo][j])
@@ -181,11 +200,11 @@ def final_results(search_word='', page=''):
         res_dict[title_number] = res
 
         # print('_' * 13, res)
-            # print(numbers_dict[title_number][bibinfo])
+        # print(numbers_dict[title_number][bibinfo])
 
-            # for gg in resdict[k]:
-            # print('\t\t', j, '. ', gg)
-            # j += 1
+        # for gg in resdict[k]:
+        # print('\t\t', j, '. ', gg)
+        # j += 1
         # print(numbers_dict[title_number])
 
     # print([gg for gg in g])
@@ -256,8 +275,8 @@ def final_results(search_word='', page=''):
     #     print('.........')
 
     # return str(txts_q_with_ent_filter_order)
-    print(res_dict)
-    return render_template('full-results.html',
+    # print(res_dict)
+    return render_template('final_results.html',
                            # title='Final Results',
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            categories=categories,
@@ -275,19 +294,29 @@ def final_results(search_word='', page=''):
 def search_results(search_word='', page=''):
     print('.' * 13)
     print(page)
-
     # todo put here the "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
     search_bar: Dict = utils.init_search_bar()
     subject_form = search_bar['subject_form']
     filter_form = search_bar['filter_form']
 
+
     if not subject_form.validate_on_submit():
-        return render_template('search-results.html',
+        if filter_form.fetch_results.data:
+            print('@' * 33, search_word)
+            print(search_word)
+            print(request)
+            print(request.args)
+        if subject_form.submit_subject.data:
+            print(request.args)
+            print('=' * 33, search_word)
+
+        return render_template('search_subjects.html',
                                title='',
                                # description="Tiresias: The Ancient Mediterranean Religions Source Database",
                                results=[],
                                total=0,
-                               search_bar=search_bar
+                               search_bar=search_bar,
+                               flag=False
                                )
 
     # if 'GET' == request.method:
@@ -300,8 +329,14 @@ def search_results(search_word='', page=''):
     #     print('^' * 13, search_word, '^' * 13)
     #     print('^' * 13, page, '^' * 13)
     #     redirect(url_for('not_found'))
-
+    # flash("You submitted  via button {button}".format(            # name=form.name.data,
+    #         button="submit_subject" if subject_form.submit_subject.data else "fetch_full"))
     print('-' * 13, ' POST ', '-' * 13)
+
+    print('*' * 33, search_word)
+    print(request.form)
+    print('*' * 33, search_word)
+
     search_word = subject_form.subject_keyword_1.data
     # print(search_word)
     # print(search_bar['subject_form'].subject_keyword_1.raw_data)
@@ -321,7 +356,14 @@ def search_results(search_word='', page=''):
     # prev_url = url_for('search_results', search_word=search_word, page=subjects.prev_num) if subjects.has_prev else None
 
     subjects = subjects_ordered.all()
-    return render_template('search-results.html', title=f'Search Result for: {search_word}',
+    g.flag = True
+    #
+
+    # subjects = []
+    # print("Starting data Value : {value}".format(value=subject_form.submit_subject.data))
+    # print("Ending data Value : {value}".format(value=filter_form.fetch_results.data))
+
+    return render_template('search_subjects.html', title=f'Search Result for: {search_word}',
                            # description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            method='post',
                            results=subjects,
@@ -331,7 +373,8 @@ def search_results(search_word='', page=''):
                            search_bar=search_bar,
                            # next_url=next_url,
                            # prev_url=prev_url,
-                           search_word=search_word
+                           search_word=search_word,
+                           flag=True
                            )
 
     # todo
@@ -378,7 +421,7 @@ def subject_list():
     next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
     prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
 
-    return render_template('subject-list.html',
+    return render_template('subject_list.html',
                            title="Tiresias Subjects",  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            subjects=subjects,
@@ -444,8 +487,20 @@ def check_check():
     # print("request.args")
     # print(request.args)
     # results = request.args['results']
+
     return render_template("check.html",
                            printout=printout)  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
+
+
+# @app.route('/json')
+# def json():
+#     return render_template('json.html')
+
+# background process happening without any refreshing
+@app.route('/fetch_results')
+def fetch_results():
+    print("@@" * 33)
+    return ("nothing")
 
 
 @app.template_filter("clean_date")
@@ -456,6 +511,11 @@ def clean_date(dt):
 @app.template_filter("value_or_zero")
 def value_or_zero(val):
     return val if val else 0
+
+
+@app.template_filter("value_or_empty")
+def value_or_zero(val):
+    return val if val else ''
 
 
 @app.route("/try_jinja")
