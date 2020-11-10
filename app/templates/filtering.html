@@ -81,6 +81,8 @@
 </div>
 <br><br><br>
 
-{{ search_bar['filter_form'].fetch_results }}
+{% if flag %}
+    {{ search_bar['filter_form'].fetch_results }}
+{% endif %}
 
 {#</form>#}
