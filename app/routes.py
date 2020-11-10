@@ -2,7 +2,7 @@ from datetime import time
 from itertools import groupby
 from typing import List, Dict, Tuple
 
-from flask import current_app as app, flash, g
+from flask import current_app as app, flash, g, session
 from flask import render_template, make_response, redirect, url_for, request
 from sqlalchemy import func
 from sqlalchemy.orm import Query
@@ -35,9 +35,9 @@ def teardown_db(exception):
 # ++++++++++++  final (filtered) results page ++++++++++++
 @app.route('/results', methods=['GET', 'POST'])
 def final_results(search_word='', page=''):
-    print('-'*20)
+    print('-' * 20)
     print(request.form)
-    print('-'*20)
+    print('-' * 20)
     categories = [
         {'name': 'Highly Validated',
          'id': 'high',
@@ -299,8 +299,7 @@ def search_results(search_word='', page=''):
     subject_form = search_bar['subject_form']
     filter_form = search_bar['filter_form']
 
-
-    if not subject_form.validate_on_submit():
+    if not subject_form.validate_on_submit():  # i.e. when method==GET
         if filter_form.fetch_results.data:
             print('@' * 33, search_word)
             print(search_word)
@@ -332,12 +331,13 @@ def search_results(search_word='', page=''):
     # flash("You submitted  via button {button}".format(            # name=form.name.data,
     #         button="submit_subject" if subject_form.submit_subject.data else "fetch_full"))
     print('-' * 13, ' POST ', '-' * 13)
-
     print('*' * 33, search_word)
     print(request.form)
     print('*' * 33, search_word)
 
     search_word = subject_form.subject_keyword_1.data
+    session['formdata'] = request.form
+    session['search_word'] = search_word
     # print(search_word)
     # print(search_bar['subject_form'].subject_keyword_1.raw_data)
 

@@ -14,7 +14,7 @@ function scrollFunction() {
         document.getElementById("myBtn").style.display = "block";
 
         // scrolled DOWN
-        subtitle.style.display = 'none';
+        // subtitle.style.display = 'none';
         // subtitle.style.transition = '400ms';
         // navbar.style.padding = "5px 10px 5px 10px";
         // logo.style.height = "3rem";
@@ -34,7 +34,7 @@ function scrollFunction() {
     } else {  // scrolled to TOP
         document.getElementById("myBtn").style.display = "none";
 
-        subtitle.style.display = 'block';
+        // subtitle.style.display = 'block';
         // subtitle.style.transition = '400ms';
 
         // logo.style.height = "3rem";

@@ -3,8 +3,16 @@
  * */
 function filter_check_all(source) {
     checkboxes = document.getElementsByName('filter-opt');
+    console.log('==============')
     for (let i = 0, n = checkboxes.length; i < n; i++) {
-        checkboxes[i].checked = source.checked;
+        let checked = source.checked;
+        checkboxes[i].checked = checked;
+        console.log(source.childNodes[0].nodeValue)
+        console.log(source.childNodes)
+        console.log('-------')
+        if (checked) source.childNodes[0].nodeValue = 'Remove All Selections';
+        else source.childNodes[0].nodeValue = 'Select All the Results';
+
     }
 }
 
