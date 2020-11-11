@@ -224,7 +224,10 @@ body {
     /*border-color: var(--primary-color-light);*/
     border-radius: 5px;
     /*-webkit-border-radius: 5%;*/
-    /*border-width: 2px;*/
+    border-width: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 90px;
     /*-moz-outline-radius: 5%;*/
     /*border: none;*/
     /*border-block-color: #00aced;*/
@@ -233,6 +236,7 @@ body {
     /* https://stackoverflow.com/questions/5903112/is-it-really-impossible-to-make-a-div-fit-its-size-to-its-content */
     /* http://jsfiddle.net/XgErJ/4 */
 }
+
 
 #submit-subject {
     /*background-color: var(--accent-color);*/

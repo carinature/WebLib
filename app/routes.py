@@ -295,6 +295,10 @@ def search_results(search_word='', page=''):
     print('.' * 13)
     print(page)
     # todo put here the "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
+
+    user_addresses = [{"name": "First Address"},
+                      {"name": "Second Address"}]
+
     search_bar: Dict = utils.init_search_bar()
     subject_form = search_bar['subject_form']
     filter_form = search_bar['filter_form']
@@ -385,6 +389,22 @@ def search_results(search_word='', page=''):
     #    appropriate normalization
 
 
+# ++++++++++++  Jinja2 Filter Functions ++++++++++++
+@app.template_filter("clean_date")
+def clean_date(dt):
+    return dt.strftime("%d %b %Y")
+
+
+@app.template_filter("value_or_zero")
+def value_or_zero(val):
+    return val if val else 0
+
+
+@app.template_filter("value_or_empty")
+def value_or_zero(val):
+    return val if val else ''
+
+
 # ++++++++++++  Home page ++++++++++++
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -405,7 +425,7 @@ def home():
 # ++++++++++++  list of books page ++++++++++++
 @app.route('/book-indices')
 def book_indices():
-    return render_template('book-indices.html',
+    return render_template('book_indices.html',
                            title="Books Included in the Tiresias Project Database",  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database", )
 
@@ -440,82 +460,6 @@ def not_found(error):
                                          description=str(error)), 404)
     print(error)
     return resp
-
-
-# ++++++++++++  Login ++++++++++++
-# @login_required https://flask-login.readthedocs.io/en/latest/ todo use this to protect from logged-off users
-# @app.route('/insert-data')
-# def insert_data():
-#     print('congrats on the new addition')
-
-
-# ++++++++++++  dbg pages ++++++++++++
-@app.route('/check', methods=['GET', 'POST'])
-def check_check():
-    # subject_form = f.PurchaseForm(fdict)
-    # reference_form = SearchReference(request.form)
-    # if subject_form.submit_subject.data and subject_form.validate_on_submit():
-    #     print('Great Success')
-    #     return redirect(url_for('success', title='subject_form'))
-    # print('what happend')
-    # print("subject_form.errors")
-    # flash(subject_form.errors)
-
-    if 'GET' == request.method:
-        # if not subject_form.validate_on_submit():
-        print('-' * 13, ' GET ', '-' * 13)
-        return render_template("check.html")  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
-
-    print('-' * 13, ' POST ', '-' * 13)
-
-    print("request.values")
-    print(request.values)
-    print("request.form")
-    print(request.form)
-    print("getlist")
-    print(request.form.getlist('item'))
-    print("getlistgetlistgetlist")
-    for item in request.form.getlist('item'):
-        print(item)
-    print("items")
-    for item in request.form.items():
-        print(item)
-    printout = [request.values, request.form, request.form.getlist('item'), request.form.getlist('item'),
-                request.form.items()]
-    # print("request.data")
-    # print(request.data)
-    # print("request.args")
-    # print(request.args)
-    # results = request.args['results']
-
-    return render_template("check.html",
-                           printout=printout)  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
-
-
-# @app.route('/json')
-# def json():
-#     return render_template('json.html')
-
-# background process happening without any refreshing
-@app.route('/fetch_results')
-def fetch_results():
-    print("@@" * 33)
-    return ("nothing")
-
-
-@app.template_filter("clean_date")
-def clean_date(dt):
-    return dt.strftime("%d %b %Y")
-
-
-@app.template_filter("value_or_zero")
-def value_or_zero(val):
-    return val if val else 0
-
-
-@app.template_filter("value_or_empty")
-def value_or_zero(val):
-    return val if val else ''
 
 
 @app.route("/try_jinja")
@@ -605,3 +549,65 @@ def success(title):
     sform = f.SearchSubject()
     return '<h1>' + title + ' Great Success</h1>'
     # return render_template('try_bs.html', title='Great Success', sform=sform)
+
+
+# ++++++++++++  Login ++++++++++++
+# @login_required https://flask-login.readthedocs.io/en/latest/ todo use this to protect from logged-off users
+# @app.route('/insert-data')
+# def insert_data():
+#     print('congrats on the new addition')
+
+
+# ++++++++++++  dbg pages ++++++++++++
+@app.route('/check', methods=['GET', 'POST'])
+def check_check():
+    # subject_form = f.PurchaseForm(fdict)
+    # reference_form = SearchReference(request.form)
+    # if subject_form.submit_subject.data and subject_form.validate_on_submit():
+    #     print('Great Success')
+    #     return redirect(url_for('success', title='subject_form'))
+    # print('what happend')
+    # print("subject_form.errors")
+    # flash(subject_form.errors)
+
+    if 'GET' == request.method:
+        # if not subject_form.validate_on_submit():
+        print('-' * 13, ' GET ', '-' * 13)
+        return render_template("check.html")  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
+
+    print('-' * 13, ' POST ', '-' * 13)
+
+    print("request.values")
+    print(request.values)
+    print("request.form")
+    print(request.form)
+    print("getlist")
+    print(request.form.getlist('item'))
+    print("getlistgetlistgetlist")
+    for item in request.form.getlist('item'):
+        print(item)
+    print("items")
+    for item in request.form.items():
+        print(item)
+    printout = [request.values, request.form, request.form.getlist('item'), request.form.getlist('item'),
+                request.form.items()]
+    # print("request.data")
+    # print(request.data)
+    # print("request.args")
+    # print(request.args)
+    # results = request.args['results']
+
+    return render_template("check.html",
+                           printout=printout)  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
+
+
+# @app.route('/json')
+# def json():
+#     return render_template('json.html')
+
+# background process happening without any refreshing
+@app.route('/fetch_results')
+def fetch_results():
+    print("@@" * 33)
+
+    return render_template('srchbr.html', form1=f.SearchSubject())

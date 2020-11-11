@@ -27,13 +27,13 @@
                         Filter by<br>Sub-subject
                     </h5>
                     <hr>
-                    {{ search_bar['filter_form'].include.label }} <br>
-                    {{ search_bar['filter_form'].include }}
+{#                    {{ search_bar['filter_form'].includes.label }} <br>#}
+                    {{ search_bar['filter_form'].includes }}
                     <br><br>
-                    {{ search_bar['filter_form'].exclude.label }} <br>
-                    {{ search_bar['filter_form'].exclude }}
+{#                    {{ search_bar['filter_form'].excludes.label }} <br>#}
+                    {{ search_bar['filter_form'].excludes }}
                     <br><br><br>
-                    <label>or check and uncheck in the list below</label>
+{#                    <label>or check and uncheck in the list below</label>#}
                 </div>
 
                 <!--text and reference filtering options-->
@@ -68,9 +68,9 @@
                         <br><br><br><br>
                         {{ search_bar['filter_form'].fetch_full }} {{ search_bar['filter_form'].fetch_full.label }}
                         <br>
-                        {{ search_bar['filter_form'].attention_label }}
-                        <p id="fetch_full_warn" style="display:none">
-                            (Attention: Checking this box will to attempt full text fetching,
+{#                        {{ search_bar['filter_form'].attention_label }}#}
+                        <p id="fetch_full_warn" style="display:block">
+                            (Attention: Checking this box will attempt full text fetching,
                             <br>which can result in very highly loading times.)</p>
 
                     </div>
@@ -79,7 +79,7 @@
         </div>
     </div>
 </div>
-<br><br><br>
+<br>
 
 {% if flag %}
     {{ search_bar['filter_form'].fetch_results }}
