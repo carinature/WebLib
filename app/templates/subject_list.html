@@ -1,5 +1,19 @@
 {% extends 'layout.html' %}
+
 {% block app_content %}
+
+    <!------------------------------------------->
+    <!-------- Search & Filter Forms ------------>
+    <!------------------------------------------->
+    <button class='s01 btn-primary'
+            data-toggle='collapse' data-target='#hidden-bar' type="button">
+        Search Subject
+    </button>
+    <div id="hidden-bar" class="collapse ">
+    {% include 'search_bar.html' %}
+    {#    {% include 'filtering.html' %}#}
+    </div>
+    <br><br><br>
 
     {#    <h1>{{ title }}</h1>#}
     <h4 class="s01 welcome">
@@ -8,12 +22,11 @@
         <em style='color: var(--accent-color)'>&nbsp {{ total }}</em>
     </h4><br>
 
-
     <div class="container">
         {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
 
 
-{#        <table border="1" class="dataframe">#}
+        {#        <table border="1" class="dataframe">#}
         <table class='table table-hover'>
             {#   <thead style='  background-color: var(--accent-color); text-align: right;'>#}
             <thead style='  background-color: var(--secondary-color-light)'>
@@ -33,6 +46,7 @@
             {% endfor %}
             </tbody>
         </table>
+
 
         {# todo make bigger #}
         <!------------------------------------------->

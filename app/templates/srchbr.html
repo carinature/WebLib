@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block app_content %}
+    {#  container-fluid #}
+
+
+    <br><br><br><br><br><br><br><br>
+    <form method="POST" action="">
+        {{ form1.hidden_tag() }}
+        <div class="form-inline container-fluid search-bar">
+            <div class="s01 container flex-wrap search-bar-content">
+                {#            <div style="  margin: 10px;" class="list-inline-item">{{ form1.subject_keyword_1 }}</div>#}
+                <div class="list-inline-item search-bar-item">
+                    {{ form1.subject_keyword_1 }}
+                </div>
+                <div class="list-inline-item search-bar-item">
+                    {{ form1.subject_keyword_2 }}
+                </div>
+                <div class="list-inline-item search-bar-item">
+                    {{ form1.submit_subject }}
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

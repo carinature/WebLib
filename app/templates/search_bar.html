@@ -2,7 +2,7 @@
 <!-------------------Search Bar ---------------------->
 <!---------------------------------------------------->
 
-<div class="container">
+<div class="container-fluid ">
     {#Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and
     padding. #}
 
@@ -30,72 +30,61 @@
     {############################}
     {#      Search Fields       #}
     {############################}
-    <div class="formwrapper flex-column">
-        <!--- search by Subject  -->
-        {#        <div class="s01 ">#}
-        <div class="s01 ">
-            <div class="row" id="search-subject">
-                {% if index_flag %}
-                    {% set url=url_for('search_results') %}
-                {% endif %}
-                <form action='{{ url }}' method="POST" >
-                    {#                <form action='{{ url_for('search_results') }}' method="POST">#}
-                    {# todo try changing the action to JS or else   #}
-                    {{ search_bar['subject_form'].hidden_tag() }} {#csrf_token #}
-                    <div class="inner-form">
-                        {#                        <div class="form-field input-field first-wrap">#}
-                        <div class="list-inline-item search-bar-item" style="border-width: 0">
-                            {{ search_bar['subject_form'].subject_keyword_1 }}
-                            {% if search_bar['subject_form'].subject_keyword_1.errors %}
-                                <ul class="errors">
-                                    {% for error in search_bar['subject_form'].subject_keyword_1.errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
+    <!--- search by Subject  -->
+    <div class="s01 flex-column">
+{#        {% if hide_bar %}
+            {% set show='display:none' %}
+        {% endif %}
+        <div class="row" id="search-subject" style="{{ show }}">#}
+        <div class="row" id="search-subject">
 
+            {% if redirect_flag %}
+                {% set url=url_for('search_results') %}
+            {% endif %}
 
-                        {#                        <div class="form-field input-field second-wrap">#}
-                        <div class="list-inline-item search-bar-item">
-                            {{ search_bar['subject_form'].subject_keyword_2 }}
-                            {% if search_bar['subject_form'].subject_keyword_2.errors %}
-                                <ul class="errors">
-                                    {% for error in search_bar['subject_form'].subject_keyword_2.errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
+            <form action='{{ url }}' method="POST">
+                {{ search_bar['subject_form'].hidden_tag() }} {#csrf_token #}
 
-                        {#                        <div class="form-field input-field third-wrap ">#}
-                        <div class="list-inline-item search-bar-item">
-                            {#
-                            {% if index_flag %}
-                            {% set lkkj=84753 %}
-                            <input class=" btn-primary" type="button"
-                                   onclick="window.location.href='{{ url_for('search_results') }}\/{{ search_bar['subject_form'].subject_keyword_1.data }}'"
-                                   value="SearchSearch">
-                            {% else %}
-#}
-                            {{ search_bar['subject_form'].submit_subject }}
-                            {#                            {% endif %}#}
-                        </div>
+                <div class="search-bar-kt form-inline container-fluid ">
+                    {#                        <div class="form-field input-field first-wrap">#}
+                    <div class="list-inline-item">
+                        {{ search_bar['subject_form'].subject_keyword_1 }}
+                        {% if search_bar['subject_form'].subject_keyword_1.errors %}
+                            <ul class="errors">
+                                {% for error in search_bar['subject_form'].subject_keyword_1.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                     </div>
 
-                    {% if not index_flag %}
-                        {% include 'filtering.html' %}
-                    {% endif %}
+                    <div class="list-inline-item">
+                        {{ search_bar['subject_form'].subject_keyword_2 }}
+                        {% if search_bar['subject_form'].subject_keyword_2.errors %}
+                            <ul class="errors">
+                                {% for error in search_bar['subject_form'].subject_keyword_2.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
 
-                </form>
+                    <div class="list-inline-item">
+                        {{ search_bar['subject_form'].submit_subject }}
+                    </div>
+                </div>
 
+                {% if not hide_filter %}
+                    {% include 'filtering.html' %}
+                {% endif %}
 
-            </div>
+            </form>
         </div>
+    </div>
 
 
-        {##############     search by Reference - hidden Section    ###############}
-        {#
+    {##############     search by Reference - hidden Section    ###############}
+    {#
         <!--- search by Reference - hidden Section -->
         <div class="row" id="search-ref" style="display: none">
             <div class="s01">
@@ -161,5 +150,5 @@
    #}
 
 
-    </div>
+    {#    </div>#}
 </div>

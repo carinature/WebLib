@@ -20,6 +20,7 @@
     <div id="filtering" class="collapse ">
         <div class="container-fluid padding container">
             <div class="row text-center inner-form ">
+                    {{ search_bar['filter_form'].hidden_tag() }}
 
                 <!--sub-subject filtering options-->
                 <div class="col-md-6 col-lg-4" style="position:relative;">
@@ -85,7 +86,6 @@
         </div>
     </div>
 </div>
-<br>
 
 {#{% if flag %}#}
 {#    {{ search_bar['filter_form'].fetch_results }}#}

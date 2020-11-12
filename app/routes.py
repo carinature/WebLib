@@ -99,7 +99,7 @@ def search_results(search_word='', page=''):
                                results=[],
                                total=0,
                                search_bar=search_bar,
-                               flag=False
+                               # flag=False
                                )
 
     # if 'GET' == request.method:
@@ -156,58 +156,60 @@ def search_results(search_word='', page=''):
     numbers_dict: Dict = {}
     res_dict: Dict = {}
 
-    groups_by_number = groupby(
-        txts_q_with_ent_filter_order,
-        key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
 
-    for title_number, texts_tuples_group in groups_by_number:
-        # resdict[k]=[txts_table for txts_table in g]
-        numbers_dict[title_number]: Dict = {}
-        # print('@' * 33, title_number)
 
-        res = m.ResultByNum(title_number)
-        # print('@' * 13, res)
-
-        # TODO note that after the next line (sorted()) - texts_tuples_group NO LONGER EXISTS
-        #   maybe it's better to use order_by of sql (if slower)
-        texts_tuples_group_ordered = sorted(texts_tuples_group, key=lambda x: x[3])
-        group_by_number_n_bibinfo = groupby(
-            texts_tuples_group_ordered,  #
-            key=lambda txts_table: txts_table[3])  # , txts_table.book_biblio_info))
-
-        # for k, g in groups_by_number:
-        for bibinfo, texts_tuples_sub_group in group_by_number_n_bibinfo:
-            # print('o' * 13, bibinfo, texts_tuples_sub_group)
-            # print('o' * 13, res)
-            # j = 0
-            numbers_dict[title_number][bibinfo]: List[txts_table] = []
-            # print('*' * 13, bibinfo)
-            res.add_bib(bibinfo)
-            # print('*' * 13, res)
-            # 8255
-            for gg in texts_tuples_sub_group:
-                txt_entry = m.TextText(number=gg[0],
-                                       ref=gg[1],
-                                       subject=gg[2],
-                                       book_biblio_info=gg[3],
-                                       page=gg[4],
-                                       C=gg[5])
-                numbers_dict[title_number][bibinfo].append(txt_entry)
-                res.add_refs(ref=gg[1], bibinfo=gg[3])
-                # print('---',gg[4],'-----')
-                res.add_page(page=gg[4], bibinfo=gg[3])
-                # res.add_refs(ref=gg[1], bibinfo=int(float(gg[3])))
-                # print('\t\t\t', numbers_dict[title_number][bibinfo][j])
-                # j+=1
-        res_dict[title_number] = res
-
-        # print('_' * 13, res)
-        # print(numbers_dict[title_number][bibinfo])
-
-        # for gg in resdict[k]:
-        # print('\t\t', j, '. ', gg)
-        # j += 1
-        # print(numbers_dict[title_number])
+    # groups_by_number = groupby(
+    #     txts_q_with_ent_filter_order,
+    #     key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
+    #
+    # for title_number, texts_tuples_group in groups_by_number:
+    #     # resdict[k]=[txts_table for txts_table in g]
+    #     numbers_dict[title_number]: Dict = {}
+    #     # print('@' * 33, title_number)
+    #
+    #     res = m.ResultByNum(title_number)
+    #     # print('@' * 13, res)
+    #
+    #     # TODO note that after the next line (sorted()) - texts_tuples_group NO LONGER EXISTS
+    #     #   maybe it's better to use order_by of sql (if slower)
+    #     texts_tuples_group_ordered = sorted(texts_tuples_group, key=lambda x: x[3])
+    #     group_by_number_n_bibinfo = groupby(
+    #         texts_tuples_group_ordered,  #
+    #         key=lambda txts_table: txts_table[3])  # , txts_table.book_biblio_info))
+    #
+    #     # for k, g in groups_by_number:
+    #     for bibinfo, texts_tuples_sub_group in group_by_number_n_bibinfo:
+    #         # print('o' * 13, bibinfo, texts_tuples_sub_group)
+    #         # print('o' * 13, res)
+    #         # j = 0
+    #         numbers_dict[title_number][bibinfo]: List[txts_table] = []
+    #         # print('*' * 13, bibinfo)
+    #         res.add_bib(bibinfo)
+    #         # print('*' * 13, res)
+    #         # 8255
+    #         for gg in texts_tuples_sub_group:
+    #             txt_entry = m.TextText(number=gg[0],
+    #                                    ref=gg[1],
+    #                                    subject=gg[2],
+    #                                    book_biblio_info=gg[3],
+    #                                    page=gg[4],
+    #                                    C=gg[5])
+    #             numbers_dict[title_number][bibinfo].append(txt_entry)
+    #             res.add_refs(ref=gg[1], bibinfo=gg[3])
+    #             # print('---',gg[4],'-----')
+    #             res.add_page(page=gg[4], bibinfo=gg[3])
+    #             # res.add_refs(ref=gg[1], bibinfo=int(float(gg[3])))
+    #             # print('\t\t\t', numbers_dict[title_number][bibinfo][j])
+    #             # j+=1
+    #     res_dict[title_number] = res
+    #
+    #     # print('_' * 13, res)
+    #     # print(numbers_dict[title_number][bibinfo])
+    #
+    #     # for gg in resdict[k]:
+    #     # print('\t\t', j, '. ', gg)
+    #     # j += 1
+    #     # print(numbers_dict[title_number])
 
 
     subjects = []
@@ -221,7 +223,6 @@ def search_results(search_word='', page=''):
                            categories=categories,
                            search_word=search_word,
                            results=res_dict,
-                           # results={},
                            # form1=subject_form
                            )
 
@@ -487,7 +488,7 @@ def search_results_filter_subjects(search_word='', page=''):
                                results=[],
                                total=0,
                                search_bar=search_bar,
-                               flag=False
+                               # flag=False
                                )
 
     # if 'GET' == request.method:
@@ -583,7 +584,7 @@ def home():
                            index_title='The Ancient Mediterranean Religions Source Database',
                            description='Tiresias: The Ancient Mediterranean Religions Source Database',
                            search_bar=search_bar,
-                           index_flag=True
+                           redirect_flag=True
                            )
     # if 'GET' == request.method:
     #     print('~' * 15, ' home() - GET ', '~' * 15)
@@ -599,24 +600,56 @@ def book_indices():
                            description="Tiresias: The Ancient Mediterranean Religions Source Database", )
 
 
-# ++++++++++++  list of "subjects" in the db page ++++++++++++
-@app.route('/subject-list')
-def subject_list():
+# ++++++++++++  list of Subjects in the db page ++++++++++++
+@app.route('/subject-list', methods=['GET', 'POST'])
+def subject_list(search_word='', page=''):
+
     page = request.args.get('page', 1, type=int)
-    subjects = m.TextSubject.query.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
-    # there is not enough memory to do the next, but maybe consider the idea
-    # subjects = TextSubject.query.order_by(
-    #   TextSubject.subject.asc()).paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
+    search_bar: Dict = utils.init_search_bar()
+    subject_form = search_bar['subject_form']
+    filter_form = search_bar['filter_form']
+
+    if not subject_form.validate_on_submit():  # i.e. when method==GET
+        subjects = m.TextSubject.query.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
+        # there is not enough memory to do the next, but maybe consider the idea
+        # subjects = TextSubject.query.order_by(
+        #   TextSubject.subject.asc()).paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
+        next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
+        prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
+        if filter_form.fetch_results.data:
+            print('@' * 33, search_word)
+            print(search_word)
+            print(request)
+            print(request.args)
+        if subject_form.submit_subject.data:
+            print(request.args)
+            print('=' * 33, search_word)
+        return render_template('subject_list.html',
+                               title="Tiresias Subjects",  # todo different title
+                               description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               subjects=subjects,
+                               total=subjects.total,
+                               next_url=next_url,
+                               prev_url=prev_url,
+                               search_bar=search_bar,
+                           )
+
+    search_word = subject_form.subject_keyword_1.data
+    search = '%{}%'.format(search_word)
+    subjects_query: Query = m.TextSubject.query
+    subjects_filter: Query = subjects_query.filter(m.TextSubject.subject.like(search))
+    subjects_ordered: Query = subjects_filter.order_by(m.TextSubject.Csum.desc())
+    subjects = subjects_ordered
     next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
     prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
-
     return render_template('subject_list.html',
                            title="Tiresias Subjects",  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            subjects=subjects,
                            total=subjects.total,
                            next_url=next_url,
-                           prev_url=prev_url
+                           prev_url=prev_url,
+                           search_bar=search_bar,
                            )
 
 
