@@ -32,45 +32,216 @@ def teardown_db(exception):
         flag = False
 
 
+categories = [
+    {'name': 'Highly Validated',
+     'id': 'high',
+     'results': [
+         {'title': 'title',
+          'author': 'Author',
+          'ref_num': 'ref_num',
+          'refs': 'refs'
+          }
+     ]
+     },
+    {'name': 'Validated',
+     'id': 'valid',
+     'results': [
+         {'title': 'title',
+          'author': 'Author',
+          'ref_num': 'ref_num',
+          'refs': 'refs'
+          }
+     ]
+     },
+    {'name': 'Unvalidated',
+     'id': 'not',
+     'results': [
+         {'title': 'title',
+          'author': 'Author',
+          'ref_num': 'ref_num',
+          'refs': 'refs'
+          }
+     ]
+     }
+]
+
+
+# ++++++++++++  search results and filtering page ++++++++++++
+# @app.route('/search-results/<string:search_word>/<int:page>', methods=['GET', 'POST'])
+# @app.route('/search-results/<int:page>', methods=['GET', 'POST'])
+# @app.route('/search-results/<string:search_word>', methods=['GET', 'POST'])
+@app.route('/search-results', methods=['GET', 'POST'])
+def search_results(search_word='', page=''):
+    print('.' * 13)
+    print(page)
+    # todo put here the "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
+
+    user_addresses = [{"name": "First Address"},
+                      {"name": "Second Address"}]
+
+    search_bar: Dict = utils.init_search_bar()
+    subject_form = search_bar['subject_form']
+    filter_form = search_bar['filter_form']
+
+    if not subject_form.validate_on_submit():  # i.e. when method==GET
+        if filter_form.fetch_results.data:
+            print('@' * 33, search_word)
+            print(search_word)
+            print(request)
+            print(request.args)
+        if subject_form.submit_subject.data:
+            print(request.args)
+            print('=' * 33, search_word)
+
+        return render_template('search_subjects.html',
+                               title='',
+                               # description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               results=[],
+                               total=0,
+                               search_bar=search_bar,
+                               flag=False
+                               )
+
+    # if 'GET' == request.method:
+    # if not subject_form.validate_on_submit():
+    #     print('-' * 13, ' GET ', '-' * 13)
+    #     if not search_word:
+    #         print('=' * 13)
+    #         print('not search_word')
+    #     print('^' * 13, ' not validated on submit ', '^' * 13)
+    #     print('^' * 13, search_word, '^' * 13)
+    #     print('^' * 13, page, '^' * 13)
+    #     redirect(url_for('not_found'))
+    # flash("You submitted  via button {button}".format(            # name=form.name.data,
+    #         button="submit_subject" if subject_form.submit_subject.data else "fetch_full"))
+    print('-' * 13, ' POST ', '-' * 13)
+    print('*' * 33, search_word)
+    print(request.form)
+    print('*' * 33, search_word)
+
+    search_word = subject_form.subject_keyword_1.data
+    session['formdata'] = request.form
+    session['search_word'] = search_word
+    # print(search_word)
+    # print(search_bar['subject_form'].subject_keyword_1.raw_data)
+
+    # search = f'%{search_word}%'
+    search = '%{}%'.format(search_word)
+    page = request.args.get('page', 1, type=int)
+    txts_table = m.TextText
+    txts_subject_col = txts_table.subject
+    txts_C_col = txts_table.C
+    num_col = txts_table.number
+    ref_col = txts_table.ref
+    bib_info_col = txts_table.book_biblio_info
+    page_col = txts_table.page
+
+    # ............  return C (list)
+    texts_query: Query = txts_table.query
+    # txts_q_with_ent: Query = texts_query.with_entities(txts_subject_col, count(txts_subject_col),
+    # txts_q_with_ent: Query = texts_query.with_entities(num_col, txts_subject_col, ref_col, count(bib_info_col), page_col)  # count())
+    txts_q_with_ent: Query = texts_query.with_entities(
+        num_col, ref_col,
+        txts_subject_col,
+        bib_info_col,
+        page_col,
+        txts_C_col)  # count()) fixme remove C_col in production
+    txts_q_with_ent_filter: Query = txts_q_with_ent.filter(txts_subject_col.like(search))
+    # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter.group_by(txts_num_col, txts_subject_col)
+    # txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(num_col, bib_info_col)
+    # needs to be ordered for the itertools.groupby() later on,
+    #   since it collects together CONTIGUOUS items with the same key.
+    # todo consider doing the order by bib_info_col after groupby(by num_col)
+    txts_q_with_ent_filter_order: Query = txts_q_with_ent_filter.order_by(num_col)  # , bib_info_col)
+    numbers_dict: Dict = {}
+    res_dict: Dict = {}
+
+    groups_by_number = groupby(
+        txts_q_with_ent_filter_order,
+        key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
+
+    for title_number, texts_tuples_group in groups_by_number:
+        # resdict[k]=[txts_table for txts_table in g]
+        numbers_dict[title_number]: Dict = {}
+        # print('@' * 33, title_number)
+
+        res = m.ResultByNum(title_number)
+        # print('@' * 13, res)
+
+        # TODO note that after the next line (sorted()) - texts_tuples_group NO LONGER EXISTS
+        #   maybe it's better to use order_by of sql (if slower)
+        texts_tuples_group_ordered = sorted(texts_tuples_group, key=lambda x: x[3])
+        group_by_number_n_bibinfo = groupby(
+            texts_tuples_group_ordered,  #
+            key=lambda txts_table: txts_table[3])  # , txts_table.book_biblio_info))
+
+        # for k, g in groups_by_number:
+        for bibinfo, texts_tuples_sub_group in group_by_number_n_bibinfo:
+            # print('o' * 13, bibinfo, texts_tuples_sub_group)
+            # print('o' * 13, res)
+            # j = 0
+            numbers_dict[title_number][bibinfo]: List[txts_table] = []
+            # print('*' * 13, bibinfo)
+            res.add_bib(bibinfo)
+            # print('*' * 13, res)
+            # 8255
+            for gg in texts_tuples_sub_group:
+                txt_entry = m.TextText(number=gg[0],
+                                       ref=gg[1],
+                                       subject=gg[2],
+                                       book_biblio_info=gg[3],
+                                       page=gg[4],
+                                       C=gg[5])
+                numbers_dict[title_number][bibinfo].append(txt_entry)
+                res.add_refs(ref=gg[1], bibinfo=gg[3])
+                # print('---',gg[4],'-----')
+                res.add_page(page=gg[4], bibinfo=gg[3])
+                # res.add_refs(ref=gg[1], bibinfo=int(float(gg[3])))
+                # print('\t\t\t', numbers_dict[title_number][bibinfo][j])
+                # j+=1
+        res_dict[title_number] = res
+
+        # print('_' * 13, res)
+        # print(numbers_dict[title_number][bibinfo])
+
+        # for gg in resdict[k]:
+        # print('\t\t', j, '. ', gg)
+        # j += 1
+        # print(numbers_dict[title_number])
+
+
+    subjects = []
+    print("Starting data Value : {value}".format(value=subject_form.submit_subject.data))
+    print("Ending data Value : {value}".format(value=filter_form.fetch_results.data))
+
+    return render_template('search_results.html',
+                           # title=f'Search Result for: {search_word}',
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           search_bar=search_bar,
+                           categories=categories,
+                           search_word=search_word,
+                           results=res_dict,
+                           # results={},
+                           # form1=subject_form
+                           )
+
+    # todo
+    #  change projection to include entire entry instead of index alone
+    #  add fuzzy (returns things *like* but not necessarily the same) / regex search on the query
+    #  clean data before:
+    #    split creation of tables function in db-migration into multiple function
+    #    appropriate normalization
+
+
 # ++++++++++++  final (filtered) results page ++++++++++++
 @app.route('/results', methods=['GET', 'POST'])
 def final_results(search_word='', page=''):
     print('-' * 20)
     print(request.form)
     print('-' * 20)
-    categories = [
-        {'name': 'Highly Validated',
-         'id': 'high',
-         'results': [
-             {'title': 'title',
-              'author': 'Author',
-              'ref_num': 'ref_num',
-              'refs': 'refs'
-              }
-         ]
-         },
-        {'name': 'Validated',
-         'id': 'valid',
-         'results': [
-             {'title': 'title',
-              'author': 'Author',
-              'ref_num': 'ref_num',
-              'refs': 'refs'
-              }
-         ]
-         },
-        {'name': 'Unvalidated',
-         'id': 'not',
-         'results': [
-             {'title': 'title',
-              'author': 'Author',
-              'ref_num': 'ref_num',
-              'refs': 'refs'
-              }
-         ]
-         }
-    ]
-    search = '%{}%'.format('woman')
+
+    search_word = 'woman'
+    search = '%{}%'.format(search_word)
     # search = '%{}%'.format('divination')
 
     # todo this shoult be replaced by results from the previous page
@@ -277,7 +448,7 @@ def final_results(search_word='', page=''):
     # return str(txts_q_with_ent_filter_order)
     # print(res_dict)
     return render_template('final_results.html',
-                           # title='Final Results',
+                           title=f'Search Result for: {search_word}',
                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
                            categories=categories,
                            results=res_dict,
@@ -287,11 +458,8 @@ def final_results(search_word='', page=''):
 
 
 # ++++++++++++  search results and filtering page ++++++++++++
-# @app.route('/search-results/<string:search_word>/<int:page>', methods=['GET', 'POST'])
-# @app.route('/search-results/<int:page>', methods=['GET', 'POST'])
-@app.route('/search-results/<string:search_word>', methods=['GET', 'POST'])
-@app.route('/search-results', methods=['GET', 'POST'])
-def search_results(search_word='', page=''):
+@app.route('/search-results-filter-subjects', methods=['GET', 'POST'])
+def search_results_filter_subjects(search_word='', page=''):
     print('.' * 13)
     print(page)
     # todo put here the "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
@@ -414,7 +582,8 @@ def home():
                            title='Tiresias',
                            index_title='The Ancient Mediterranean Religions Source Database',
                            description='Tiresias: The Ancient Mediterranean Religions Source Database',
-                           search_bar=search_bar
+                           search_bar=search_bar,
+                           index_flag=True
                            )
     # if 'GET' == request.method:
     #     print('~' * 15, ' home() - GET ', '~' * 15)

@@ -295,9 +295,12 @@ class ResultByNum:
         # self.refs[bibinfo] = ref
         self.refs.add(ref)
 
-    def add_page(self, page: int, bibinfo: int):
+    def add_page(self, page: str, bibinfo: int):
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
-        page = int(float(page)) # todo page should be int in the DB, currentyly str
+        if not page.strip(' '):#todo should be handled in DB
+            page=' Page-Unknown '
+        else:
+            page = int(float(page)) # todo page should be int in the DB, currentyly str
         # self.books[bibinfo].pages.add(page)
         self.books[-1].pages.add(page)
 

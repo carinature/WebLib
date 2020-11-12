@@ -33,7 +33,7 @@ class SearchSubject(FlaskForm):
                                     [Optional(), validators.Regexp('^\w+$', message="Field accepts one search word")],
                                     render_kw={'placeholder': '(Optional) Subject'})
     submit_subject = SubmitField('Search',
-                                 render_kw={'class': 'btn-primary',}
+                                 render_kw={'class': 'btn-primary', }
                                  #            # 'style': 'float: right',
                                  #            # 'onclick': "alert('Fetching Data...')"
                                  #            }
@@ -68,29 +68,30 @@ languages = [
 ]
 
 
-
 class ExpenseItem(Form):
     expense_name = StringField('Expense_Item', validators=[DataRequired()])
     cost = FloatField('Cost', validators=[DataRequired()])
     due_date = DateField('Due Date', format='%Y-%m-%d',
-                                 validators=[DataRequired()],
-                                 default=datetime.datetime.today().date())
+                         validators=[DataRequired()],
+                         default=datetime.datetime.today().date())
     type = SelectField('Role', choices=[
         ('mutual', 'Mutual'),
         ('personal#1', 'Personal #1'),
         ('personal#2', 'Personal #2')
     ])
 
+
 class ExpensesForm(FlaskForm):
     """A collection of expense items."""
     items = FieldList(FormField(ExpenseItem), min_entries=1)
 
+
 class Include(FlaskForm):
     include = StringField(render_kw={'placeholder': 'Subject'})
 
+
 class Exclude(FlaskForm):
     exclude = StringField(render_kw={'placeholder': 'Subject'})
-
 
 
 class FilterForm(FlaskForm):
@@ -102,9 +103,9 @@ class FilterForm(FlaskForm):
     # <!--sub-subject filtering options-->
     includes = FieldList(
         # 'Including ',  # fixme remove *all* [Optional()] ?
-        FormField(Include), min_entries=1,  label='Includes'
+        FormField(Include), min_entries=1, label='Includes'
     )
-    excludes  = FieldList(
+    excludes = FieldList(
         # 'Including ',  # fixme remove *all* [Optional()] ?
         FormField(Exclude), min_entries=1, label='Excludes'
     )

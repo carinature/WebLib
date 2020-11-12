@@ -30,11 +30,16 @@
     {############################}
     {#      Search Fields       #}
     {############################}
-    <div class="formwrapper">
+    <div class="formwrapper flex-column">
         <!--- search by Subject  -->
+        {#        <div class="s01 ">#}
         <div class="s01 ">
             <div class="row" id="search-subject">
-                <form action='{{ url_for('search_results') }}' method="POST">
+                {% if index_flag %}
+                    {% set url=url_for('search_results') %}
+                {% endif %}
+                <form action='{{ url }}' method="POST" >
+                    {#                <form action='{{ url_for('search_results') }}' method="POST">#}
                     {# todo try changing the action to JS or else   #}
                     {{ search_bar['subject_form'].hidden_tag() }} {#csrf_token #}
                     <div class="inner-form">
@@ -65,23 +70,31 @@
 
                         {#                        <div class="form-field input-field third-wrap ">#}
                         <div class="list-inline-item search-bar-item">
-                            {# <div class="btn-search btn-primary">#}
-                            {# <i class="fas fa-search" aria-hidden="true">#}
+                            {#
+                            {% if index_flag %}
+                            {% set lkkj=84753 %}
+                            <input class=" btn-primary" type="button"
+                                   onclick="window.location.href='{{ url_for('search_results') }}\/{{ search_bar['subject_form'].subject_keyword_1.data }}'"
+                                   value="SearchSearch">
+                            {% else %}
+#}
                             {{ search_bar['subject_form'].submit_subject }}
-                            {# </i>#}
-                            {#</div> #}
+                            {#                            {% endif %}#}
                         </div>
-
                     </div>
-                    {% include 'filtering.html' %}
 
+                    {% if not index_flag %}
+                        {% include 'filtering.html' %}
+                    {% endif %}
 
-                    <button class="btn btn-dark">
-                        Clear all fields
-                    </button>
                 </form>
+
+
             </div>
         </div>
+
+
+        {##############     search by Reference - hidden Section    ###############}
         {#
         <!--- search by Reference - hidden Section -->
         <div class="row" id="search-ref" style="display: none">

@@ -10,7 +10,7 @@ function scrollFunction() {
     let subtitle = document.getElementById("navbar-subtitle");
     let title = document.getElementsByClassName("navbar-title")[0];
 
-    if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+    if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
         document.getElementById("myBtn").style.display = "block";
 
         // scrolled DOWN
