@@ -741,7 +741,7 @@ def try_bs():
 
 
 @app.route("/csv_to_mysql", methods=['GET', 'POST'])
-def csv_to_mysql():
+def load_db():
     csv_to_mysql()
     return 'OK'
 
