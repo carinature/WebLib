@@ -3,6 +3,7 @@
 {% block app_content %}
     {#  container-fluid #}
 
+
     <form method="post" action='{{ url_for('check_check') }}'>
         {#        {{ form1.hidden_tag() }}#}
 
@@ -29,15 +30,15 @@
         <br><br>
 
 
-                {% for item in ['option 1', 'option 2', 'option 3', 'option 4', 'option 5'] %}
-                    {{ checkbox_input(label=item, type="checkbox", id=item, name='item', value=item) }}
-                {% endfor %}
+        {% for item in ['option 1', 'option 2', 'option 3', 'option 4', 'option 5'] %}
+            {{ checkbox_input(label=item, type="checkbox", id=item, name='item', value=item) }}
+        {% endfor %}
 
-                <button type="submit">Submit</button>
-                <br><br><br>
-                {% for item in printout %}
-                    {{ item }}<br>
-                {% endfor %}
+        <button type="submit">Submit</button>
+        <br><br><br>
+        {% for item in printout %}
+            {{ item }}<br>
+        {% endfor %}
 
         {#    {{ data }}#}
 
@@ -55,6 +56,8 @@
     </div>
 
     <script src='../static/js/script.js'></script>
+
+
 
 {% endblock %}
 

@@ -13,7 +13,7 @@
 <div class="s01">
     <!-- s01 should appear in a parent element of collapse, so it would use the correct css rule for form-->
     <!--todo instead of relying on existing consider just making your own class for this case-->
-{#    <div id="filtering" class=" ">#}
+    {#    <div id="filtering" class=" ">#}
     <div id="filtering" class="collapse ">
         <div class="container-fluid padding container">
             <div class="row  inner-form ">
@@ -30,20 +30,17 @@
                     {% for i in search_bar['filter_form'].includes %}
                         {{ i }}
                     {% endfor %}
-                    <button onclick="add_field('include')" type="button"> + </button>
+                    <button onclick="add_field('include')" type="button"> +</button>
                     <br><br>
 
                     {{ search_bar['filter_form'].excludes.label }} <br>
                     {% for i in search_bar['filter_form'].excludes %}
                         {{ i }}
                     {% endfor %}
-                    <button onclick="add_field('exclude')" type="button"> + </button>
+                    <button onclick="add_field('exclude')" type="button"> +</button>
 
                     {#                    <label>or check and uncheck in the list below</label>#}
 
-                    <button class="btn btn-dark" style="position: absolute; bottom: 0; left: 0">
-                        Clear all fields
-                    </button>
                 </div>
 
                 <!--text and reference filtering options-->
@@ -91,10 +88,13 @@
                     </div>
 
                 </div>
+
+                <input type="reset" class="btn btn-dark" style="bottom: 0; left: 0">
             </div>
         </div>
     </div>
 </div>
+
 
 {#{% if flag %}#}
 {#    {{ search_bar['filter_form'].fetch_results }}#}

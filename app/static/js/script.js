@@ -68,17 +68,17 @@ function add_field(type = 'include') {
         return;
     }
     // construct and add label
-    let caps = type.charAt(0).toUpperCase() + type.slice(1);
+    let id = type + 's-' + i + '-' + type;
     let label = document.createElement("label");
-    label.setAttribute('for', type + 's-' + i + '-' + type);
-    let text = document.createTextNode(caps);
+    label.setAttribute('for', id);
+    let text = document.createTextNode(type.charAt(0).toUpperCase() + type.slice(1));
     label.appendChild(text);
     let new_th = document.createElement("th");
     new_th.appendChild(label);
     // construct and add input field
     let new_input = document.createElement("input");
-    new_input.setAttribute('id', caps);
-    new_input.setAttribute('name', caps);
+    new_input.setAttribute('id', id);
+    new_input.setAttribute('name', id);
     new_input.setAttribute('placeholder', ' Subject');
     let new_td = document.createElement("td");
     new_td.appendChild(new_input);
@@ -88,5 +88,18 @@ function add_field(type = 'include') {
     new_tr.appendChild(new_td);
     tbody.appendChild(new_tr);
 
-
 }
+
+// function clear_filter() {
+//     $("select").each(function () {
+//         this.selectedIndex = 0
+//     });
+//     $("input").each(function () {
+//         if ('checkbox' === this.type) {
+//             this.checked = false;
+//         }
+//         if ('text'===this.type){
+//             this.value = '';
+//         }
+//     });
+// }
