@@ -1,0 +1,53 @@
+
+{% macro disappring_btn(text, rbtn_id, relm_id, class='') -%}
+    <button class='{{ class }}'
+            data-toggle='collapse'
+            data-target='#{{ relm_id }}'
+            type='button'
+            onclick="this.style.display='none';"
+            style="border-radius: 15px"
+            {#                    onclick="more_less_info('{{ rbtn_id }}','{{ relm_id }}')"#}
+            id={{ rbtn_id }}>
+        {{ text }}
+    </button>
+{%- endmacro %}
+
+
+{% macro result_item(index = 0, author='', title='', books={}, refs=[], num='') -%}
+    {% set relm_id='refs'~num %}
+    {% set rbtn_id='refsbtn'~num %}
+    <div class="container-fluid">
+        {#        <div class="col-12" style=""> <!--todo move the style to css-->#}
+        <h4 class="" style="display: inline; padding: 10px;">
+            {{ index }}. {{ author }}, <em>{{ title }} </em>
+        </h4>
+        <span>
+            <em class="collapse" id={{ relm_id }}> {{ refs }} </em>
+            {{ disappring_btn( text='references: ', rbtn_id = rbtn_id, relm_id = relm_id) }}
+{#            <em style="display: none" id={{ relm_id }}> {{ refs }} </em>#}
+        </span>
+        <br>
+        <div style="padding-left: 2em">
+            {% for book in books %}
+                <br><em><b>{{ book.title_full }}</b></em>, &nbsp; pages:
+                {#                {{ book.pages }}#}
+                {% for page in book.pages -%}
+                    <a href="{{ link|value_or_empty }}"> {{ page }} </a>
+                    {#                    {% if loop.index!=(books|length) %}, {% endif %}#}
+                {%- endfor %}
+                <br>
+            {% endfor %}<br>
+            <br><br>
+        </div>
+    </div>
+{%- endmacro %}
+
+{% macro category_head(category='', id='', res_num='', value='') -%}
+    <div class="container-fluid padding" id="{{ id }}">
+        <div class="col-12" style="background-color: var(--secondary-color-light)"> <!--todo move the style to css-->
+            <h1 class="">{{ category }} {{ res_num }}</h1>
+            {#            <h1 class="display-4 welcome text-center">Tiresias: The Ancient Mediterranean Religions Source Database</h1>#}
+        </div>
+    </div>
+{%- endmacro %}
+

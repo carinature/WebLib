@@ -3,6 +3,7 @@
 {% block app_content %}
     {#  container-fluid #}
 
+
     <form method="post" action='{{ url_for('check_check') }}'>
         {#        {{ form1.hidden_tag() }}#}
 
@@ -38,9 +39,24 @@
         {% for item in printout %}
             {{ item }}<br>
         {% endfor %}
+
+        {#    {{ data }}#}
+
     </form>
 
-    {#    {{ data }}#}
+
+    <div class='container'>
+        <h3>Test</h3>
+        <form>
+            <a href=# id=test>
+                <button class='btn btn-default'>Test</button>
+            </a>
+        </form>
+
+    </div>
+
+    <script src='../static/js/script.js'></script>
+
 
 
 {% endblock %}
@@ -49,25 +65,25 @@
 {% macro checkbox_input(label="", type="text", id="", name="", value='' ) -%}
     <div class="form-group">
         <input type="{{ type }}" class="form-control" id="{{ id }}" name="{{ name }}"
-               value="{{ value }}">
+               value="val~{{ value }}">
         <label for="{{ id }}">{{ label }}</label>
     </div>
 {%- endmacro %}
 
 
 
-{% macro table(header, rows, columns) %}
-    \begin{tabular}{(formatting, later)}
-    {{ row(header) }}
-    {% for row in rows %}
-        {% for column in columns %}
-            {{ caller(row, column) }} {% if loop.last %}\\{% else %}&{% endif %}
-        {% endfor %}
-    {% endfor %}
-    \end{tabular}
-{% endmacro %}
-
-{% call(row, column) table.table(header, rows, columns) %}
-    Content at row = {{ row }}, column = {{ column }}
-{% endcall %}
+{#{% macro table(header, rows, columns) %}#}
+{#    \begin{tabular}{(formatting, later)}#}
+{#    {{ row(header) }}#}
+{#    {% for row in rows %}#}
+{#        {% for column in columns %}#}
+{#            {{ caller(row, column) }} {% if loop.last %}\\{% else %}&{% endif %}#}
+{#        {% endfor %}#}
+{#    {% endfor %}#}
+{#    \end{tabular}#}
+{#{% endmacro %}#}
+{##}
+{#{% call(row, column) table.table(header, rows, columns) %}#}
+{#    Content at row = {{ row }}, column = {{ column }}#}
+{#{% endcall %}#}
 

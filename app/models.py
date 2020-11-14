@@ -271,7 +271,8 @@ class Book(object):
 class ResultByNum:
     def __init__(self, num: int):
         self.num = num
-        self.refs: Dict = {}
+        # self.refs: Dict = {}
+        self.refs: Set = set()
         self.bibinfo: List[int] = []
         self.books: List[Book] = []
         # self.books: Dict[int, Book] = collections.defaultdict(Book)
@@ -291,11 +292,15 @@ class ResultByNum:
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
         # self.books[bibinfo].refs.append(ref)
         self.books[-1].refs.append(ref)
-        self.refs[bibinfo] = ref
+        # self.refs[bibinfo] = ref
+        self.refs.add(ref)
 
-    def add_page(self, page: int, bibinfo: int):
+    def add_page(self, page: str, bibinfo: int):
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
-        page = int(float(page)) # todo page should be int in the DB, currentyly str
+        if not page.strip(' '):#todo should be handled in DB
+            page=' Page-Unknown '
+        else:
+            page = int(float(page)) # todo page should be int in the DB, currentyly str
         # self.books[bibinfo].pages.add(page)
         self.books[-1].pages.add(page)
 

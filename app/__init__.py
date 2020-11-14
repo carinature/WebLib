@@ -11,6 +11,7 @@ def create_app():
     # instance_relative_config=True tells the app that configuration files are relative to the instance folder.
     # The instance folder is located outside the flaskr package and can hold local data that shouldn’t be committed
     # to version control, such as configuration secrets and the database file.
+
     # app.config.from_object('config.DevConfig')  # development configuration
     app.config.from_object('config.ProdConfig')  # production configuration
 

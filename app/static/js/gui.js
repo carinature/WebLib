@@ -1,7 +1,7 @@
 // When the user scrolls down 80px from the top of the document, resize the navbar's padding and the logo's font size
-// window.onscroll = function () {
-//     scrollFunction()
-// };
+window.onscroll = function () {
+    scrollFunction()
+};
 
 function scrollFunction() {
     let navbar = document.getElementsByClassName("navbar")[0];
@@ -10,9 +10,11 @@ function scrollFunction() {
     let subtitle = document.getElementById("navbar-subtitle");
     let title = document.getElementsByClassName("navbar-title")[0];
 
-    if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+    if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+        document.getElementById("myBtn").style.display = "block";
+
         // scrolled DOWN
-        subtitle.style.display = 'none';
+        // subtitle.style.display = 'none';
         // subtitle.style.transition = '400ms';
         // navbar.style.padding = "5px 10px 5px 10px";
         // logo.style.height = "3rem";
@@ -30,7 +32,9 @@ function scrollFunction() {
         title.style.fontSize = '0.5em';
 
     } else {  // scrolled to TOP
-        subtitle.style.display = 'block';
+        document.getElementById("myBtn").style.display = "none";
+
+        // subtitle.style.display = 'block';
         // subtitle.style.transition = '400ms';
 
         // logo.style.height = "3rem";
@@ -47,6 +51,13 @@ function scrollFunction() {
 }
 
 
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+
+
 function ShowHideDiv() {
     let chkYes = document.getElementById("chkYes");
     let search_subject = document.getElementById("search-subject");
@@ -55,4 +66,6 @@ function ShowHideDiv() {
 
     search_ref.style.display = chkYes.checked ? "none" : "block";
 }
+
+
 

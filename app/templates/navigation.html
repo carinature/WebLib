@@ -18,6 +18,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive" style="alignment: bottom">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active"><a class="nav-link" href="/#">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/#about-hook">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="/book-indices">Sources</a></li>
                 <li class="nav-item"><a class="nav-link" href="/subject-list">Subjects</a></li>
                 <li class="nav-item"><a class="nav-link" href="/#contact">Contact</a></li>
@@ -26,25 +27,15 @@
     </div>
 </nav>
 
+
+{#<nav class="navbar navbar-default">#}
 {#
-
-<nav class="navbar navbar-default">
-#}
-{#<nav class="navbar navbar-default navbar-expand-md navbar-light bgn-light sticky-top">#}{#
-
-#}
-{#    <img class="img-fluid " id="logo" src="../static/favicon.ico"#}{#
-
-#}
-{#         style="max-height: 3rem; display: inline;"#}{#
-
-#}
-{#         alt="h.c.m.h logo">#}{#
-
+<nav class="navbar navbar-default navbar-expand-md navbar-light bgn-light sticky-top">
+    <img class="img-fluid " id="logo" src="../static/favicon.ico"
+         style="max-height: 3rem; display: inline;"
+         alt="h.c.m.h logo">
     <div class="container-fluid">
-
         <div class="navbar-header">
-
             <a class="navbar-brand" href="{{ url_for('home') }}">
                 <b>Tiresias</b>
             </a>
@@ -52,14 +43,11 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                     data-target="#navbarResponsive" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-#}
-{#                <span class="navbar-toggler-icon"></span>#}{#
-
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="navbar-toggler-icon"></span>
             </button>
-
         </div>
 
         <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -67,30 +55,17 @@
                 <li class="nav-item"><a class="nav-link active" href="/#about-hook">About</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                #}
-{#                    {% if current_user.is_anonymous %}#}{#
-
-                <li class="nav-item"><a class="nav-link" href="/book-indices">Sources</a></li>
-                <li class="nav-item"><a class="nav-link" href="/subject-list">Subjects</a></li>
-                <li class="nav-item"><a class="nav-link active" href="/#contact">Contact</a></li>
-                #}
-{#                    <li><a href="{{ url_for('book_indices') }}">Login</a></li>#}{#
-
-                #}
-{#                    {% else %}#}{#
-
-                #}
-{#                    <li><a href="{{ url_for('pipi', username=current_user.username) }}">Profile</a></li>#}{#
-
-                #}
-{#                    <li><a href="{{ url_for('book_indices') }}">Logout</a></li>#}{#
-
-                #}
-{#                    {% endif %}#}{#
-
+                {% if current_user.is_anonymous %}
+                    <li class="nav-item"><a class="nav-link" href="/book-indices">Sources</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/subject-list">Subjects</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/#contact">Contact</a></li>
+                    <li><a href="{{ url_for('book_indices') }}">Login</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('pipi', username=current_user.username) }}">Profile</a></li>
+                    <li><a href="{{ url_for('book_indices') }}">Logout</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>
-</nav>
-#}
+</nav>#}
 

@@ -1,10 +1,20 @@
 {% extends 'layout.html' %}
 
 {% block app_content %}
+    <!------------------------------------------->
+    <!-------- Search & Filter Forms ------------>
+    <!------------------------------------------->
+    {#    <button class='s01 btn-primary' data-toggle='collapse' data-target='#search-subject'>Advanced Search Options &nbsp; (click#}
+    {#    me)#}
+    {#</button>#}
+    {% include 'search_bar.html' %}
+{#    {% include 'filtering.html' %}#}
+    <br><br><br>
 
     <!------------------------------------------->
     <!------- Headline - results for ... -------->
     <!------------------------------------------->
+{#
     {% if 'post'==method %}
         <div class='container-fluid padding'>
             <!--    <div class='row welcome text-center'>-->
@@ -17,15 +27,7 @@
             </div>
         </div>
     {% endif %}
-    <!------------------------------------------->
-    <!-------- Search & Filter Forms ------------>
-    <!------------------------------------------->
-    {#    <button class='s01 btn-primary' data-toggle='collapse' data-target='#search-subject'>Advanced Search Options &nbsp; (click#}
-    {#    me)#}
-    {#</button>#}
-    {% include 'search-bar.html' %}
-    {% include 'filtering.html' %}
-    <br><br><br>
+#}
 
 
     <!------------------------------------------->
