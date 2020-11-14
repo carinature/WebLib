@@ -1,25 +1,26 @@
 {% extends 'bootstrap/base.html' %}
 
 {% block styles %}
-{{ super() }}
-<style>
-    .navbar-nav {
-        background-color: var(--primary-color-light);
-    }
-    .navbar-default {
-        background-color: var(--primary-color-light);
-    }
-</style>
+    {{ super() }}
+    <style>
+        .navbar-nav {
+            background-color: var(--primary-color-light);
+        }
+
+        .navbar-default {
+            background-color: var(--primary-color-light);
+        }
+    </style>
 {% endblock %}
 
 
 {% block navbar %}
     <nav class="navbar navbar-default" style="background-color: var(--primary-color-light);">
-{#    <nav class="navbar navbar-default navbar-expand-md navbar-light bgn-light sticky-top">#}
-{#        <img class="img-fluid " id="logo" src="../static/favicon.ico"#}
-{#             style="max-height: 3rem; display: inline;"#}
-{#             alt="h.c.m.h logo">#}
-        <div class="container-fluid" >
+        {#    <nav class="navbar navbar-default navbar-expand-md navbar-light bgn-light sticky-top">#}
+        {#        <img class="img-fluid " id="logo" src="../static/favicon.ico"#}
+        {#             style="max-height: 3rem; display: inline;"#}
+        {#             alt="h.c.m.h logo">#}
+        <div class="container-fluid">
             <div class="navbar-header">
 
                 <a class="navbar-brand" href="{{ url_for('home') }}">
@@ -41,15 +42,15 @@
                     <li class="nav-item"><a class="nav-link active" href="/#about-hook">About</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-{#                    {% if current_user.is_anonymous %}#}
-                        <li class="nav-item"><a class="nav-link" href="/book-indices">Sources</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/subject-list">Subjects</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="/#contact">Contact</a></li>
-{#                        <li><a href="{{ url_for('book_indices') }}">Login</a></li>#}
-{#                    {% else %}#}
-{#                        <li><a href="{{ url_for('pipi', username=current_user.username) }}">Profile</a></li>#}
-{#                        <li><a href="{{ url_for('book_indices') }}">Logout</a></li>#}
-{#                    {% endif %}#}
+                    {#                    {% if current_user.is_anonymous %}#}
+                    <li class="nav-item"><a class="nav-link" href="/book-indices">Sources</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/subject-list">Subjects</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/#contact">Contact</a></li>
+                    {#                        <li><a href="{{ url_for('book_indices') }}">Login</a></li>#}
+                    {#                    {% else %}#}
+                    {#                        <li><a href="{{ url_for('pipi', username=current_user.username) }}">Profile</a></li>#}
+                    {#                        <li><a href="{{ url_for('book_indices') }}">Logout</a></li>#}
+                    {#                    {% endif %}#}
                 </ul>
             </div>
         </div>
@@ -61,7 +62,7 @@
     {% if title %}
         {{ title }} - Microblog
     {% else %}
-        Welcome to Microblog
+        Tirsias - CSV to MYSQL
     {% endif %}
 {% endblock %}
 
@@ -78,10 +79,13 @@
 
         {# application content needs to be provided in the app_content block #}
         {% block app_content %}
+
+            <br><br><br><br>
             {% for i in range %}
                 {{ i }}
                 <br>
             {% endfor %}
         {% endblock %}
     </div>
+    <script src="../static/js/script.js"></script>
 {% endblock %}

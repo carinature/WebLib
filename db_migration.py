@@ -13,6 +13,8 @@ from time import time
 
 def csv_to_mysql():  # todo consider NOT using try
 
+    print('csv_to_mysql()')
+
     # Create engine
     engine = db.engine  # todo or?
     # with app.app_context():
@@ -28,10 +30,18 @@ def csv_to_mysql():  # todo consider NOT using try
     t = time()
 
     # try:
-    models = Base.__subclasses__()
+    # models = Base.__subclasses__()
+    models = [BookRef, Title, TextText, TextSubject]
+    # models = [BookRef]
     for model in models:
-    # for model in [TextSubject]:
+        tm = time()
+        with open('flask_python_log.txt', 'a') as f:
+            f.write('\n')
+            f.write("@"*50)
+            f.write('\n')
+
         for src_file in model.src_scv:
+            tsrc = time()
             with open(src_file) as csv_file:
                 for dataframe in pd.read_csv(csv_file,
                                              dtype=model.dtype_dic_csv2py,
@@ -51,25 +61,38 @@ def csv_to_mysql():  # todo consider NOT using try
                         if TextSubject == model:
                             sunject_list = session.query(TextSubject).all()
                             for row in sunject_list:
-                                # print(row)
-                                # print(row.C)
                                 csum = 0
                                 clist = str(row.C).split(',')
-                                # print('clist')
-                                # print(clist)
                                 for c in clist:
                                     cc = c.split('-')
-                                    # print('cc')
-                                    # print(cc)
                                     if 2 == len(cc):
                                         csum += int(cc[1]) - int(cc[0])
                                     csum += 1
                                 row.Csum = csum
                         session.commit()
                     except Exception as e:
-                        print('~'*5, ' In model << ', model, ' >> ', '~'*5)
+                        print('~' * 5, ' In model << ', model, ' >> ', '~' * 5)
                         print('Error: {}'.format(str(e)))
                         print(dataframe)
+                        with open('flask_python_log.txt', 'a') as f:
+                            f.write('~' * 5 + ' In model << ' + str(model) + ' >> ' + '~' * 5)
+                            f.write('\n')
+                            f.write('Error: {}'.format(str(e)))
+                            f.write('\n')
+                            f.write(dataframe)
+                            f.write('\n')
+
+            print("...      SRC File " + src_file + " time: " + str(time() - tsrc) + " s.")
+            with open('flask_python_log.txt', 'a') as f:
+                f.write("...    SRC File " + src_file + " time: " + str(time() - tsrc) + " s.")
+                f.write('\n')
+
+        print("---  Model " + str(model) + " time: " + str(time() - tm) + " s.")
+        with open('flask_python_log.txt', 'a') as f:
+            f.write("---        Model " + str(model) + " time: " + str(time() - tm) + " s.")
+            f.write('\n')
+            f.write('\n')
+
     session.close()
 
     # except Exception as e:
@@ -77,8 +100,13 @@ def csv_to_mysql():  # todo consider NOT using try
     #     # s.rollback()  # Rollback the changes on error
     # finally:
     #     session.close()
-    print("Time elapsed: " + str(time() - t) + " s.")
-
+    print("=== Total Time elapsed: " + str(time() - t) + " s.")
+    with open('flask_python_log.txt', 'a') as f:
+        f.write("===            Total Time elapsed: " + str(time() - t) + " s.")
+        f.write('\n')
+        f.write("="*33)
+        f.write('\n')
+        f.write('\n')
 
 if __name__ == '__main__':
     # Load all CSV files to the DB

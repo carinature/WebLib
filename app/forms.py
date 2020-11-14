@@ -40,7 +40,7 @@ class SearchSubject(FlaskForm):
                                  )
 
 
-centuries = [('Any', 'Any'),
+centuries = [('', 'Any'),
              ('8 BCE', '8 BCE'),
              ('7 BCE', '7 BCE'),
              ('6 BCE', '6 BCE'),
@@ -58,7 +58,7 @@ centuries = [('Any', 'Any'),
              ('7 CE', '7 CE'),
              ('8 CE', '8 CE')]
 languages = [
-    ('Any', 'Any'),
+    ('', 'Any'),
     ('Aramaic', 'Aramaic'),
     ('Arabic', 'Arabic'),
     ('Greek', 'Greek'),

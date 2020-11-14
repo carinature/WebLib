@@ -2,9 +2,22 @@
 
 {% block app_content %}
     {#  container-fluid #}
+    {{ title }}
 
+    <br><br>
+
+
+
+    <button id="js-to-py" > pipi route </button>
+
+    <br>
+    <br>
+
+    <a id="test" type="button" href=""> fetch_results </a>
 
     <br><br><br><br><br><br><br><br>
+
+
     <form method="POST" action="">
         {{ form1.hidden_tag() }}
         <div class="form-inline container-fluid search-bar">
@@ -23,4 +36,5 @@
         </div>
     </form>
 
+    <script src="../static/js/script.js"></script>
 {% endblock %}

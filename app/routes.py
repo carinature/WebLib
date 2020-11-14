@@ -1,4 +1,5 @@
-from datetime import time
+from time import time
+
 from itertools import groupby
 from typing import List, Dict, Tuple
 
@@ -736,21 +737,8 @@ def try_bs():
     # )
     from flask import flash
     flash('mamase mamasa mamakusa')
+    return render_template('try_bs.html', title='TRY', range=range(25), load_db_flag=False)
 
-    return render_template('try_bs.html', title='TRY', range=range(25))
-
-
-@app.route("/csv_to_mysql", methods=['GET', 'POST'])
-def load_db():
-    csv_to_mysql()
-    return 'OK'
-
-
-@app.route("/success/<title>", methods=['GET', 'POST'])
-def success(title):
-    sform = f.SearchSubject()
-    return '<h1>' + title + ' Great Success</h1>'
-    # return render_template('try_bs.html', title='Great Success', sform=sform)
 
 
 # ++++++++++++  Login ++++++++++++
@@ -812,4 +800,40 @@ def check_check():
 def fetch_results():
     print("@@" * 33)
 
-    return render_template('srchbr.html', form1=f.SearchSubject())
+    # return render_template('srchbr.html', form1=f.SearchSubject())
+    return '<h1> A O K </h1>'
+
+
+@app.route("/success/<title>", methods=['GET', 'POST'])
+@app.route("/success")
+def success(title=''):
+    sform = f.SearchSubject()
+    # return '<h1>' + title + ' Great Success</h1>'
+    return render_template('srchbr.html', title='Great Success', form1=sform)
+
+
+@app.route('/flask_route_but_not_webpage')
+def js_btn_to_python():
+    print('##' * 33, ' from_js_btn_to_python function')
+    print("It's happening... ")
+    # csv_to_mysql()
+    return '<h1> A O K </h1>'
+
+
+@app.route("/csv_to_mysql_route", methods=['GET', 'POST'])
+def load_db():
+    from flask import flash
+    flash("If you click on the button below You are about to ask the server to load raw scv files into the mysql DB. ")
+    flash("It's gonna take a loooong time to finish (if lucky). ")
+    flash("Are you sure you want to do that? ")
+    return render_template('csv_to_mysql.html', load_db_flag=True)
+
+
+@app.route("/csv_to_mysql_func")
+def csv_to_mysql_func_btn():
+    print("It's happening... ")
+    t = time()
+    csv_to_mysql()
+    print("Time elapsed: " + str(time() - t) + " s.")
+    return '<h1> A O K </h1>'
+
