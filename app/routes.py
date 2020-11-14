@@ -158,58 +158,58 @@ def search_results(search_word='', page=''):
 
 
 
-    # groups_by_number = groupby(
-    #     txts_q_with_ent_filter_order,
-    #     key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
-    #
-    # for title_number, texts_tuples_group in groups_by_number:
-    #     # resdict[k]=[txts_table for txts_table in g]
-    #     numbers_dict[title_number]: Dict = {}
-    #     # print('@' * 33, title_number)
-    #
-    #     res = m.ResultByNum(title_number)
-    #     # print('@' * 13, res)
-    #
-    #     # TODO note that after the next line (sorted()) - texts_tuples_group NO LONGER EXISTS
-    #     #   maybe it's better to use order_by of sql (if slower)
-    #     texts_tuples_group_ordered = sorted(texts_tuples_group, key=lambda x: x[3])
-    #     group_by_number_n_bibinfo = groupby(
-    #         texts_tuples_group_ordered,  #
-    #         key=lambda txts_table: txts_table[3])  # , txts_table.book_biblio_info))
-    #
-    #     # for k, g in groups_by_number:
-    #     for bibinfo, texts_tuples_sub_group in group_by_number_n_bibinfo:
-    #         # print('o' * 13, bibinfo, texts_tuples_sub_group)
-    #         # print('o' * 13, res)
-    #         # j = 0
-    #         numbers_dict[title_number][bibinfo]: List[txts_table] = []
-    #         # print('*' * 13, bibinfo)
-    #         res.add_bib(bibinfo)
-    #         # print('*' * 13, res)
-    #         # 8255
-    #         for gg in texts_tuples_sub_group:
-    #             txt_entry = m.TextText(number=gg[0],
-    #                                    ref=gg[1],
-    #                                    subject=gg[2],
-    #                                    book_biblio_info=gg[3],
-    #                                    page=gg[4],
-    #                                    C=gg[5])
-    #             numbers_dict[title_number][bibinfo].append(txt_entry)
-    #             res.add_refs(ref=gg[1], bibinfo=gg[3])
-    #             # print('---',gg[4],'-----')
-    #             res.add_page(page=gg[4], bibinfo=gg[3])
-    #             # res.add_refs(ref=gg[1], bibinfo=int(float(gg[3])))
-    #             # print('\t\t\t', numbers_dict[title_number][bibinfo][j])
-    #             # j+=1
-    #     res_dict[title_number] = res
-    #
-    #     # print('_' * 13, res)
-    #     # print(numbers_dict[title_number][bibinfo])
-    #
-    #     # for gg in resdict[k]:
-    #     # print('\t\t', j, '. ', gg)
-    #     # j += 1
-    #     # print(numbers_dict[title_number])
+    groups_by_number = groupby(
+        txts_q_with_ent_filter_order,
+        key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
+
+    for title_number, texts_tuples_group in groups_by_number:
+        # resdict[k]=[txts_table for txts_table in g]
+        numbers_dict[title_number]: Dict = {}
+        # print('@' * 33, title_number)
+
+        res = m.ResultByNum(title_number)
+        # print('@' * 13, res)
+
+        # TODO note that after the next line (sorted()) - texts_tuples_group NO LONGER EXISTS
+        #   maybe it's better to use order_by of sql (if slower)
+        texts_tuples_group_ordered = sorted(texts_tuples_group, key=lambda x: x[3])
+        group_by_number_n_bibinfo = groupby(
+            texts_tuples_group_ordered,  #
+            key=lambda txts_table: txts_table[3])  # , txts_table.book_biblio_info))
+
+        # for k, g in groups_by_number:
+        for bibinfo, texts_tuples_sub_group in group_by_number_n_bibinfo:
+            # print('o' * 13, bibinfo, texts_tuples_sub_group)
+            # print('o' * 13, res)
+            # j = 0
+            numbers_dict[title_number][bibinfo]: List[txts_table] = []
+            # print('*' * 13, bibinfo)
+            res.add_bib(bibinfo)
+            # print('*' * 13, res)
+            # 8255
+            for gg in texts_tuples_sub_group:
+                txt_entry = m.TextText(number=gg[0],
+                                       ref=gg[1],
+                                       subject=gg[2],
+                                       book_biblio_info=gg[3],
+                                       page=gg[4],
+                                       C=gg[5])
+                numbers_dict[title_number][bibinfo].append(txt_entry)
+                res.add_refs(ref=gg[1], bibinfo=gg[3])
+                # print('---',gg[4],'-----')
+                res.add_page(page=gg[4], bibinfo=gg[3])
+                # res.add_refs(ref=gg[1], bibinfo=int(float(gg[3])))
+                # print('\t\t\t', numbers_dict[title_number][bibinfo][j])
+                # j+=1
+        res_dict[title_number] = res
+
+        # print('_' * 13, res)
+        # print(numbers_dict[title_number][bibinfo])
+
+        # for gg in resdict[k]:
+        # print('\t\t', j, '. ', gg)
+        # j += 1
+        # print(numbers_dict[title_number])
 
 
     subjects = []
