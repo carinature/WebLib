@@ -31,8 +31,8 @@ def csv_to_mysql():  # todo consider NOT using try
 
     # try:
     # models = Base.__subclasses__()
-    models = [BookRef, Title, TextText, TextSubject]
-    # models = [BookRef]
+    models = [BookRef, Title, TextSubject, TextText]
+    # models = [TextSubject]
     for model in models:
         tm = time()
         with open('flask_python_log.txt', 'a') as f:
