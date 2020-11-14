@@ -14,20 +14,20 @@
     <div class="container-fluid padding">
         <div class="row">
             <!-------- Title & Results Info ------------>
-            <div class="col-lg-4 text-center ">
+            <span class="col-lg-4 text-center ">
                 {#            <div class="col-12 text-center ">#}
                 <h1 class="display-4 welcome padding">
                     There are {{ results|length|value_or_zero }} results for: <em>{{ search_word }}</em></h1>
                 <h6>{{ y|value_or_zero }} are <a href="#high">highly validated</a> results.</h6>
                 <h6>{{ y|value_or_zero }} are <a href="#valid">validated</a> results.</h6>
                 <h6>{{ y|value_or_zero }} are <a href="#not">unvalidated</a> results.</h6>
-            </div>
+            </span>
 
             <!-------- Search & Filter Forms ------------>
-            <div class="col-lg-8">
+            <span class="col-lg-8">
                 {% include 'search_bar.html' %}
                 {#              {% include 'srchbr.html' %} #}
-            </div>
+            </span>
         </div>
         <hr>
     </div>

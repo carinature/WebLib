@@ -16,7 +16,7 @@
     {#    <div id="filtering" class=" ">#}
     <div id="filtering" class="collapse ">
         <div class="container-fluid padding container">
-            <div class="row  inner-form ">
+            <div class="row text-center inner-form ">
                 {{ search_bar['filter_form'].hidden_tag() }}
 
                 <!--sub-subject filtering options-->
@@ -26,17 +26,19 @@
                     </h5>
                     <hr>
 
-                    {{ search_bar['filter_form'].includes.label }} <br>
+                    {{ search_bar['filter_form'].includes.label }}
                     {% for i in search_bar['filter_form'].includes %}
                         {{ i }}
                     {% endfor %}
+                    <br>
                     <button onclick="add_field('include')" type="button"> +</button>
-                    <br><br>
+                    <br><br><br><br>
 
-                    {{ search_bar['filter_form'].excludes.label }} <br>
+                    {{ search_bar['filter_form'].excludes.label }}
                     {% for i in search_bar['filter_form'].excludes %}
                         {{ i }}
                     {% endfor %}
+                    <br>
                     <button onclick="add_field('exclude')" type="button"> +</button>
 
                     {#                    <label>or check and uncheck in the list below</label>#}
@@ -44,7 +46,7 @@
                 </div>
 
                 <!--text and reference filtering options-->
-                <div class="col-md-6 col-lg-4" style="padding: 1em;">
+                <div class="col-md-6 col-lg-4 " style="padding: 1em;">
                     <h5 class="welcome  col-form-label-lg">
                         Filter by<br>Text
                     </h5>
@@ -78,7 +80,7 @@
                     {{ search_bar['filter_form'].reference }}
                     <div class="" style="text-align: left">
                         <br><br><br><br>
-                        {{ search_bar['filter_form'].fetch_full }} {{ search_bar['filter_form'].fetch_full.label }}
+                        {{ search_bar['filter_form'].fetch_full }} &nbsp;&nbsp;&nbsp; {{ search_bar['filter_form'].fetch_full.label }}
                         <br>
                         {#                        {{ search_bar['filter_form'].attention_label }}#}
                         <p id="fetch_full_warn" style="display:block">
@@ -89,8 +91,16 @@
 
                 </div>
 
-                <input type="reset" class="btn btn-dark" style="bottom: 0; left: 0">
+                {#                <input type="reset" class="btn btn-dark" style="bottom: 0; left: 0">#}
+
+
             </div>
+            <button type="button"
+                    class="btn btn-dark"
+                    style="bottom: 0; left: 0"
+                    onclick="clear_filter()">
+                Clear all fields
+            </button>
         </div>
     </div>
 </div>

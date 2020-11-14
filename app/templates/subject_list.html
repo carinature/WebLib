@@ -3,29 +3,28 @@
 
 {% block app_content %}
 
-    <!------------------------------------------->
-    <!-------- Search & Filter Forms ------------>
-    <!------------------------------------------->
-    <div class="container">
-    {{ disappring_btn( text='Search Subject in the Database', rbtn_id = 'show-search-btn', relm_id = 'search-subject',
-    class='s01 btn-primary') }}
-</div>
-
-    {% with hide_bar=true %}
-        {% include 'search_bar.html' %}
-        {#    {% include 'filtering.html' %}#}
-    {% endwith %}
-    <br>
-
     <h4 class="s01 welcome">
         {#    <h4 style="background-color: var(--secondary-color-light); padding: 5%">#}
         Total Number of Subjects Currently Included in Database:
         <em style='color: var(--accent-color)'>&nbsp {{ total }}</em>
     </h4><br>
 
+    <!------------------------------------------->
+    <!-------- Search & Filter Forms ------------>
+    <!------------------------------------------->
+    <div class="container">
+        {{ disappring_btn( text='Search Subject in the Database', rbtn_id = 'show-search-btn', relm_id = 'search-subject',
+    class='s01 btn-primary') }}
+    </div>
+
+    {% with hide_bar=true %}
+        {% include 'search_bar.html' %}
+    {% endwith %}
+    <br>
+
+
     <div class="container">
         {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
-
 
         {#        <table border="1" class="dataframe">#}
         <table class='table table-hover'>

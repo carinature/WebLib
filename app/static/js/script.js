@@ -55,13 +55,16 @@ function more_less_info(btn_id, elm_id, show_msg = '', hide_msg = '') {
     if (hide_btn_flag) btn.style.display = "none"
 }
 
-function add_field(type = 'include') {
+function add_field(type = 'exclude') {
     // which table to expand
     let tbody = document.getElementById(type + 's-0').lastChild;
     // get number of input fields
     let labels = tbody.getElementsByTagName('label');
-    let last_label = labels[labels.length - 1];
-    let i = 1 + Number(last_label.attributes[0].value.split('-')[1]);
+    let i = 0;
+    if (0 < labels.length) {
+        let last_label = labels[labels.length - 1];
+        i = 1 + Number(last_label.attributes[0].value.split('-')[1]);
+    }
     // too many fields added
     if (2 < i) {
         alert("Hey buddy, you're asking too much.");
@@ -80,6 +83,7 @@ function add_field(type = 'include') {
     new_input.setAttribute('id', id);
     new_input.setAttribute('name', id);
     new_input.setAttribute('placeholder', ' Subject');
+    new_input.setAttribute('style', 'margin-left:15px');
     let new_td = document.createElement("td");
     new_td.appendChild(new_input);
     // construct and add the new input row to the table
@@ -90,16 +94,30 @@ function add_field(type = 'include') {
 
 }
 
-// function clear_filter() {
-//     $("select").each(function () {
-//         this.selectedIndex = 0
-//     });
-//     $("input").each(function () {
-//         if ('checkbox' === this.type) {
-//             this.checked = false;
-//         }
-//         if ('text'===this.type){
-//             this.value = '';
-//         }
-//     });
-// }
+function clear_filter() {
+    // reset all drop-down manues
+    $("select").each(function () {
+        this.selectedIndex = 0
+    });
+    // remove all excess text input fields
+    let includes = document.getElementsByTagName('tr');
+    console.log(includes)
+    // for some reason this worked weird when going from first to last
+    for (let j = includes.length - 1; j >= 0; --j) {
+        includes[j].remove();
+    }
+    // clear input
+    $("input").each(function () {
+        // clear all checkbox fields
+        if ('checkbox' === this.type) {
+            this.checked = false;
+        }
+        // clear all text input fields
+        if ('text' === this.type) {
+            this.value = '';
+        }
+    });
+    add_field('include');
+    add_field('exclude');
+
+}

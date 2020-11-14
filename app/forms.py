@@ -87,11 +87,13 @@ class ExpensesForm(FlaskForm):
 
 
 class Include(FlaskForm):
-    include = StringField(render_kw={'placeholder': ' Subject'})
+    include = StringField(render_kw={'placeholder': ' Subject',
+                                     'style':'margin-left:15px'})
 
 
 class Exclude(FlaskForm):
-    exclude = StringField(render_kw={'placeholder': ' Subject'})
+    exclude = StringField(render_kw={'placeholder': ' Subject',
+                                     'style':'margin-left:15px'})
 
 
 class FilterForm(FlaskForm):
@@ -113,12 +115,15 @@ class FilterForm(FlaskForm):
     # <!--text and reference filtering options-->
     # Dont delete this: https://gist.github.com/Overdese/abebc48e878662377988
     from_century = SelectField('From ', id="from-century-dl",
+                               render_kw={'style': ' float:right;'},
                                choices=centuries,
                                )
     to_century = SelectField('To ', id="to-century-dl",
+                             render_kw={'style': ' float:right;'},
                              choices=centuries,
                              )
     language = SelectField('Language ', id="language-dl",
+                           render_kw={'style': ' float:right;'},
                            choices=languages,
                            # render_kw={'style': 'margin-left: 20px; float: right'},
                            )
@@ -132,11 +137,13 @@ class FilterForm(FlaskForm):
                             render_kw={
                                 'placeholder': '(e.g., 1.1 for chapter 1 verse 1, or leave empty for whole work)'}
                             )
-    fetch_full = BooleanField('Fetch full text', id='fetch_full_chkbox',
-                              render_kw={'class': 'inline-radio', 'style': '',
-                                         # 'onClick': 'displayWarningFetchAllChkbx()',
-                                         'onClick':  # todo remove alert?
-                                             "alert('Attention! Checking this box will attempt full text fetching, which can result in very highly loading times.')"}
+    fetch_full = BooleanField('   Fetch full text', id='fetch_full_chkbox',
+                              render_kw={
+                                  # 'class': 'inline-radio',
+                                  # 'style': 'padding;',
+                                  # 'onClick': 'displayWarningFetchAllChkbx()',
+                                  'onClick':  # todo remove alert?
+                                      "alert('Attention! Checking this box will attempt full text fetching, which can result in very highly loading times.')"}
                               )
     attention_label = Label(
         text='(Attention: Checking this box will attempt full text fetching,'
