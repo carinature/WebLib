@@ -6,16 +6,16 @@
     <!------------------------------------------->
     <!-------- Search & Filter Forms ------------>
     <!------------------------------------------->
-    {{ disappring_btn(
-            text='Search Subject',
-            rbtn_id = 'show-search-btn',
-            relm_id = 'search-subject',
-            class='s01 btn-primary') }}
-
+    <button class='s01 btn-primary' id="show-search-btn"
+            data-toggle='collapse' data-target='#search-subject'
+            type="button" onclick="this.style.display='none';">
+        Search Subject
+    </button>
     {% with hide_bar=true %}
-        {% include 'search_bar.html' %}
+    {% include 'search_bar.html'%}
+    {#    {% include 'filtering.html' %}#}
     {% endwith %}
-    <br>
+    <br><br><br>
 
     <h4 class="s01 welcome">
         {#    <h4 style="background-color: var(--secondary-color-light); padding: 5%">#}
@@ -67,21 +67,11 @@
         {% endfor %}
 
     </div>
-    <script src="../static/js/script.js"></script>
+<script src="../static/js/script.js"></script>
 
 {% endblock %}
 
 
-{% macro disappring_btn(text, rbtn_id, relm_id, class='') -%}
-    <button class='{{ class }}'
-            data-toggle='collapse'
-            data-target='#{{ relm_id }}'
-            type='button'
-            onclick="this.style.display='none';"
-            {#                    onclick="more_less_info('{{ rbtn_id }}','{{ relm_id }}')"#}
-            id={{ rbtn_id }}>
-        {{ text }}
-    </button>
-{%- endmacro %}
+
 
 
