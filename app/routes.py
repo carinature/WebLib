@@ -639,7 +639,7 @@ def subject_list(search_word='', page=''):
     subjects_query: Query = m.TextSubject.query
     subjects_filter: Query = subjects_query.filter(m.TextSubject.subject.like(search))
     subjects_ordered: Query = subjects_filter.order_by(m.TextSubject.Csum.desc())
-    subjects = subjects_ordered
+    subjects = subjects_ordered.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
     next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
     prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
     return render_template('subject_list.html',

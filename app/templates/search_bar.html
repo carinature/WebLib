@@ -32,11 +32,11 @@
     {############################}
     <!--- search by Subject  -->
     <div class="s01 flex-column">
-{#        {% if hide_bar %}
-            {% set show='display:none' %}
+        {% if hide_bar %}
+            {% set collapse='collapse' %}
         {% endif %}
-        <div class="row" id="search-subject" style="{{ show }}">#}
-        <div class="row" id="search-subject">
+        <div class="row {{ collapse }}" id="search-subject" style="{{ show }}">
+{#        <div class="row " id="search-subject">#}
 
             {% if redirect_flag %}
                 {% set url=url_for('search_results') %}

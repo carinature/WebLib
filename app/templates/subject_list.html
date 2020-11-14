@@ -5,17 +5,17 @@
     <!------------------------------------------->
     <!-------- Search & Filter Forms ------------>
     <!------------------------------------------->
-    <button class='s01 btn-primary'
-            data-toggle='collapse' data-target='#hidden-bar' type="button">
+    <button class='s01 btn-primary' id="show-search-btn"
+            data-toggle='collapse' data-target='#search-subject'
+            type="button" onclick="this.style.display='none';">
         Search Subject
     </button>
-    <div id="hidden-bar" class="collapse ">
-    {% include 'search_bar.html' %}
+    {% with hide_bar=true %}
+    {% include 'search_bar.html'%}
     {#    {% include 'filtering.html' %}#}
-    </div>
+    {% endwith %}
     <br><br><br>
 
-    {#    <h1>{{ title }}</h1>#}
     <h4 class="s01 welcome">
         {#    <h4 style="background-color: var(--secondary-color-light); padding: 5%">#}
         Total Number of Subjects Currently Included in Database:
@@ -66,10 +66,10 @@
         {% endfor %}
 
     </div>
+<script src="../static/js/script.js"></script>
 
 {% endblock %}
 
-{#<script src="../static/js/script.js"></script>#}
 
 
 
