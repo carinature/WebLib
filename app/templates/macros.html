@@ -1,0 +1,12 @@
+
+{% macro disappring_btn(text, rbtn_id, relm_id, class='') -%}
+    <button class='{{ class }}'
+            data-toggle='collapse'
+            data-target='#{{ relm_id }}'
+            type='button'
+            onclick="this.style.display='none';"
+            {#                    onclick="more_less_info('{{ rbtn_id }}','{{ relm_id }}')"#}
+            id={{ rbtn_id }}>
+        {{ text }}
+    </button>
+{%- endmacro %}
