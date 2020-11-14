@@ -31,13 +31,13 @@ def csv_to_mysql():  # todo consider NOT using try
 
     # try:
     # models = Base.__subclasses__()
-    models = [BookRef, Title, TextText, TextSubject]
+    models = [BookRef, Title, TextSubject, TextText]
     # models = [BookRef]
     for model in models:
         tm = time()
         with open('flask_python_log.txt', 'a') as f:
             f.write('\n')
-            f.write("@"*50)
+            f.write("="*55 + str(time()))
             f.write('\n')
 
         for src_file in model.src_scv:
@@ -104,7 +104,7 @@ def csv_to_mysql():  # todo consider NOT using try
     with open('flask_python_log.txt', 'a') as f:
         f.write("===            Total Time elapsed: " + str(time() - t) + " s.")
         f.write('\n')
-        f.write("="*33)
+        f.write("@"*55)
         f.write('\n')
         f.write('\n')
 
