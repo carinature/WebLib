@@ -39,8 +39,8 @@ $('a#test').on('click', function (e) {
 
 function more_less_info(btn_id, elm_id, show_msg = 'Show More', hide_msg = 'Show less') {
     let btn = document.getElementById(btn_id); // Get the checkbox/button
-    console.log(btn_id)
-    console.log(btn)
+    console.log(btn_id);
+    console.log(btn);
     let elm = document.getElementById(elm_id); // Get the element to show/hide
     // If the element is shown, hide it. Otherwise, display
     if ('none' === elm.style.display) {
@@ -53,3 +53,38 @@ function more_less_info(btn_id, elm_id, show_msg = 'Show More', hide_msg = 'Show
     if (hide_btn_flag) btn.style.display = "none"
 }
 
+function add_field(type = 'include') {
+    // which table to expand
+    let tbody = document.getElementById(type + 's-0').lastChild;
+    // get number of input fields
+    let labels = tbody.getElementsByTagName('label');
+    let last_label = labels[labels.length - 1];
+    let i = 1 + Number(last_label.attributes[0].value.split('-')[1]);
+    // too many fields added
+    if (2 < i) {
+        alert("Hey buddy, you're asking too much.");
+        return;
+    }
+    // construct and add label
+    let caps = type.charAt(0).toUpperCase() + type.slice(1);
+    let label = document.createElement("label");
+    label.setAttribute('for', type + 's-' + i + '-' + type);
+    let text = document.createTextNode(caps);
+    label.appendChild(text);
+    let new_th = document.createElement("th");
+    new_th.appendChild(label);
+    // construct and add input field
+    let new_input = document.createElement("input");
+    new_input.setAttribute('id', caps);
+    new_input.setAttribute('name', caps);
+    new_input.setAttribute('placeholder', ' Subject');
+    let new_td = document.createElement("td");
+    new_td.appendChild(new_input);
+    // construct and add the new input row to the table
+    let new_tr = document.createElement("tr");
+    new_tr.appendChild(new_th);
+    new_tr.appendChild(new_td);
+    tbody.appendChild(new_tr);
+
+
+}

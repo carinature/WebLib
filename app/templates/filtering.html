@@ -9,56 +9,65 @@
     Advanced Search Options &nbsp; (click me)
 </button>
 
-
-{#        <form class="">#}
-{#<form action='{{ url_for('final_results') }}' method="POST">#}
-
 <!--hidden filtering section-->
 <div class="s01">
     <!-- s01 should appear in a parent element of collapse, so it would use the correct css rule for form-->
     <!--todo instead of relying on existing consider just making your own class for this case-->
-    <div id="filtering" class="collapse ">
+    <div id="filtering" class=" ">
+{#    <div id="filtering" class="collapse ">#}
         <div class="container-fluid padding container">
-            <div class="row text-center inner-form ">
-                    {{ search_bar['filter_form'].hidden_tag() }}
+            <div class="row  inner-form ">
+                {{ search_bar['filter_form'].hidden_tag() }}
 
                 <!--sub-subject filtering options-->
                 <div class="col-md-6 col-lg-4" style="position:relative;">
-                    <h5 class="welcome text-center col-form-label-lg" style="float: top; vertical-align: top">
+                    <h5 class="welcome  col-form-label-lg" style="float: top; vertical-align: top">
                         Filter by<br>Sub-subject
                     </h5>
                     <hr>
-                    {#                    {{ search_bar['filter_form'].includes.label }} <br>#}
-                    {{ search_bar['filter_form'].includes }}
+
+                    {{ search_bar['filter_form'].includes.label }} <br>
+                    {% for i in search_bar['filter_form'].includes %}
+                        {{ i }}
+                    {% endfor %}
+                    <button onclick="add_field('include')" type="button"> + </button>
                     <br><br>
-                    {#                    {{ search_bar['filter_form'].excludes.label }} <br>#}
-                    {{ search_bar['filter_form'].excludes }}
-                    <br><br><br>
+
+                    {{ search_bar['filter_form'].excludes.label }} <br>
+                    {% for i in search_bar['filter_form'].excludes %}
+                        {{ i }}
+                    {% endfor %}
+                    <button onclick="add_field('exclude')" type="button"> + </button>
+
                     {#                    <label>or check and uncheck in the list below</label>#}
 
-
-                    <button class="btn btn-dark" style="position: absolute; bottom: 0">
+                    <button class="btn btn-dark" style="position: absolute; bottom: 0; left: 0">
                         Clear all fields
                     </button>
                 </div>
 
                 <!--text and reference filtering options-->
                 <div class="col-md-6 col-lg-4" style="padding: 1em;">
-                    <h5 class="welcome text-center col-form-label-lg">
+                    <h5 class="welcome  col-form-label-lg">
                         Filter by<br>Text
                     </h5>
                     <hr>
                     <br>
-                    {{ search_bar['filter_form'].from_century.label }} {{ search_bar['filter_form'].from_century }}
-                    {% if SMALL_SCREEN %}
-                        <br><br>
-                    {% endif %}
-                    {{ search_bar['filter_form'].to_century.label }} {{ search_bar['filter_form'].to_century }}
+                    {{ search_bar['filter_form'].from_century.label }}
+                    {{ search_bar['filter_form'].from_century }}
                     <br><br>
-                    {{ search_bar['filter_form'].language.label }} {{ search_bar['filter_form'].language }}
+                    {{ search_bar['filter_form'].to_century.label }}
+                    {{ search_bar['filter_form'].to_century }}
+                    <br><br>
+                    {{ search_bar['filter_form'].language.label }}
+                    {{ search_bar['filter_form'].language }}
+
+                    {#                    {% if SMALL_SCREEN %}#}
+                    <br><br>
+                    {#                    {% endif %}#}
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <h5 class="welcome text-center col-form-label-lg">
+                    <h5 class="welcome  col-form-label-lg">
                         Filter by<br>Reference
                     </h5>
                     <hr>

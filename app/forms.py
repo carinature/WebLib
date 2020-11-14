@@ -28,11 +28,11 @@ class SearchSubject(FlaskForm):
         EMPTY_LABEL,
         [DataRequired(message='Did you forget to insert a search keyword'),
          validators.Regexp('^\w+$', message="Field accepts one search word")],
-        render_kw={'placeholder': 'Subject'})
+        render_kw={'placeholder': ' Subject'})
     subject_keyword_2 = StringField(EMPTY_LABEL,
                                     [Optional(), validators.Regexp('^\w+$', message="Field accepts one search word")],
                                     render_kw={'placeholder': '(Optional) Subject'})
-    submit_subject = SubmitField('Search',
+    submit_subject = SubmitField(' Search',
                                  render_kw={'class': 'btn-primary', }
                                  #            # 'style': 'float: right',
                                  #            # 'onclick': "alert('Fetching Data...')"
@@ -87,11 +87,11 @@ class ExpensesForm(FlaskForm):
 
 
 class Include(FlaskForm):
-    include = StringField(render_kw={'placeholder': 'Subject'})
+    include = StringField(render_kw={'placeholder': ' Subject'})
 
 
 class Exclude(FlaskForm):
-    exclude = StringField(render_kw={'placeholder': 'Subject'})
+    exclude = StringField(render_kw={'placeholder': ' Subject'})
 
 
 class FilterForm(FlaskForm):
