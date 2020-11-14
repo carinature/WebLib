@@ -68,7 +68,7 @@
 
 {% endblock %}
 
-
+{% from 'macros.html' import disappring_btn %}
 {% macro result_item(index = 0, author='', title='', books={}, refs=[], num='') -%}
     {% set relm_id='refs'~num %}
     {% set rbtn_id='refsbtn'~num %}
@@ -77,15 +77,10 @@
         <h4 class="" style="display: inline; padding: 10px;">
             {{ index }}. {{ author }}, <em>{{ title }} </em>
         </h4>
-        <span style="display: inline">
-            <button style="display: inline"
-                    {#                    class="btn"#}
-                    style="background-color: var(--primary-color-light)"
-                    onclick="more_less_info('{{ rbtn_id }}','{{ relm_id }}')"
-                    id={{ rbtn_id }}>
-                references:
-            </button>
-            <em style="display: none" id={{ relm_id }}> {{ refs }} </em>
+        <span>
+            <em class="collapse" id={{ relm_id }}> {{ refs }} </em>
+            {{ disappring_btn( text='references: ', rbtn_id = rbtn_id, relm_id = relm_id) }}
+{#            <em style="display: none" id={{ relm_id }}> {{ refs }} </em>#}
         </span>
         <br>
         <div style="padding-left: 2em">

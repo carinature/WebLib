@@ -547,7 +547,7 @@ def search_results_filter_subjects(search_word='', page=''):
                            # next_url=next_url,
                            # prev_url=prev_url,
                            search_word=search_word,
-                           flag=True
+                           # flag=True
                            )
 
     # todo
