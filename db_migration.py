@@ -28,6 +28,11 @@ def csv_to_mysql():  # todo consider NOT using try
     session = Session()  # todo or? session = scoped_session(Session())
 
     t = time()
+    with open('flask_python_log.txt', 'a') as f:
+        f.write('\n')
+        f.write('\n')
+        f.write("=" * 55 + str(time()))
+        f.write('\n')
 
     # try:
     # models = Base.__subclasses__()
@@ -35,10 +40,6 @@ def csv_to_mysql():  # todo consider NOT using try
     # models = [TextSubject]
     for model in models:
         tm = time()
-        with open('flask_python_log.txt', 'a') as f:
-            f.write('\n')
-            f.write("="*55 + str(time()))
-            f.write('\n')
 
         for src_file in model.src_scv:
             tsrc = time()
@@ -104,7 +105,7 @@ def csv_to_mysql():  # todo consider NOT using try
     with open('flask_python_log.txt', 'a') as f:
         f.write("===            Total Time elapsed: " + str(time() - t) + " s.")
         f.write('\n')
-        f.write("@"*55)
+        f.write("="*55)
         f.write('\n')
         f.write('\n')
 
