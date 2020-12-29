@@ -6,6 +6,7 @@ from flask_bootstrap import Bootstrap
 db = SQLAlchemy()
 bootstrap = Bootstrap()
 
+
 def create_app():
     app = Flask(__name__, instance_relative_config=False)
     # instance_relative_config=True tells the app that configuration files are relative to the instance folder.

@@ -38,8 +38,9 @@
             </thead>
             <tbody>
             {% for row in subjects.items %}
-                <tr>
-                    {# {{ loop.index0 }}</th>#}
+                <tr onclick="alert('this is the subject: {{ row.subject|replace("'", "") }}')">
+{#                <tr>#}
+{#                     {{ loop.index0 }}#}
                     <td>{{ row.subject }}</td>
                     <td style="text-align: center">{{ row.Csum }}</td>
                 </tr>

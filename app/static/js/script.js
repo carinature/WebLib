@@ -26,7 +26,7 @@ function displayWarningFetchAllChkbx() {
     else text.style.display = "none";
 }
 
-
+//for testing purposes - currently not used
 $('a#test').on('click', function (e) {
     e.preventDefault();
     $.getJSON('fetch_results',
@@ -35,7 +35,7 @@ $('a#test').on('click', function (e) {
         });
     return false;
 });
-
+//for testing purposes - currently not used(?)
 $('button#js-to-py').on('click', function (e) {
     //  NEXT TO COMMANDS DO NOT SEEM TO WORK
     alert("You pushed the button  =)")
@@ -48,7 +48,7 @@ $('button#js-to-py').on('click', function (e) {
     return false;
 });
 
-
+//load raw scv files into the MySQL DB
 $('button#csv_to_mysql_btn').on('click', function (e) {
     alert("You are about to ask the server to load raw scv files into the mysql DB. " +
         "It's gonna take a loooong time to finish (if lucky). " +
@@ -83,6 +83,9 @@ function more_less_info(btn_id, elm_id, show_msg = '', hide_msg = '') {
     if (hide_btn_flag) btn.style.display = "none"
 }
 
+/**
+ * adding a field to the filtering form
+ * */
 function add_field(type = 'exclude') {
     // which table to expand
     let tbody = document.getElementById(type + 's-0').lastChild;
@@ -121,7 +124,9 @@ function add_field(type = 'exclude') {
     tbody.appendChild(new_tr);
 
 }
-
+/**
+ * clearing all fields in the search bar and filter form
+ * */
 function clear_filter() {
     // reset all drop-down manues
     $("select").each(function () {
@@ -149,3 +154,45 @@ function clear_filter() {
     add_field('exclude');
 
 }
+
+// Invoking a python script on click of html button can be accomplished using python-django framework.
+// The ajax for it is written this way
+// <input type = “button” id=”b1″ value=”1″>
+// <script>
+// $(document).ready(function () {
+//     $("#b1").click(function () {
+//         $.ajax({
+//             method: "GET",
+//             url: "type your python script path here",
+//             data: {"place": value},
+//             dataType: "text",
+//             success: function (result) {
+//                 let data = JSON.parse(result);
+//                 console.log(result);
+//             }
+//         });
+//     });
+// });
+// </script>
+
+
+//
+// function searchjs(srchwrd) {
+//     srchwrd = srchwrd.replace('\'', '');
+//     console.log(srchwrd);
+//     // $.getJSON('flam',
+//     // function (data) {
+//     //     //do nothing
+//     // });
+//     $.ajax({
+//         method: "post",
+//         url: "/search-results",
+//         data: 696969,
+//         // data: {"place": 'value'},
+//         dataType: "text",
+//         success: function (result) {
+//             let data = JSON.parse(result);
+//             console.log(result);
+//         }
+//     });
+// }

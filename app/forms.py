@@ -5,6 +5,8 @@ from markupsafe import Markup
 from wtforms import *
 from wtforms.validators import *
 
+from . import models as m  # for the global variables and db constants
+
 # from wtforms import (StringField,
 #                      TextAreaField,
 #                      SubmitField,
@@ -21,6 +23,8 @@ from wtforms.validators import *
 from wtforms.widgets import html_params, TextInput
 
 EMPTY_LABEL = ''
+EARLIEST_CENTURY = -100
+NEWEST_CENTURY = 21
 
 
 class SearchSubject(FlaskForm):
@@ -39,8 +43,14 @@ class SearchSubject(FlaskForm):
                                  #            }
                                  )
 
+    def __repr__(self):
+        return f'SearchSubject:\n' \
+               f'   kw_1: "{self.subject_keyword_1.data}\n"' \
+               f'   kw_2: "{self.subject_keyword_2.data}\n"' \
+               f'   btn pressed? {self.submit_subject.data}'
 
-centuries = [('', 'Any'),
+
+centuries = [(EARLIEST_CENTURY, 'Any'),
              ('-8', '8 BCE'),
              ('-7', '7 BCE'),
              ('-6', '6 BCE'),
@@ -68,36 +78,17 @@ languages = [
 ]
 
 
-class ExpenseItem(Form):
-    expense_name = StringField('Expense_Item', validators=[DataRequired()])
-    cost = FloatField('Cost', validators=[DataRequired()])
-    due_date = DateField('Due Date', format='%Y-%m-%d',
-                         validators=[DataRequired()],
-                         default=datetime.datetime.today().date())
-    type = SelectField('Role', choices=[
-        ('mutual', 'Mutual'),
-        ('personal#1', 'Personal #1'),
-        ('personal#2', 'Personal #2')
-    ])
-
-
-class ExpensesForm(FlaskForm):
-    """A collection of expense items."""
-    items = FieldList(FormField(ExpenseItem), min_entries=1)
-
-
 class Include(FlaskForm):
     include = StringField(render_kw={'placeholder': ' Subject',
-                                     'style':'margin-left:15px'})
+                                     'style': 'margin-left:15px'})
 
 
 class Exclude(FlaskForm):
     exclude = StringField(render_kw={'placeholder': ' Subject',
-                                     'style':'margin-left:15px'})
+                                     'style': 'margin-left:15px'})
 
 
 class FilterForm(FlaskForm):
-    """Sign up for a user account."""
     # email = StringField('Email', [
     #     Email(message='Not a valid email address.'),
     #     DataRequired()])
@@ -157,6 +148,25 @@ class FilterForm(FlaskForm):
                                 )
 
     # clean_button = ('Clear all fields')
+
+    def __repr__(self):
+        strtr = f'SearchSubject:' \
+                f'\n   includes: '
+        for i in self.includes.data:
+            strtr += f" {i['include']} "
+        strtr += f'\n   excludes: '
+        for i in self.excludes.data:
+            strtr += f" {i['exclude']} "
+        strtr += f'\n' \
+                 f'   from_century: "{self.from_century.data}\n"' \
+                 f'   to_century: "{self.to_century.data}\n"' \
+                 f'   language: "{self.language.data}\n"' \
+                 f'   ancient_author: "{self.ancient_author.data}\n"' \
+                 f'   reference: "{self.reference.data}\n"' \
+                 f'   ancient_title: "{self.ancient_title.data}\n"' \
+                 f'   fetch_full? {self.fetch_full.data}'
+
+        return strtr
 
 
 class SearchReference(FlaskForm):
