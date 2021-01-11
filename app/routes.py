@@ -65,16 +65,23 @@ categories = [
      ]
      }
 ]
+links = {
+    'home': '/',
+    'search': '/search-results',
+    'books': '/book-indices',
+    'subjects': '/subject-list',
+}
 
 
 # ++++++++++++  search results and filtering page ++++++++++++
 # @app.route('/search-results/<string:search_word>/<int:page>', methods=['GET', 'POST'])
 # @app.route('/search-results/<int:page>', methods=['GET', 'POST'])
 # @app.route('/search-results/<string:search_word>', methods=['GET', 'POST'])
-@app.route('/search-results', methods=['GET', 'POST'])
+@app.route(links['search'], methods=['GET', 'POST'])
+# @app.route('/search-results', methods=['GET', 'POST'])
 def search_results(search_word='', page=''):
-    print('.' * 13)
-    print(page)
+    # print('.' * 13)
+    # print(page)
     # todo put here the "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
 
     search_bar: Dict = utils.init_search_bar()
@@ -91,13 +98,13 @@ def search_results(search_word='', page=''):
                                # flag=False
                                )
 
-    print('-' * 13, ' POST ', '-' * 13)
-    print(' - request.form - ')
-    print(request.form)
-    print(' - subject_form - ')
-    print(subject_form)
-    print(' - filter_form - ')
-    print(filter_form)
+    # print('-' * 13, ' POST ', '-' * 13)
+    # print(' - request.form - ')
+    # print(request.form)
+    # print(' - subject_form - ')
+    # print(subject_form)
+    # print(' - filter_form - ')
+    # print(filter_form)
 
     search_word = subject_form.subject_keyword_1.data
     print('*' * 33, search_word)
@@ -107,7 +114,7 @@ def search_results(search_word='', page=''):
 
     # search = f'%{search_word}%'
     # search = '%{}%'.format(search_word)
-    search = '%{}%'.format('Abishag')
+    search = '%{}%'.format('women')
     page = request.args.get('page', 1, type=int)
     txts_table = m.TextText
     sbj_col = txts_table.subject
@@ -117,7 +124,7 @@ def search_results(search_word='', page=''):
     bib_info_col = txts_table.book_biblio_info
     page_col = txts_table.page
 
-    # ............  return C (list)
+    # ............  return all matching results (subjects) by C column [list] ............
     texts_query: Query = txts_table.query
     # txts_q_with_ent: Query = texts_query.with_entities(sbj_col, count(sbj_col),
     # txts_q_with_ent: Query = texts_query.with_entities(num_col, sbj_col, ref_col, count(bib_info_col), page_col)  # count())
@@ -138,31 +145,35 @@ def search_results(search_word='', page=''):
     numbers_dict: Dict = {}
     res_dict: Dict = {}
 
+    # ............  group the results by (referenced) title ('number' column) [dict?] ............
     groups_by_number = groupby(
         txts_q_with_ent_filter_order,
         key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
 
+    # ............  filter and add the references (ref-ing titles) [dict of result objects ] ............
     for title_number, texts_tuples_group in groups_by_number:
         # resdict[k]=[txts_table for txts_table in g]
         numbers_dict[title_number]: Dict = {}
         # print('@' * 33, title_number)
 
+        # ... create title object - filter is checked during object init
         res = m.ResultTitle(title_number, filter_form)
         # print('@' * 13, res)
         # if the result doesn't pass the filters, continue to the next result.
         # can only now that after creating the result/title obj when checking in the Titles table.
-
-        if not res.filtered_flag:
+        # if this title doesn't pass the filtering continue to the next result (it won't be added to the final list)
+        if not res.filtered_flag:  # fixme - too primitive?
             continue
 
         # TODO note that after the next line (sorted()) - texts_tuples_group NO LONGER EXISTS
         #   maybe it's better to use order_by of sql (if slower)
+        # ... sub grouping the results by the ref-ing titles
         texts_tuples_group_ordered = sorted(texts_tuples_group, key=lambda x: x[3])
         group_by_number_n_bibinfo = groupby(
-            texts_tuples_group_ordered,  #
+            texts_tuples_group_ordered,
             key=lambda txts_table: txts_table[3])  # , txts_table.book_biblio_info))
 
-        # for k, g in groups_by_number:
+        # add every ref-ing title to the current result (title) object
         for bibinfo, texts_tuples_sub_group in group_by_number_n_bibinfo:
             # print('o' * 13, bibinfo, texts_tuples_sub_group)
             # print('o' * 13, res)
@@ -542,6 +553,10 @@ def search_results(search_word='', page=''):
 #     #    appropriate normalization
 
 
+def nothing():
+    pass
+
+
 # ++++++++++++  Jinja2 Filter Functions ++++++++++++
 @app.template_filter("clean_date")
 def clean_date(dt):
@@ -559,7 +574,7 @@ def value_or_zero(val):
 
 
 # ++++++++++++  Home page ++++++++++++
-@app.route('/', methods=['GET', 'POST'])
+@app.route(links['home'], methods=['GET', 'POST'])
 def home():
     search_bar: Dict = utils.init_search_bar()
     search_word = search_bar['subject_form'].subject_keyword_1.data
@@ -577,7 +592,8 @@ def home():
 
 
 # ++++++++++++  list of books page ++++++++++++
-@app.route('/book-indices')
+@app.route(links['books'])
+# @app.route('/book-indices')
 def book_indices():
     return render_template('book_indices.html',
                            title="Books Included in the Tiresias Project Database",  # todo different title
@@ -585,7 +601,8 @@ def book_indices():
 
 
 # ++++++++++++  list of Subjects in the db page ++++++++++++
-@app.route('/subject-list', methods=['GET', 'POST'])
+@app.route(links['subjects'])
+# @app.route('/subject-list', methods=['GET', 'POST'])
 def subject_list(search_word='', page=''):
     page = request.args.get('page', 1, type=int)
     search_bar: Dict = utils.init_search_bar()
@@ -829,6 +846,3 @@ def flam_bla(place):
     # print("place: ", place)
     flam_flam()
     return '<h1> A O K </h1>'
-
-    
-

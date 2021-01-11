@@ -26,23 +26,23 @@
 
 
     <!-------- Validation Category Sections ------------>
-    {% for category in categories %}
+{#    {% for category in categories %}
         {{ category_head(category['name'], category['id']) }}
         {% set outer_loop = loop %}
         {% for res in category['results'] %}
             {{ result_item(loop.index, res['author'], res['title'], res['refs_num'], res['refs'], loop.index~outer_loop.index) }}
 
-            {#            {% set elm_id=num %}#}
-            {#            {% set btn_id='btn'~num %}#}
-            {#            <button id={{ btn_id }} class="" style="padding:.5em; background-color: var(--accent-color)"#}
-            {#                    onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">Show More#}
-            {#            </button>#}
-            {#            <br><br>#}
-            {#            <p style="display: none" id={{ elm_id }}>#}
-            {#                preview of the text (???)#}
-            {#            </p>#}
+            #}{#            {% set elm_id=num %}#}{#
+            #}{#            {% set btn_id='btn'~num %}#}{#
+            #}{#            <button id={{ btn_id }} class="" style="padding:.5em; background-color: var(--accent-color)"#}{#
+            #}{#                    onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">Show More#}{#
+            #}{#            </button>#}{#
+            #}{#            <br><br>#}{#
+            #}{#            <p style="display: none" id={{ elm_id }}>#}{#
+            #}{#                preview of the text (???)#}{#
+            #}{#            </p>#}{#
         {% endfor %}
-    {% endfor %}
+    {% endfor %}#}
 
 
     <!-------- Results (Per Category) ------------>

@@ -223,33 +223,35 @@ class ResultTitle:
         self.title = q_title_filter.value(Title.title)
         print('.' * 13, self.title, 'by:', self.author)
         self.filtered_flag = False
-        q_title_filter_from: Query = q_title_filter.filter(Title.centstart >= filter_form.from_century.data)
-        q_title_filter_to: Query = q_title_filter_from.filter(
-            Title.centend <= filter_form.to_century.data)  # fixme deal with null cases
-        # q_title_filter_lang: Query = \
-        #     q_title_filter_to.filter(Title.language == filter_form.language.data) if filter_form.language.data \
-        #         else q_title_filter_to
-        # q_title_filter_author: Query = \
-        #     q_title_filter_lang.filter(
-        #         Title.author == filter_form.ancient_author.data) if filter_form.ancient_author.data \
-        #         else q_title_filter_lang
-        #
+        from_century = int(filter_form.from_century.data) if filter_form.from_century.data else -21
+        to_century = int(filter_form.to_century.data) if filter_form.to_century.data else 21
+        language = filter_form.language.data
+        ancient_author = filter_form.ancient_author.data
+        ref = filter_form.ancient_author.data
+        if to_century > from_century:
+            if from_century:
+                q_title_filter: Query = q_title_filter.filter(Title.centstart >= from_century)
+            if to_century:
+                q_title_filter: Query = q_title_filter.filter(Title.centend <= to_century)
+        if language:
+            q_title_filter: Query = q_title_filter.filter(Title.language == language)
+        if ancient_author:
+            q_title_filter: Query = q_title_filter.filter(Title.author == ancient_author)
+        # if ref: fixme
+        #     q_title_filter: Query = q_title_filter.filter(Title. == filter_form.from_century.data)  # fixme check this in routes!
+
         # # fixme check this in routes or sooner in the code - at the top of this function!
         # q_title_filter_title: Query = q_title_filter_author.filter(
         #     Title.title == filter_form.ancient_title.data) if filter_form.ancient_author.data \
         #         else q_title_filter_author
 
-        # q_title_filter_ref: Query = q_title_filter_title.filter(
-        #     Title. == filter_form.from_century.data)  # fixme check this in routes!
-
-        if q_title_filter_to.first():
+        if q_title_filter.first():
             self.filtered_flag = True
-        self.filtered_flag = True
+        # self.filtered_flag = True
         # fixme - the above yields 87 results and only 15 results without the 2nd 'flag=true' line
         #   even though in both cases the filters are empty in the form.
         #   this is probably the result of mishandling null in the 'to_century" field
         #   (currently 'Any' value is -100, so if NULL in the field the query to_century<-100 is always FALSE)
-
 
     def add_bib(self, bibinfo: int):
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
