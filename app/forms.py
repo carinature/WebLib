@@ -2,6 +2,7 @@ import datetime
 
 from flask_wtf import FlaskForm, RecaptchaField
 from markupsafe import Markup
+from numpy import insert
 from wtforms import *
 from wtforms.validators import *
 
@@ -30,12 +31,12 @@ NEWEST_CENTURY = 21
 class SearchSubject(FlaskForm):
     subject_keyword_1 = StringField(
         EMPTY_LABEL,
-        [DataRequired(message='Did you forget to insert a search keyword'),
-         validators.Regexp('^\w+$', message="Field accepts one search word")],
+        [DataRequired(), Regexp('^\w+$', message="Field accepts one search word")],
         render_kw={'placeholder': ' Subject'})
-    subject_keyword_2 = StringField(EMPTY_LABEL,
-                                    [Optional(), validators.Regexp('^\w+$', message="Field accepts one search word")],
-                                    render_kw={'placeholder': '(Optional) Subject'})
+    subject_keyword_2 = StringField(
+        EMPTY_LABEL,
+        [Optional(), Regexp('^\w+$', message="Field accepts one search word")],
+        render_kw={'placeholder': '(Optional) Subject'})
     submit_subject = SubmitField(' Search',
                                  render_kw={'class': 'btn-primary', }
                                  #            # 'style': 'float: right',
@@ -50,23 +51,24 @@ class SearchSubject(FlaskForm):
                f'   btn pressed? {self.submit_subject.data}'
 
 
-centuries = [('', 'Any'),
-             (-8, '8 BCE'),
-             (-7, '7 BCE'),
-             (-6, '6 BCE'),
-             (-5, '5 BCE'),
-             (-4, '4 BCE'),
-             (-3, '3 BCE'),
-             (-2, '2 BCE'),
-             (-1, '1 BCE'),
-             (1, '1 CE'),
-             (2, '2 CE'),
-             (3, '3 CE'),
-             (4, '4 CE'),
-             (5, '5 CE'),
-             (6, '6 CE'),
-             (7, '7 CE'),
-             (8, '8 CE')]
+centuries = [
+    (-8, '8 BCE'),
+    (-7, '7 BCE'),
+    (-6, '6 BCE'),
+    (-5, '5 BCE'),
+    (-4, '4 BCE'),
+    (-3, '3 BCE'),
+    (-2, '2 BCE'),
+    (-1, '1 BCE'),
+    (1, '1 CE'),
+    (2, '2 CE'),
+    (3, '3 CE'),
+    (4, '4 CE'),
+    (5, '5 CE'),
+    (6, '6 CE'),
+    (7, '7 CE'),
+    (8, '8 CE')
+]
 languages = [
     ('', 'Any'),
     ('Aramaic', 'Aramaic'),
@@ -88,6 +90,16 @@ class Exclude(FlaskForm):
                                      'style': 'margin-left:15px'})
 
 
+def validate_century(field_from):
+    print('validate_century validate_century validate_century validate_century')
+
+    def _century_check(form, field_to):
+        if field_to.data < field_from.data:
+            raise ValidationError('Validation Error: \'to_century\' is smaller than \'from_century\' field.')
+
+    return _century_check
+
+
 class FilterForm(FlaskForm):
     # email = StringField('Email', [
     #     Email(message='Not a valid email address.'),
@@ -106,12 +118,18 @@ class FilterForm(FlaskForm):
     # <!--text and reference filtering options-->
     # Dont delete this: https://gist.github.com/Overdese/abebc48e878662377988
     from_century = SelectField('From ', id="from-century-dl",
+                               # validators=[],
                                render_kw={'style': ' float:right;'},
-                               choices=centuries,
+                               # choices=centuries,
+                               choices=[(-21, 'Any'), *centuries],
+                               coerce=int
                                )
     to_century = SelectField('To ', id="to-century-dl",
+                             validators=[validate_century(field_from=from_century)],
                              render_kw={'style': ' float:right;'},
-                             choices=centuries,
+                             # choices=centuries,
+                             choices=[tuple((21, 'Any')), *centuries],
+                             coerce=int
                              )
     language = SelectField('Language ', id="language-dl",
                            render_kw={'style': ' float:right;'},

@@ -223,27 +223,26 @@ class ResultTitle:
         self.title = q_title_filter.value(Title.title)
         print('.' * 13, self.title, 'by:', self.author)
         self.filtered_flag = False
-        from_century = int(filter_form.from_century.data) if filter_form.from_century.data else -21
-        to_century = int(filter_form.to_century.data) if filter_form.to_century.data else 21
+        from_century = filter_form.from_century.data
+        to_century = filter_form.to_century.data
         language = filter_form.language.data
         ancient_author = filter_form.ancient_author.data
-        ref = filter_form.ancient_author.data
-        if to_century > from_century:
-            if from_century:
-                q_title_filter: Query = q_title_filter.filter(Title.centstart >= from_century)
-            if to_century:
-                q_title_filter: Query = q_title_filter.filter(Title.centend <= to_century)
+        ancient_title = filter_form.ancient_title.data
+        # if to_century < from_century:
+        #     raise Exception('KARINA. to_century is smaller than from_century.')
+        if from_century:
+            q_title_filter: Query = q_title_filter.filter(Title.centstart >= from_century)
+        if to_century:
+            q_title_filter: Query = q_title_filter.filter(Title.centend <= to_century)
         if language:
             q_title_filter: Query = q_title_filter.filter(Title.language == language)
         if ancient_author:
             q_title_filter: Query = q_title_filter.filter(Title.author == ancient_author)
+        if ancient_title:
+            q_title_filter: Query = q_title_filter.filter(Title.title == ancient_title)
+        # # fixme check this in routes or sooner in the code - at the top of this function!
         # if ref: fixme
         #     q_title_filter: Query = q_title_filter.filter(Title. == filter_form.from_century.data)  # fixme check this in routes!
-
-        # # fixme check this in routes or sooner in the code - at the top of this function!
-        # q_title_filter_title: Query = q_title_filter_author.filter(
-        #     Title.title == filter_form.ancient_title.data) if filter_form.ancient_author.data \
-        #         else q_title_filter_author
 
         if q_title_filter.first():
             self.filtered_flag = True

@@ -103,8 +103,12 @@ def search_results(search_word='', page=''):
     # print(request.form)
     # print(' - subject_form - ')
     # print(subject_form)
-    # print(' - filter_form - ')
-    # print(filter_form)
+    print(' - filter_form - ')
+    print(filter_form)
+    # print(filter_form.from_century)
+    # print(filter_form.from_century.data)
+    # print(type(filter_form.from_century))
+    # print(type(filter_form.from_century.data))
 
     search_word = subject_form.subject_keyword_1.data
     print('*' * 33, search_word)
@@ -135,7 +139,8 @@ def search_results(search_word='', page=''):
         page_col,
         c_col)  # count()) fixme remove C_col in production
     txts_q_with_ent_filter: Query = txts_q_with_ent.filter(sbj_col.like(search))
-    txts_q_with_ent_filter: Query = txts_q_with_ent_filter.filter(sbj_col.like(search))
+    if filter_form.reference.data:
+        txts_q_with_ent_filter: Query = txts_q_with_ent_filter.filter(ref_col.like(str(filter_form.reference)))
     # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter.group_by(txts_num_col, sbj_col)
     # txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(num_col, bib_info_col)
     # needs to be ordered for the itertools.groupby() later on,
