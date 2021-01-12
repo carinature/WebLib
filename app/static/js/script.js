@@ -68,19 +68,17 @@ $('button#csv_to_mysql_btn').on('click', function (e) {
 // function more_less_info(btn_id, elm_id, show_msg = 'Show More', hide_msg = 'Show less') {
 function more_less_info(btn_id, elm_id, show_msg = '', hide_msg = '') {
     let btn = document.getElementById(btn_id); // Get the checkbox/button
-    console.log(btn_id);
-    console.log(btn);
     let elm = document.getElementById(elm_id); // Get the element to show/hide
     // If the element is shown, hide it. Otherwise, display
     if ('none' === elm.style.display) {
-        elm.style.display = "block";
-        elm.style.display = 'inline';
+        // elm.style.display = "block";
+        // elm.style.display = 'inline';
         if (hide_msg) btn.childNodes[0].nodeValue = hide_msg;
     } else {
         elm.style.display = "none";
         if (show_msg) btn.childNodes[0].nodeValue = show_msg;
     }
-    if (hide_btn_flag) btn.style.display = "none"
+    if (hide_btn_flag) btn.style.display = "none";
 }
 
 /**

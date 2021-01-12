@@ -18,13 +18,13 @@
     {% set rbtn_id='refsbtn'~num %}
     <div class="container-fluid">
         {#        <div class="col-12" style=""> <!--todo move the style to css-->#}
-        <h4 class="" style="display: inline; padding: 10px;">
+        <h4 class="" style="display: inline; padding: 1em;">
             {{ index }}. {{ author }}, <em>{{ title }} </em>
         </h4>
         <span>
-            <em class="collapse" id={{ relm_id }}> {{ refs }} </em>
-            {{ disappring_btn( text='references: ', rbtn_id = rbtn_id, relm_id = relm_id) }}
 {#            <em style="display: none" id={{ relm_id }}> {{ refs }} </em>#}
+            <em class="collapse inline" style="padding-left: 2em" id={{ relm_id }}> {{ refs }} </em>
+            {{ disappring_btn( text='references: ', rbtn_id = rbtn_id, relm_id = relm_id) }}
         </span>
         <br>
         <div style="padding-left: 2em">
