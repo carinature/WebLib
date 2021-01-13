@@ -173,8 +173,17 @@
                     click
                     "submit":</p>
                 <label for="user-email">Email Address:</label><br>
-                <input type="text" id="user-email" name="user-email" placeholder="username@email.edu"><br><br>
-                <a href="#" class="btn btn-primary" onclick="alert('This feature is TBD (KarinaT)')">Submit</a>
+                <form action="">
+                    {#        <input type="text" id="user-email" name="user-email" placeholder="username@email.edu"><br><br>#}
+                    <br>
+                    {{ form1.hidden_tag() }}
+                    {{ form1.email }}
+                    {#        {{ form1.submit_email }}#}
+                    <button id='email_button' class="btn btn-default btn-outline-secondary"
+                            style="background-color: var(--secondary-color-light)">Submit
+                    </button>
+                </form>
+
                 <br><br>
                 <p>For more information, see About</p>
             </div>

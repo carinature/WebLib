@@ -4,6 +4,7 @@ from flask_wtf import FlaskForm, RecaptchaField
 from markupsafe import Markup
 from numpy import insert
 from wtforms import *
+from wtforms.fields.html5 import EmailField
 from wtforms.validators import *
 
 from . import models as m  # for the global variables and db constants
@@ -102,10 +103,6 @@ def validate_century(field_from):
 
 
 class FilterForm(FlaskForm):
-    # email = StringField('Email', [
-    #     Email(message='Not a valid email address.'),
-    #     DataRequired()])
-
     # <!--sub-subject filtering options-->
     includes = FieldList(
         # 'Including ',  # fixme remove *all* [Optional()] ?
@@ -225,7 +222,19 @@ class SearchTypeChoice(FlaskForm):
         # 'style': 'font-size:1.5em; vertical-align: middle; horizontal-align: middle;text-align: center'}
     )
 
-# class SignupForm(FlaskForm):
+
+class SignupForm(FlaskForm):
+    # sign up for updates
+    email = EmailField('Email', [DataRequired(), Email()],
+                       render_kw={'id': 'email_field',
+                                  'placeholder': ' e.g. username@email.edu '})
+    submit_email = SubmitField('Submit',
+                               render_kw={'class': 'btn btn-default',
+                                          'id': 'lala',
+                                          'style': 'background-color: var(--secondary-color-light);',
+                                          }
+                               )
+
 #     """Sign up for a user account."""
 #     # email = StringField('Email', [
 #     #     Email(message='Not a valid email address.'),

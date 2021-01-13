@@ -466,8 +466,8 @@ def check_check():
 def fetch_results():
     print("@@" * 33)
 
-    # return render_template('srchbr.html', form1=f.SearchSubject())
-    return '<h1> A O K </h1>'
+    return render_template('srchbr.html', form1=f.SearchSubject())
+    # return '<h1> A O K </h1>'
 
 
 @app.route("/success/<title>", methods=['GET', 'POST'])
@@ -478,11 +478,20 @@ def success(title=''):
     return render_template('srchbr.html', title='Great Success', form1=sform)
 
 
+@app.route('/falala')
+def falalafunc():
+    print('=-' * 33, ' falala')
+    print("Adding your Email address")
+
+    # csv_to_mysql()
+    return '<h1> A O K </h1>'
+
 @app.route('/flask_route_but_not_webpage')
 def js_btn_to_python():
     print('##' * 33, ' from_js_btn_to_python function')
     print("It's happening... ")
     # csv_to_mysql()
+
     return '<h1> A O K </h1>'
 
 

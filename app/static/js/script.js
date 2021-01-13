@@ -65,6 +65,20 @@ $('button#csv_to_mysql_btn').on('click', function (e) {
 });
 
 
+//load raw scv files into the MySQL DB
+$('button#email_button').on('click', function (e) {
+    //  NEXT TO COMMANDS DO NOT SEEM TO WORK
+    alert("Adding your Email address")
+    e.preventDefault();
+    $.getJSON('falala',
+        function (data) {
+            //do nothing
+        });
+    return false;
+});
+
+
+
 // function more_less_info(btn_id, elm_id, show_msg = 'Show More', hide_msg = 'Show less') {
 function more_less_info(btn_id, elm_id, show_msg = '', hide_msg = '') {
     let btn = document.getElementById(btn_id); // Get the checkbox/button
@@ -122,6 +136,7 @@ function add_field(type = 'exclude') {
     tbody.appendChild(new_tr);
 
 }
+
 /**
  * clearing all fields in the search bar and filter form
  * */

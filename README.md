@@ -46,7 +46,7 @@ and then:
 
 #### The Following files and folders are within the app folder
 
-**routs**.py - defines the views 
+**routes**.py - defines the views 
 
 **models**.py - defines the table structures in the DB 
 
@@ -54,7 +54,7 @@ and then:
 
 **raw_data** - contains the csv files from which the SQL DB is created
 
-**templates** - contains the html templates rendered in _routs.py_
+**templates** - contains the html templates rendered in _routes.py_
 
 **static** - contains rest of the static files:
     ***css*** - 
