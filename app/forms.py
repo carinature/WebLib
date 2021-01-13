@@ -96,6 +96,7 @@ def validate_century(field_from):
     def _century_check(form, field_to):
         if field_to.data < field_from.data:
             raise ValidationError('Validation Error: \'to_century\' is smaller than \'from_century\' field.')
+            # raise ValueError('Validation Error: \'to_century\' is smaller than \'from_century\' field.')
 
     return _century_check
 

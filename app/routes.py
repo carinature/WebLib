@@ -36,32 +36,17 @@ def teardown_db(exception):
 categories = [
     {'name': 'Highly Validated',
      'id': 'high',
-     'results': [
-         {'title': 'title',
-          'author': 'Author',
-          'ref_num': 'ref_num',
-          'refs': 'refs'
-          }
+     'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
      ]
      },
     {'name': 'Validated',
      'id': 'valid',
-     'results': [
-         {'title': 'title',
-          'author': 'Author',
-          'ref_num': 'ref_num',
-          'refs': 'refs'
-          }
+     'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
      ]
      },
     {'name': 'Unvalidated',
      'id': 'not',
-     'results': [
-         {'title': 'title',
-          'author': 'Author',
-          'ref_num': 'ref_num',
-          'refs': 'refs'
-          }
+     'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
      ]
      }
 ]
@@ -142,7 +127,9 @@ def search_results(search_word='', page=''):
     txts_q_with_ent_filter_order: Query = txts_q_with_ent_filter.order_by(num_col)  # , bib_info_col)
     numbers_dict: Dict = {}
     res_dict: Dict = {}
+    highly_valid, valid, not_valid = [], [], []
 
+    import pandas as pd
     # ............  group the results by (referenced) title ('number' column) [dict?] ............
     groups_by_number = groupby(
         txts_q_with_ent_filter_order,
@@ -188,9 +175,22 @@ def search_results(search_word='', page=''):
                 res.add_page(page=gg[4], bibinfo=gg[3])
                 # print('\t\t\t', numbers_dict[title_number][bibinfo][j])
         res_dict[title_number] = res
+        if len(res.books) > 1:
+            highly_valid.append(res)
+            # categories[0]['results'].append(res)sdfsdfs
+        elif len(res.refs) > 1:
+            valid.append(res)
+        else:
+            not_valid.append(res)
+
+    categories[0]['results'] = sorted(highly_valid, key=lambda result: len(result.books), reverse=True)
+    categories[1]['results'] = sorted(valid, key=lambda result: len(result.refs), reverse=True)
+    categories[2]['results'] = not_valid
+    sum_len = len(highly_valid) + len(valid) + len(not_valid)
 
     print(f'Starting data Value : {subject_form.submit_subject.data}')
     print(f'Ending data Value :     {filter_form.fetch_results.data}')
+    print(f'sum_len :     {sum_len}')
 
     return render_template('search_results.html',
                            # title=f'Search Result for: {search_word}',
@@ -198,8 +198,7 @@ def search_results(search_word='', page=''):
                            search_bar=search_bar,
                            categories=categories,
                            search_word=search_word,
-                           results=res_dict,
-                           # form1=subject_form
+                           results_num=sum_len,
                            )
 
     # todo
