@@ -11,7 +11,7 @@ function scrollFunction() {
     let title = document.getElementsByClassName("navbar-title")[0];
 
     if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
-        document.getElementById("myBtn").style.display = "block";
+        document.getElementById("top_btn").style.display = "block";
 
         // scrolled DOWN
         // subtitle.style.display = 'none';
@@ -32,7 +32,7 @@ function scrollFunction() {
         title.style.fontSize = '0.5em';
 
     } else {  // scrolled to TOP
-        document.getElementById("myBtn").style.display = "none";
+        document.getElementById("top_btn").style.display = "none";
 
         // subtitle.style.display = 'block';
         // subtitle.style.transition = '400ms';
@@ -51,12 +51,19 @@ function scrollFunction() {
 }
 
 
-// When the user clicks on the button, scroll to the top of the document
-function topFunction() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-}
+// // When the user clicks on the button, scroll to the top of the document
+// function topFunction() {
+//     document.body.scrollTop = 0;
+//     document.documentElement.scrollTop = 0;
+// }
 
+// $('button#csv_to_mysql_btn').on('click', function () {
+$(document).ready(function () {
+    $("#top_btn").click(function () {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    });
+});
 
 function ShowHideDiv() {
     let chkYes = document.getElementById("chkYes");

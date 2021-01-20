@@ -245,12 +245,14 @@ def value_or_zero(val):
 @app.route(links['home'], methods=['GET', 'POST'])
 def home():
     search_bar: Dict = utils.init_search_bar()
-    search_word = search_bar['subject_form'].subject_keyword_1.data
+    email_form = f.SignupForm()
+    # search_word = search_bar['subject_form'].subject_keyword_1.data
     return render_template('index.html',
                            title='Tiresias',
                            index_title='The Ancient Mediterranean Religions Source Database',
                            description='Tiresias: The Ancient Mediterranean Religions Source Database',
                            search_bar=search_bar,
+                           email_form=email_form,
                            redirect_flag=True
                            )
     # if 'GET' == request.method:
