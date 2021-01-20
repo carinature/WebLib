@@ -6,6 +6,7 @@ from flask_bootstrap import Bootstrap
 db = SQLAlchemy()
 bootstrap = Bootstrap()
 
+
 def create_app():
     app = Flask(__name__, instance_relative_config=False)
     # instance_relative_config=True tells the app that configuration files are relative to the instance folder.
@@ -25,6 +26,7 @@ def create_app():
         # todo - make sure this line wasn't deleted:
         #  from . import routes  # Import routes
         from . import routes  # Import routes
+        from . import test_routes  # fixme remove in production
         # db.create_all()  # Create sql tables for our data models
         # from db_migration import csv_to_mysql
         # csv_to_mysql()

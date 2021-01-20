@@ -5,24 +5,35 @@
     {{ title }}
 
     <br><br>
-
-
-
-    <button id="js-to-py" > pipi route </button>
-
-    <br>
-    <br>
-
+    <button id="js-to-py"> route to something</button>
+    <button id="js-to-py"> route to something</button>
+    <br><br>
     <a id="test" type="button" href=""> fetch_results </a>
+    <br><br><br><br>
+
+
+    <p>If you would like to receive updates on the development of the project, please enter your email and click
+        "submit":</p>
+    <label for="user-email">Email Address:</label><br>
+    <form action="">
+        {#        <input type="text" id="user-email" name="user-email" placeholder="username@email.edu"><br><br>#}
+        <br>
+        {{ form1.hidden_tag() }}
+        {{ form1.email }}
+        {#        {{ form1.submit_email }}#}
+        <button id='email_button' class="btn btn-default btn-outline-secondary"
+                style="background-color: var(--secondary-color-light)">Submit
+        </button>
+    </form>
 
     <br><br><br><br><br><br><br><br>
 
 
-    <form method="POST" action="">
+    {#    <form method="POST" action="">
         {{ form1.hidden_tag() }}
         <div class="form-inline container-fluid search-bar">
             <div class="s01 container flex-wrap search-bar-content">
-                {#            <div style="  margin: 10px;" class="list-inline-item">{{ form1.subject_keyword_1 }}</div>#}
+                #}{#            <div style="  margin: 10px;" class="list-inline-item">{{ form1.subject_keyword_1 }}</div>#}{#
                 <div class="list-inline-item search-bar-item">
                     {{ form1.subject_keyword_1 }}
                 </div>
@@ -34,7 +45,7 @@
                 </div>
             </div>
         </div>
-    </form>
+    </form>#}
 
     <script src="../static/js/script.js"></script>
 {% endblock %}

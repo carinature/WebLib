@@ -10,6 +10,7 @@ from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float
 from config import RAW_DATA_DIR
 
 from . import db
+from . import forms as f
 
 Base: SQLAlchemy.__base__ = db.Model
 
@@ -53,66 +54,6 @@ Base: SQLAlchemy.__base__ = db.Model
 #         return '<Person model {}>'.format(self.id)
 
 
-# ---------- Mapping Example ----------
-# metadata = MetaData()
-#
-# test = Table('test', metadata,
-#              Column('dbg_index', Integer, autoincrement=True, primary_key=True),
-#              Column('book_biblio_info', String(10), primary_key=True, nullable=False, default='non'),
-#              Column('file', String(100), default='non', nullable=True),
-#              Column('titleref', String(100), nullable=True),
-#              Column('gcode', Text, nullable=True),  # ,unique=True),
-#              keep_existing=True
-#              )
-#
-#
-# class Test(object):
-#     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
-#                for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('bookreferences')]
-#
-#     col_names = ['book_biblio_info', 'file', 'titleref', 'gcode']
-#     dtype_dic_py2sql = {int: Integer, str: Text}
-#     dtype_dic_csv2py = {'book bibliographic info': str,  # :int ???
-#                         'file': str,
-#                         'titleref': str,
-#                         'gcode': str}
-#
-#     def __init__(self, dbg_index, book_biblio_info, file, titleref, gcode):
-#         self.dbg_index = dbg_index
-#         self.book_biblio_info = book_biblio_info
-#         self.file = file
-#         self.titleref = titleref
-#         self.gcode = gcode
-#
-#
-# mapper(Test, test)
-
-# class Deb(Base):
-#     __tablename__ = 'deb'
-#
-#     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
-#                for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('deb')]
-#
-#     col_names = ['ccc']
-#     dtype_dic_py2sql = {int: Integer, str: String(10)}
-#     dtype_dic_csv2py = {'ccc': str}
-#
-#     dbg_index = Column(Integer, primary_key=True, autoincrement=True)
-#     ccc = Column(String(100), )
-#     test_field = Column(String(100), )
-#     # test_field1 = column_property(dbg_index)
-#     test_field2 = Column(Integer, )
-#
-#     def __init__(self):
-#         super().__init__('BookRef', Base, self.dtype_dic_py2sql)
-#         res = column_property(self.ccc)
-#         # self.test_field = String(Integer(res) * 5)
-#         # self.test_field1 = String(int(res) * 5)
-#         # self.test_field2 = str(int(res) * 5)
-#         self.test_field = String('slkfd')
-#         # self.test_field1 = column_property(self.dbg_index)
-#         self.test_field2 = 3
-
 # corresponds to the bookrefernces.csv
 class BookRef(Base):
     __tablename__ = 'book_references'
@@ -146,7 +87,7 @@ class BookRef(Base):
 
 
 # corresponds to the titlesa.csv
-class Title(Base):  # todo make sure what each fields
+class Title(Base):  # todo handle cases of null in 'from/to century',
     __tablename__ = 'titles'  # fixme
 
     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
@@ -250,7 +191,7 @@ class TextText(Base):
 from typing import List, Dict, Set
 
 
-class Book(object):
+class Book:
     def __init__(self, bibinfo: int):
         self.pages: Set[int] = set()
         self.refs: List[int] = []
@@ -259,17 +200,17 @@ class Book(object):
         self.title_full = q_book_ref_filter.value(BookRef.titleref)
         self.bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
 
+    def __repr__(self):
+        return \
+            f'... The Referencing Book: ' \
+            f'{self.bibinfo} ' \
+            f'{self.title_full} ' \
+            f'pages: {self.pages}'
 
-    # def __repr__(self):
-    #     return \
-    #         f'... The Referencing Book: ' \
-    #         f'{self.bibinfo} ' \
-    #         f'{self.title_full} ' \
-    #         f'pages: {self.pages}'
 
-
-class ResultByNum:
-    def __init__(self, num: int):
+class ResultTitle:
+    def __init__(self, num: int, filter_form: f.FilterForm):
+        # def __init__(self, num: int, filter_form: f.FilterForm):
         self.num = num
         # self.refs: Dict = {}
         self.refs: Set = set()
@@ -280,16 +221,45 @@ class ResultByNum:
         q_title_filter: Query = q_title.filter(Title.number == num)
         self.author = q_title_filter.value(Title.author)
         self.title = q_title_filter.value(Title.title)
-        # print('.' * 13, self.title, 'by:', self.author)
+        print('.' * 13, self.title, 'by:', self.author)
+        self.filtered_flag = False
+        from_century = filter_form.from_century.data
+        to_century = filter_form.to_century.data
+        language = filter_form.language.data
+        ancient_author = filter_form.ancient_author.data
+        ancient_title = filter_form.ancient_title.data
+        # if to_century < from_century:
+        #     raise Exception('KARINA. to_century is smaller than from_century.')
+        if from_century:
+            q_title_filter: Query = q_title_filter.filter(Title.centstart >= from_century)
+        if to_century:
+            q_title_filter: Query = q_title_filter.filter(Title.centend <= to_century)
+        if language:
+            q_title_filter: Query = q_title_filter.filter(Title.language == language)
+        if ancient_author:
+            q_title_filter: Query = q_title_filter.filter(Title.author == ancient_author)
+        if ancient_title:
+            q_title_filter: Query = q_title_filter.filter(Title.title == ancient_title)
+        # # fixme check this in routes or sooner in the code - at the top of this function!
+        # if ref: fixme
+        #     q_title_filter: Query = q_title_filter.filter(Title. == filter_form.from_century.data)  # fixme check this in routes!
+
+        if q_title_filter.first():
+            self.filtered_flag = True
+        # self.filtered_flag = True
+        # fixme - the above yields 87 results and only 15 results without the 2nd 'flag=true' line
+        #   even though in both cases the filters are empty in the form.
+        #   this is probably the result of mishandling null in the 'to_century" field
+        #   (currently 'Any' value is -100, so if NULL in the field the query to_century<-100 is always FALSE)
 
     def add_bib(self, bibinfo: int):
-        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
+        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
         self.bibinfo.append(bibinfo)
         # self.books[bibinfo] = Book(bibinfo)
         self.books.append(Book(bibinfo))
 
     def add_refs(self, ref: str, bibinfo: int):
-        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
+        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
         # self.books[bibinfo].refs.append(ref)
         self.books[-1].refs.append(ref)
         # self.refs[bibinfo] = ref
@@ -297,10 +267,10 @@ class ResultByNum:
 
     def add_page(self, page: str, bibinfo: int):
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
-        if not page.strip(' '):#todo should be handled in DB
-            page=' Page-Unknown '
+        if not page.strip(' '):  # todo should be handled in DB
+            page = ' Page-Unknown '
         else:
-            page = int(float(page)) # todo page should be int in the DB, currentyly str
+            page = int(float(page))  # todo page should be int in the DB, currentyly str
         # self.books[bibinfo].pages.add(page)
         self.books[-1].pages.add(page)
 

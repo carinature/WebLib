@@ -41,5 +41,8 @@ flask run
 #   ERROR: Encountered errors while bringing up the project.
 # DO
 #   $ sudo netstat -laputen | grep ':3306'
+#     >>  tcp6   0   0 :::3306    :::*    LISTEN      0   5346542   NUMBER/docker-proxy
 #   $ sudo systemctl stop PROGRAM_NAME
+# OR
+#   $ sudo kill NUMBER
 # TODO move this to the readme file ?

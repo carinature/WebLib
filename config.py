@@ -7,12 +7,11 @@ RAW_DATA_DIR = os.path.join(ROOT_DIR, 'app/raw_data')
 # UTILS_DIR = os.path.join(ROOT_DIR, 'utilities')
 
 
-class Config(object):
+class Config:
     EXPLAIN_TEMPLATE_LOADING = True
     # General Flask config variables
     # SECRET_KEY = os.environ.get('SECRET_KEY')
     SECRET_KEY = os.getenv("SECRET_KEY")
-    # static_folder = 'static'
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
     # SESSION_COOKIE_NAME = os.environ.get('SESSION_COOKIE_NAME')

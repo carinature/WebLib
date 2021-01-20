@@ -1,11 +1,10 @@
-
 {% macro disappring_btn(text, rbtn_id, relm_id, class='') -%}
     <button class='{{ class }}'
             data-toggle='collapse'
             data-target='#{{ relm_id }}'
             type='button'
             onclick="this.style.display='none';"
-            style="border-radius: 15px"
+            style="border-radius: 1em"
             {#                    onclick="more_less_info('{{ rbtn_id }}','{{ relm_id }}')"#}
             id={{ rbtn_id }}>
         {{ text }}
@@ -18,27 +17,28 @@
     {% set rbtn_id='refsbtn'~num %}
     <div class="container-fluid">
         {#        <div class="col-12" style=""> <!--todo move the style to css-->#}
-        <h4 class="" style="display: inline; padding: 10px;">
+        <h4 class="" style="display: inline; ">
             {{ index }}. {{ author }}, <em>{{ title }} </em>
         </h4>
-        <span>
-            <em class="collapse" id={{ relm_id }}> {{ refs }} </em>
-            {{ disappring_btn( text='references: ', rbtn_id = rbtn_id, relm_id = relm_id) }}
-{#            <em style="display: none" id={{ relm_id }}> {{ refs }} </em>#}
-        </span>
-        <br>
-        <div style="padding-left: 2em">
+                    <a href="#link" class="btn btn-sm btn-primary" role="button" style="float: right"> For more information </a>
+
+        <div style="padding: 1em">
             {% for book in books %}
-                <br><em><b>{{ book.title_full }}</b></em>, &nbsp; pages:
+                <em><b>{{ book.title_full }}</b></em> &nbsp; &nbsp; pages:
                 {#                {{ book.pages }}#}
                 {% for page in book.pages -%}
                     <a href="{{ link|value_or_empty }}"> {{ page }} </a>
                     {#                    {% if loop.index!=(books|length) %}, {% endif %}#}
                 {%- endfor %}
-                <br>
-            {% endfor %}<br>
-            <br><br>
+            <br>
+            {% endfor %}
         </div>
+
+        <span>
+{#            <em style="display: none" id={{ relm_id }}> {{ refs }} </em>#}
+            <em class="collapse inline" style="padding-left: 2em" id={{ relm_id }}> {{ refs }} </em>
+            {{ disappring_btn( text='references: ', rbtn_id = rbtn_id, relm_id = relm_id, class='btn-sm') }}
+        </span>
     </div>
 {%- endmacro %}
 

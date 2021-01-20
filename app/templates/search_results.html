@@ -9,10 +9,10 @@
             <span class="col-lg-4 text-center ">
                 {#            <div class="col-12 text-center ">#}
                 <h1 class="display-4 welcome padding">
-                    There are {{ results|length|value_or_zero }} results for: <em>{{ search_word }}</em></h1>
-                <h6>{{ y|value_or_zero }} are <a href="#high">highly validated</a> results.</h6>
-                <h6>{{ y|value_or_zero }} are <a href="#valid">validated</a> results.</h6>
-                <h6>{{ y|value_or_zero }} are <a href="#not">unvalidated</a> results.</h6>
+                    There are {{ results_num }} results for: <em>{{ search_word }}</em></h1>
+                <h6>{{ categories[0]['results']|length }} are <a href="#high">highly validated</a> results.</h6>
+                <h6>{{ categories[1]['results']|length }} are <a href="#valid">validated</a> results.</h6>
+                <h6>{{ categories[2]['results']|length }} are <a href="#not">unvalidated</a> results.</h6>
             </span>
 
             <!-------- Search & Filter Forms ------------>
@@ -28,34 +28,40 @@
     <!-------- Validation Category Sections ------------>
     {% for category in categories %}
         {{ category_head(category['name'], category['id']) }}
-        {% set outer_loop = loop %}
-        {% for res in category['results'] %}
-            {{ result_item(loop.index, res['author'], res['title'], res['refs_num'], res['refs'], loop.index~outer_loop.index) }}
+        <div style="padding: 1em 2em 3em 3em;">
+            {% if not category['results'] %}
+                <h3>No results in this category.</h3>
+                <h4>Try using a different filter or search word.</h4>
+            {% endif %}
+            {% set outer_loop = loop %}
+            {% for res in category['results'] %}
+                <!-------- Results (Per Category) ------------>
+                {{ result_item(
+                    index = loop.index,
+                    author=res.author,
+                    title=res.title,
+                    books=res.books,
+                    refs=res.refs,
+                    num=res.num) }}
 
-            {#            {% set elm_id=num %}#}
-            {#            {% set btn_id='btn'~num %}#}
-            {#            <button id={{ btn_id }} class="" style="padding:.5em; background-color: var(--accent-color)"#}
-            {#                    onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">Show More#}
-            {#            </button>#}
-            {#            <br><br>#}
-            {#            <p style="display: none" id={{ elm_id }}>#}
-            {#                preview of the text (???)#}
-            {#            </p>#}
-        {% endfor %}
+                <br>
+                <br>
+                {#            {% set elm_id=num %}#}
+                {#            {% set btn_id='btn'~num %}#}
+                {#            <button id={{ btn_id }} class="" style="padding:.5em; background-color: var(--accent-color)"#}
+                {#                    onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">Show More#}
+                {#            </button>#}
+                {#            <br><br>#}
+                {#            <p style="display: none" id={{ elm_id }}>#}
+                {#                preview of the text (???)#}
+                {#            </p>#}
+            {% endfor %}
+        </div>
+
     {% endfor %}
 
 
-    <!-------- Results (Per Category) ------------>
-    {% for num, res in results.items() %}
-        {{ result_item(
-        index = loop.index,
-        author=res.author,
-        title=res.title,
-        books=res.books,
-        refs=res.refs,
-        num=num) }}
-        <br>
-    {% endfor %}
+
 
 
     <script src='../static/js/script.js'></script>
