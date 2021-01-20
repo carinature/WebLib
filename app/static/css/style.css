@@ -11,14 +11,13 @@
     /*--secondary-color-light: #295;*/
 
     --accent-color: #6D75FC;
+    /*--accent-color: #7d4bfe;*/
 
     --primary-color-dark: #596e79;
     --secondary-color-dark: #255873;
 
     --misc-color: #c7b198;
-
     --font-color: #444; /*fixme font color not updating*/
-
 }
 
 @font-face {
@@ -243,7 +242,7 @@ body {
 }
 
 
-#myBtn {
+#top_btn {
     position: fixed;
     bottom: 20px;
     right: 30px;
@@ -251,16 +250,17 @@ body {
     font-size: 18px;
     border: none;
     outline: none;
-    background-color: #545445;
+    /*background-color: #545445;*/
     color: white;
+    background-color: var(--accent-color);
+    /*color: var(--font-color);*/
     cursor: pointer;
     padding: 15px;
     border-radius: 45px;
-
-
+    font-weight: bold;
 }
 
-#myBtn:hover {
+#top_btn:hover {
     background-color: #555;
 }
 
@@ -300,7 +300,7 @@ body {
 .search-bar-item {
 }
 
-form #filtering input{
+form #filtering input {
     max-width: 10em;
     /*background-color: #1b1e21;*/
     /*border-color: #0b2e13;*/

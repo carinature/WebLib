@@ -73,7 +73,7 @@
         <br>
         <div style="padding-left: 2em">
             {% for book in books %}
-                <br><em><b>{{ book.title_full }}</b></em>, &nbsp; pages:
+                <br><em><strong>{{ book.title_full }}</strong></em>, &nbsp; pages:
                 {#                {{ book.pages }}#}
                 {% for page in book.pages -%}
                     <a href="{{ link|value_or_empty }}"> {{ page }} </a>

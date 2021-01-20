@@ -5,16 +5,16 @@
 {#{% extends 'bootstrap/base.html' %}#}
 
 <head>
+    <meta charset="utf-8">
     {% if title %}
         <title>Tiresias {{ title }}</title>
     {% else %}
         <title>Tiresias: The Ancient Mediterranean Religions Source Database</title>
     {% endif %}
-    <meta charset="utf-8">
     {% if description %}
-    <meta name="description" content={{ description }}>
+        <meta name="description" content={{ description }}>
     {% else %}
-    <meta name="description" content="Tiresias: The Ancient Mediterranean Religions Source Database">
+        <meta name="description" content="Tiresias: The Ancient Mediterranean Religions Source Database">
     {% endif %}
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -73,7 +73,7 @@
     <hr>
 {% endif %}
 
-<button onclick="topFunction()" id="myBtn" title="Go to top" style="display: block;">Top</button>
+<button id="top_btn" title="Go to top" style="display: none;">Top</button>
 
 {% block app_content %}{% endblock %}
 {% include 'footer.html' %}

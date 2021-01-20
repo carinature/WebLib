@@ -163,22 +163,20 @@
                     General History Department and the Haifa Center for Mediterranean History and Daphne Raban, the
                     Department of Information & Knowledge Management, both at the University of Haifa.
                     For information and suggestions, please contact mblidstei@univ.haifa.ac.il.</p>
-
             </div>
             <div class="col-lg-6" style="padding: 5em">
                 <!--            <img class="img-fluid" src="https://assets.hongkiat.com/uploads/programming-jokes/joke-algorithm-is.jpg">-->
                 <h2><br></h2> <!--for alignment properties -->
                 <h5><br></h5>
                 <p>If you would like to receive updates on the development of the project, please enter your email and
-                    click
-                    "submit":</p>
+                    click "submit":</p>
                 <label for="user-email">Email Address:</label><br>
                 <form action="">
                     {#        <input type="text" id="user-email" name="user-email" placeholder="username@email.edu"><br><br>#}
                     <br>
-                    {{ form1.hidden_tag() }}
-                    {{ form1.email }}
-                    {#        {{ form1.submit_email }}#}
+                    {{ email_form.hidden_tag() }}
+                    {{ email_form.email }}
+                    {#        {{ email_form.submit_email }}#}
                     <button id='email_button' class="btn btn-default btn-outline-secondary"
                             style="background-color: var(--secondary-color-light)">Submit
                     </button>
