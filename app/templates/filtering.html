@@ -3,17 +3,14 @@
 <!------------------------------------------->
 
 
-<!--the button-->
+<!--the Filter Options button-->
 <button class="s01 btn-primary" data-toggle="collapse" data-target="#filtering" type="button">
-    {#    Filter Options    #}
-    Advanced Search Options &nbsp; (click me)
+    Advanced Search Options
 </button>
 
 <!--hidden filtering section-->
 <div class="s01">
     <!-- s01 should appear in a parent element of collapse, so it would use the correct css rule for form-->
-    <!--todo instead of relying on existing consider just making your own class for this case-->
-    {#    <div id="filtering" class=" ">#}
     <div id="filtering" class="collapse ">
         <div class="container-fluid padding container">
             <div class="row text-center inner-form ">
@@ -47,7 +44,7 @@
 
                 <!--text and reference filtering options-->
                 <div class="col-md-6 col-lg-4 " style="padding: 1em;">
-                    <h5 class="welcome  col-form-label-lg">
+                    <h5 class="welcome col-form-label-lg">
                         Filter by<br>Text
                     </h5>
                     <hr>
@@ -90,10 +87,7 @@
                     </div>
 
                 </div>
-
                 {#                <input type="reset" class="btn btn-dark" style="bottom: 0; left: 0">#}
-
-
             </div>
             <button type="button"
                     class="btn btn-dark"
