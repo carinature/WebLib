@@ -333,7 +333,6 @@ def not_found(error):
     resp = make_response(render_template('page_not_found.html',
                                          title="Tiresias Project - Page not Found",
                                          description=str(error)), 404)
-    print(error)
     return resp
 
 

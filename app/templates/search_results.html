@@ -3,12 +3,12 @@
 
 {% block app_content %}
 
-    <div class="container-fluid padding">
+    <div class="container-fluid padding-bot-2">
         <div class="row">
             <!-------- Title & Results Info ------------>
             <span class="col-lg-4 text-center ">
                 {#            <div class="col-12 text-center ">#}
-                <h1 class="display-4 head-title padding">
+                <h1 class="display-4 head-title padding-bot-2">
                     There are {{ results_num }} results for: <em>{{ search_word }}</em></h1>
                 <h6>{{ categories[0]['results']|length }} are <a href="#high">highly validated</a> results.</h6>
                 <h6>{{ categories[1]['results']|length }} are <a href="#valid">validated</a> results.</h6>
@@ -28,7 +28,7 @@
     <!-------- Validation Category Sections ------------>
     {% for category in categories %}
         {{ category_head(category['name'], category['id']) }}
-        <div style="padding: 1em 2em 3em 3em;">
+        <div class="category-padding">
             {% if not category['results'] %}
                 <h3>No results in this category.</h3>
                 <h4>Try using a different filter or search word.</h4>
@@ -48,7 +48,7 @@
                 <br>
                 {#            {% set elm_id=num %}#}
                 {#            {% set btn_id='btn'~num %}#}
-                {#            <button id={{ btn_id }} class="" style="padding:.5em; background-color: var(--accent-color)"#}
+                {#            <button id={{ btn_id }} class="padding bgn-dark" #}
                 {#                    onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">Show More#}
                 {#            </button>#}
                 {#            <br><br>#}

@@ -25,7 +25,7 @@
 
     <!------------------------------------------->
     <!------------ 'About' Section -------------->
-    <div class="container-fluid padding">
+    <div class="container-fluid padding-bot-2">
 
         <div class="col-12  bgn-light-second"> <!--todo move the style to css-->
             <h1 class="display-4 head-title text-center">About the Tiresias Project</h1>
@@ -74,7 +74,7 @@
     <!------------------------------------------->
     <!-- -------  This site .. (Jumbotron) ------>
     <div class="container-fluid">
-        <div class="row jumbotron" style="padding: 5%">
+        <div class="row jumbotron padding-5r">
             <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10"><br>
                 <p class="lead">This site attempts to provide full-text (in source language and English) for highly
                     validated results.
@@ -105,8 +105,8 @@
 
     <!------------------------------------------->
     <!------- Acknowledge, icons Section -------->
-    <div class="container-fluid padding"><br><br>
-        <div class="row text-center padding">
+    <div class="container-fluid padding-bot-2"><br><br>
+        <div class="row text-center padding-bot-2">
             <div class="col-xs-12 col-sm-6 col-md-4">
                 <a href="https://www.sefaria.org.il/"><img src="../static/images/sefaria-logo.jpg"
                                                            class="refsite-logos"/></a>
@@ -148,9 +148,9 @@
 
     <!---------------------------------------------------------------->
     <!---- Note of caution Section (previous: Two Column Section) ---->
-    <div class="container-fluid padding">
-        <div class="row padding">
-            <div class="col-lg-6" style="padding: 5em">
+    <div class="container-fluid padding-bot-2">
+        <div class="row padding-5r">
+            <div class="col-lg-6 padding-bot-2">
                 <!--   should be the same as     <div class="col-md-12 col-lg-6">-->
                 <h2>If you build it...</h2>
                 <h5>Note:</h5>
@@ -161,7 +161,7 @@
                     Department of Information & Knowledge Management, both at the University of Haifa.
                     For information and suggestions, please contact mblidstei@univ.haifa.ac.il.</p>
             </div>
-            <div class="col-lg-6" style="padding: 5em">
+            <div class="col-lg-6">
                 <!--            <img class="img-fluid" src="https://assets.hongkiat.com/uploads/programming-jokes/joke-algorithm-is.jpg">-->
                 <h2><br></h2> <!--for alignment properties -->
                 <h5><br></h5>
@@ -175,7 +175,7 @@
                     {{ email_form.email }}
                     {#        {{ email_form.submit_email }}#}
                     <button id='email_button' class="btn btn-default btn-outline-secondary bgn-light-second"
-                            >Submit
+                    >Submit
                     </button>
                 </form>
 
@@ -189,7 +189,7 @@
 
     <!------------------------------------------->
     <!--------- word graph Column Section ------->
-    <div class="container-fluid padding">
+    <div class="container-fluid padding-bot-2">
         <div class="row head-title text-center">
             <div class="col-12">
                 <h1 class="display-4">word graph</h1>
@@ -206,12 +206,7 @@
     </div>
 
 
-    <!--<div class="container-fluid padding">-->
-    <!--    <div class="row"><img src="http://tiresias.haifa.ac.il/static/large13.1.png" style="max-width: 90%; padding-left: 7em">-->
-    <!--    </div>-->
-    <!--</div>-->
     <!-- - Image Slider-->
-
     <div id="slides" class="carousel slide" data-ride="carousel">
         <ul class="carousel-indicators">
             <li data-target="#slides" data-slide-to="0" class="active"></li>
@@ -222,40 +217,33 @@
             <div class="carousel-item active">
                 <!--            <img class="size-20" src="../images/bg-bluish.png"/>-->
                 <a target="_blank" href="http://tiresias.haifa.ac.il/static/large13.1.png">
-                    <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
-                         style="max-width: 90%; padding-left: 7em"/></a>
+                    <img class="size-20 carousel-img" src="http://tiresias.haifa.ac.il/static/large13.1.png"/></a>
                 <div class="carousel-caption">
                     <h1 class="display-2">This is an image of the main subjects in the database.</h1>
-                    <h3>
-                        Subjects are arranged by the number of references they share: subjects sharing many references
-                        are
-                        graphed close to each other, while subjects sharing few references are far apart.
+                    <h3> Subjects are arranged by the number of references they share: subjects sharing many references
+                        are graphed close to each other, while subjects sharing few references are far apart.
                         Colors show general clusters of subjects.
                         Download the image to view at greater resolution.</h3>
                     <button type="button" class="btn">Analise</button>
-                    <button type="button" class="btn btn-primary btm-lg">More</button>
+                    <button type="button" class="btn btn-primary btn-lg">More</button>
                 </div>
             </div>
 
             <div class="carousel-item">
-                <!--            <img src="../images/bg-dark-cream.png"/>-->
                 <a target="_blank" href="http://tiresias.haifa.ac.il/static/large13.1.png">
-                    <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
-                         style="max-width: 90%; padding-left: 7em"/></a>
+                    <img class="size-20 carousel-img" src="http://tiresias.haifa.ac.il/static/large13.1.png"/></a>
             </div>
             <div class="carousel-item">
-                <!--            <img src="../images/lib-1.jpg"/>-->
                 <a target="_blank" href="http://tiresias.haifa.ac.il/static/large13.1.png">
-                    <img class="size-20" src="http://tiresias.haifa.ac.il/static/large13.1.png"
-                         style="max-width: 90%; padding-left: 7em"/></a>
+                    <img class="size-20 carousel-img" src="http://tiresias.haifa.ac.il/static/large13.1.png"/></a>
             </div>
         </div>
     </div>
 
     <!------------------------------------------->
     <!--------------  Connect ------------------>
-    <div class="container-fluid padding"><br><br><br><br>
-        <div class="row padding text-center">
+    <div class="container-fluid padding-bot-2"><br><br><br><br>
+        <div class="row padding-bot-2 text-center">
             <div class="col-12"><h2>Share</h2></div>
             <div class="col-12 social">
                 <a href="https://www.facebook.com/sharer/sharer.php?u=Tiresias"><i class="fab fa-facebook"></i> </a>

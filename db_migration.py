@@ -37,7 +37,7 @@ def csv_to_mysql():  # todo consider NOT using try
     # try:
     # models = Base.__subclasses__()
     # models = [BookRef, Title, TextSubject, TextText]
-    models = [TextSubject]
+    models = [TextText]
     for model in models:
         tm = time()
 
