@@ -35,10 +35,10 @@
     <!------------------------------------------->
     {% if total %}
         <div class='container'>
-            <div class='form-group padding col-9' style='margin-left: 5%'>
+            <div class='form-group padding col-9'>
                 {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
                 {#  -----   Select All  -----   #}
-                <div class='custom-control custom-switch ' style='text-align: left'>
+                <div class='custom-control custom-switch text-left'>
                     <input type='checkbox' class='custom-control-input' id='checkAll' checked
                            onClick='filter_check_all(this)'>
                     <label class='custom-control-label padding' for='checkAll'>
@@ -84,7 +84,7 @@
 <!---- Result Checkbox List Item Macro ------>
 <!------------------------------------------->
 {% macro checkbox_input(label='', id='', name='', value='') -%}
-    <div class='form-group custom-control custom-switch ' style='text-align: left; '>
+    <div class='form-group custom-control custom-switch text-left'>
         {#        <input type='{{ type }}' class='form-control' id='{{ id }}' name='{{ name }}'#}
         <input type='checkbox' class='custom-control-input' id='{{ id }}' name='{{ name }}'
                value="{{ value }}" checked>

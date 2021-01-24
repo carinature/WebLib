@@ -37,7 +37,6 @@
     <!--    your stylesheets  -->
     <link href="../static/css/normalize.css" rel="stylesheet"/>
     <link href="../static/css/search-engine-main.css" rel="stylesheet"/>
-    <link href="../static/css/bs4-style.css" rel="stylesheet">
     <link href="../static/css/style.css" rel="stylesheet">
 
     {#       css for index   #}
@@ -58,12 +57,12 @@
 {% if title %}
     <div class="container-fluid ">
         <!--    <div class="row welcome text-center">-->
-        <div class="row welcome ">
+        <div class="row head-title ">
             <div class="col-12">
-                <h1 class="display-3" style="text-align: center">
+                <h1 class="display-3  text-center">
                     {{ title }}
                 </h1>
-                <h6 class="display-4" style="text-align: center">
+                <h6 class="display-4  text-center">
                     {% block index_title %}
                         {{ index_title }}
                     {% endblock %}
@@ -84,8 +83,8 @@
 </html>#}
 
 {#<div class="col-12">  <!--DO NOT DELETE THIS! -->#}
-{#    <h1 class="display-4" style="text-align: center">Tiresias</h1>#}
-{#    <h1 class="display-1" style="text-align: center">#}
+{#    <h1 class="display-4  text-center">Tiresias</h1>#}
+{#    <h1 class="display-1  text-center">#}
 {#    The Ancient Mediterranean Religions Source Database</h1>#}
 {#</div>#}
 

@@ -10,6 +10,7 @@ html {
     line-height: 1.15; /* 1 */
     -ms-text-size-adjust: 100%; /* 2 */
     -webkit-text-size-adjust: 100%; /* 2 */
+    height: 100%;
 }
 
 
@@ -19,6 +20,8 @@ html {
 /** Remove the margin in all browsers. */
 body {
     margin: 0;
+    /*height: 100%;*/
+    width: 100%;
 }
 
 /** Render the `main` element consistently in IE. */
@@ -69,11 +72,10 @@ pre {
    ========================================================================== */
 
 /** 1. Remove the gray background on active links in IE 10.
- * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
- */
+ * 2. Remove gaps in links underline in iOS 8+ and Safari 8+. */
 a {
-    background-color: transparent;    /* 1 */
-    -webkit-text-decoration-skip: objects;    /* 2 */
+    background-color: transparent; /* 1 */
+    -webkit-text-decoration-skip: objects; /* 2 */
 }
 
 
@@ -136,29 +138,25 @@ sup {
 
 /* Embedded content
    ========================================================================== */
+
 /** Remove the border on images inside links in IE 10.*/
 img {
     border-style: none;
 }
-/**
- * Add the correct display in IE 9-.
- */
+
+/** Add the correct display in IE 9-. */
 audio,
 video {
     display: inline-block;
 }
 
-/**
- * Add the correct display in iOS 4-7.
- */
+/** Add the correct display in iOS 4-7. */
 audio:not([controls]) {
     display: none;
     height: 0;
 }
 
-/**
- * Hide the overflow in IE.
- */
+/** Hide the overflow in IE. */
 svg:not(:root) {
     overflow: hidden;
 }
@@ -166,6 +164,7 @@ svg:not(:root) {
 
 /* Forms
    ========================================================================== */
+
 /** 1. Change the font styles in all browsers. (opinionated).
  * 2. Remove the margin in Firefox and Safari.*/
 button,
@@ -194,12 +193,15 @@ select { /* 1 */
     text-transform: none;
 }
 
-/** Correct the inability to style clickable types in iOS and Safari.*/
+/** 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
+ *    controls in Android 4.
+ * 2. Correct the inability to style clickable types in iOS and Safari. */
 button,
+html [type="button"], /* 1 */
 [type="button"],
 [type="reset"],
 [type="submit"] {
-    -webkit-appearance: button;
+    -webkit-appearance: button; /* 2 */
 }
 
 /** Remove the inner border and padding in Firefox.*/
@@ -237,10 +239,13 @@ legend {
     white-space: normal; /* 1 */
 }
 
-/** Add the correct vertical alignment in Chrome, Firefox, and Opera.*/
+/** 1. Add the correct display in IE 9-.
+ * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera. */
 progress {
-    vertical-align: baseline;
+    display: inline-block; /* 1 */
+    vertical-align: baseline; /* 2 */
 }
+
 
 /** Remove the default vertical scrollbar in IE 10+.*/
 textarea {
@@ -268,7 +273,8 @@ textarea {
     outline-offset: -2px; /* 2 */
 }
 
-/** Remove the inner padding in Chrome and Safari on macOS.*/
+/** Remove the inner padding and cancel buttons in Chrome and Safari on macOS. */
+[type="search"]::-webkit-search-cancel-button,
 [type="search"]::-webkit-search-decoration {
     -webkit-appearance: none;
 }
@@ -282,6 +288,7 @@ textarea {
 
 /* Interactive
    ========================================================================== */
+
 /*
  * Add the correct display in Edge, IE 10+, and Firefox.*/
 details {
@@ -296,6 +303,7 @@ summary {
 
 /* Misc
    ========================================================================== */
+
 /** Add the correct display in IE 10+.*/
 template {
     display: none;
@@ -304,4 +312,12 @@ template {
 /** Add the correct display in IE 10.*/
 [hidden] {
     display: none;
+}
+
+
+/* Scripting
+   ========================================================================== */
+/** Add the correct display in IE 9-. */
+canvas {
+    display: inline-block;
 }

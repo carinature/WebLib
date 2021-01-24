@@ -271,7 +271,7 @@ def book_indices():
 
 
 # ++++++++++++  list of Subjects in the db page ++++++++++++
-@app.route(links['subjects'])
+@app.route(links['subjects'], methods=['GET', 'POST'])
 # @app.route('/subject-list', methods=['GET', 'POST'])
 def subject_list(search_word='', page=''):
     page = request.args.get('page', 1, type=int)
@@ -302,6 +302,8 @@ def subject_list(search_word='', page=''):
                                next_url=next_url,
                                prev_url=prev_url,
                                search_bar=search_bar,
+                               hide_filter=True,
+                               # redirect_flag=False
                                )
 
     search_word = subject_form.subject_keyword_1.data
@@ -320,6 +322,7 @@ def subject_list(search_word='', page=''):
                            next_url=next_url,
                            prev_url=prev_url,
                            search_bar=search_bar,
+                           hide_filter=True,
                            )
 
 

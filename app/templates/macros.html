@@ -17,10 +17,10 @@
     {% set rbtn_id='refsbtn'~num %}
     <div class="container-fluid">
         {#        <div class="col-12" style=""> <!--todo move the style to css-->#}
-        <h4 class="" style="display: inline; ">
+        <h4 class="display-inline">
             {{ index }}. {{ author }}, <em>{{ title }} </em>
         </h4>
-                    <a href="#link" class="btn btn-sm btn-primary" role="button" style="float: right"> For more information </a>
+                    <a href="#link" class="btn btn-sm btn-primary float-right" role="button" > For more information </a>
 
         <div style="padding: 1em">
             {% for book in books %}
@@ -35,7 +35,7 @@
         </div>
 
         <span>
-{#            <em style="display: none" id={{ relm_id }}> {{ refs }} </em>#}
+{#            <em   class="display-none" id={{ relm_id }}> {{ refs }} </em>#}
             <em class="collapse inline" style="padding-left: 2em" id={{ relm_id }}> {{ refs }} </em>
             {{ disappring_btn( text='references: ', rbtn_id = rbtn_id, relm_id = relm_id, class='btn-sm') }}
         </span>
@@ -44,7 +44,7 @@
 
 {% macro category_head(category='', id='', res_num='', value='') -%}
     <div class="container-fluid padding" id="{{ id }}">
-        <div class="col-12" style="background-color: var(--secondary-color-light)"> <!--todo move the style to css-->
+        <div class="col-12  bgn-light-second"> <!--todo move the style to css-->
             <h1 class="">{{ category }} {{ res_num }}</h1>
             {#            <h1 class="display-4 welcome text-center">Tiresias: The Ancient Mediterranean Religions Source Database</h1>#}
         </div>

@@ -4,9 +4,9 @@
 
 
     <div class="container-fluid padding">
-        <div class="row welcome text-center">
+        <div class="row head-title text-center">
             <div class="col-12">
-                <h1 class="display-4 welcome text-center padding">
+                <h1 class="display-4 head-title text-center padding">
                     There are {{ results|length|value_or_zero }} results.</h1>
                 <h6>{{ y|value_or_zero }} are <a href="#high">highly validated</a> results.</h6>
                 <h6>{{ y|value_or_zero }} are <a href="#valid">validated</a> results.</h6>
@@ -28,7 +28,7 @@
             {#                    onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">Show More#}
             {#            </button>#}
             {#            <br><br>#}
-            {#            <p style="display: none" id={{ elm_id }}>#}
+            {#            <p   class="display-none" id={{ elm_id }}>#}
             {#                preview of the text (???)#}
             {#            </p>#}
         {% endfor %}
@@ -57,18 +57,18 @@
     {% set rbtn_id='refsbtn'~num %}
     <div class="container-fluid">
         {#        <div class="col-12" style=""> <!--todo move the style to css-->#}
-        <h4 class="" style="display: inline; padding: 10px;">
+        <h4 class="display-inline" style="padding: 10px;">
             {{ index }}. {{ author }}, <em>{{ title }} </em>
         </h4>
-        <span style="display: inline">
-            <button style="display: inline"
+        <span class='display-inline'>
+            <button class='display-inline'
 {#                    class="btn"#}
                     style="background-color: var(--primary-color-light)"
                     onclick="more_less_info('{{ rbtn_id }}','{{ relm_id }}')"
                     id={{ rbtn_id }}>
                 references:
             </button>
-            <em style="display: none" id={{ relm_id }}> {{ refs }} </em>
+            <em   class="display-none" id={{ relm_id }}> {{ refs }} </em>
         </span>
         <br>
         <div style="padding-left: 2em">
@@ -88,7 +88,7 @@
 
 {% macro category_head(category='', id='', res_num='', value='') -%}
     <div class="container-fluid padding" id="{{ id }}">
-        <div class="col-12" style="background-color: var(--secondary-color-light)"> <!--todo move the style to css-->
+        <div class="col-12  bgn-light-second"> <!--todo move the style to css-->
             <h1 class="">{{ category }} {{ res_num }}</h1>
             {#            <h1 class="display-4 welcome text-center">Tiresias: The Ancient Mediterranean Religions Source Database</h1>#}
         </div>

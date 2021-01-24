@@ -8,7 +8,7 @@
             <!-------- Title & Results Info ------------>
             <span class="col-lg-4 text-center ">
                 {#            <div class="col-12 text-center ">#}
-                <h1 class="display-4 welcome padding">
+                <h1 class="display-4 head-title padding">
                     There are {{ results_num }} results for: <em>{{ search_word }}</em></h1>
                 <h6>{{ categories[0]['results']|length }} are <a href="#high">highly validated</a> results.</h6>
                 <h6>{{ categories[1]['results']|length }} are <a href="#valid">validated</a> results.</h6>
@@ -52,7 +52,7 @@
                 {#                    onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">Show More#}
                 {#            </button>#}
                 {#            <br><br>#}
-                {#            <p style="display: none" id={{ elm_id }}>#}
+                {#            <p   class="display-none" id={{ elm_id }}>#}
                 {#                preview of the text (???)#}
                 {#            </p>#}
             {% endfor %}

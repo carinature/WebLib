@@ -11,7 +11,7 @@
     {############################}
     {#
     <br><br>
-    <div style="text-align: center">
+    <div class='text-center'>
     <span style="margin-left: 2rem; display: inline-block;" class="padding">
        <input class="inline-radio" type="radio" id="chkYes" name="search-radio" onclick="ShowHideDiv()" checked/>
        <label for="chkYes" style="vertical-align: middle; font-size: 1.5rem">Search by Subject</label>
@@ -22,7 +22,7 @@
     </span>
     </div>
 
-    <div style="text-align: center; ">
+    <div class='text-center'>
         <span style="margin-left: 2rem; display: inline-block;" class="padding">{{ radio.r_field }}</span>
     </div>
     #}
@@ -35,18 +35,18 @@
         {% if hide_bar %}
             {% set collapse='collapse' %}
         {% endif %}
-        <div class="row {{ collapse }}" id="search-subject" style="{{ show }}">
-{#        <div class="row " id="search-subject">#}
+        <div class="row {{ collapse }} " id="search-subject">
 
             {% if redirect_flag %}
                 {% set url=url_for('search_results') %}
+            {% else %}
+                {% set url=url_for('subject_list') %}
             {% endif %}
 
-            <form action='{{ url }}' method="POST">
+            <form action={{ url }} method="POST">
                 {{ search_bar['subject_form'].hidden_tag() }} {#csrf_token #}
 
                 <div class="search-bar-kt form-inline container-fluid ">
-                    {#                        <div class="form-field input-field first-wrap">#}
                     <div class="list-inline-item">
                         {{ search_bar['subject_form'].subject_keyword_1 }}
                         {% if search_bar['subject_form'].subject_keyword_1.errors %}
@@ -86,7 +86,7 @@
     {##############     search by Reference - hidden Section    ###############}
     {#
         <!--- search by Reference - hidden Section -->
-        <div class="row" id="search-ref" style="display: none">
+        <div class="row display-none" id="search-ref" >
             <div class="s01">
                 <form action="{{ url_for('search_results') }}" method="POST">
                     #}{#                <form action="{{ url_for('home') }}" method="POST">#}{#
