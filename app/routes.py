@@ -280,14 +280,7 @@ def subject_list(search_word='', page=''):
         #   TextSubject.subject.asc()).paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
         next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
         prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
-        if filter_form.fetch_results.data:
-            print('@' * 33, search_word)
-            print(search_word)
-            print(request)
-            print(request.args)
-        if subject_form.submit_subject.data:
-            print(request.args)
-            print('=' * 33, search_word)
+
         return render_template('subject_list.html',
                                title="Tiresias Subjects",  # todo different title
                                description="Tiresias: The Ancient Mediterranean Religions Source Database",
