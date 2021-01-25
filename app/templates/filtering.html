@@ -2,106 +2,96 @@
 <!-------------------Filtering---------------------->
 <!------------------------------------------->
 
-
-<!--the Filter Options button-->
+{#<!--      Filter Options Button    -->#}
 <button class="s01 btn-primary" data-toggle="collapse" data-target="#filtering" type="button">
     Advanced Search Options
 </button>
 
-<!--hidden filtering section-->
+{#<!--      hidden filtering section    -->#}
 <div class="s01">
     <!-- s01 should appear in a parent element of collapse, so it would use the correct css rule for form-->
     <div id="filtering" class="collapse ">
-        <div class="container-fluid padding-bot-2 container">
+        <div class="container-fluid container padding-bot-2 ">
             <div class="row text-center inner-form ">
                 {{ search_bar['filter_form'].hidden_tag() }}
 
-                <!--sub-subject filtering options-->
-                <div class="col-md-6 col-lg-4 position-rel">
-                    <h5 class="head-title col-form-label-lg" >
+                <!-- filter by sub-subject options-->
+                <div class="col-md-6 col-lg-4 filter-section">
+                    <h5 class="head-title col-form-label-lg">
                         Filter by<br>Sub-subject
                     </h5>
                     <hr>
-
-                    {{ search_bar['filter_form'].includes.label }}
-                    {% for i in search_bar['filter_form'].includes %}
-                        {{ i }}
-                    {% endfor %}
-                    <br>
-                    <button onclick="add_field('include')" type="button"> + </button>
-                    <br><br><br><br>
-
-                    {{ search_bar['filter_form'].excludes.label }}
-                    {% for i in search_bar['filter_form'].excludes %}
-                        {{ i }}
-                    {% endfor %}
-                    <br>
-                    <button onclick="add_field('exclude')" type="button"> + </button>
-
-                    {#                    <label>or check and uncheck in the list below</label>#}
-
+                    <div class="padding-bot-1">
+                        {{ search_bar['filter_form'].includes.label }}
+                        {% for i in search_bar['filter_form'].includes %}
+                            {{ i }}
+                        {% endfor %}
+                        <button class="add-btn" id="add-include" type="button"> +</button>
+                    </div>
+                    <div class="padding-bot-1">
+                        {{ search_bar['filter_form'].excludes.label }}
+                        {% for i in search_bar['filter_form'].excludes %}
+                            {{ i }}
+                        {% endfor %}
+                        <button class="add-btn margin-2r" id="add-exclude" type="button"> +</button>
+                    </div>
                 </div>
 
-                <!--text and reference filtering options-->
-                <div class="col-md-6 col-lg-4 padding-1r;">
-                    <h5 class="head-title col-form-label-lg">
+                <!-- filter by text options-->
+                <div class="col-md-6 col-lg-4 filter-section">
+                    <h5 class="head-title col-form-label-lg ">
                         Filter by<br>Text
                     </h5>
-                    <hr>
-                    <br>
-                    {{ search_bar['filter_form'].from_century.label }}
-                    {{ search_bar['filter_form'].from_century }}
-                    <br><br>
-                    {{ search_bar['filter_form'].to_century.label }}
-                    {{ search_bar['filter_form'].to_century }}
-                    <br><br>
-                    {{ search_bar['filter_form'].language.label }}
-                    {{ search_bar['filter_form'].language }}
-
-                    {#                    {% if SMALL_SCREEN %}#}
-                    <br><br>
-                    {#                    {% endif %}#}
+                    <hr class="padding-bot-2">
+                    <div class="padding-bot-2">
+                        {{ search_bar['filter_form'].from_century.label }}
+                        {{ search_bar['filter_form'].from_century }}
+                    </div>
+                    <div class="padding-bot-2">
+                        {{ search_bar['filter_form'].to_century.label }}
+                        {{ search_bar['filter_form'].to_century }}
+                    </div>
+                    <div class="padding-bot-2">
+                        {{ search_bar['filter_form'].language.label }}
+                        {{ search_bar['filter_form'].language }}
+                    </div>
                 </div>
-                <div class="col-md-6 col-lg-4">
+
+                <!-- filter by reference options-->
+                <div class="col-md-6 col-lg-4 filter-section">
                     <h5 class="head-title  col-form-label-lg">
                         Filter by<br>Reference
                     </h5>
                     <hr>
-                    {{ search_bar['filter_form'].ancient_author.label }} <br>
-                    {{ search_bar['filter_form'].ancient_author }}
-                    <br><br>
-                    {{ search_bar['filter_form'].ancient_title.label }} <br>
-                    {{ search_bar['filter_form'].ancient_title }}
-                    <br><br>
-                    {{ search_bar['filter_form'].reference.label }} <br>
-                    {{ search_bar['filter_form'].reference }}
-                    <div class="text-left">
-                        <br><br><br><br>
-                        {{ search_bar['filter_form'].fetch_full }}
-                        &nbsp;&nbsp;&nbsp; {{ search_bar['filter_form'].fetch_full.label }}
-                        <br>
-                        {#                        {{ search_bar['filter_form'].attention_label }}#}
-                        <p id="fetch_full_warn" class="display-block">
-                            (Attention: Checking this box will attempt full text fetching,
-                            <br>which can result in very highly loading times.)</p>
-
+                    <div class="padding-bot-2">
+                        {{ search_bar['filter_form'].ancient_author.label }} <br>
+                        {{ search_bar['filter_form'].ancient_author }}
                     </div>
+                    <div class="padding-bot-2">
+                        {{ search_bar['filter_form'].ancient_title.label }} <br>
+                        {{ search_bar['filter_form'].ancient_title }}
+                    </div>
+                    <div class="padding-bot-2">
+                        {{ search_bar['filter_form'].reference.label }} <br>
+                        {{ search_bar['filter_form'].reference }}
+                    </div>
+                </div>
 
+                <div class="text-left padding-5r">
+                    {{ search_bar['filter_form'].fetch_full }}
+                    &nbsp;&nbsp;&nbsp; {{ search_bar['filter_form'].fetch_full.label }} <br>
+                    {#                        {{ search_bar['filter_form'].attention_label }}#}
+                    <p id="fetch_full_warn" class="display-block">
+                        (Attention: Checking this box will attempt full text fetching,
+                        <br>which can result in very highly loading times.)</p>
                 </div>
                 {#                <input type="reset" class="btn btn-dark bottom-left">#}
+                <button type="button"
+                        class="btn btn-dark bottom-left"
+                        onclick="clear_filter()">
+                    Clear all fields
+                </button>
             </div>
-            <button type="button"
-                    class="btn btn-dark bottom-left"
-                    onclick="clear_filter()">
-                Clear all fields
-            </button>
         </div>
     </div>
 </div>
-
-
-{#{% if flag %}#}
-{#    {{ search_bar['filter_form'].fetch_results }}#}
-{#{% endif %}#}
-
-{#</form>#}

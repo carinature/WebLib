@@ -64,7 +64,6 @@ $('button#csv_to_mysql_btn').on('click', function (e) {
     return false;
 });
 
-
 //load raw scv files into the MySQL DB
 $('button#email_button').on('click', function (e) {
     //  NEXT TO COMMANDS DO NOT SEEM TO WORK
@@ -98,7 +97,10 @@ function more_less_info(btn_id, elm_id, show_msg = '', hide_msg = '') {
 /**
  * adding a field to the filtering form
  * */
-function add_field(type = 'exclude') {
+$('button.add-btn').on('click', function (e) {
+// function add_field(type = 'exclude') {
+    let type = this.id.split('-')[1];
+    console.log(type)
     // which table to expand
     let tbody = document.getElementById(type + 's-0').lastChild;
     // get number of input fields
@@ -135,7 +137,9 @@ function add_field(type = 'exclude') {
     new_tr.appendChild(new_td);
     tbody.appendChild(new_tr);
 
-}
+});
+
+
 
 /**
  * clearing all fields in the search bar and filter form
