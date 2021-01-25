@@ -115,12 +115,9 @@ def search_results(search_word='', page=''):
         bib_info_col,
         page_col,
         c_col)  # count()) fixme remove C_col in production
-
-    txts_q_with_ent_filter: Query = txts_q_with_ent.filter(sbj_col.like(search_word))
-    # txts_q_with_ent_filter: Query = txts_q_with_ent.filter(sbj_col.like(search))
-    # if filter_form.reference.data:
-    #     print('-' * 33, ' filter_form.reference.data ')
-    #     txts_q_with_ent_filter: Query = txts_q_with_ent_filter.filter(ref_col.like(str(filter_form.reference)))
+    txts_q_with_ent_filter: Query = txts_q_with_ent.filter(sbj_col.like(search))
+    if filter_form.reference.data:
+        txts_q_with_ent_filter: Query = txts_q_with_ent_filter.filter(ref_col.like(str(filter_form.reference)))
     # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter.group_by(txts_num_col, sbj_col)
     # txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(num_col, bib_info_col)
     # needs to be ordered for the itertools.groupby() later on,
@@ -186,7 +183,7 @@ def search_results(search_word='', page=''):
         if len(res.books) > 1:
             highly_valid.append(res)  # categories[0]['results'].append(res)
         elif len(res.refs) > 1:
-        # elif len(res.pages) > 1:
+            # elif len(res.pages) > 1:
             valid.append(res)
         else:
             not_valid.append(res)
@@ -212,7 +209,6 @@ def search_results(search_word='', page=''):
 
     # for k, g in groupby(session.query(Stuff).order_by(Stuff.column1, Stuff.column2), key=lambda stuff: stuff.column1):
     #     print('{}: {}'.format(k, ','.join(stuff.column2 for stuff in g)))
-
 
 
 def nothing():
