@@ -32,18 +32,13 @@ NEWEST_CENTURY = 21
 class SearchSubject(FlaskForm):
     subject_keyword_1 = StringField(
         EMPTY_LABEL,
-        [DataRequired(), Regexp('^\w+$', message="Field accepts one search word")],
+        validators=[DataRequired(), Regexp('^\w+$', message="Field accepts one search word")],
         render_kw={'placeholder': ' Subject'})
     subject_keyword_2 = StringField(
         EMPTY_LABEL,
-        [Optional(), Regexp('^\w+$', message="Field accepts one search word")],
+        validators=[Optional(), Regexp('^\w+$', message="Field accepts one search word")],
         render_kw={'placeholder': '(Optional) Subject'})
-    submit_subject = SubmitField(' Search',
-                                 render_kw={'class': 'btn-primary', }
-                                 #            #  'class': 'float-right',
-                                 #            # 'onclick': "alert('Fetching Data...')"
-                                 #            }
-                                 )
+    submit_subject = SubmitField(' Search', render_kw={'class': 'btn-primary', })
 
     def __repr__(self):
         return f'SearchSubject:\n' \
@@ -143,23 +138,11 @@ class FilterForm(FlaskForm):
                             render_kw={
                                 'placeholder': '(e.g., 1.1 for chapter 1 verse 1, or leave empty for whole work)'}
                             )
-    fetch_full = BooleanField('   Fetch full text', id='fetch_full_chkbox',
-                              render_kw={
-                                  # 'class': 'inline-radio padding',
-                                  # 'onClick': 'displayWarningFetchAllChkbx()',
-                                  'onClick':  # todo remove alert?
-                                      "alert('Attention! Checking this box will attempt full text fetching, which can result in very highly loading times.')"}
-                              )
+    fetch_full = BooleanField('   Fetch full text', id='fetch_full_chkbox',                              )
     attention_label = Label(
         text='(Attention: Checking this box will attempt full text fetching,'
              '\nwhich can result in very highly loading times.)',
         field_id=fetch_full)
-    fetch_results = SubmitField('Fetch Results',
-                                render_kw={'class': 'btn btn-lg btn-primary fetch-submit-field',
-                                           'style': '',
-                                           # 'onclick': "alert('Fetching Data...')"
-                                           }
-                                )
 
     # clean_button = ('Clear all fields')
 
@@ -204,9 +187,7 @@ class SearchReference(FlaskForm):
         [Optional()],  # , validators.Regexp('^\w+$', message="Field accepts one search word")],
         render_kw={'placeholder': 'Reference'})
     submit_reference = SubmitField('Submit',
-                                   # render_kw={'class': 'btn btn-lg btn-primary float-right',
-                                   #            # 'onclick': "alert('Fetching Data...')"
-                                   #            }
+                                   # render_kw={'class': 'btn btn-lg btn-primary float-right'}
                                    )
 
 

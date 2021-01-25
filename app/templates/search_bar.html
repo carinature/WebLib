@@ -9,24 +9,20 @@
     {############################}
     <!-- Radio search buttons -->
     {############################}
-
-{#
-    <br><br>
-    <div class='text-center'>
+{#    <div class='text-center padding-1r'>
     <span class="inline-radio-span">
-       <input class="inline-radio" type="radio" id="chkYes" name="search-radio" onclick="ShowHideDiv()" checked/>
-       <label for="chkYes" class="inline-radio-label">Search by Subject</label>
+        <input id="chkYes" class="inline-radio" type="radio" name="search-radio" checked/>
+        <label for="chkYes" class="inline-radio-label">Search by Subject</label>
     </span>
-        <span class="inline-radio-span">
-       <input class="inline-radio" type="radio" id="chkNo" name="search-radio" onclick="ShowHideDiv()"/>
+    <span class="inline-radio-span">
+        <input id="chkNo" class="inline-radio" type="radio" name="search-radio"/>
         <label for="chkNo" class="inline-radio-label">Search by Reference</label>
     </span>
     </div>
-
-    <div class='text-center'>
+    #}{#    <div class='text-center'>
         <span class="inline-radio-span">{{ radio.r_field }}</span>
-    </div>
-#}
+    </div>  #}
+
 
     {############################}
     {#      Search Fields       #}
@@ -44,7 +40,6 @@
 
             <form action='{{ url }}' method="POST">
                 {{ search_bar['subject_form'].hidden_tag() }} {#csrf_token #}
-
                 <div class="search-bar-kt form-inline container-fluid ">
                     <div class="list-inline-item">
                         {{ search_bar['subject_form'].subject_keyword_1 }}
@@ -74,7 +69,7 @@
                 </div>
 
                 {% if not hide_filter %}
-                    {% include 'filtering.html' %}
+                    {% include 'filter_bar.html' %}
                 {% endif %}
 
             </form>

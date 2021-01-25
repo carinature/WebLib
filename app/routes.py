@@ -71,13 +71,11 @@ def search_results(search_word='', page=''):
     filter_form = search_bar['filter_form']
 
     if not subject_form.validate_on_submit():  # i.e. when method==GET
-        return render_template('search_subjects.html',
+        return render_template('search_results.html',
                                title='Search',
                                # description="Tiresias: The Ancient Mediterranean Religions Source Database",
                                search_bar=search_bar,
-                               # results=[],
-                               # total=0,
-                               # flag=False
+                               method='get'
                                )
 
     # print('-' * 13, ' POST ', '-' * 13)
@@ -215,15 +213,6 @@ def search_results(search_word='', page=''):
     # for k, g in groupby(session.query(Stuff).order_by(Stuff.column1, Stuff.column2), key=lambda stuff: stuff.column1):
     #     print('{}: {}'.format(k, ','.join(stuff.column2 for stuff in g)))
 
-
-#     return render_template('final_results.html',
-#                            title=f'Search Result for: {search_word}',
-#                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
-#                            categories=categories,
-#                            results=res_dict,
-#                            # result_clists=result_clists,
-#                            # res_dict = res_dict
-#                            )
 
 
 def nothing():

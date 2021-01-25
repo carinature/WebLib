@@ -1,8 +1,10 @@
-// When the user scrolls down 80px from the top of the document, resize the navbar's padding and the logo's font size
+
+/**
+ * When the user scrolls down 80px from the top of the document, resize the navbar's padding and the logo's font size
+ * */
 window.onscroll = function () {
     scrollFunction()
 };
-
 function scrollFunction() {
     let navbar = document.getElementsByClassName("navbar")[0];
     let logo = document.getElementById("logo");
@@ -12,20 +14,17 @@ function scrollFunction() {
 
     if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
         document.getElementById("top_btn").style.display = "block";
-
         // scrolled DOWN
         // subtitle.style.display = 'none';
         // subtitle.style.transition = '400ms';
         // navbar.style.padding = "5px 10px 5px 10px";
-        // logo.style.height = "3rem";
+        // navbar.style.padding = "0";
         // title.style.transform = "scale(0.5)";
         // title.style.margin = "0";
         // title.style.paddingTop = "0";
-
-
         // logo.style.margin = "0";
         // logo.style.width = "5em";
-        // navbar.style.padding = "0";
+        // logo.style.height = "3rem";
         // logo.style.padding = "5px 10px 5px 10px";
         // logo.style.margin = "5px 10px 5px 10px";
         title.style.padding = "1rem 0 0 0 ";
@@ -33,30 +32,22 @@ function scrollFunction() {
 
     } else {  // scrolled to TOP
         document.getElementById("top_btn").style.display = "none";
-
         // subtitle.style.display = 'block';
         // subtitle.style.transition = '400ms';
-
-        // logo.style.height = "3rem";
-        // title.style.transform = "scale(1)";
-
-
         // navbar.style.padding = "30px 10px 10px 10px";
         // logo.style.padding = "30px 10px 30px 10px";
         // logo.style.margin = "30px 10px 30px 10px";
         // logo.style.width = "10em";
+        // logo.style.height = "3rem";
+        // title.style.transform = "scale(1)";
         title.style.padding = "initial";
         title.style.fontSize = 'inherit';
     }
 }
 
-
-// // When the user clicks on the button, scroll to the top of the document
-// function topFunction() {
-//     document.body.scrollTop = 0;
-//     document.documentElement.scrollTop = 0;
-// }
-
+/**
+ * When the user clicks on the button, scroll to the top of the document
+ * */
 // $('button#csv_to_mysql_btn').on('click', function () {
 $(document).ready(function () {
     $("#top_btn").click(function () {
@@ -65,14 +56,13 @@ $(document).ready(function () {
     });
 });
 
-function ShowHideDiv() {
+$('input.inline-radio').on('click', function (e) {
     let chkYes = document.getElementById("chkYes");
     let search_subject = document.getElementById("search-subject");
     let search_ref = document.getElementById("search-ref");
     search_subject.style.display = chkYes.checked ? "block" : "none";
-
     search_ref.style.display = chkYes.checked ? "none" : "block";
-}
+});
 
 
 

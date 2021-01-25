@@ -1,10 +1,7 @@
 {% macro disappring_btn(text, rbtn_id, relm_id, class='') -%}
-    <button class='{{ class }} btn-rounded'
+    <button class='{{ class }} btn-rounded disappring-btn'
             data-toggle='collapse'
             data-target='#{{ relm_id }}'
-            type='button'
-            onclick="this.style.display='none';"
-            {#                    onclick="more_less_info('{{ rbtn_id }}','{{ relm_id }}')"#}
             id={{ rbtn_id }}>
         {{ text }}
     </button>
@@ -49,3 +46,40 @@
     </div>
 {%- endmacro %}
 
+
+<!------------------------------------------->
+<!---- Result Checkbox List Item Macro ------>
+<!------------------------------------------->
+{% macro checkbox_input(label='', id='', name='', value='') -%}
+    <div class='form-group custom-control custom-switch text-left'>
+        {#        <input type='{{ type }}' class='form-control' id='{{ id }}' name='{{ name }}'#}
+        <input type='checkbox' class='custom-control-input' id='{{ id }}' name='{{ name }}'
+               value="{{ value }}" checked>
+        <label for='{{ id }}' class='custom-control-label padding-bot-2'>{{ label }}</label>
+    </div>
+{%- endmacro %}
+
+    <!------------------------------------------->
+    <!------ Result Subject Checkbox List ------->
+    <!------------------------------------------->
+    {% if total %}
+        <div class='container'>
+            <div class='form-group padding-bot-2 col-9'>
+                {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
+                {#  -----   Select All  -----   #}
+                <div class='custom-control custom-switch text-left'>
+                    <input type='checkbox' class='custom-control-input' id='checkAll' checked
+                           onClick='filter_check_all(this)'>
+                    <label class='custom-control-label padding-bot-2' for='checkAll'>
+                        <em><strong>Select All the Results</strong></em><br>
+                    </label>
+                <form action='#' method='POST' >
+                    {#  -----   The Result subjects  -----   #}
+                    {% for item in results %}
+                        {{ checkbox_input(label=item.subject, id=item.subject, name='filter-opt', value=item.C) }}<br>
+                    {% endfor %}
+                </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}

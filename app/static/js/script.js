@@ -76,8 +76,6 @@ $('button#email_button').on('click', function (e) {
     return false;
 });
 
-
-
 // function more_less_info(btn_id, elm_id, show_msg = 'Show More', hide_msg = 'Show less') {
 function more_less_info(btn_id, elm_id, show_msg = '', hide_msg = '') {
     let btn = document.getElementById(btn_id); // Get the checkbox/button
@@ -140,6 +138,13 @@ $('button.add-btn').on('click', function (e) {
 });
 
 /**
+ * The button disappears when you click it
+ * */
+$('button.disappring-btn').on('click', function (e) {
+    this.style.display='none';
+});
+
+/**
  * clearing all fields in the search bar and filter form
  * */
 $('button#clear-filter').on('click', function (e) {
@@ -168,6 +173,13 @@ $('button#clear-filter').on('click', function (e) {
     add_field('include');
     add_field('exclude');
 
+});
+
+/**
+ * clearing all fields in the search bar and filter form
+ * */
+$('input#fetch_full_chkbox').on('click', function (e) {
+    alert('Attention! Checking this box will attempt full text fetching, which can result in very highly loading times.')
 });
 
 // Invoking a python script on click of html button can be accomplished using python-django framework.

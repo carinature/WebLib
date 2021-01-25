@@ -280,7 +280,7 @@ class ResultTitle:
 
         self.books[-1].refs.append(ref)
         if ref not in self.refs:
-            print(' --- add_refs ---    to self.refs')
+            print(' --- add_refs ---    ')
         self.refs.add(ref)
 
     def __repr__(self):
