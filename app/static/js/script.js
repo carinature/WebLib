@@ -139,12 +139,10 @@ $('button.add-btn').on('click', function (e) {
 
 });
 
-
-
 /**
  * clearing all fields in the search bar and filter form
  * */
-function clear_filter() {
+$('button#clear-filter').on('click', function (e) {
     // reset all drop-down manues
     $("select").each(function () {
         this.selectedIndex = 0
@@ -170,7 +168,7 @@ function clear_filter() {
     add_field('include');
     add_field('exclude');
 
-}
+});
 
 // Invoking a python script on click of html button can be accomplished using python-django framework.
 // The ajax for it is written this way
