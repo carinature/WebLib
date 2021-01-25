@@ -26,46 +26,67 @@
     /*src: url("/app/static/css/Spectral-Regular.ttf");*/
 }
 
+/*@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700');*/
+
+html {
+}
+
+/* Sections
+   ========================================================================== */
 body {
-    height: 100%;
-    /*background-color: var(--primary-color);*/
     padding-top: 7.5em;
     /*background-color: var(--primary-color-light);*/ /*  !important;*/
-    font-family: spectral, sans-serif;
     color: var(--font-color);
-    font-size: large; /*todo*/
-    /*font: */
+    font-family: spectral, sans-serif;
+}
+
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
 }
 
 /*img {*/ /*DONT DO IT*/
 /*    max-width: 90%;*/
 /*    padding-left: 5rem;*/
 /*}*/
+/*tbody tr:nth-child(odd) {background: #fafafa; }*/
 
-.bgn-light {
-    background-color: var(--primary-color-light); /*!important;*/
-    /*background-color: var(--secondary-color-light);*/ /* !important;*/
+footer {
+    background-color: #3f3f3f;
+    color: lightgrey;
+    padding-top: 2rem;
 }
 
-.bgn-dark {
-    background-color: var(--primary-color-light) /*!important;*/
+footer a {
+    color: lightgrey;
 }
 
-/*todo consider changing*/
-/*a.bg-light:hover, a.bg-light:focus,*/
-/*button.bg-light:hover,*/
-/*button.bg-light:focus {*/
-/*  background-color: #dae0e5 !important;*/
-/*}*/
-
-/*todo consider changing*/
-/*a.bg-dark:hover, a.bg-dark:focus,*/
-/*button.bg-dark:hover,*/
-/*button.bg-dark:focus {*/
-/*  background-color: #1d2124 !important;*/
-/*}*/
+footer button {
+    color: lightgrey;
+    background-color: dimgrey;
+    width: 100%;
+    margin-bottom: 2rem;
+}
 
 
+/* Elements
+   ========================================================================== */
+
+/** Image **/
+/*--- Fixed Background Image --*/
+figure {
+    position: relative;
+    width: 100%;
+    height: 60%;
+    margin: 0 !important;
+}
+
+/* Buttons
+   ========================================================================== */
 .btn-primary {
     background-color: var(--accent-color);
     border: 1px solid var(--misc-color);
@@ -76,25 +97,170 @@ body {
     border: 1px solid var(--misc-color);
 }
 
+#top_btn {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    /*background-color: #545445;*/
+    color: white;
+    background-color: var(--accent-color);
+    /*color: var(--font-color);*/
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 45px;
+    font-weight: bold;
+}
 
-/*.jumbotron {*/
-/*    max-height: 13em !important;*/
-/*    !*padding: 5em;!* inherit;*!*!*/
-/*    !*    height: 20%  !important;*!*/
-/*    !*    width: 20%  !important;*!*/
+#top_btn:hover {
+    background-color: #555;
+}
 
-/*}*/
+.fetch-submit-btn {
+    margin-right: 5%;
+    padding: 1rem 4rem 1rem 4rem;
+    position: sticky;
+    float: right
+}
 
-/*.size-20 {*/
-/*  height: 20%;*/
-/*  !*background: #aaa;*!*/
-/*}*/
+.btn-rounded {
+    border-radius: 1em;
+}
+
+.add-btn {
+    margin-bottom: 4rem;
+}
+
+/* General
+   ========================================================================== */
+
+.bgn-light {
+    background-color: var(--primary-color-light);
+}
+
+.bgn-light-second {
+    background-color: var(--secondary-color-light);
+}
+
+.bgn-dark {
+    background-color: var(--primary-color-dark);
+}
+
+.bgn-dark-second {
+    background-color: var(--secondary-color-dark);
+}
+
+.color-accent {
+    color: var(--accent-color);
+}
+
+hr.light {
+    border-top: 1px solid lightgrey;
+    width: 75%;
+    margin-top: .8rem;
+    margin-bottom: 1rem;
+}
+
+hr.light-100 {
+    border-top: 1px solid lightgrey;
+    width: 100%;
+    margin-top: .8rem;
+    margin-bottom: 1rem;
+}
+
+/*--- Bootstrap Padding Fix --*/
+[class*="col-"] {
+    padding: 1rem;
+}
+
+.display-none {
+    display: none;
+}
+
+.display-inline {
+    display: inline;
+}
+
+.display-block {
+    display: block;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.float-right {
+    float: right;
+}
+
+.float-top {
+    float: top;
+}
+
+.margin-left-1r {
+    margin-left: 1rem;
+}
 
 
-/* Create a sticky/fixed navbar */
+.margin-2r {
+    margin: 2rem;
+}
+
+.position-rel {
+    position: relative;
+}
+
+.padding-bot-1 { /* todo consider padding all around */
+    padding-bottom: 1rem;
+}
+
+.padding-bot-2 { /* todo consider padding all around */
+    padding-bottom: 2rem;
+}
+
+.padding-left-2r { /* todo consider padding all around */
+    padding-left: 2rem;
+}
+
+.padding-5r {
+    padding: 5rem;
+}
+
+.padding-1r {
+    padding: 1rem;
+}
+
+.category-padding {
+    padding: 1em 2em 3em 3em;
+}
+
+.bottom-left {
+    bottom: 0;
+    left: 0;
+}
+
+.max-h-15r {
+    max-height: 15rem;
+}
+
+/* Navbar
+   ========================================================================== */
+
+.nav-link {
+    font-size: 1.1em !important;
+}
+
 .navbar {
     /*overflow: hidden;*/
     /*padding: 10px 10px 10px 10px; !* Large padding which will shrink on scroll (using JS) *!*/
+    padding: .8rem; /*****    NOTE: bootstrap uses rem as a default    ?? ********/
     transition: 0.2s; /* Adds a transition effect when the padding is decreased */
     position: fixed; /* Sticky/fixed navbar */
     width: 100%;
@@ -105,11 +271,17 @@ body {
     float: left;
 }
 
+.navbar-nav li {
+    padding-right: 20px;
+}
+
 /* Style the logo */
 .navbar #logo {
-    max-height: 10rem;
+    max-height: 5rem;
+    width: auto;
     margin: 1rem;
     transition: 0.2s;
+    display: inline;
     /*margin-right: 2em;*/
     /*margin-left: 1em;*/
     /*font-size: 35px;*/
@@ -135,10 +307,29 @@ body {
     align-items: center;
 }
 
-/*#search-subject {*/
-/*    padding-top: 15em;*/
-/*}*/
+.navbar-default {
+    background-color: var(--primary-color-light);
+}
 
+/* Head Title
+   ========================================================================== */
+.head-title {
+    width: 75%;
+    margin: 0 auto;
+    padding-top: .5rem;
+}
+
+.head-title hr {
+    border-top: 2px solid #b4b4b4;
+    width: 90%;
+    /*margin-top: .3rem;*/
+    /*margin-bottom: .5rem;*/
+}
+
+
+/*  Forms (Search Bar & Filters)
+   ========================================================================== */
+/*  Radio Buttons   */
 .inline-radio:hover {
     background-color: var(--misc-color);
 }
@@ -154,31 +345,22 @@ body {
     margin-right: 1em
 }
 
-.inline-label {
+.inline-radio-span {
+    margin-left: 2rem;
+    display: inline-block;
+    padding-bottom: 2rem;
+}
 
+.inline-radio-label {
+    vertical-align: middle;
+    font-size: 1.5em
+}
+
+.inline-label {
     padding-right: 2rem;
     vertical-align: middle;
     /*float: left;*/
     transform: scale(2);
-}
-
-.fun { /*the button for the hidden section*/
-    /*width: 90%;*/
-    /*margin-bottom: 2rem;*/
-    /*align-content: center;*/
-    /*alignment: center;*/
-    /*align-items: center;*/
-    /*align-self: center;*/
-    padding-left: 5rem;
-    background-color: var(--accent-color);
-}
-
-.lead {
-    text-align: justify;
-}
-
-.jumbotron {
-    background-color: var(--secondary-color-light);
 }
 
 .s01 form .inner-form .input-field.third-wrap .btn-search {
@@ -233,37 +415,6 @@ body {
 }
 
 
-#submit-subject {
-    /*background-color: var(--accent-color);*/
-}
-
-.navbar-default {
-    background-color: var(--primary-color-light);
-}
-
-
-#top_btn {
-    position: fixed;
-    bottom: 20px;
-    right: 30px;
-    z-index: 99;
-    font-size: 18px;
-    border: none;
-    outline: none;
-    /*background-color: #545445;*/
-    color: white;
-    background-color: var(--accent-color);
-    /*color: var(--font-color);*/
-    cursor: pointer;
-    padding: 15px;
-    border-radius: 45px;
-    font-weight: bold;
-}
-
-#top_btn:hover {
-    background-color: #555;
-}
-
 /*!* this is from the ORIGINAL bootstrap*!*/
 /*.row {*/
 /*  display: -webkit-box;*/
@@ -275,6 +426,13 @@ body {
 /*  margin-left: -15px;*/
 /*}*/
 
+.filter-section {
+    padding: 1rem 1rem 2rem 1rem;
+}
+
+.filter-sub-section {
+    padding-bottom: 1rem;
+}
 
 .search-bar {
     display: inline-block;
@@ -306,3 +464,319 @@ form #filtering input {
     /*border-color: #0b2e13;*/
     border-width: 4px;
 }
+
+
+/* Fixed background
+   ========================================================================== */
+.fixed-wrap {
+    clip: rect(0, auto, auto, 0);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#fixed {
+    /*background-image: url('http://tiresias.haifa.ac.il/static/large13.1.png'); !*KT*!*/
+    /*background-image: url('../images/lib-4-noncom-reuse.jpg'); !*KT*!*/
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Carousel & Jumbotron
+   ========================================================================== */
+.carousel-inner img {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.carousel-img {
+    max-width: 90%;
+    padding-left: 7em;
+}
+
+.carousel-caption {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent-color); /*KT*/
+}
+
+.carousel-caption h1 {
+    font-size: 300%; /*KT*/
+    /*font-size: 500%;*/
+    text-transform: uppercase;
+    text-shadow: 1px 1px 10px #000;
+
+}
+
+.carousel-caption h3 {
+    font-size: 150%; /*KT*/
+    /*font-size: 200%;*/
+    font-weight: 500;
+    /*text-transform: uppercase;*/
+    text-shadow: 1px 1px 10px #000;
+    padding-bottom: 1rem;
+}
+
+/*---Firefox Bug Fix --*/
+.carousel-item {
+    transition: -webkit-transform 0.5s ease;
+    transition: transform 0.5s ease;
+    transition: transform 0.5s ease, -webkit-transform 0.5s ease;
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+}
+
+.jumbotron {
+    padding: 1rem;
+    border-radius: 0;
+    background-color: var(--secondary-color-light);
+}
+
+/*.jumbotron {*/
+/*    max-height: 13em !important;*/
+/*    !*padding: 5em;!* inherit;*!*!*/
+/*    !*    height: 20%  !important;*!*/
+/*    !*    width: 20%  !important;*!*/
+/*}*/
+
+
+/* Misc.
+   ========================================================================== */
+
+.lead { /* Paragraph */
+    text-align: justify;
+}
+
+.fun { /* The button for the hidden section */
+    /*width: 90%;*/
+    /*margin-bottom: 2rem;*/
+    /*align-content: center;*/
+    /*alignment: center;*/
+    /*align-items: center;*/
+    /*align-self: center;*/
+    padding-left: 5rem;
+    background-color: var(--accent-color);
+}
+
+.gif {
+    max-width: 100%;
+}
+
+.social a {
+    font-size: 4.5em;
+    padding: 3rem;
+}
+
+.fa-facebook {
+    color: #3b5998;
+}
+
+.fa-twitter {
+    color: #00aced;
+}
+
+.fa-google-plus-g {
+    color: #dd4b39;
+}
+
+.fa-instagram {
+    color: #517fa4;
+}
+
+.fa-youtube {
+    color: #b00;
+}
+
+.fa-facebook:hover, .fa-twitter:hover, .fa-google-plus-g:hover, .fa-instagram:hover, .fa-youtube:hover {
+    color: #d5d5d5;
+}
+
+
+/*---Media Queries --*/
+@media (max-width: 992px) {
+    .social a {
+        font-size: 4em;
+        padding: 2rem;
+    }
+
+    #navbar-title-h1-id { /*KT*/
+        font-size: 3rem;
+        padding-left: 3rem;
+        transition: 400ms;
+        /*font-size: initial;*/
+    }
+
+    #navbar-subtitle { /*KT*/
+        /*font-size: 0.75rem;*/
+        display: none;
+        transition: 400ms;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-caption {
+        top: 45%;
+    }
+
+    .carousel-caption h1 {
+        font-size: 350%;
+    }
+
+    .carousel-caption h3 {
+        font-size: 140%;
+        font-weight: 400;
+        padding-bottom: .2rem;
+    }
+
+    .carousel-caption .btn {
+        font-size: 95%;
+        padding: 8px 14px;
+    }
+
+    .display-4 {
+        font-size: 200%;
+    }
+
+    .social a {
+        font-size: 2.5em;
+        padding: 1.2rem;
+    }
+
+    #logo { /*KT*/
+        /*max-height: 5em;*/
+        /*max-width: 10%;*/
+        /*max-height: 10%;*/
+        /*height: 5em;*/
+        /*height: auto\9;*/
+        /*transition: 0.2s;*/
+        /*display: none;*/
+        /*display: block;*/
+        /*transition: 400ms;*/
+        /*transform: scale(1);*/
+        /*margin-top: 0;*/
+    }
+
+    #navbar-title-h1-id { /*KT*/
+        font-size: 3rem;
+        padding-left: 3rem;
+        transition: 400ms;
+    }
+
+    #navbar-subtitle { /*KT*/
+        /*font-size: 0.75rem;*/
+        display: none;
+        /*transition: 400ms;*/
+
+    }
+}
+
+@media (max-width: 576px) {
+    .carousel-caption {
+        top: 40%;
+    }
+
+    .carousel-caption h1 {
+        font-size: 250%;
+    }
+
+    .carousel-caption h3 {
+        font-size: 110%;
+    }
+
+    .carousel-caption .btn {
+        font-size: 90%;
+        padding: 4px 8px;
+    }
+
+    .carousel-indicators {
+        display: none;
+    }
+
+    .display-4 {
+        font-size: 160%;
+    }
+
+    .social a {
+        font-size: 2em;
+        padding: .7rem;
+    }
+
+    #logo { /*KT*/
+        /*max-height: 5em;*/
+        /*max-width: 10%;*/
+        /*max-height: 10%;*/
+        /*/*height: 10%;*/
+        /*height: auto\9;*/
+        /*    transition: 0.2s;*/
+        /*display: none;*/
+        /*transform: scale(0.5);*/
+        /*transition: 400ms;*/
+    }
+
+    #navbar-title-h1-id { /*KT*/
+        font-size: 3rem;
+        margin-left: 3rem;
+        /*transform: scale(0.5);*/
+
+    }
+
+    #navbar-subtitle { /*KT*/
+        /*transform: scale(0.5);*/
+
+        /*font-size: 1rem;*/
+        /*margin-left: 1rem;*/
+        /*/*display: inline;*/
+        /*transition: 400ms;*/
+
+    }
+}
+
+
+/*
+Extra small (xs) devices (portrait phones, less than 576px)
+No media query since this is the default in Bootstrap
+
+Small (sm) devices (landscape phones, 576px and up)
+@media (min-width: 576px) { ... }
+
+Medium (md) devices (tablets, 768px and up)
+@media (min-width: 768px) { ... }
+
+Large (lg) devices (desktops, 992px and up)
+@media (min-width: 992px) { ... }
+
+Extra (xl) large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { ... }
+*/
+
+
+/***********************************************************/
+/***********************************************************/
+
+
+/*todo consider changing*/
+/*a.bg-light:hover, a.bg-light:focus,*/
+/*button.bg-light:hover,*/
+/*button.bg-light:focus {*/
+/*  background-color: #dae0e5 !important;*/
+/*}*/
+
+/*todo consider changing*/
+/*a.bg-dark:hover, a.bg-dark:focus,*/
+/*button.bg-dark:hover,*/
+/*button.bg-dark:focus {*/
+/*  background-color: #1d2124 !important;*/
+/*}*/
+

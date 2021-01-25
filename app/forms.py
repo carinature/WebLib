@@ -32,18 +32,13 @@ NEWEST_CENTURY = 21
 class SearchSubject(FlaskForm):
     subject_keyword_1 = StringField(
         EMPTY_LABEL,
-        [DataRequired(), Regexp('^\w+$', message="Field accepts one search word")],
+        validators=[DataRequired(), Regexp('^\w+$', message="Field accepts one search word")],
         render_kw={'placeholder': ' Subject'})
     subject_keyword_2 = StringField(
         EMPTY_LABEL,
-        [Optional(), Regexp('^\w+$', message="Field accepts one search word")],
+        validators=[Optional(), Regexp('^\w+$', message="Field accepts one search word")],
         render_kw={'placeholder': '(Optional) Subject'})
-    submit_subject = SubmitField(' Search',
-                                 render_kw={'class': 'btn-primary', }
-                                 #            # 'style': 'float: right',
-                                 #            # 'onclick': "alert('Fetching Data...')"
-                                 #            }
-                                 )
+    submit_subject = SubmitField(' Search', render_kw={'class': 'btn-primary', })
 
     def __repr__(self):
         return f'SearchSubject:\n' \
@@ -83,12 +78,12 @@ languages = [
 
 class Include(FlaskForm):
     include = StringField(render_kw={'placeholder': ' Subject',
-                                     'style': 'margin-left:15px'})
+                                     'class': 'margin-left-15'})
 
 
 class Exclude(FlaskForm):
     exclude = StringField(render_kw={'placeholder': ' Subject',
-                                     'style': 'margin-left:15px'})
+                                     'class': 'margin-left-15'})
 
 
 def validate_century(field_from):
@@ -117,22 +112,21 @@ class FilterForm(FlaskForm):
     # Dont delete this: https://gist.github.com/Overdese/abebc48e878662377988
     from_century = SelectField('From ', id="from-century-dl",
                                # validators=[],
-                               render_kw={'style': ' float:right;'},
+                               render_kw={'class': 'float-right'},
                                # choices=centuries,
                                choices=[(-21, 'Any'), *centuries],
                                coerce=int
                                )
     to_century = SelectField('To ', id="to-century-dl",
                              validators=[validate_century(field_from=from_century)],
-                             render_kw={'style': ' float:right;'},
+                             render_kw={'class': 'float-right'},
                              # choices=centuries,
                              choices=[tuple((21, 'Any')), *centuries],
                              coerce=int
                              )
     language = SelectField('Language ', id="language-dl",
-                           render_kw={'style': ' float:right;'},
+                           render_kw={'class': 'float-right'},
                            choices=languages,
-                           # render_kw={'style': 'margin-left: 20px; float: right'},
                            )
     ancient_author = StringField('Ancient Author ',
                                  render_kw={'placeholder': ' (In English)'}
@@ -144,24 +138,11 @@ class FilterForm(FlaskForm):
                             render_kw={
                                 'placeholder': '(e.g., 1.1 for chapter 1 verse 1, or leave empty for whole work)'}
                             )
-    fetch_full = BooleanField('   Fetch full text', id='fetch_full_chkbox',
-                              render_kw={
-                                  # 'class': 'inline-radio',
-                                  # 'style': 'padding;',
-                                  # 'onClick': 'displayWarningFetchAllChkbx()',
-                                  'onClick':  # todo remove alert?
-                                      "alert('Attention! Checking this box will attempt full text fetching, which can result in very highly loading times.')"}
-                              )
+    fetch_full = BooleanField('   Fetch full text', id='fetch_full_chkbox',                              )
     attention_label = Label(
         text='(Attention: Checking this box will attempt full text fetching,'
              '\nwhich can result in very highly loading times.)',
         field_id=fetch_full)
-    fetch_results = SubmitField('Fetch Results',
-                                render_kw={'class': 'btn btn-lg btn-primary',
-                                           'style': 'margin-right: 5%; padding:1rem 4rem 1rem 4rem; position: sticky; float: right',
-                                           # 'onclick': "alert('Fetching Data...')"
-                                           }
-                                )
 
     # clean_button = ('Clear all fields')
 
@@ -206,10 +187,7 @@ class SearchReference(FlaskForm):
         [Optional()],  # , validators.Regexp('^\w+$', message="Field accepts one search word")],
         render_kw={'placeholder': 'Reference'})
     submit_reference = SubmitField('Submit',
-                                   # render_kw={'class': 'btn btn-lg btn-primary',
-                                   #            # 'style': 'float: right',
-                                   #            # 'onclick': "alert('Fetching Data...')"
-                                   #            }
+                                   # render_kw={'class': 'btn btn-lg btn-primary float-right'}
                                    )
 
 
@@ -217,8 +195,7 @@ class SearchTypeChoice(FlaskForm):
     r_field = RadioField(
         'Label',
         choices=[(1, 'Search by Subject'), (0, 'Search by Reference')],
-        render_kw={'class': 'inline-radio', 'style': ''}
-        # render_kw={'class': 'inline-radio',
+        render_kw={'class': 'inline-radio'}
         # 'style': 'font-size:1.5em; vertical-align: middle; horizontal-align: middle;text-align: center'}
     )
 
@@ -229,9 +206,8 @@ class SignupForm(FlaskForm):
                        render_kw={'id': 'email_field',
                                   'placeholder': ' e.g. username@email.edu '})
     submit_email = SubmitField('Submit',
-                               render_kw={'class': 'btn btn-default',
+                               render_kw={'class': 'btn btn-default bgn-light-second',
                                           'id': 'lala',
-                                          'style': 'background-color: var(--secondary-color-light);',
                                           }
                                )
 

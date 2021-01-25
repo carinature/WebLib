@@ -193,22 +193,23 @@ from typing import List, Dict, Set
 
 class Book:
     def __init__(self, bibinfo: int):
+        self.bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
         self.pages: Set[int] = set()
         self.refs: List[int] = []
         q_book_ref: Query = BookRef.query
-        q_book_ref_filter: Query = q_book_ref.filter(BookRef.book_biblio_info == bibinfo)
+        q_book_ref_filter: Query = q_book_ref.filter(BookRef.book_biblio_info == self.bibinfo)
         self.title_full = q_book_ref_filter.value(BookRef.titleref)
-        self.bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
 
     def __repr__(self):
         return \
             f'... The Referencing Book: ' \
-            f'{self.bibinfo} ' \
             f'{self.title_full} ' \
+            f'bib: {self.bibinfo} ' \
             f'pages: {self.pages}'
 
 
 class ResultTitle:
+    # print(' =============== ResultTitle ================')
     def __init__(self, num: int, filter_form: f.FilterForm):
         # def __init__(self, num: int, filter_form: f.FilterForm):
         self.num = num
@@ -221,7 +222,6 @@ class ResultTitle:
         q_title_filter: Query = q_title.filter(Title.number == num)
         self.author = q_title_filter.value(Title.author)
         self.title = q_title_filter.value(Title.title)
-        print('.' * 13, self.title, 'by:', self.author)
         self.filtered_flag = False
         from_century = filter_form.from_century.data
         to_century = filter_form.to_century.data
@@ -246,6 +246,8 @@ class ResultTitle:
 
         if q_title_filter.first():
             self.filtered_flag = True
+            print('.' * 50, self.title, 'by:', self.author)
+
         # self.filtered_flag = True
         # fixme - the above yields 87 results and only 15 results without the 2nd 'flag=true' line
         #   even though in both cases the filters are empty in the form.
@@ -253,17 +255,11 @@ class ResultTitle:
         #   (currently 'Any' value is -100, so if NULL in the field the query to_century<-100 is always FALSE)
 
     def add_bib(self, bibinfo: int):
+        print(' ---------------------- add_bib --------------------')
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
         self.bibinfo.append(bibinfo)
         # self.books[bibinfo] = Book(bibinfo)
         self.books.append(Book(bibinfo))
-
-    def add_refs(self, ref: str, bibinfo: int):
-        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
-        # self.books[bibinfo].refs.append(ref)
-        self.books[-1].refs.append(ref)
-        # self.refs[bibinfo] = ref
-        self.refs.add(ref)
 
     def add_page(self, page: str, bibinfo: int):
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
@@ -272,7 +268,20 @@ class ResultTitle:
         else:
             page = int(float(page))  # todo page should be int in the DB, currentyly str
         # self.books[bibinfo].pages.add(page)
+
+        if page not in self.books[-1].pages:
+            print(' ------------ add_page -------------')
         self.books[-1].pages.add(page)
+
+    def add_refs(self, ref: str, bibinfo: int):
+        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
+        # self.books[bibinfo].refs.append(ref)
+        # self.refs[bibinfo] = ref
+
+        self.books[-1].refs.append(ref)
+        if ref not in self.refs:
+            print(' --- add_refs ---    ')
+        self.refs.add(ref)
 
     def __repr__(self):
         s = '*' * 13

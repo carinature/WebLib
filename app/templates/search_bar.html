@@ -9,23 +9,20 @@
     {############################}
     <!-- Radio search buttons -->
     {############################}
-    {#
-    <br><br>
-    <div style="text-align: center">
-    <span style="margin-left: 2rem; display: inline-block;" class="padding">
-       <input class="inline-radio" type="radio" id="chkYes" name="search-radio" onclick="ShowHideDiv()" checked/>
-       <label for="chkYes" style="vertical-align: middle; font-size: 1.5rem">Search by Subject</label>
+{#    <div class='text-center padding-1r'>
+    <span class="inline-radio-span">
+        <input id="chkYes" class="inline-radio" type="radio" name="search-radio" checked/>
+        <label for="chkYes" class="inline-radio-label">Search by Subject</label>
     </span>
-        <span style="margin-left: 2rem; display: inline-block;" class="padding">
-       <input class="inline-radio" type="radio" id="chkNo" name="search-radio" onclick="ShowHideDiv()"/>
-        <label for="chkNo" style="vertical-align: middle; font-size: 1.5em">Search by Reference</label>
+    <span class="inline-radio-span">
+        <input id="chkNo" class="inline-radio" type="radio" name="search-radio"/>
+        <label for="chkNo" class="inline-radio-label">Search by Reference</label>
     </span>
     </div>
+    #}{#    <div class='text-center'>
+        <span class="inline-radio-span">{{ radio.r_field }}</span>
+    </div>  #}
 
-    <div style="text-align: center; ">
-        <span style="margin-left: 2rem; display: inline-block;" class="padding">{{ radio.r_field }}</span>
-    </div>
-    #}
 
     {############################}
     {#      Search Fields       #}
@@ -35,8 +32,7 @@
         {% if hide_bar %}
             {% set collapse='collapse' %}
         {% endif %}
-        <div class="row {{ collapse }}" id="search-subject" style="{{ show }}">
-{#        <div class="row " id="search-subject">#}
+        <div class="row {{ collapse }} " id="search-subject">
 
             {% if redirect_flag %}
                 {% set url=url_for('search_results') %}
@@ -44,9 +40,7 @@
 
             <form action='{{ url }}' method="POST">
                 {{ search_bar['subject_form'].hidden_tag() }} {#csrf_token #}
-
                 <div class="search-bar-kt form-inline container-fluid ">
-                    {#                        <div class="form-field input-field first-wrap">#}
                     <div class="list-inline-item">
                         {{ search_bar['subject_form'].subject_keyword_1 }}
                         {% if search_bar['subject_form'].subject_keyword_1.errors %}
@@ -75,7 +69,7 @@
                 </div>
 
                 {% if not hide_filter %}
-                    {% include 'filtering.html' %}
+                    {% include 'filter_bar.html' %}
                 {% endif %}
 
             </form>
@@ -86,7 +80,7 @@
     {##############     search by Reference - hidden Section    ###############}
     {#
         <!--- search by Reference - hidden Section -->
-        <div class="row" id="search-ref" style="display: none">
+        <div class="row display-none" id="search-ref" >
             <div class="s01">
                 <form action="{{ url_for('search_results') }}" method="POST">
                     #}{#                <form action="{{ url_for('home') }}" method="POST">#}{#
@@ -140,7 +134,7 @@
                 </form>
             </div>
             <div class="s01 ">
-                <p class="lead" style="color: var(--accent-color);">If you have a specific reference to ancient
+                <p class="lead color-accent">If you have a specific reference to ancient
                     text, enter it here to receive a list of subjects relevant to it.<br>
                     Most author/title styles are accepted. for reference style, please use arabic numerals separated by
                     a period:<br> e.g., 1.5 for book 1, line 5 (or chapter 1, verse 5).<br>

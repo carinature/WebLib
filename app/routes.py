@@ -63,7 +63,6 @@ links = {
 # @app.route('/search-results/<int:page>', methods=['GET', 'POST'])
 # @app.route('/search-results/<string:search_word>', methods=['GET', 'POST'])
 @app.route(links['search'], methods=['GET', 'POST'])
-# @app.route('/search-results', methods=['GET', 'POST'])
 def search_results(search_word='', page=''):
     # todo put here the "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
 
@@ -72,13 +71,11 @@ def search_results(search_word='', page=''):
     filter_form = search_bar['filter_form']
 
     if not subject_form.validate_on_submit():  # i.e. when method==GET
-        return render_template('search_subjects.html',
+        return render_template('search_results.html',
                                title='Search',
                                # description="Tiresias: The Ancient Mediterranean Religions Source Database",
                                search_bar=search_bar,
-                               # results=[],
-                               # total=0,
-                               # flag=False
+                               method='get'
                                )
 
     # print('-' * 13, ' POST ', '-' * 13)
@@ -93,8 +90,10 @@ def search_results(search_word='', page=''):
     # print(type(filter_form.from_century))
     # print(type(filter_form.from_century.data))
 
+    # print(f'Starting data Value : {subject_form.submit_subject.data}')
+    # print(f'Ending data Value :     {filter_form.fetch_results.data}')
+
     search_word = subject_form.subject_keyword_1.data
-    print('*' * 33, search_word)
     search = '%{}%'.format(search_word)
     # search = '%{}%'.format('women')
     # page = request.args.get('page', 1, type=int)
@@ -104,9 +103,9 @@ def search_results(search_word='', page=''):
     txts_table = m.TextText
     sbj_col, c_col, num_col = txts_table.subject, txts_table.C, txts_table.number
     bib_info_col, ref_col, page_col = txts_table.book_biblio_info, txts_table.ref, txts_table.page
-
     # ............  return all matching results (subjects) by C column [list] ............
     texts_query: Query = txts_table.query
+    print(texts_query)
     # txts_q_with_ent: Query = texts_query.with_entities(sbj_col, count(sbj_col),
     # txts_q_with_ent: Query = texts_query.with_entities(num_col, sbj_col, ref_col, count(bib_info_col), page_col)  # count())
     #     # txts_q_with_ent: Query = texts_query.with_entities(txts_subject_col, count(txts_subject_col),
@@ -116,9 +115,12 @@ def search_results(search_word='', page=''):
         bib_info_col,
         page_col,
         c_col)  # count()) fixme remove C_col in production
-    txts_q_with_ent_filter: Query = txts_q_with_ent.filter(sbj_col.like(search))
-    if filter_form.reference.data:
-        txts_q_with_ent_filter: Query = txts_q_with_ent_filter.filter(ref_col.like(str(filter_form.reference)))
+
+    txts_q_with_ent_filter: Query = txts_q_with_ent.filter(sbj_col.like(search_word))
+    # txts_q_with_ent_filter: Query = txts_q_with_ent.filter(sbj_col.like(search))
+    # if filter_form.reference.data:
+    #     print('-' * 33, ' filter_form.reference.data ')
+    #     txts_q_with_ent_filter: Query = txts_q_with_ent_filter.filter(ref_col.like(str(filter_form.reference)))
     # txts_q_with_ent_filter_group: Query = txts_q_with_ent_filter.group_by(txts_num_col, sbj_col)
     # txts_q_with_ent_filter_group_order: Query = txts_q_with_ent_filter_group.order_by(num_col, bib_info_col)
     # needs to be ordered for the itertools.groupby() later on,
@@ -129,21 +131,31 @@ def search_results(search_word='', page=''):
     res_dict: Dict = {}
     highly_valid, valid, not_valid = [], [], []
 
-    import pandas as pd
+    # print('5' * 33)
+    # print(txts_q_with_ent_filter_order)
+    # print(txts_q_with_ent_filter.limit(30).all())
+
     # ............  group the results by (referenced) title ('number' column) [dict?] ............
     groups_by_number = groupby(
         txts_q_with_ent_filter_order,
         key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
 
+    # print('$'*20, )
+    # for ke, ge in groups_by_number:
+    #     print('#' * 13, ke)
+    #     print('^' * 13, list(ge))
+
     # ............  filter and add the references (ref-ing titles) [dict of result objects ] ............
     for title_number, texts_tuples_group in groups_by_number:
         # resdict[k]=[txts_table for txts_table in g]
+        # print('=' * 100, 'title_number: ', title_number)
         numbers_dict[title_number]: Dict = {}
         # ... create title object. filtering is done during object init
         res = m.ResultTitle(title_number, filter_form)
         # if the result doesn't pass the filters, continue to the next result.
         # can only know that after creating the result/title obj when checking in the Titles table.
         # if this title doesn't pass the filtering continue to the next result (it won't be added to the final list)
+        # print('(-)' * 13, res)
         if not res.filtered_flag:  # fixme - too primitive?
             continue
 
@@ -158,9 +170,7 @@ def search_results(search_word='', page=''):
         # add every ref-ing title to the current result (title) object
         for bibinfo, texts_tuples_sub_group in group_by_number_n_bibinfo:
             numbers_dict[title_number][bibinfo]: List[txts_table] = []
-            res.add_bib(bibinfo)
-            # print('*' * 13, res)
-            # 8255
+            res.add_bib(bibinfo)  # 8255
             for gg in texts_tuples_sub_group:
                 txt_entry = m.TextText(number=gg[0],
                                        ref=gg[1],
@@ -169,16 +179,14 @@ def search_results(search_word='', page=''):
                                        page=gg[4],
                                        C=gg[5])
                 numbers_dict[title_number][bibinfo].append(txt_entry)
-                res.add_refs(ref=gg[1], bibinfo=gg[3])
-                # res.add_refs(ref=gg[1], bibinfo=int(float(gg[3])))
-                # print('---',gg[4],'-----')
                 res.add_page(page=gg[4], bibinfo=gg[3])
-                # print('\t\t\t', numbers_dict[title_number][bibinfo][j])
+                res.add_refs(ref=gg[1], bibinfo=gg[3])
+
         res_dict[title_number] = res
         if len(res.books) > 1:
-            highly_valid.append(res)
-            # categories[0]['results'].append(res)sdfsdfs
+            highly_valid.append(res)  # categories[0]['results'].append(res)
         elif len(res.refs) > 1:
+        # elif len(res.pages) > 1:
             valid.append(res)
         else:
             not_valid.append(res)
@@ -186,11 +194,6 @@ def search_results(search_word='', page=''):
     categories[0]['results'] = sorted(highly_valid, key=lambda result: len(result.books), reverse=True)
     categories[1]['results'] = sorted(valid, key=lambda result: len(result.refs), reverse=True)
     categories[2]['results'] = not_valid
-    sum_len = len(highly_valid) + len(valid) + len(not_valid)
-
-    print(f'Starting data Value : {subject_form.submit_subject.data}')
-    print(f'Ending data Value :     {filter_form.fetch_results.data}')
-    print(f'sum_len :     {sum_len}')
 
     return render_template('search_results.html',
                            # title=f'Search Result for: {search_word}',
@@ -198,7 +201,7 @@ def search_results(search_word='', page=''):
                            search_bar=search_bar,
                            categories=categories,
                            search_word=search_word,
-                           results_num=sum_len,
+                           results_num=len(highly_valid) + len(valid) + len(not_valid),
                            )
 
     # todo
@@ -210,15 +213,6 @@ def search_results(search_word='', page=''):
     # for k, g in groupby(session.query(Stuff).order_by(Stuff.column1, Stuff.column2), key=lambda stuff: stuff.column1):
     #     print('{}: {}'.format(k, ','.join(stuff.column2 for stuff in g)))
 
-
-#     return render_template('final_results.html',
-#                            title=f'Search Result for: {search_word}',
-#                            description="Tiresias: The Ancient Mediterranean Religions Source Database",
-#                            categories=categories,
-#                            results=res_dict,
-#                            # result_clists=result_clists,
-#                            # res_dict = res_dict
-#                            )
 
 
 def nothing():
@@ -271,7 +265,7 @@ def book_indices():
 
 
 # ++++++++++++  list of Subjects in the db page ++++++++++++
-@app.route(links['subjects'])
+@app.route(links['subjects'], methods=['GET', 'POST'])
 # @app.route('/subject-list', methods=['GET', 'POST'])
 def subject_list(search_word='', page=''):
     page = request.args.get('page', 1, type=int)
@@ -302,6 +296,8 @@ def subject_list(search_word='', page=''):
                                next_url=next_url,
                                prev_url=prev_url,
                                search_bar=search_bar,
+                               hide_filter=True,
+                               # redirect_flag=False
                                )
 
     search_word = subject_form.subject_keyword_1.data
@@ -320,6 +316,7 @@ def subject_list(search_word='', page=''):
                            next_url=next_url,
                            prev_url=prev_url,
                            search_bar=search_bar,
+                           hide_filter=True,
                            )
 
 
@@ -330,7 +327,6 @@ def not_found(error):
     resp = make_response(render_template('page_not_found.html',
                                          title="Tiresias Project - Page not Found",
                                          description=str(error)), 404)
-    print(error)
     return resp
 
 
@@ -487,6 +483,7 @@ def falalafunc():
 
     # csv_to_mysql()
     return '<h1> A O K </h1>'
+
 
 @app.route('/flask_route_but_not_webpage')
 def js_btn_to_python():
