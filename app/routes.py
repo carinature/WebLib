@@ -453,7 +453,7 @@ def check_check():
 def fetch_results():
     print("@@" * 33)
 
-    return render_template('srchbr.html', form1=f.SearchSubject())
+    return render_template('bar_srchbr.html', form1=f.SearchSubject())
     # return '<h1> A O K </h1>'
 
 
@@ -462,7 +462,7 @@ def fetch_results():
 def success(title=''):
     sform = f.SearchSubject()
     # return '<h1>' + title + ' Great Success</h1>'
-    return render_template('srchbr.html', title='Great Success', form1=sform)
+    return render_template('bar_srchbr.html', title='Great Success', form1=sform)
 
 
 @app.route('/falala')

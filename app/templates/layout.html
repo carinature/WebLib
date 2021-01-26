@@ -28,6 +28,9 @@
     <!--    for extra fonts and icons  --> {# only needed for the "share" buttons#}
     <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 
+{#        For DBG   /*fixme REMOVE*/ #}
+{#    <script type="text/javascript" src="js/cssrefresh.js"></script> {# fixme remove  #}
+
     <!--    your own scripts  -->
     <script src="../static/js/gui.js"></script>
 
@@ -48,7 +51,7 @@
 
 {#<body>#}
 {#{% block navbar %}#}
-{% include 'navigation.html' %}
+{% include 'bar_navigation.html' %}
 {#{% endblock %}#}
 
 
@@ -72,9 +75,10 @@
 {% endif %}
 
 <button id="top_btn" title="Go to top" class="display-none">Top</button>
+{#<button id="refreshCSS">refreshCSS</button>#}
 
 {% block app_content %}{% endblock %}
-{% include 'footer.html' %}
+{% include 'bar_footer.html' %}
 <script src='../static/js/script.js'></script>
 
 {#</body>

@@ -56,7 +56,8 @@
     </nav>
 {% endblock %}
 
-<br><br><br><br>
+<div class="padding-5"></div>
+
 {% block title %}
     {% if title %}
         {{ title }} - Microblog
@@ -79,7 +80,8 @@
         {# application content needs to be provided in the app_content block #}
         {% block app_content %}
 
-            <br><br><br><br>
+            <div class="padding-5"></div>
+
             {% for i in range %}
                 {{ i }}
                 <br>
@@ -87,4 +89,5 @@
         {% endblock %}
     </div>
     <script src="../static/js/script.js"></script>
+    <script src="../static/js/gui.js"></script>
 {% endblock %}

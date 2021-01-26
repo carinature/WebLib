@@ -55,7 +55,7 @@ $(document).ready(function () {
         document.documentElement.scrollTop = 0;
     });
 });
-
+/** supposed to toggle between to radio button options */
 $('input.inline-radio').on('click', function (e) {
     let chkYes = document.getElementById("chkYes");
     let search_subject = document.getElementById("search-subject");
@@ -65,4 +65,33 @@ $('input.inline-radio').on('click', function (e) {
 });
 
 
+/**
+ * checkes and unchecks all the items in the serach results (step 1) checklist
+ * */
+function filter_check_all(source) {
+    checkboxes = document.getElementsByName('filter-opt');
+    console.log('==============')
+    for (let i = 0, n = checkboxes.length; i < n; i++) {
+        let checked = source.checked;
+        checkboxes[i].checked = checked;
+        if (checked) source.childNodes[0].nodeValue = 'Remove All Selections';
+        else source.childNodes[0].nodeValue = 'Select All the Results';
 
+    }
+}
+
+
+
+/****************************************************
+****************************************************
+ * 		For DBG      fixme remove in production
+ *****************************************************
+ *****************************************************/
+/*
+// $('button#csv_to_mysql_btn').on('click', function () {
+$(document).ready(function () {
+    $("#refreshCSS").click(function () {
+        css_refresh_sdfsadfsaf()
+    });
+});
+*/

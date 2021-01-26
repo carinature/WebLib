@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
-{% from 'macros.html' import result_item, category_head %}
+{% from 'aux_macros.html' import result_item, category_head %}
 
 {% block app_content %}
     {% if 'get'==method %}
-        {% include 'search_bar.html' %}
+        {% include 'bar_search.html' %}
     {% else %}
         <div class="container-fluid padding-bot-2">
             <div class="row">
@@ -18,8 +18,8 @@
 
                 <!-------- Search & Filter Forms ------------>
                 <span class="col-lg-8">
-                {% include 'search_bar.html' %}
-                {#              {% include 'srchbr.html' %} #}
+                {% include 'bar_search.html' %}
+                {#              {% include 'bar_srchbr.html' %} #}
             </span>
             </div>
             <hr>
