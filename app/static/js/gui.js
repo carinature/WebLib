@@ -1,10 +1,10 @@
-
 /**
  * When the user scrolls down 80px from the top of the document, resize the navbar's padding and the logo's font size
  * */
 window.onscroll = function () {
     scrollFunction()
 };
+
 function scrollFunction() {
     let navbar = document.getElementsByClassName("navbar")[0];
     let logo = document.getElementById("logo");
@@ -81,10 +81,44 @@ function filter_check_all(source) {
 }
 
 
+$(function () {
+    $('.popover_ctgry').hover(
+        function (event) {
+            // mouse in event handler
+            let elem = $(event.currentTarget);
+            let href = elem[0].getAttribute('href')
+            let id = elem[0].id
+            let data = 'reference is tagged with the subject '
+            if ('#high' === href || 'high' === id) {
+                data += 'in more than one book';
+            }
+            if ('#valid' === href || 'valid' === id) {
+                data += 'only in one book, but more than once';
+            }
+            if ('#not' === href || 'not' === id) {
+                data += 'only once, in one book';
+            }
+            elem.popover({
+                trigger: 'manual',
+                html: true,
+                animation: false,
+                container: elem,
+                content: data,
+                placement: 'right'
+            }).popover('show');
+        },
+        function (event) {
+            // mouse out event handler
+            var elem = $(event.currentTarget);
+            // elem.popover('dispose');
+            elem.popover('hide');
+        }
+    )
+});
 
 /****************************************************
-****************************************************
- * 		For DBG      fixme remove in production
+ ****************************************************
+ *        For DBG      fixme remove in production
  *****************************************************
  *****************************************************/
 /*

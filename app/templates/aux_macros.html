@@ -38,8 +38,11 @@
     </div>
 {%- endmacro %}
 
+<!------------------------------------------->
+<!---------- Category Title Macro ----------->
+<!------------------------------------------->
 {% macro category_head(category='', id='', res_num='', value='') -%}
-    <div class="container-fluid padding-bot-2" id="{{ id }}">
+    <div class="container-fluid padding-bot-2 popover_ctgry" id="{{ id }}">
         <div class="col-12  bgn-light-second"> <!--todo move the style to css-->
             <h1 class="">{{ category }} {{ res_num }}</h1>
             {#            <h1 class="display-4 welcome text-center">Tiresias: The Ancient Mediterranean Religions Source Database</h1>#}

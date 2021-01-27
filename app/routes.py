@@ -73,7 +73,8 @@ def search_results(search_word='', page=''):
     if not subject_form.validate_on_submit():  # i.e. when method==GET
         return render_template('search_results.html',
                                title='Search',
-                               # description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               description="Tiresias: The Ancient Mediterranean Religions Source Database. "
+                                           "Default search page.",
                                search_bar=search_bar,
                                method='get'
                                )
@@ -193,8 +194,9 @@ def search_results(search_word='', page=''):
     categories[2]['results'] = not_valid
 
     return render_template('search_results.html',
-                           # title=f'Search Result for: {search_word}',
-                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           title=f'Search Result for: {search_word}',
+                           description=f'Tiresias: The Ancient Mediterranean Religions Source Database. '
+                                       f'This page shows results for {search_word}, sorted by validity.',
                            search_bar=search_bar,
                            categories=categories,
                            search_word=search_word,
@@ -240,7 +242,10 @@ def home():
     return render_template('index.html',
                            title='Tiresias',
                            index_title='The Ancient Mediterranean Religions Source Database',
-                           description='Tiresias: The Ancient Mediterranean Religions Source Database',
+                           description='Tiresias: The Ancient Mediterranean Religions Source Database Home page.'
+                                       'The Tiresias contains more than database allows'
+                                       'Here is a short introduction to the site, search options, and conatact details.'
+                                       'Also can be found a few database graphs describing ',
                            search_bar=search_bar,
                            email_form=email_form,
                            redirect_flag=True
@@ -254,10 +259,12 @@ def home():
 # ++++++++++++  list of books page ++++++++++++
 @app.route(links['books'])
 # @app.route('/book-indices')
+# todo create a table of the listed books and fix the description to show the correct number of books (dynamically)
 def book_indices():
     return render_template('book_indices.html',
                            title="Books Included in the Tiresias Project Database",  # todo different title
-                           description="Tiresias: The Ancient Mediterranean Religions Source Database", )
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database. "
+                                       "The database references more than 200 title, which are listed in this page.", )
 
 
 # ++++++++++++  list of Subjects in the db page ++++++++++++
@@ -278,8 +285,10 @@ def subject_list(search_word='', page=''):
         prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
 
         return render_template('subject_list.html',
-                               title="Tiresias Subjects",  # todo different title
-                               description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               title="Tiresias Subjects Included in the Database",  # todo different title
+                               description="Tiresias: The Ancient Mediterranean Religions Source Database."
+                                           "The database includes over 50,000 subjects, listed in the page."
+                                           "For a more topic specific list, use the search option",
                                subjects=subjects,
                                total=subjects.total,
                                next_url=next_url,
@@ -299,7 +308,8 @@ def subject_list(search_word='', page=''):
     prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
     return render_template('subject_list.html',
                            title="Tiresias Subjects",  # todo different title
-                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database"
+                                       "The database includes over 50,000 subjects, listed in the page.",
                            subjects=subjects,
                            total=subjects.total,
                            next_url=next_url,
@@ -319,6 +329,7 @@ def not_found(error):
     return resp
 
 
+# ++++++++++++  DGB and Testing ++++++++++++
 @app.route("/try_jinja")
 def try_jinja():
     # Strings
