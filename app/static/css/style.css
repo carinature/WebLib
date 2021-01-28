@@ -358,6 +358,8 @@ hr.light-100 {
     width: 75%;
     margin: 0 auto;
     padding-top: .5em;
+    /*font-size: 2em;*/
+
 }
 
 .head-title hr {
@@ -465,7 +467,7 @@ form #filtering input {
     height: 100%;
 }
 
-.fixed-background {
+#fixed {
     /*background-image: url('http://tiresias.haifa.ac.il/static/large13.1.png'); !*KT*!*/
     /*background-image: url('../images/lib-4-noncom-reuse.jpg'); !*KT*!*/
     position: fixed;
