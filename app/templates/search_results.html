@@ -18,7 +18,7 @@
     {% else %}
         <div class="container-fluid padding-bot-2">
             <div class="row">
-                <!-------- Title & Results Info ------------>
+                <!-- Title & Results Info -->
                 <div class="col-lg-4 text-center ">
                     <h1 class="display-4 head-title padding-bot-2">
                         There are {{ results_num }} results for: <em>{{ search_word }}</em></h1>
@@ -38,7 +38,7 @@
                         results.</h6>
                 </div>
 
-                <!-------- Search & Filter Forms ------------>
+                <!-- Search & Filter Forms -->
                 <div class="col-lg-8">
                     {% include 'bar_search.html' %}
                     {#              {% include 'bar_srchbr.html' %} #}
@@ -48,7 +48,7 @@
         </div>
     {% endif %}
 
-    <!-------- Validation Category Sections ------------>
+    <!-- Validation Category Sections -->
     {% for category in categories %}
         {{ category_head(category['name'], category['id']) }}
         <div class="category-padding">
@@ -58,7 +58,7 @@
             {% endif %}
             {% set outer_loop = loop %}
             {% for res in category['results'] %}
-                <!-------- Results (Per Category) ------------>
+                <!-- Results (Per Category) -->
                 {{ result_item(
                     index = loop.index,
                     author=res.author,

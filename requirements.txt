@@ -34,7 +34,18 @@
 # WTForms-Components
 
 python-dotenv~=0.14.0
-<<<<<<< HEAD
-=======
 flask-bootstrap~=3.3.7.1
->>>>>>> 36869f4e534d8628cd7e4f4015a27d9ebcc9eb76
+
+DateTime~=4.3
+MarkupSafe~=1.1.1
+numpy~=1.19.2
+WTForms~=2.3.3
+SQLAlchemy~=1.3.19
+Flask~=1.1.2
+mysqlclient~=2.0.1
+PyMySQL~=0.10.1
+pandas~=1.1.2
+regex~=2020.9.27
+requests~=2.24.0
+natsort~=7.0.1
+Pillow~=7.2.0

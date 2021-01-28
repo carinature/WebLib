@@ -4,6 +4,7 @@
 window.onscroll = function () {
     scrollFunction()
 };
+
 function scrollFunction() {
     let navbar = document.getElementsByClassName("navbar")[0];
     let logo = document.getElementById("logo");
@@ -80,6 +81,11 @@ function filter_check_all(source) {
     }
 }
 
+/*
+    Enable popovers via JavaScript:
+*/
+// $('#example').popover(options)
+
 /** creates a popover (small window hovering) when hovering over the div*/
 $(function () {
     $('.popover_ctgry').hover(
@@ -101,10 +107,10 @@ $(function () {
             elem.popover({
                 trigger: 'manual',
                 html: true,
-                animation: false,
+                animation: true,
                 container: elem,
                 content: data,
-                placement: 'right'
+                placement: 'top'
             }).popover('show');
         },
         function (event) {

@@ -1,6 +1,4 @@
-<!---------------------------------------------------->
-<!-------------------Search Bar ---------------------->
-<!---------------------------------------------------->
+<!--Search Bar -->
 
 <div class="container-fluid ">
     {#Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and
@@ -27,14 +25,14 @@
     {############################}
     {#      Search Fields       #}
     {############################}
-    <!--- search by Subject  -->
+    <!-- search by Subject  -->
     <div class="s01 flex-column">
         {% if hide_bar %}
             {% set collapse='collapse' %}
         {% endif %}
         <div class="row {{ collapse }} " id="search-subject">
 
-            {% if redirect_flag %}
+            {% if home_flag %}
                 {% set url=url_for('search_results') %}
             {% endif %}
 
@@ -81,7 +79,7 @@
 
     {##############     search by Reference - hidden Section    ###############}
     {#
-        <!--- search by Reference - hidden Section -->
+        <!-- search by Reference - hidden Section -->
         <div class="row display-none" id="search-ref" >
             <div class="s01">
                 <form action="{{ url_for('search_results') }}" method="POST">

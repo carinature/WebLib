@@ -38,9 +38,7 @@
     </div>
 {%- endmacro %}
 
-<!------------------------------------------->
-<!---------- Category Title Macro ----------->
-<!------------------------------------------->
+<!-- Category Title Macro -->
 {% macro category_head(category='', id='', res_num='', value='') -%}
     <div class="container-fluid padding-bot-2 popover_ctgry" id="{{ id }}">
         <div class="col-12  bgn-light-second"> <!--todo move the style to css-->
@@ -51,9 +49,7 @@
 {%- endmacro %}
 
 
-<!------------------------------------------->
-<!---- Result Checkbox List Item Macro ------>
-<!------------------------------------------->
+<!-- Result Checkbox List Item Macro -->
 {% macro checkbox_input(label='', id='', name='', value='') -%}
     <div class='form-group custom-control custom-switch text-left'>
         {#        <input type='{{ type }}' class='form-control' id='{{ id }}' name='{{ name }}'#}
@@ -63,14 +59,12 @@
     </div>
 {%- endmacro %}
 
-<!------------------------------------------->
-<!------ Result Subject Checkbox List ------->
-<!------------------------------------------->
+<!-- Result Subject Checkbox List -->
 {% if total %}
     <div class='container'>
         <div class='form-group padding-bot-2 col-9'>
             {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
-            {#  -----   Select All  -----   #}
+            {#  --   Select All  --   #}
             <div class='custom-control custom-switch text-left'>
                 <input type='checkbox' class='custom-control-input' id='checkAll' checked
                        onClick='filter_check_all(this)'>
@@ -78,7 +72,7 @@
                     <em><strong>Select All the Results</strong></em><br>
                 </label>
                 <form action='#' method='POST'>
-                    {#  -----   The Result subjects  -----   #}
+                    {#  --   The Result subjects  --   #}
                     {% for item in results %}
                         {{ checkbox_input(label=item.subject, id=item.subject, name='filter-opt', value=item.C) }}<br>
                     {% endfor %}

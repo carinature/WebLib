@@ -1,15 +1,11 @@
 from itertools import groupby
 from typing import List, Dict, Tuple
 
-from flask import current_app as app, flash, g, session
+from flask import current_app as app, flash, g, session, send_from_directory
 from flask import render_template, make_response, redirect, url_for, request
 from sqlalchemy import func
 from sqlalchemy.orm import Query
 from sqlalchemy.sql.functions import count
-from wtforms import BooleanField, StringField, form
-from wtforms.widgets import CheckboxInput
-
-from db_migration import csv_to_mysql
 
 from . import forms as f
 from . import models as m
@@ -246,12 +242,8 @@ def home():
                                        'Also can be found a few database graphs describing ',
                            search_bar=search_bar,
                            email_form=email_form,
-                           redirect_flag=True
+                           home_flag=True
                            )
-    # if 'GET' == request.method:
-    #     print('~' * 15, ' home() - GET ', '~' * 15)
-    # print('~' * 15, ' home() - POST ', '~' * 15)
-    # return redirect(url_for(search_results,search_word))
 
 
 # ++++++++++++  list of books page ++++++++++++
@@ -260,7 +252,7 @@ def home():
 # todo create a table of the listed books and fix the description to show the correct number of books (dynamically)
 def book_indices():
     return render_template('book_indices.html',
-                           title="Books Included in the Tiresias Project Database",  # todo different title
+                           title="Tiresias: Books Included in the Project Database",  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database. "
                                        "The database references more than 200 title, which are listed in this page.", )
 
@@ -283,7 +275,7 @@ def subject_list(search_word='', page=''):
         prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
 
         return render_template('subject_list.html',
-                               title="Tiresias Subjects Included in the Database",  # todo different title
+                               title="Tiresias Subjects Included in the Project Database",  # todo different title
                                description="Tiresias: The Ancient Mediterranean Religions Source Database."
                                            "The database includes over 50,000 subjects, listed in the page."
                                            "For a more topic specific list, use the search option",
@@ -293,7 +285,7 @@ def subject_list(search_word='', page=''):
                                prev_url=prev_url,
                                search_bar=search_bar,
                                hide_filter=True,
-                               # redirect_flag=False
+                               # home_flag=False
                                )
 
     search_word = subject_form.subject_keyword_1.data
@@ -305,7 +297,7 @@ def subject_list(search_word='', page=''):
     next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
     prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
     return render_template('subject_list.html',
-                           title="Tiresias Subjects",  # todo different title
+                           title=f'Tiresias Subjects Search Results for: {search_word}',  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database"
                                        "The database includes over 50,000 subjects, listed in the page.",
                            subjects=subjects,
@@ -327,19 +319,33 @@ def not_found(error):
     return resp
 
 
-# ++++++++++++  DGB and Testing ++++++++++++
+# ++++++++++++  Serving (Google's) Robots & Crawlers ++++++++++++
+@app.route('/robots.txt')
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
+
+
+# ++++++++++++ ++++++++++++ ++++++++++++
+# ++++++++++++ ++++++++++++ ++++++++++++
+# ++++++++++++ ++++++++++++ ++++++++++++
+# ++++++++++  DGB and Testing ++++++++++
+# ++++++++++++ ++++++++++++ ++++++++++++
+# ++++++++++++ ++++++++++++ ++++++++++++
+# ++++++++++++ ++++++++++++ ++++++++++++
 @app.route("/csv_to_mysql_route", methods=['GET', 'POST'])
 def load_db():
     from flask import flash
     flash("If you click on the button below You are about to ask the server to load raw scv files into the mysql DB. ")
     flash("It's gonna take a loooong time to finish (if lucky). ")
     flash("Are you sure you want to do that? ")
-    return render_template('csv_to_mysql.html', load_db_flag=True)
+    return render_template('dbg/csv_to_mysql.html', load_db_flag=True, avoid_robots=True)
 
-from time import time
+
 @app.route("/csv_to_mysql_func")
 def csv_to_mysql_func_btn():
     print("It's happening... ")
+    from time import time
     t = time()
     from db_migration import csv_to_mysql
     csv_to_mysql()

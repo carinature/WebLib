@@ -7,7 +7,7 @@ from wtforms import *
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import *
 
-from . import models as m  # for the global variables and db constants
+# from . import models as m  # for the global variables and db constants
 
 # from wtforms import (StringField,
 #                      TextAreaField,
