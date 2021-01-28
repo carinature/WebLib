@@ -7,7 +7,7 @@ from wtforms import *
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import *
 
-from . import models as m  # for the global variables and db constants
+# from . import models as m  # for the global variables and db constants
 
 # from wtforms import (StringField,
 #                      TextAreaField,
@@ -138,7 +138,7 @@ class FilterForm(FlaskForm):
                             render_kw={
                                 'placeholder': '(e.g., 1.1 for chapter 1 verse 1, or leave empty for whole work)'}
                             )
-    fetch_full = BooleanField('   Fetch full text', id='fetch_full_chkbox',                              )
+    fetch_full = BooleanField('Fetch full text', id='fetch_full_chkbox')
     attention_label = Label(
         text='(Attention: Checking this box will attempt full text fetching,'
              '\nwhich can result in very highly loading times.)',
@@ -196,7 +196,7 @@ class SearchTypeChoice(FlaskForm):
         'Label',
         choices=[(1, 'Search by Subject'), (0, 'Search by Reference')],
         render_kw={'class': 'inline-radio'}
-        # 'style': 'font-size:1.5em; vertical-align: middle; horizontal-align: middle;text-align: center'}
+        # 'style': 'font-size:16px; vertical-align: middle; horizontal-align: middle;text-align: center'}
     )
 
 

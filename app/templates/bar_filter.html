@@ -1,6 +1,4 @@
-<!------------------------------------------->
-<!-------------------Filtering---------------------->
-<!------------------------------------------->
+<!--Filtering-->
 
 {#<!--      Filter Options Button    -->#}
 <button class="s01 btn-primary" data-toggle="collapse" data-target="#filtering" type="button">
@@ -12,7 +10,7 @@
     <!-- s01 should appear in a parent element of collapse, so it would use the correct css rule for form-->
     <div id="filtering" class="collapse ">
         <div class="container-fluid container padding-bot-2 ">
-            <div class="row text-center inner-form ">
+            <div class="row text-center bgn-light-second ">
                 {{ search_bar['filter_form'].hidden_tag() }}
 
                 <!-- filter by sub-subject options-->
@@ -21,14 +19,14 @@
                         Filter by<br>Sub-subject
                     </h5>
                     <hr>
-                    <div class="padding-bot-1">
+                    <div class="padding-1 padding-left-2r" style="align-content: center">
                         {{ search_bar['filter_form'].includes.label }}
                         {% for i in search_bar['filter_form'].includes %}
                             {{ i }}
                         {% endfor %}
                         <button class="add-btn margin-2r" id="add-include" type="button"> +</button>
                     </div>
-                    <div class="padding-bot-1">
+                    <div class="padding-1 padding-left-2r">
                         {{ search_bar['filter_form'].excludes.label }}
                         {% for i in search_bar['filter_form'].excludes %}
                             {{ i }}
@@ -77,17 +75,20 @@
                     </div>
                 </div>
 
-                <div class="text-left padding-5r">
+                <div class="text-left padding-5">
                     {{ search_bar['filter_form'].fetch_full }}
-                    &nbsp;&nbsp;&nbsp; {{ search_bar['filter_form'].fetch_full.label }} <br>
+                    <span class="margin-2r"> {{ search_bar['filter_form'].fetch_full.label }} </span>
                     {#  {{ search_bar['filter_form'].attention_label }}#}
                     <p id="fetch_full_warn" class="display-block">
                         (Attention: Checking this box will attempt full text fetching,
                         <br>which can result in very highly loading times.)</p>
                 </div>
                 {# <input type="reset" class="btn btn-dark bottom-left">#}
-                <button class="btn btn-dark" id="clear-filter"> Clear all fields</button>
+            <div class="float-right" style="width: 100%">
+            <button class="btn btn-dark" id="clear-filter" style="position: sticky; float: right ;"> Clear all fields</button>
             </div>
+            </div>
+
         </div>
     </div>
 </div>

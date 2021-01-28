@@ -1,31 +1,3 @@
-/**
- * checkes and unchecks all the items in the serach results (step 1) checklist
- * */
-function filter_check_all(source) {
-    checkboxes = document.getElementsByName('filter-opt');
-    console.log('==============')
-    for (let i = 0, n = checkboxes.length; i < n; i++) {
-        let checked = source.checked;
-        checkboxes[i].checked = checked;
-        if (checked) source.childNodes[0].nodeValue = 'Remove All Selections';
-        else source.childNodes[0].nodeValue = 'Select All the Results';
-
-    }
-}
-
-/**
- * when selecting the Fetch Full Text checkbox this will make the warning paragraph to appear beneath the chek=ckbox
- * currently not using this because it makes the filter form look and act funny
- * */
-function displayWarningFetchAllChkbx() {
-    let checkBox = document.getElementById("fetch_full_chkbox"); // Get the checkbox
-    let text = document.getElementById("fetch_full_warn"); // Get the output text
-
-    // If the checkbox is checked, display the output text
-    if (checkBox.checked) text.style.display = "block";
-    else text.style.display = "none";
-}
-
 //for testing purposes - currently not used
 $('a#test').on('click', function (e) {
     e.preventDefault();
@@ -47,6 +19,12 @@ $('button#js-to-py').on('click', function (e) {
         });
     return false;
 });
+/** template example **/
+$(document).ready(function() {
+			$( "#linkid" ).click(function() {
+				dothings();
+			});
+		});
 
 //load raw scv files into the MySQL DB
 $('button#csv_to_mysql_btn').on('click', function (e) {
@@ -64,7 +42,7 @@ $('button#csv_to_mysql_btn').on('click', function (e) {
     return false;
 });
 
-//load raw scv files into the MySQL DB
+// todo should load an email to the db?
 $('button#email_button').on('click', function (e) {
     //  NEXT TO COMMANDS DO NOT SEEM TO WORK
     alert("Adding your Email address")
@@ -181,6 +159,25 @@ $('button#clear-filter').on('click', function (e) {
 $('input#fetch_full_chkbox').on('click', function (e) {
     alert('Attention! Checking this box will attempt full text fetching, which can result in very highly loading times.')
 });
+
+/**
+ * when selecting the Fetch Full Text checkbox this will make the warning paragraph to appear beneath the chek=ckbox
+ * currently not using this because it makes the filter form look and act funny
+ * */
+function displayWarningFetchAllChkbx() {
+    let checkBox = document.getElementById("fetch_full_chkbox"); // Get the checkbox
+    let text = document.getElementById("fetch_full_warn"); // Get the output text
+
+    // If the checkbox is checked, display the output text
+    if (checkBox.checked) text.style.display = "block";
+    else text.style.display = "none";
+}
+
+$(document).ready(function() {
+			$( "#linkid" ).click(function() {
+				dothings();
+			});
+		});
 
 // Invoking a python script on click of html button can be accomplished using python-django framework.
 // The ajax for it is written this way

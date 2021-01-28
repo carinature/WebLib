@@ -14,9 +14,10 @@
 
     <p>If you would like to receive updates on the development of the project, please enter your email and click
         "submit":</p>
-    <label for="user-email">Email Address:</label><br>
-    <form action="">
-        {#        <input type="text" id="user-email" name="user-email" placeholder="username@email.edu"><br><br>#}
+    <label for="email_field">Email Address:</label><br>
+    <form>
+{#    <form action="">#}
+        {#        <input type="text" id="email_field" name="user-email" placeholder="username@email.edu"><br><br>#}
         <br>
         {{ form1.hidden_tag() }}
         {{ form1.email }}
@@ -47,5 +48,5 @@
         </div>
     </form>#}
 
-    <script src="../static/js/script.js"></script>
+{#    <script src="../static/js/script.js"></script>#}
 {% endblock %}

@@ -42,8 +42,8 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {#                    {% if current_user.is_anonymous %}#}
-                    <li class="nav-item"><a class="nav-link" href="/book-indices">Sources</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/subject-list">Subjects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../book-indices">Sources</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../subject-list">Subjects</a></li>
                     <li class="nav-item"><a class="nav-link active" href="/#contact">Contact</a></li>
                     {#                        <li><a href="{{ url_for('book_indices') }}">Login</a></li>#}
                     {#                    {% else %}#}
@@ -56,7 +56,8 @@
     </nav>
 {% endblock %}
 
-<br><br><br><br>
+<div class="padding-5"></div>
+
 {% block title %}
     {% if title %}
         {{ title }} - Microblog
@@ -79,12 +80,14 @@
         {# application content needs to be provided in the app_content block #}
         {% block app_content %}
 
-            <br><br><br><br>
+            <div class="padding-5"></div>
+
             {% for i in range %}
                 {{ i }}
                 <br>
             {% endfor %}
         {% endblock %}
     </div>
-    <script src="../static/js/script.js"></script>
+    <script src="../../static/js/script.js"></script>
+    <script src="../../static/js/gui.js"></script>
 {% endblock %}

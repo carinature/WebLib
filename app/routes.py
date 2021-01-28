@@ -1,17 +1,11 @@
-from time import time
-
 from itertools import groupby
 from typing import List, Dict, Tuple
 
-from flask import current_app as app, flash, g, session
+from flask import current_app as app, flash, g, session, send_from_directory
 from flask import render_template, make_response, redirect, url_for, request
 from sqlalchemy import func
 from sqlalchemy.orm import Query
 from sqlalchemy.sql.functions import count
-from wtforms import BooleanField, StringField, form
-from wtforms.widgets import CheckboxInput
-
-from db_migration import csv_to_mysql
 
 from . import forms as f
 from . import models as m
@@ -73,7 +67,8 @@ def search_results(search_word='', page=''):
     if not subject_form.validate_on_submit():  # i.e. when method==GET
         return render_template('search_results.html',
                                title='Search',
-                               # description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               description="Tiresias: The Ancient Mediterranean Religions Source Database. "
+                                           "Default search page.",
                                search_bar=search_bar,
                                method='get'
                                )
@@ -193,8 +188,9 @@ def search_results(search_word='', page=''):
     categories[2]['results'] = not_valid
 
     return render_template('search_results.html',
-                           # title=f'Search Result for: {search_word}',
-                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           title=f'Search Result for: {search_word}',
+                           description=f'Tiresias: The Ancient Mediterranean Religions Source Database. '
+                                       f'This page shows results for {search_word}, sorted by validity.',
                            search_bar=search_bar,
                            categories=categories,
                            search_word=search_word,
@@ -240,24 +236,25 @@ def home():
     return render_template('index.html',
                            title='Tiresias',
                            index_title='The Ancient Mediterranean Religions Source Database',
-                           description='Tiresias: The Ancient Mediterranean Religions Source Database',
+                           description='Tiresias: The Ancient Mediterranean Religions Source Database Home page.'
+                                       'The Tiresias contains more than database allows'
+                                       'Here is a short introduction to the site, search options, and conatact details.'
+                                       'Also can be found a few database graphs describing ',
                            search_bar=search_bar,
                            email_form=email_form,
-                           redirect_flag=True
+                           home_flag=True
                            )
-    # if 'GET' == request.method:
-    #     print('~' * 15, ' home() - GET ', '~' * 15)
-    # print('~' * 15, ' home() - POST ', '~' * 15)
-    # return redirect(url_for(search_results,search_word))
 
 
 # ++++++++++++  list of books page ++++++++++++
 @app.route(links['books'])
 # @app.route('/book-indices')
+# todo create a table of the listed books and fix the description to show the correct number of books (dynamically)
 def book_indices():
     return render_template('book_indices.html',
-                           title="Books Included in the Tiresias Project Database",  # todo different title
-                           description="Tiresias: The Ancient Mediterranean Religions Source Database", )
+                           title="Tiresias: Books Included in the Project Database",  # todo different title
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database. "
+                                       "The database references more than 200 title, which are listed in this page.", )
 
 
 # ++++++++++++  list of Subjects in the db page ++++++++++++
@@ -278,15 +275,17 @@ def subject_list(search_word='', page=''):
         prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
 
         return render_template('subject_list.html',
-                               title="Tiresias Subjects",  # todo different title
-                               description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                               title="Tiresias Subjects Included in the Project Database",  # todo different title
+                               description="Tiresias: The Ancient Mediterranean Religions Source Database."
+                                           "The database includes over 50,000 subjects, listed in the page."
+                                           "For a more topic specific list, use the search option",
                                subjects=subjects,
                                total=subjects.total,
                                next_url=next_url,
                                prev_url=prev_url,
                                search_bar=search_bar,
                                hide_filter=True,
-                               # redirect_flag=False
+                               # home_flag=False
                                )
 
     search_word = subject_form.subject_keyword_1.data
@@ -298,8 +297,9 @@ def subject_list(search_word='', page=''):
     next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
     prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
     return render_template('subject_list.html',
-                           title="Tiresias Subjects",  # todo different title
-                           description="Tiresias: The Ancient Mediterranean Religions Source Database",
+                           title=f'Tiresias Subjects Search Results for: {search_word}',  # todo different title
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database"
+                                       "The database includes over 50,000 subjects, listed in the page.",
                            subjects=subjects,
                            total=subjects.total,
                            next_url=next_url,
@@ -319,195 +319,35 @@ def not_found(error):
     return resp
 
 
-@app.route("/try_jinja")
-def try_jinja():
-    # Strings
-    _str = "Julian"
-
-    # Integers
-    _int = 30
-
-    # Lists
-    _list = ["Python", "JavaScript", "Bash", "Ruby", "C", "Rust"]
-
-    # Dictionaries
-    _dict = {
-        "Tony": 43,
-        "Cody": 28,
-        "Amy": 26,
-        "Clarissa": 23,
-        "Wendell": 39
-    }
-
-    # Tuples
-    _tuple = ("Red", "Blue")
-
-    # Booleans
-    _bool = True
-
-    # Classes
-    class _class:
-        def __init__(self, name, description, domain):
-            self.name = name
-            self.description = description
-            self.domain = domain
-
-        def pull(self):
-            return f"Pulling repo '{self.name}'"
-
-        def clone(self, repo):
-            return f"Cloning into {repo}"
-
-    _class_obj = _class(
-        name="The Name",
-        description="Some short description",
-        domain="https://github.com/something-something.git"
-    )
-
-    # Functions
-    def _function(x, qty=1):
-        return x * qty
-
-    from datetime import datetime
-    date = datetime.utcnow()
-
-    my_html = "<h1>This is some HTML</h1>"
-
-    return render_template(
-        "try_jinja.html", _str=_str, _int=_int, _list=_list,
-        _dict=_dict, _tuple=_tuple, _bool=_bool, _class=BooleanField,
-        _class_obj=_class_obj, _function=_function, date=date,
-        my_html=my_html
-    )
+# ++++++++++++  Serving (Google's) Robots & Crawlers ++++++++++++
+@app.route('/robots.txt')
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
 
 
-@app.route("/try_bs", methods=['GET', 'POST'])
-def try_bs():
-    # headers = {"Content-Type": "app/kaka"}
-    # return make_response(
-    #     'Test worked!',
-    #     200,
-    #     headers
-    # )
-    from flask import flash
-    flash('mamase mamasa mamakusa')
-    return render_template('try_bs.html', title='TRY', range=range(25), load_db_flag=False)
-
-
-# ++++++++++++  Login ++++++++++++
-# @login_required https://flask-login.readthedocs.io/en/latest/ todo use this to protect from logged-off users
-# @app.route('/insert-data')
-# def insert_data():
-#     print('congrats on the new addition')
-
-
-# ++++++++++++  dbg pages ++++++++++++
-@app.route('/check', methods=['GET', 'POST'])
-def check_check():
-    # subject_form = f.PurchaseForm(fdict)
-    # reference_form = SearchReference(request.form)
-    # if subject_form.submit_subject.data and subject_form.validate_on_submit():
-    #     print('Great Success')
-    #     return redirect(url_for('success', title='subject_form'))
-    # print('what happend')
-    # print("subject_form.errors")
-    # flash(subject_form.errors)
-
-    if 'GET' == request.method:
-        # if not subject_form.validate_on_submit():
-        print('-' * 13, ' GET ', '-' * 13)
-        return render_template("check.html")  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
-
-    print('-' * 13, ' POST ', '-' * 13)
-
-    print("request.values")
-    print(request.values)
-    print("request.form")
-    print(request.form)
-    print("getlist")
-    print(request.form.getlist('item'))
-    print("getlistgetlistgetlist")
-    for item in request.form.getlist('item'):
-        print(item)
-    print("items")
-    for item in request.form.items():
-        print(item)
-    printout = [request.values, request.form, request.form.getlist('item'), request.form.getlist('item'),
-                request.form.items()]
-    # print("request.data")
-    # print(request.data)
-    # print("request.args")
-    # print(request.args)
-    # results = request.args['results']
-
-    return render_template("check.html",
-                           printout=printout)  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
-
-
-# @app.route('/json')
-# def json():
-#     return render_template('json.html')
-
-# background process happening without any refreshing
-@app.route('/fetch_results')
-def fetch_results():
-    print("@@" * 33)
-
-    return render_template('srchbr.html', form1=f.SearchSubject())
-    # return '<h1> A O K </h1>'
-
-
-@app.route("/success/<title>", methods=['GET', 'POST'])
-@app.route("/success")
-def success(title=''):
-    sform = f.SearchSubject()
-    # return '<h1>' + title + ' Great Success</h1>'
-    return render_template('srchbr.html', title='Great Success', form1=sform)
-
-
-@app.route('/falala')
-def falalafunc():
-    print('=-' * 33, ' falala')
-    print("Adding your Email address")
-
-    # csv_to_mysql()
-    return '<h1> A O K </h1>'
-
-
-@app.route('/flask_route_but_not_webpage')
-def js_btn_to_python():
-    print('##' * 33, ' from_js_btn_to_python function')
-    print("It's happening... ")
-    # csv_to_mysql()
-
-    return '<h1> A O K </h1>'
-
-
+# ++++++++++++ ++++++++++++ ++++++++++++
+# ++++++++++++ ++++++++++++ ++++++++++++
+# ++++++++++++ ++++++++++++ ++++++++++++
+# ++++++++++  DGB and Testing ++++++++++
+# ++++++++++++ ++++++++++++ ++++++++++++
+# ++++++++++++ ++++++++++++ ++++++++++++
+# ++++++++++++ ++++++++++++ ++++++++++++
 @app.route("/csv_to_mysql_route", methods=['GET', 'POST'])
 def load_db():
     from flask import flash
     flash("If you click on the button below You are about to ask the server to load raw scv files into the mysql DB. ")
     flash("It's gonna take a loooong time to finish (if lucky). ")
     flash("Are you sure you want to do that? ")
-    return render_template('csv_to_mysql.html', load_db_flag=True)
+    return render_template('dbg/csv_to_mysql.html', load_db_flag=True, avoid_robots=True)
 
 
 @app.route("/csv_to_mysql_func")
 def csv_to_mysql_func_btn():
     print("It's happening... ")
+    from time import time
     t = time()
+    from db_migration import csv_to_mysql
     csv_to_mysql()
     print("Time elapsed: " + str(time() - t) + " s.")
-    return '<h1> A O K </h1>'
-
-
-def flam_flam():
-    print('flam_flam')
-
-
-@app.route("/flam")
-def flam_bla(place):
-    print("-----")
-    # print("place: ", place)
-    flam_flam()
     return '<h1> A O K </h1>'

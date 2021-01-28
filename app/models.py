@@ -210,7 +210,8 @@ class Book:
 
 class ResultTitle:
     # print(' =============== ResultTitle ================')
-    def __init__(self, num: int, filter_form: f.FilterForm):
+    def __init__(self, num: int, filter_form):
+    # def __init__(self, num: int, filter_form: f.FilterForm):
         # def __init__(self, num: int, filter_form: f.FilterForm):
         self.num = num
         # self.refs: Dict = {}

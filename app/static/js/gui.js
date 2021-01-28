@@ -1,10 +1,10 @@
-
 /**
  * When the user scrolls down 80px from the top of the document, resize the navbar's padding and the logo's font size
  * */
 window.onscroll = function () {
     scrollFunction()
 };
+
 function scrollFunction() {
     let navbar = document.getElementsByClassName("navbar")[0];
     let logo = document.getElementById("logo");
@@ -56,6 +56,7 @@ $(document).ready(function () {
     });
 });
 
+/** supposed to toggle between to radio button options */
 $('input.inline-radio').on('click', function (e) {
     let chkYes = document.getElementById("chkYes");
     let search_subject = document.getElementById("search-subject");
@@ -65,4 +66,72 @@ $('input.inline-radio').on('click', function (e) {
 });
 
 
+/**
+ * checkes and unchecks all the items in the serach results (step 1) checklist
+ * */
+function filter_check_all(source) {
+    checkboxes = document.getElementsByName('filter-opt');
+    console.log('==============')
+    for (let i = 0, n = checkboxes.length; i < n; i++) {
+        let checked = source.checked;
+        checkboxes[i].checked = checked;
+        if (checked) source.childNodes[0].nodeValue = 'Remove All Selections';
+        else source.childNodes[0].nodeValue = 'Select All the Results';
 
+    }
+}
+
+/*
+    Enable popovers via JavaScript:
+*/
+// $('#example').popover(options)
+
+/** creates a popover (small window hovering) when hovering over the div*/
+$(function () {
+    $('.popover_ctgry').hover(
+        function (event) {
+            // mouse in event handler
+            let elem = $(event.currentTarget);
+            let href = elem[0].getAttribute('href')
+            let id = elem[0].id
+            let data = 'reference is tagged with the subject '
+            if ('#high' === href || 'high' === id) {
+                data += 'in more than one book';
+            }
+            if ('#valid' === href || 'valid' === id) {
+                data += 'only in one book, but more than once';
+            }
+            if ('#not' === href || 'not' === id) {
+                data += 'only once, in one book';
+            }
+            elem.popover({
+                trigger: 'manual',
+                html: true,
+                animation: true,
+                container: elem,
+                content: data,
+                placement: 'top'
+            }).popover('show');
+        },
+        function (event) {
+            // mouse out event handler
+            var elem = $(event.currentTarget);
+            // elem.popover('dispose');
+            elem.popover('hide');
+        }
+    )
+});
+
+/****************************************************
+ ****************************************************
+ *        For DBG      fixme remove in production
+ *****************************************************
+ *****************************************************/
+/*
+// $('button#csv_to_mysql_btn').on('click', function () {
+$(document).ready(function () {
+    $("#refreshCSS").click(function () {
+        css_refresh_sdfsadfsaf()
+    });
+});
+*/

@@ -1,23 +1,21 @@
 {% extends 'layout.html' %}
-{% from 'macros.html' import disappring_btn %}
+{% from 'aux_macros.html' import disappring_btn %}
 
 {% block app_content %}
 
-    <h4 class="s01 head-title">
+    <h4 class="s01 head-title padding-bot-1">
         Total Number of Subjects Currently Included in Database:
         <em class="color-accent">&nbsp {{ total }}</em>
-    </h4><br>
+    </h4>
 
-    <!------------------------------------------->
-    <!-------- Search & Filter Forms ------------>
-    <!------------------------------------------->
+    <!-- Search & Filter Forms -->
     <div class="container">
         {{ disappring_btn( text='Search Subject in the Database', rbtn_id = 'show-search-btn', relm_id = 'search-subject',
     class='s01 btn-primary') }}
     </div>
 
     {% with hide_bar=true %}
-        {% include 'search_bar.html' %}
+        {% include 'bar_search.html' %}
     {% endwith %}
     <br>
 
@@ -48,11 +46,9 @@
 
 
         {# todo make bigger #}
-        <!------------------------------------------->
-        <!---------- Prev & Next Buttons ------------>
-        <!------------------------------------------->
+        <!-- Prev & Next Buttons -->
         {% if prev_url %}
-            <a href='{{ prev_url }}'>Prev</a>
+            <a class="page-link pagination" href='{{ prev_url }}'>Prev</a>
         {% endif %}
         &nbsp &nbsp
         {% if next_url %}
@@ -65,7 +61,7 @@
         {% endfor %}
 
     </div>
-    <script src="../static/js/script.js"></script>
+{#    <script src="../static/js/script.js"></script>#}
 
 {% endblock %}
 

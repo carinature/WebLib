@@ -1,6 +1,4 @@
-<!---------------------------------------------------->
-<!-------------------Search Bar ---------------------->
-<!---------------------------------------------------->
+<!--Search Bar -->
 
 <div class="container-fluid ">
     {#Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and
@@ -9,7 +7,7 @@
     {############################}
     <!-- Radio search buttons -->
     {############################}
-{#    <div class='text-center padding-1r'>
+    {#    <div class='text-center padding-1r'>
     <span class="inline-radio-span">
         <input id="chkYes" class="inline-radio" type="radio" name="search-radio" checked/>
         <label for="chkYes" class="inline-radio-label">Search by Subject</label>
@@ -27,14 +25,14 @@
     {############################}
     {#      Search Fields       #}
     {############################}
-    <!--- search by Subject  -->
+    <!-- search by Subject  -->
     <div class="s01 flex-column">
         {% if hide_bar %}
             {% set collapse='collapse' %}
         {% endif %}
         <div class="row {{ collapse }} " id="search-subject">
 
-            {% if redirect_flag %}
+            {% if home_flag %}
                 {% set url=url_for('search_results') %}
             {% endif %}
 
@@ -65,11 +63,13 @@
 
                     <div class="list-inline-item">
                         {{ search_bar['subject_form'].submit_subject }}
+                        {# <i class="fas fa-search"></i>#}
+                        {# <input type=submit class="btn btn-primary" data-icon="search" content=" ">#}
                     </div>
                 </div>
 
                 {% if not hide_filter %}
-                    {% include 'filter_bar.html' %}
+                    {% include 'bar_filter.html' %}
                 {% endif %}
 
             </form>
@@ -79,7 +79,7 @@
 
     {##############     search by Reference - hidden Section    ###############}
     {#
-        <!--- search by Reference - hidden Section -->
+        <!-- search by Reference - hidden Section -->
         <div class="row display-none" id="search-ref" >
             <div class="s01">
                 <form action="{{ url_for('search_results') }}" method="POST">
@@ -127,7 +127,6 @@
                         </div>
 
                         <div class="list-inline-item search-bar-item input-field">
-                            #}{# <br>#}{#
                             {{ search_bar['reference_form'].submit_reference }}
                         </div>
                     </div>

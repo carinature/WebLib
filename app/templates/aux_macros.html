@@ -13,19 +13,20 @@
     {% set rbtn_id='refsbtn'~num %}
     <div class="container-fluid">
         <h4 class="display-inline">
-            {{ index }}. <em>{{ title }} </em>  by {{ author }}
+            {{ index }}. <em>{{ title }} </em> by {{ author }}
         </h4>
-                    <a href="#link" class="btn btn-sm btn-primary float-right" role="button" > For more information </a>
+        <a href="#link" class="btn btn-sm btn-primary float-right" role="button"> For more information </a>
 
-        <div class="padding-1r">
+        <div class="padding-1">
             {% for book in books %}
-                <em><strong>{{ book.title_full }}</strong></em> &nbsp; &nbsp; pages:
-                {#                {{ book.pages }}#}
-                {% for page in book.pages -%}
-                    <a href="{{ link|value_or_empty }}"> {{ page }} </a>
-                    {#                    {% if loop.index!=(books|length) %}, {% endif %}#}
-                {%- endfor %}
-            <br>
+                <div class="padding-bot-1">
+                    <em class="padding-1"><strong>{{ book.title_full }}</strong></em> pages:
+                    {#                {{ book.pages }}#}
+                    {% for page in book.pages -%}
+                        <a href="{{ link|value_or_empty }}"> {{ page }} </a>
+                        {#                    {% if loop.index!=(books|length) %}, {% endif %}#}
+                    {%- endfor %}
+                </div>
             {% endfor %}
         </div>
 
@@ -37,8 +38,9 @@
     </div>
 {%- endmacro %}
 
+<!-- Category Title Macro -->
 {% macro category_head(category='', id='', res_num='', value='') -%}
-    <div class="container-fluid padding-bot-2" id="{{ id }}">
+    <div class="container-fluid padding-bot-2 popover_ctgry" id="{{ id }}">
         <div class="col-12  bgn-light-second"> <!--todo move the style to css-->
             <h1 class="">{{ category }} {{ res_num }}</h1>
             {#            <h1 class="display-4 welcome text-center">Tiresias: The Ancient Mediterranean Religions Source Database</h1>#}
@@ -47,9 +49,7 @@
 {%- endmacro %}
 
 
-<!------------------------------------------->
-<!---- Result Checkbox List Item Macro ------>
-<!------------------------------------------->
+<!-- Result Checkbox List Item Macro -->
 {% macro checkbox_input(label='', id='', name='', value='') -%}
     <div class='form-group custom-control custom-switch text-left'>
         {#        <input type='{{ type }}' class='form-control' id='{{ id }}' name='{{ name }}'#}
@@ -59,27 +59,25 @@
     </div>
 {%- endmacro %}
 
-    <!------------------------------------------->
-    <!------ Result Subject Checkbox List ------->
-    <!------------------------------------------->
-    {% if total %}
-        <div class='container'>
-            <div class='form-group padding-bot-2 col-9'>
-                {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
-                {#  -----   Select All  -----   #}
-                <div class='custom-control custom-switch text-left'>
-                    <input type='checkbox' class='custom-control-input' id='checkAll' checked
-                           onClick='filter_check_all(this)'>
-                    <label class='custom-control-label padding-bot-2' for='checkAll'>
-                        <em><strong>Select All the Results</strong></em><br>
-                    </label>
-                <form action='#' method='POST' >
-                    {#  -----   The Result subjects  -----   #}
+<!-- Result Subject Checkbox List -->
+{% if total %}
+    <div class='container'>
+        <div class='form-group padding-bot-2 col-9'>
+            {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
+            {#  --   Select All  --   #}
+            <div class='custom-control custom-switch text-left'>
+                <input type='checkbox' class='custom-control-input' id='checkAll' checked
+                       onClick='filter_check_all(this)'>
+                <label class='custom-control-label padding-bot-2' for='checkAll'>
+                    <em><strong>Select All the Results</strong></em><br>
+                </label>
+                <form action='#' method='POST'>
+                    {#  --   The Result subjects  --   #}
                     {% for item in results %}
                         {{ checkbox_input(label=item.subject, id=item.subject, name='filter-opt', value=item.C) }}<br>
                     {% endfor %}
                 </form>
-                </div>
             </div>
         </div>
-    {% endif %}
+    </div>
+{% endif %}
