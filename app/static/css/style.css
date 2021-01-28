@@ -213,17 +213,20 @@ hr.light-100 {
     display: block;
 }
 
+/*
+!* already in bootstrap! *!
 .text-center {
     text-align: center;
 }
-
+!* already in bootstrap! *!
 .text-left {
     text-align: left;
 }
-
+!* already in bootstrap! *!
 .float-right {
     float: right;
 }
+*/
 
 .float-top {
     float: top;

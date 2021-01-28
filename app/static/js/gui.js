@@ -4,7 +4,6 @@
 window.onscroll = function () {
     scrollFunction()
 };
-
 function scrollFunction() {
     let navbar = document.getElementsByClassName("navbar")[0];
     let logo = document.getElementById("logo");
@@ -55,6 +54,7 @@ $(document).ready(function () {
         document.documentElement.scrollTop = 0;
     });
 });
+
 /** supposed to toggle between to radio button options */
 $('input.inline-radio').on('click', function (e) {
     let chkYes = document.getElementById("chkYes");
@@ -80,7 +80,7 @@ function filter_check_all(source) {
     }
 }
 
-
+/** creates a popover (small window hovering) when hovering over the div*/
 $(function () {
     $('.popover_ctgry').hover(
         function (event) {
