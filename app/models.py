@@ -116,6 +116,9 @@ class Title(Base):  # todo handle cases of null in 'from/to century',
     language = Column(String(100))
     number = Column(String(100))
 
+    def name(self):
+        return 'Title bla bla'
+
     def __repr__(self):
         # todo rename column names
         return f'<Title model title: {self.title},  author: {self.author}, index: {self.index_org}>'
@@ -211,7 +214,7 @@ class Book:
 class ResultTitle:
     # print(' =============== ResultTitle ================')
     def __init__(self, num: int, filter_form):
-    # def __init__(self, num: int, filter_form: f.FilterForm):
+        # def __init__(self, num: int, filter_form: f.FilterForm):
         # def __init__(self, num: int, filter_form: f.FilterForm):
         self.num = num
         # self.refs: Dict = {}

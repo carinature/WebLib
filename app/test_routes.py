@@ -3,7 +3,9 @@ from flask import render_template, make_response, redirect, url_for, request
 
 from time import time
 
+from sqlalchemy import or_
 from wtforms import BooleanField
+
 
 # from . import forms as f
 
@@ -116,7 +118,8 @@ def check_check():
         # if not subject_form.validate_on_submit():
         print('-' * 13, ' GET ', '-' * 13)
         return render_template(
-            'dbg/check.html', avoid_robots=True)  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
+            'dbg/check.html',
+            avoid_robots=True)  # , form1=subject_form, _list=subjects)#, data=subject_form.example.data)
 
     print('-' * 13, ' POST ', '-' * 13)
 
@@ -183,13 +186,27 @@ def js_btn_to_python():
     return '<h1> A O K </h1>'
 
 
+@app.route('/flam_flam')
 def flam_flam():
     print('flam_flam')
+    # 6276 has 2 bib-infos   . another option for 'woman' is 8255. also 2 bib-infos
+    from . import models as m
+    resTitle = m.Title.query.filter_by(number='6276').all()
+    resRef = m.BookRef.query.filter(or_(
+        m.BookRef.book_biblio_info == '15',
+        m.BookRef.book_biblio_info == '31')).all()
+    resTextText = m.TextText.query.filter(or_(
+        m.TextText.subject == 'Proverbs, ideal woman',
+        m.TextText.subject == 'Martha apocryphal as anointing woman')).all()
+    print(resTitle)
+    print(resTitle.__repr__())
+    for r in resRef:
+        print('  ---  ref  --- ', r.__repr__())
+        print(r)
+    print(resRef)
+    # for r in resTextText:
+    #     print('  ---  texttext  --- ', r.__repr__())
+    # return (resRef) #exception
+    return (resRef.__repr__())
 
 
-@app.route('/flam')
-def flam_bla(place):
-    print('-----')
-    # print('place: ', place)
-    flam_flam()
-    return '<h1> A O K </h1>'
