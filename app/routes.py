@@ -1,5 +1,7 @@
-from itertools import groupby
 from typing import List, Dict, Tuple
+
+import pandas as pd
+from itertools import groupby
 
 from flask import current_app as app, flash, g, session, send_from_directory
 from flask import render_template, make_response, redirect, url_for, request
@@ -7,6 +9,7 @@ from flask_sqlalchemy import BaseQuery
 from sqlalchemy.orm import Query
 from sqlalchemy.sql.functions import count
 
+from .models import Base
 from . import forms as f
 from . import models as m
 from . import utilities as utils
@@ -49,35 +52,17 @@ categories = [
 links = {
     'home': '/',
     'search': '/search-results',
-    'search_test': '/search-results-test',
+    'test_search': '/test-search-results',
     'books': '/book-indices',
     'subjects': '/subject-list',
 }
 
-from sqlalchemy import Table
-from sqlalchemy.ext.compiler import compiles
-from sqlalchemy.sql.expression import Executable, ClauseElement
-
-
-class CreateView(Executable, ClauseElement):
-    def __init__(self, name, select):
-        self.name = name
-        self.select = select
-
-
-@compiles(CreateView)
-def visit_create_view(element, compiler, **kw):
-    return "CREATE VIEW %s AS %s" % (
-        element.name,
-        compiler.process(element.select, literal_binds=True)
-    )
-
 
 # ++++++++++++  search results and filtering page ++++++++++++
-@app.route(links['search_test'], methods=['GET', 'POST'])
+@app.route(links['test_search'], methods=['GET', 'POST'])
 # @app.route('/search-results/<string:search_word>/<int:page>', methods=['GET', 'POST'])
 def search_test(search_word='', page=''):
-    search = '%{}%'.format('woman')
+    search = '%{}%'.format('divin')
 
     txts_table = m.TextText
     # ............  return all matching results (subjects) by C column [list] ............
@@ -85,25 +70,27 @@ def search_test(search_word='', page=''):
 
     # filter by subject
     txts_q_filter: BaseQuery = txts_query.filter(txts_table.subject.like(search))
+    # txts_q_filter: BaseQuery = txts_q_filter.filter(txts_table.subject.like(search))
     filtered_sub_query: Query = txts_q_filter.subquery()
-    # group by title and then by bib_info (referencing book) and count refs (C's)
-    sub_q_title_and_bibinfo_with_count = txts_query.with_entities(
-        filtered_sub_query.c.number,
-        filtered_sub_query.c.book_biblio_info,
-        count().label('count_c')
-    )
-    groups_by_title_bibinfo = sub_q_title_and_bibinfo_with_count.group_by(
-        filtered_sub_query.c.number,
-        filtered_sub_query.c.book_biblio_info)
 
-    grouped_sub_query: Query = groups_by_title_bibinfo.subquery()
-    # filter by subject and count ref-books
-    sub_q_title_bibcount = txts_query.with_entities(
-        grouped_sub_query.c.number,
-        count().label('count_bib')
-    )
-    groups_by_title = sub_q_title_bibcount.group_by(grouped_sub_query.c.number)
-    filtered_results = groups_by_title.all()
+    # # group by title and then by bib_info (referencing book) and count refs (C's)
+    # sub_q_title_and_bibinfo_with_count = txts_query.with_entities(
+    #     # filtered_sub_query.c.number,
+    #     filtered_sub_query.c.number,
+    #     filtered_sub_query.c.book_biblio_info,
+    #     count().label('count_c')
+    # )
+    # groups_by_title_bibinfo = sub_q_title_and_bibinfo_with_count.group_by(
+    #     filtered_sub_query.c.number,
+    #     filtered_sub_query.c.book_biblio_info)
+    # grouped_sub_query: Query = groups_by_title_bibinfo.subquery()
+    #
+    # # filter by subject and count ref-books
+    # sub_q_title_bibcount = txts_query.with_entities(
+    #     grouped_sub_query.c.number,
+    #     count().label('count_bib')
+    # )
+    # groups_by_title = sub_q_title_bibcount.group_by(grouped_sub_query.c.number)
 
     bib_dict: Dict[int, List] = {}
 
@@ -112,22 +99,43 @@ def search_test(search_word='', page=''):
     highly_valid, valid, not_valid = [], [], []
     bib_more_than_1, bib_only_1 = {}, {}
 
+    print(txts_q_filter)
+    df: pd.DataFrame = pd.read_sql(txts_q_filter.statement, txts_q_filter.session.bind)
+    print(df.tail())
+    dfgroups: pd.DataFrame.groupby.DataFrameGroupBy = df.groupby(
+        # by=['number', 'book_biblio_info'],  # Notice that a tuple is interpreted as a (single) key.
+        by=['number'],  # Notice that a tuple is interpreted as a (single) key.
+        as_index=False,  # is effectively “SQL-style” grouped output.
+        sort=True, )
+    tit: str
+    dfg: pd.DataFrame
+    for tit, dfg in dfgroups:
+        print('-------\n', tit)
+        # dfg.sort(key = lambda x: x[3] ) #todo change x[3] to x.bib_info...
+        print('-------\n', type(dfg))
+        fin = dfg.groupby(
+            by=['book_biblio_info'],
+            as_index=False,  # is effectively “SQL-style” grouped output.
+        )
+        for sg in fin:
+            print('-------\n', sg)
+
     # print('sr' * 33)
     # for sr in groups_by_title:
     #     print(sr)
 
-    print('res' * 33)
-    for res in filtered_results:
-        bib_count = res.count_bib
-        title_number = res.number
-        if bib_count >= 2:  # todo maybe consider using HAVING instead of an 'if'
-            print('-' * 30, title_number, '-' * 30, bib_count)
-            full_res = txts_q_filter.filter(filtered_sub_query.c.number == title_number).all()
-            bib_more_than_1[title_number] = full_res
-            # print(full_res)
-
-        else:
-            bib_only_1[title_number] = bib_count
+    # print('res' * 33)
+    # for res in filtered_results:
+    #     bib_count = res.count_bib
+    #     title_number = res.number
+    #     if bib_count >= 2:  # todo maybe consider using HAVING instead of an 'if'
+    #         print('-' * 30, title_number, '-' * 30, bib_count)
+    #         full_res = txts_q_filter.filter(filtered_sub_query.c.number == title_number).all()
+    #         bib_more_than_1[title_number] = full_res
+    #         # print(full_res)
+    #
+    #     else:
+    #         bib_only_1[title_number] = bib_count
 
     highly_valid.append(bib_more_than_1)
     valid.append(bib_only_1)
@@ -136,7 +144,7 @@ def search_test(search_word='', page=''):
     # print('bib_only_1 ' * 5)
     # print(bib_only_1)
 
-        # for res in groups_by_title_bibinfo:
+    # for res in groups_by_title_bibinfo:
     #     print(res)
     #     res_num = res.number  # res[0]
     #     bib_info = res.book_biblio_info  # res[1]
@@ -155,6 +163,8 @@ def search_test(search_word='', page=''):
     #
     #     # title = m.Title.get(res_num)
     #     # bib_info = m.Title.get(res[1])
+
+    # 6276 of number and 15 & 31 for bub-info
     return render_template('dbg/test_search.html',
                            motototo=['Nothing', 'worth', 'having', 'comes', 'easy'],
                            list1=highly_valid,
@@ -232,10 +242,6 @@ def search_results(search_word='', page=''):
     numbers_dict: Dict = {}
     res_dict: Dict = {}
     highly_valid, valid, not_valid = [], [], []
-
-    # print('5' * 33)
-    # print(txts_q_with_ent_filter_order)
-    # print(txts_q_with_ent_filter.limit(30).all())
 
     # ............  group the results by (referenced) title ('number' column) [dict?] ............
     groups_by_number = groupby(

@@ -300,3 +300,14 @@ class ResultTitle:
         for i in self.books:
             s += f'\t\t{i}\n'
         return s
+
+
+# from sqlalchemy_utils import create_view
+
+# view: Table = create_view('my_view', TextText, Base.metadata)
+
+
+# provides an ORM interface to the view
+# class MyView(Base):
+#     __table__ = 'my_view'
+
