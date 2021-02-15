@@ -13,7 +13,6 @@
 
     <div class="s01 display-4">
         {% for x in motototo %}
-
             {{ x }}
         {% endfor %}
     </div>
@@ -21,20 +20,35 @@
     <h1>Highly Valid</h1>
 
     <div class="padding-5">
+
         {% for x in list1 %}
-            {% for t in x %}
-                {{ t }}<br>
-            {% endfor %}
+            {{ x }}<br>
+            {#            {% for t in x %}#}
+            {#                {{ t }}<br>#}
+            {#            {% endfor %}#}
         {% endfor %}
+
     </div>
+    {##}
+    {#    <div class="padding-5">#}
+    {#        {% for x in list1 %}#}
+    {#            {% for t in x %}#}
+    {#                {{ t }}<br>#}
+    {#            {% endfor %}#}
+    {#        {% endfor %}#}
+    {#    </div>#}
 
     <h1>The Others</h1>
 
     <div class="padding-5">
-        {% for x in list2 %}
-            {% for t in x %}
-                {{ t }}<br>
+        {% for x,y in list2.items() %}
+            {{ x }}
+            {{ y.__repr__() }}<br>
+            {% for u,v in y.books_dict.items() %}
+                {{ u }}<br>
+                {{ v }}<br>
             {% endfor %}
+            <br>
         {% endfor %}
     </div>
 

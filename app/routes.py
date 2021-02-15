@@ -62,15 +62,18 @@ links = {
 @app.route(links['test_search'], methods=['GET', 'POST'])
 # @app.route('/search-results/<string:search_word>/<int:page>', methods=['GET', 'POST'])
 def search_test(search_word='', page=''):
+    # search = '%{}%'.format('freedwoman')
     search = '%{}%'.format('divin')
+    # search = '%{}%'.format('woman')
+    filter_form = f.FilterForm().return_as_dict()
 
     txts_table = m.TextText
     # ............  return all matching results (subjects) by C column [list] ............
     txts_query: BaseQuery = txts_table.query
-
-    # filter by subject
+    # filter by subject (and reference if ref_filter field in form is filled out)
     txts_q_filter: BaseQuery = txts_query.filter(txts_table.subject.like(search))
-    # txts_q_filter: BaseQuery = txts_q_filter.filter(txts_table.subject.like(search))
+    txts_q_filter = txts_q_filter.filter_by(ref=filter_form['reference']) if filter_form['reference'] else txts_q_filter
+
     filtered_sub_query: Query = txts_q_filter.subquery()
 
     # # group by title and then by bib_info (referencing book) and count refs (C's)
@@ -84,7 +87,6 @@ def search_test(search_word='', page=''):
     #     filtered_sub_query.c.number,
     #     filtered_sub_query.c.book_biblio_info)
     # grouped_sub_query: Query = groups_by_title_bibinfo.subquery()
-    #
     # # filter by subject and count ref-books
     # sub_q_title_bibcount = txts_query.with_entities(
     #     grouped_sub_query.c.number,
@@ -93,82 +95,67 @@ def search_test(search_word='', page=''):
     # groups_by_title = sub_q_title_bibcount.group_by(grouped_sub_query.c.number)
 
     bib_dict: Dict[int, List] = {}
-
-    numbers_dict: Dict = {}
-    res_dict: Dict = {}
-    highly_valid, valid, not_valid = [], [], []
+    res_dict: Dict[str, m.ResultTitle] = {}
+    highly_valid: List[m.ResultTitle] = []
+    # highly_valid, valid, not_valid = List[m.ResultTitle], List[m.ResultTitle], List[m.ResultTitle]
     bib_more_than_1, bib_only_1 = {}, {}
+    # print(txts_q_filter)
 
-    print(txts_q_filter)
+    # x: m.TextText
+    # for x in txts_q_filter:
+    #     print(type(x))
+    #     print(x)
+    #     title_key = x.number
+    #     res_title: m.ResultTitle = res_dict.setdefault(title_key, m.ResultTitle(title_key, filter_form))
+
     df: pd.DataFrame = pd.read_sql(txts_q_filter.statement, txts_q_filter.session.bind)
-    print(df.tail())
-    dfgroups: pd.DataFrame.groupby.DataFrameGroupBy = df.groupby(
-        # by=['number', 'book_biblio_info'],  # Notice that a tuple is interpreted as a (single) key.
-        by=['number'],  # Notice that a tuple is interpreted as a (single) key.
-        as_index=False,  # is effectively “SQL-style” grouped output.
-        sort=True, )
-    tit: str
-    dfg: pd.DataFrame
-    for tit, dfg in dfgroups:
-        print('-------\n', tit)
-        # dfg.sort(key = lambda x: x[3] ) #todo change x[3] to x.bib_info...
-        print('-------\n', type(dfg))
-        fin = dfg.groupby(
-            by=['book_biblio_info'],
-            as_index=False,  # is effectively “SQL-style” grouped output.
-        )
-        for sg in fin:
-            print('-------\n', sg)
+    # print(df.tail())
+
+    groups_by_title_num: pd.DataFrame.groupby.DataFrameGroupBy = df.groupby(
+        by=['number'],  # ,'book_biblio_info'],  # Notice that a tuple is interpreted as a (single) key.
+        # level=0,
+        # as_index=False,  # is effectively “SQL-style” grouped output.
+        # sort=True,
+    )
+    # lists_by_title_num = groups_by_title_num.apply(list)
+
+    title_key: str
+    titles_group: pd.DataFrame
+    for title_key, titles_group in groups_by_title_num:
+        # print(type(titles_group))
+        groups_by_title_and_bib: pd.DataFrame.groupby.DataFrameGroupBy = titles_group.groupby(
+            by=['book_biblio_info'])
+        res_title: m.ResultTitle = res_dict.setdefault(title_key, m.ResultTitle(title_key, filter_form))
+        if not res_title.filtered_flag:
+            continue
+        bib_count = len(titles_group['book_biblio_info'].unique())
+        print(bib_count)
+        if 2> bib_count:
+            continue
+        bib_info: str
+        bib_info_group: pd.DataFrame
+        for bib_info, bib_info_group in groups_by_title_and_bib:
+            # print('-------\n', bib_info)
+            # print('-------\n', bib_info_group)
+            res_bib = res_title.books_dict.setdefault(bib_info, res_title.add_bib(bib_info))
+            # res_title.add_bib(bib_info)
+        highly_valid.append(res_title)
 
     # print('sr' * 33)
-    # for sr in groups_by_title:
+    # for sr, gr in res_dict.items():
     #     print(sr)
-
-    # print('res' * 33)
-    # for res in filtered_results:
-    #     bib_count = res.count_bib
-    #     title_number = res.number
-    #     if bib_count >= 2:  # todo maybe consider using HAVING instead of an 'if'
-    #         print('-' * 30, title_number, '-' * 30, bib_count)
-    #         full_res = txts_q_filter.filter(filtered_sub_query.c.number == title_number).all()
-    #         bib_more_than_1[title_number] = full_res
-    #         # print(full_res)
-    #
-    #     else:
-    #         bib_only_1[title_number] = bib_count
+    #     print(gr)
 
     highly_valid.append(bib_more_than_1)
-    valid.append(bib_only_1)
-    # print('highly_valid '*5)
-    # print(highly_valid)
-    # print('bib_only_1 ' * 5)
-    # print(bib_only_1)
+    # valid.append(bib_only_1)
 
-    # for res in groups_by_title_bibinfo:
-    #     print(res)
-    #     res_num = res.number  # res[0]
-    #     bib_info = res.book_biblio_info  # res[1]
-    #     # cc = res.C  # res[2]
-    #     bib_dict[res_num] = res_num
-    #     # group by title, and then by bib
-    #     print(res.number, res_num)
-    #     print()
-    #     # cc: BaseQuery = txts_query.filter(num_col==res_num).all()
-    #     # cc: BaseQuery = txts_query.filter_by(number=res_num).all() # this gives tooo many results - wrong ones
-    #     print('cc' * 9)
-    #     # print(len(cc))
-    #     # print(cc)
-    #     print(bib_info)
-    #     print('ee' * 9)
-    #
-    #     # title = m.Title.get(res_num)
-    #     # bib_info = m.Title.get(res[1])
-
-    # 6276 of number and 15 & 31 for bub-info
+    # 6276 for number and 15 & 31 for bub-info  || 8255 and 31.0 & 64.0
     return render_template('dbg/test_search.html',
                            motototo=['Nothing', 'worth', 'having', 'comes', 'easy'],
+                           # list1=highly_valid,
+                           # list2=valid,
                            list1=highly_valid,
-                           list2=valid,
+                           list2={},
                            )
 
 
@@ -181,8 +168,9 @@ def search_results(search_word='', page=''):
     # todo put here the "waiting" bar/circle/notification (search "flashing/messages" in the flask doc)
 
     search_bar: Dict = utils.init_search_bar()
-    subject_form = search_bar['subject_form']
-    filter_form = search_bar['filter_form']
+    subject_form: f.SearchSubject = search_bar['subject_form']
+    filter_form: f.FilterForm = search_bar['filter_form']
+    print(filter_form.return_as_dict())
 
     if not subject_form.validate_on_submit():  # i.e. when method==GET
         return render_template('search_results.html',
@@ -252,6 +240,7 @@ def search_results(search_word='', page=''):
     # for ke, ge in groups_by_number:
     #     print('#' * 13, ke)
     #     print('^' * 13, list(ge))
+    filter_form = f.FilterForm().return_as_dict()
 
     # ............  filter and add the references (ref-ing titles) [dict of result objects ] ............
     for title_number, texts_tuples_group in groups_by_number:

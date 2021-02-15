@@ -213,27 +213,20 @@ class Book:
 
 class ResultTitle:
     # print(' =============== ResultTitle ================')
-    def __init__(self, num: int, filter_form):
+    filtered_flag = False
+
+    def __init__(self, num: str, filter_form: Dict):
         # def __init__(self, num: int, filter_form: f.FilterForm):
-        # def __init__(self, num: int, filter_form: f.FilterForm):
-        self.num = num
-        # self.refs: Dict = {}
-        self.refs: Set = set()
-        self.bibinfo: List[int] = []
-        self.books: List[Book] = []
-        # self.books: Dict[int, Book] = collections.defaultdict(Book)
-        q_title: Query = Title.query
-        q_title_filter: Query = q_title.filter(Title.number == num)
-        self.author = q_title_filter.value(Title.author)
-        self.title = q_title_filter.value(Title.title)
-        self.filtered_flag = False
-        from_century = filter_form.from_century.data
-        to_century = filter_form.to_century.data
-        language = filter_form.language.data
-        ancient_author = filter_form.ancient_author.data
-        ancient_title = filter_form.ancient_title.data
-        # if to_century < from_century:
-        #     raise Exception('KARINA. to_century is smaller than from_century.')
+        # todo better to accept dict, instead of form?
+        #  todo should accept num as int. change to DB
+        from_century = filter_form['from_century']
+        to_century = filter_form['to_century']
+        language = filter_form['language']
+        ancient_author = filter_form['ancient_author']
+        ancient_title = filter_form['ancient_title']
+        q_title_filter: Query = Title.query.filter(Title.number == num)
+        # todo  if to_century < from_century:
+        # todo remove the 'if' clause from the '*_century', when the html page would actually have a filter form
         if from_century:
             q_title_filter: Query = q_title_filter.filter(Title.centstart >= from_century)
         if to_century:
@@ -244,37 +237,36 @@ class ResultTitle:
             q_title_filter: Query = q_title_filter.filter(Title.author == ancient_author)
         if ancient_title:
             q_title_filter: Query = q_title_filter.filter(Title.title == ancient_title)
-        # # fixme check this in routes or sooner in the code - at the top of this function!
-        # if ref: fixme
-        #     q_title_filter: Query = q_title_filter.filter(Title. == filter_form.from_century.data)  # fixme check this in routes!
-
+        # if passed all filters
         if q_title_filter.first():
             self.filtered_flag = True
-            print('.' * 50, self.title, 'by:', self.author)
+            self.num = num
+            self.refs: Set = set()
+            self.bibinfo: List[int] = []
+            self.books: List[Book] = []
+            self.books_dict: Dict[str, Book] = {}
+            self.author = q_title_filter.value(Title.author)
+            self.title = q_title_filter.value(Title.title)
+            # print('.' * 50, self.title, 'by:', self.author)
 
-        # self.filtered_flag = True
-        # fixme - the above yields 87 results and only 15 results without the 2nd 'flag=true' line
-        #   even though in both cases the filters are empty in the form.
-        #   this is probably the result of mishandling null in the 'to_century" field
-        #   (currently 'Any' value is -100, so if NULL in the field the query to_century<-100 is always FALSE)
-
-    def add_bib(self, bibinfo: int):
-        print(' ---------------------- add_bib --------------------')
+    def add_bib(self, bibinfo: str): # todo bibinfo: int
+        # print(' ---------- add_bib --------- ')
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
         self.bibinfo.append(bibinfo)
         # self.books[bibinfo] = Book(bibinfo)
         self.books.append(Book(bibinfo))
 
-    def add_page(self, page: str, bibinfo: int):
+    def add_page(self, page: str, bibinfo: str): # todo bibinfo: int
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
+        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
         if not page.strip(' '):  # todo should be handled in DB
             page = ' Page-Unknown '
         else:
             page = int(float(page))  # todo page should be int in the DB, currentyly str
         # self.books[bibinfo].pages.add(page)
 
-        if page not in self.books[-1].pages:
-            print(' ------------ add_page -------------')
+        # if page not in self.books[-1].pages:
+            # print(' --------- add_page --------')
         self.books[-1].pages.add(page)
 
     def add_refs(self, ref: str, bibinfo: int):
@@ -301,7 +293,6 @@ class ResultTitle:
             s += f'\t\t{i}\n'
         return s
 
-
 # from sqlalchemy_utils import create_view
 
 # view: Table = create_view('my_view', TextText, Base.metadata)
@@ -310,4 +301,3 @@ class ResultTitle:
 # provides an ORM interface to the view
 # class MyView(Base):
 #     __table__ = 'my_view'
-

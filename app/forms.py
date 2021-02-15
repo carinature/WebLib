@@ -144,6 +144,17 @@ class FilterForm(FlaskForm):
              '\nwhich can result in very highly loading times.)',
         field_id=fetch_full)
 
+    def return_as_dict(self):
+        return {
+            'from_century': self.from_century.data,
+            'to_century': self.to_century.data,
+            'language': self.language.data,
+            'ancient_author': self.ancient_author.data,
+            'reference': self.reference.data,
+            'ancient_title': self.ancient_title.data,
+            'fetch_full': self.fetch_full.data
+        }
+
     # clean_button = ('Clear all fields')
 
     def __repr__(self):
