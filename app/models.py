@@ -55,8 +55,11 @@ Base: SQLAlchemy.__base__ = db.Model
 SHORT_STRING_LEN = 20
 LONG_STRING_LEN = 100
 
+# the fields marked as 'nullable(=True)' are (mostly) those who don't have a value in the orig (moshes) csv
 
-# corresponds to the bookrefernces.csv
+# corresponds to the book_references table
+# holding information for the referencing books
+# prime key 'bibinfo' is (will be) a foreign key in TextText
 class BookRef(Base):
     __tablename__ = 'book_references'
 
@@ -70,11 +73,12 @@ class BookRef(Base):
                         'titleref': str,
                         'gcode': str}
 
-    # the fields marked as 'nullable(=True)' are (mostly) those who don't have a value in the orig (moshes) csv
+    # prime key 'bibinfo' is (will be) a foreign key in TextText
     biblio = Column(Integer, primary_key=True, nullable=False)
-    title = Column(String(LONG_STRING_LEN), key=True, nullable=False)
+    title = Column(String(LONG_STRING_LEN), nullable=False)
     file = Column(String(SHORT_STRING_LEN), nullable=False)
     gcode = Column(String(SHORT_STRING_LEN), nullable=True)
+
     # CheckConstraint("gcode in ('x','#VALUE!')"), #this only throws an exception and stops table build
     # ,unique=True)
 
@@ -87,8 +91,11 @@ class BookRef(Base):
     #         _gcode = gcode
     #     return _gcode
 
+    # def mydefault(context):
+    #     return context.get_current_parameters()['counter'] + 12
+
     # _gcode = Column(String(SHORT_STRING_LEN),
-    #                 default=check_gcode(gcode),
+    #                 default=check_gcode,
     #                 nullable=True)
 
     # @synonym_for("gcode")
@@ -117,7 +124,9 @@ class BookRef(Base):
             f' biblio: {self.biblio}>'
 
 
-# corresponds to the titlesa.csv
+# corresponds to the titles table
+# holding information for the referenced titles - the results of the search
+# prime key 'number' is (will be) a foreign key in TextText
 class Title(Base):  # todo handle cases of null in 'from/to century',
     __tablename__ = 'titles'  # fixme
 
@@ -128,27 +137,28 @@ class Title(Base):  # todo handle cases of null in 'from/to century',
 
     dtype_dic_csv2py = {'index1': str,
                         'author1': str,
-                        'centend': str,
-                        'centstart': str,
+                        'centend': str,  # fixme float,
+                        'centstart': str,  # fixme float,
                         'joined': str,
                         'language': str,
-                        'number': str,
+                        'number': str,  # fixme int, #todo can you try a conversion function? kt_nan_to_int() ...?
                         'title1': str}
-    # dtype_dic_py2sql = {int: Integer, str: Text}
+    dtype_dic_py2sql = {int: Integer, float: Float, str: Text}
 
-    dbg_index = Column(Integer, autoincrement=True, primary_key=True)
-    # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
-    index_org = Column(String(10), primary_key=True, nullable=False, default='non')  # , nullable=False)
-    title = Column(String(500))
-    author = Column(String(100))
-    centend = Column(String(100))
-    centstart = Column(String(100))
-    joined = Column(String(200))  # fixme this seems to be always null
-    language = Column(String(100))
-    number = Column(String(100))
+    # dbg_index = Column(Integer, autoincrement=True, primary_key=True)
+    index_org = Column(String(SHORT_STRING_LEN), primary_key=True, nullable=False)  # todo remove # , nullable=False)
+    title = Column(String(500))  # fixme - shouldn't be that long - update in files
+    author = Column(String(LONG_STRING_LEN))
+    centend = Column(String(SHORT_STRING_LEN))  # Float, nullable=True, default=0)
+    centstart = Column(String(SHORT_STRING_LEN))  # Float, nullable=True, default=0)
+    joined = Column(String(250))  # fixme - shouldn't be that long - update in files
+    language = Column(String(SHORT_STRING_LEN))
+    number = Column(String(SHORT_STRING_LEN), primary_key=True)
 
-    CheckConstraint('centend <= centstart',
-                    name="ck_centend_before_centstart")
+    # fixme - number should be Integer - problem when file conains chars or empty field as number.
+    #  also it should be the ONLY primary
+
+    # CheckConstraint('centend <= centstart', name="ck_centend_before_centstart")
 
     # @staticmethod
     # def name():
@@ -176,14 +186,13 @@ class TextSubject(Base):
                         'C': str}
     dtype_dic_py2sql = {int: Integer, str: Text}
 
-    dbg_index = Column(Integer, primary_key=True, autoincrement=True)
-    subject = Column(String(200), nullable=False)
-    C = Column(Text)  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
-    Csum = Column(
-        Integer)  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
+    subject = Column(String(200), primary_key=True, nullable=False)
+    dbg_index = Column(Integer, primary_key=True, autoincrement=True)  # todo remove
+    C = Column(Text)  # longest C value is ~68,000 chars in line 24794/5 &~31268 ..
+    Csum = Column(Integer)
 
     def __repr__(self):
-        return f'<TextSubject subject: {self.subject}, C: {self.C} >'
+        return f'<TextSubject subject: {self.subject}, #ref: {self.Csum} , C: {self.C}>'
 
 
 # corresponds to the textsa1.csv textsa2.csv textsa19.csv textsa1.csv

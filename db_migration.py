@@ -38,6 +38,9 @@ def csv_to_mysql():  # todo consider NOT using try
     # models = Base.__subclasses__()
     # models = [BookRef, Title, TextSubject, TextText]
     models = [BookRef]
+    # models = [Title]
+    # models = [TextText]
+    # models = [TextSubject]
     for model in models:
         tm = time()
 
@@ -48,10 +51,17 @@ def csv_to_mysql():  # todo consider NOT using try
                                              dtype=model.dtype_dic_csv2py,
                                              header=0,
                                              names=model.col_names,
-                                             chunksize=app.config['CHUNK_SIZE_DB']
+                                             chunksize=app.config['CHUNK_SIZE_DB'],
+                                             # converters={'number': int},
+                                             # na_values=''
                                              ):
                     # next line is to handle cases of empty cell (e.g when val,val,,val in csv file
                     df_nonone = dataframe.replace(np.nan, '', regex=True)
+                    # df_nonone = dataframe.where((pd.notnull(dataframe)), None)
+                    # # df_nonone = dataframe
+                    # df_nonone['number'] = pd.to_numeric(df_nonone['number'], errors='coerce')
+                    # df_nonone = df_nonone.dropna(subset=['number'])
+                    # df_nonone['number'] = df_nonone['number'].astype(int)
                     try:
                         session.bulk_insert_mappings(model, df_nonone.to_dict(orient='records'))
                         # todo the next two is another good WORKING option - find out which of the 3 is faster
