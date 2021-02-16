@@ -193,8 +193,8 @@ def flam_flam():
     from . import models as m
     resTitle = m.Title.query.filter_by(number='6276').all()
     resRef = m.BookRef.query.filter(or_(
-        m.BookRef.book_biblio_info == '15',
-        m.BookRef.book_biblio_info == '31')).all()
+        m.BookRef.biblio == '15',
+        m.BookRef.biblio == '31')).all()
     resTextText = m.TextText.query.filter(or_(
         m.TextText.subject == 'Proverbs, ideal woman',
         m.TextText.subject == 'Martha apocryphal as anointing woman')).all()

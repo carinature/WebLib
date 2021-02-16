@@ -80,12 +80,12 @@ def search_test(search_word='', page=''):
     # sub_q_title_and_bibinfo_with_count = txts_query.with_entities(
     #     # filtered_sub_query.c.number,
     #     filtered_sub_query.c.number,
-    #     filtered_sub_query.c.book_biblio_info,
+    #     filtered_sub_query.c.biblio,
     #     count().label('count_c')
     # )
     # groups_by_title_bibinfo = sub_q_title_and_bibinfo_with_count.group_by(
     #     filtered_sub_query.c.number,
-    #     filtered_sub_query.c.book_biblio_info)
+    #     filtered_sub_query.c.biblio)
     # grouped_sub_query: Query = groups_by_title_bibinfo.subquery()
     # # filter by subject and count ref-books
     # sub_q_title_bibcount = txts_query.with_entities(
@@ -112,7 +112,7 @@ def search_test(search_word='', page=''):
     # print(df.tail())
 
     groups_by_title_num: pd.DataFrame.groupby.DataFrameGroupBy = df.groupby(
-        by=['number'],  # ,'book_biblio_info'],  # Notice that a tuple is interpreted as a (single) key.
+        by=['number'],  # ,'biblio'],  # Notice that a tuple is interpreted as a (single) key.
         # level=0,
         # as_index=False,  # is effectively “SQL-style” grouped output.
         # sort=True,
@@ -124,11 +124,11 @@ def search_test(search_word='', page=''):
     for title_key, titles_group in groups_by_title_num:
         # print(type(titles_group))
         groups_by_title_and_bib: pd.DataFrame.groupby.DataFrameGroupBy = titles_group.groupby(
-            by=['book_biblio_info'])
+            by=['biblio'])
         res_title: m.ResultTitle = res_dict.setdefault(title_key, m.ResultTitle(title_key, filter_form))
         if not res_title.filtered_flag:
             continue
-        bib_count = len(titles_group['book_biblio_info'].unique())
+        bib_count = len(titles_group['biblio'].unique())
         print(bib_count)
         if 2> bib_count:
             continue
@@ -205,7 +205,7 @@ def search_results(search_word='', page=''):
 
     txts_table = m.TextText
     sbj_col, c_col, num_col = txts_table.subject, txts_table.C, txts_table.number
-    bib_info_col, ref_col, page_col = txts_table.book_biblio_info, txts_table.ref, txts_table.page
+    bib_info_col, ref_col, page_col = txts_table.biblio, txts_table.ref, txts_table.page
     # ............  return all matching results (subjects) by C column [list] ............
     texts_query: Query = txts_table.query
     print(texts_query)
@@ -234,7 +234,7 @@ def search_results(search_word='', page=''):
     # ............  group the results by (referenced) title ('number' column) [dict?] ............
     groups_by_number = groupby(
         txts_q_with_ent_filter_order,
-        key=lambda txts_table: (txts_table.number))  # , txts_table.book_biblio_info))
+        key=lambda txts_table: (txts_table.number))  # , txts_table.biblio))
 
     # print('$'*20, )
     # for ke, ge in groups_by_number:
@@ -262,7 +262,7 @@ def search_results(search_word='', page=''):
         texts_tuples_group_ordered = sorted(texts_tuples_group, key=lambda x: x[3])
         group_by_number_n_bibinfo = groupby(
             texts_tuples_group_ordered,
-            key=lambda txts_table: txts_table[3])  # , txts_table.book_biblio_info))
+            key=lambda txts_table: txts_table[3])  # , txts_table.biblio))
 
         # add every ref-ing title to the current result (title) object
         for bibinfo, texts_tuples_sub_group in group_by_number_n_bibinfo:
@@ -272,7 +272,7 @@ def search_results(search_word='', page=''):
                 txt_entry = m.TextText(number=gg[0],
                                        ref=gg[1],
                                        subject=gg[2],
-                                       book_biblio_info=gg[3],
+                                       biblio=gg[3],
                                        page=gg[4],
                                        C=gg[5])
                 numbers_dict[title_number][bibinfo].append(txt_entry)

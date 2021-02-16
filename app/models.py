@@ -3,22 +3,20 @@ import os
 from collections import defaultdict
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, ForeignKey, Table, MetaData
-from sqlalchemy.orm import column_property, Query
+from sqlalchemy import Column, ForeignKey, Table, MetaData, CheckConstraint
+from sqlalchemy.ext.declarative import synonym_for
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import column_property, Query, validates, synonym
 from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float, Boolean, PickleType
 
 from config import RAW_DATA_DIR
 
 from . import db
-from . import forms as f
 
 Base: SQLAlchemy.__base__ = db.Model
-
-
 # Base:SQLAlchemy.Query = db.Model
 # Base:sqlalchemy.orm = db.Model
 # Base:SQLAlchemy = db.Model
-
 
 # Base = declarative_base()
 
@@ -54,6 +52,10 @@ Base: SQLAlchemy.__base__ = db.Model
 #         return '<Person model {}>'.format(self.id)
 
 
+SHORT_STRING_LEN = 20
+LONG_STRING_LEN = 100
+
+
 # corresponds to the bookrefernces.csv
 class BookRef(Base):
     __tablename__ = 'book_references'
@@ -61,29 +63,58 @@ class BookRef(Base):
     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
                for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('bookreferences')]
 
-    col_names = ['book_biblio_info', 'file', 'titleref', 'gcode']
+    col_names = ['biblio', 'file', 'title', 'gcode']
     dtype_dic_py2sql = {int: Integer, str: Text}
-    dtype_dic_csv2py = {'book bibliographic info': str,  # :int ???
+    dtype_dic_csv2py = {'book bibliographic info': int,  # :int ???
                         'file': str,
                         'titleref': str,
                         'gcode': str}
 
-    # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
-    dbg_index = Column(Integer, autoincrement=True, primary_key=True, )
-    book_biblio_info = Column(String(10), primary_key=True, nullable=False, default='non')
-    file = Column(String(100), default='non', nullable=True)
-    titleref = Column(String(100), nullable=True)
-    gcode = Column(Text, nullable=True)  # ,unique=True)
+    # the fields marked as 'nullable(=True)' are (mostly) those who don't have a value in the orig (moshes) csv
+    biblio = Column(Integer, primary_key=True, nullable=False)
+    title = Column(String(LONG_STRING_LEN), key=True, nullable=False)
+    file = Column(String(SHORT_STRING_LEN), nullable=False)
+    gcode = Column(String(SHORT_STRING_LEN), nullable=True)
+    # CheckConstraint("gcode in ('x','#VALUE!')"), #this only throws an exception and stops table build
+    # ,unique=True)
 
-    # fixme find a better default val or handle empty field. try the option below
-    # file = Column(String(100), default=None, nullable=True) todo try this one
+    # def check_gcode(gcode: String):
+    #     # return context.get_current_parameters()['gcode'] + 12
+    #     if ('x' == gcode) or ('#VALUE!' == gcode):
+    #         _gcode = None
+    #     else:
+    #         print(gcode)
+    #         _gcode = gcode
+    #     return _gcode
+
+    # _gcode = Column(String(SHORT_STRING_LEN),
+    #                 default=check_gcode(gcode),
+    #                 nullable=True)
+
+    # @synonym_for("gcode")
+    # @property
+    # # @hybrid_property
+    # def _gcode(self):
+    #     if 'x' == self.gcode:
+    #         return None
+    #     else:
+    #         return self.gcode
+
+    # ggcode = synonym("gcode", descriptor=_gcode)
+    # @validates('gcode')
+    # def bad_value_in_csv(self, key, value):
+    #     if 'x' == value:
+    #         return None
+    #     else:
+    #         return value
+
     # todo what does it mean to have a column that is both nullable and has a default value
 
     def __repr__(self):
         return \
-            f'< (BookRef) - file: {self.file}, ' \
-            f' title ref: {self.titleref}, ' \
-            f' book_biblio_info: {self.book_biblio_info}>'
+            f'< (BookRef) - {self.title}, ' \
+            f' file: {self.file}, ' \
+            f' biblio: {self.biblio}>'
 
 
 # corresponds to the titlesa.csv
@@ -116,8 +147,12 @@ class Title(Base):  # todo handle cases of null in 'from/to century',
     language = Column(String(100))
     number = Column(String(100))
 
-    def name(self):
-        return 'Title bla bla'
+    CheckConstraint('centend <= centstart',
+                    name="ck_centend_before_centstart")
+
+    # @staticmethod
+    # def name():
+    #     return 'Title bla bla'
 
     def __repr__(self):
         # todo rename column names
@@ -161,7 +196,7 @@ class TextText(Base):
     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'  # fixme should work
                for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
 
-    col_names = ['subject', 'ref', 'page', 'book_biblio_info', 'number', 'C']
+    col_names = ['subject', 'ref', 'page', 'biblio', 'number', 'C']
 
     dtype_dic_csv2py = {'subject': str,
                         'ref': str,
@@ -175,7 +210,7 @@ class TextText(Base):
     subject = Column(String(120))
     ref = Column(String(100))
     page = Column(String(10))
-    book_biblio_info = Column(String(10))
+    biblio = Column(String(10))
     number = Column(String(10))
     C = Column(String(10))
 
@@ -185,7 +220,7 @@ class TextText(Base):
             f'#{self.number}, ' \
             f'subject: {self.subject}, ' \
             f'ref: {self.ref}, ' \
-            f'bib_info: {self.book_biblio_info} ' \
+            f'bib_info: {self.biblio} ' \
             f'pg.{self.page}, ' \
             f'C: {self.C}, ' \
             f'>'
@@ -200,8 +235,8 @@ class Book:
         self.pages: Set[int] = set()
         self.refs: List[int] = []
         q_book_ref: Query = BookRef.query
-        q_book_ref_filter: Query = q_book_ref.filter(BookRef.book_biblio_info == self.bibinfo)
-        self.title_full = q_book_ref_filter.value(BookRef.titleref)
+        q_book_ref_filter: Query = q_book_ref.filter(BookRef.biblio == self.bibinfo)
+        self.title_full = q_book_ref_filter.value(BookRef.title)
 
     def __repr__(self):
         return \
@@ -249,14 +284,14 @@ class ResultTitle:
             self.title = q_title_filter.value(Title.title)
             # print('.' * 50, self.title, 'by:', self.author)
 
-    def add_bib(self, bibinfo: str): # todo bibinfo: int
+    def add_bib(self, bibinfo: str):  # todo bibinfo: int
         # print(' ---------- add_bib --------- ')
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
         self.bibinfo.append(bibinfo)
         # self.books[bibinfo] = Book(bibinfo)
         self.books.append(Book(bibinfo))
 
-    def add_page(self, page: str, bibinfo: str): # todo bibinfo: int
+    def add_page(self, page: str, bibinfo: str):  # todo bibinfo: int
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
         bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
         if not page.strip(' '):  # todo should be handled in DB
@@ -266,7 +301,7 @@ class ResultTitle:
         # self.books[bibinfo].pages.add(page)
 
         # if page not in self.books[-1].pages:
-            # print(' --------- add_page --------')
+        # print(' --------- add_page --------')
         self.books[-1].pages.add(page)
 
     def add_refs(self, ref: str, bibinfo: int):
