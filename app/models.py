@@ -139,8 +139,8 @@ class Title(Base):  # todo handle cases of null in 'from/to century',
 
     dtype_dic_csv2py = {'index1': str,
                         'author1': str,
-                        'centend': str,  # fixme float,
-                        'centstart': str,  # fixme float,
+                        'centend': int,  # fixme float,
+                        'centstart': int,  # fixme float,
                         'joined': str,
                         'language': str,
                         'number': str,  # fixme int, #todo can you try a conversion function? kt_nan_to_int() ...?
@@ -150,10 +150,12 @@ class Title(Base):  # todo handle cases of null in 'from/to century',
     # index_org = Column(String(SHORT_STRING_LEN), primary_key=True, nullable=False)  # todo remove # , nullable=False)
     title = Column(String(500))  # fixme - shouldn't be that long - update in files
     author = Column(String(LONG_STRING_LEN))
-    centend = Column(String(SHORT_STRING_LEN))  # Float, nullable=True, default=0)
-    centstart = Column(String(SHORT_STRING_LEN))  # Float, nullable=True, default=0)
+    centend = Column(Integer)  # Float, nullable=True, default=0)
+    centstart = Column(Integer)  # Float, nullable=True, default=0)
+    # centend = Column(String(SHORT_STRING_LEN))  # Float, nullable=True, default=0)
+    # centstart = Column(String(SHORT_STRING_LEN))  # Float, nullable=True, default=0)
     # joined = Column(String(250))  # fixme - shouldn't be that long - update in files. doe's this even HAVE a value?
-    language = Column(String(SHORT_STRING_LEN))
+    lang = Column(String(SHORT_STRING_LEN))
     number = Column(String(SHORT_STRING_LEN), primary_key=True, unique=True)
 
     # fixme - number should be Integer - problem when file conains chars or empty field as number.
@@ -192,7 +194,8 @@ class TextSubject(Base):
                      nullable=False,
                      # whitespace=
                      )
-    C = Column(Text, nullable=False)  # longest C value is ~68,000 chars in line 24794/5 &~31268 ..
+    C = Column(Text,
+               nullable=False)  # longest C value is ~68,000 chars in line 24794/5 &~31268 ..
     Csum = Column(Integer)  # used for ref counts (e.g. in listings of subjects)
 
     def __repr__(self):
@@ -280,7 +283,7 @@ class ResultTitle:
         if to_century:
             q_title_filter: Query = q_title_filter.filter(Title.centend <= to_century)
         if language:
-            q_title_filter: Query = q_title_filter.filter(Title.language == language)
+            q_title_filter: Query = q_title_filter.filter(Title.lang == language)
         if ancient_author:
             q_title_filter: Query = q_title_filter.filter(Title.author == ancient_author)
         if ancient_title:

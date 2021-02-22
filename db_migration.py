@@ -32,9 +32,9 @@ def csv_to_mysql():
     # models = Base.__subclasses__()
     # models = [BookRef, Title, TextSubject, TextText]
     # models = [BookRef]
-    # models = [Title]
+    # models = [TextSubject]
+    models = [Title]
     # models = [TextText]
-    models = [TextSubject]
     for model in models:
         t_per_model = time()
         for src_file in model.src_scv:
@@ -46,25 +46,26 @@ def csv_to_mysql():
                                              names=model.col_names,
                                              chunksize=app.config['CHUNK_SIZE_DB'],
                                              # converters={'number': int},
-                                             na_values=['x', '#VALUE!', '']
+                                             na_values=['x', '#VALUE!', '', 'Unknown']
                                              # todo consider striping the brackets (qoutation marks regular & special)
                                              ):
                     # next line is to handle cases of empty cell (e.g when val,val,,val in csv file
-                    df_nonone = dataframe.replace(np.nan, '', regex=True)
+                    df_nonone : pd.DataFrame = dataframe.replace(np.nan, '', regex=True)
+                    df_nonone = df_nonone.drop_duplicates('number')
                     # df_nonone = dataframe.where((pd.notnull(dataframe)), None)
                     # # df_nonone = dataframe
                     # df_nonone['number'] = pd.to_numeric(df_nonone['number'], errors='coerce')
                     # df_nonone = df_nonone.dropna(subset=['number'])
                     # df_nonone['number'] = df_nonone['number'].astype(int)
                     try:
-                        session.bulk_insert_mappings(model, df_nonone.to_dict(orient='records'))
-                        # todo the next two is another good WORKING option - find out which of the 3 is faster
-                        # db.engine.execute(model.__table__.insert(), df_nonone.to_dict('records'))
-                        # dataframe.to_sql(name=model.__tablename__, con=engine, if_exists='replace', index=False,
-                        #                  index_label='book_bibliographic_info', dtype=dtype_dic_py2sql)
-                        session.commit()
-                        # in TextSubject table add the Csum (#references) column
                         if TextSubject == model:
+                            session.bulk_insert_mappings(model, df_nonone.to_dict(orient='records'))
+                            # todo the next two is another good WORKING option - find out which of the 3 is faster
+                            # db.engine.execute(model.__table__.insert(), df_nonone.to_dict('records'))
+                            # dataframe.to_sql(name=model.__tablename__, con=engine, if_exists='replace', index=False,
+                            #                  index_label='book_bibliographic_info', dtype=dtype_dic_py2sql)
+                            session.commit()
+                            # in TextSubject table add the Csum (#references) column
                             sunject_list = session.query(TextSubject).all()
                             # i=0
                             for row in sunject_list:
@@ -78,7 +79,16 @@ def csv_to_mysql():
                                         csum += int(cc[1]) - int(cc[0])
                                     csum += 1
                                 row.Csum = csum
+                        else:
+                            session.bulk_insert_mappings(model, df_nonone.to_dict(orient='records'))
+                            # todo the next two is another good WORKING option - find out which of the 3 is faster
+                            # db.engine.execute(model.__table__.insert(), df_nonone.to_dict('records'))
+                            # dataframe.to_sql(name=model.__tablename__, con=engine, if_exists='replace', index=False,
+                            #                  index_label='book_bibliographic_info', dtype=dtype_dic_py2sql)
                         session.commit()
+                        # in TextSubject table add the Csum (#references) column
+
+
                     except Exception as e:
                         print('~' * 5 + ' In model ' + str(model) + '~' * 5)
                         print('Error: {}'.format(str(e)))
