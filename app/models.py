@@ -55,6 +55,7 @@ Base: SQLAlchemy.__base__ = db.Model
 SHORT_STRING_LEN = 20
 LONG_STRING_LEN = 100
 
+
 # the fields marked as 'nullable(=True)' are (mostly) those who don't have a value in the orig (moshes) csv
 
 # corresponds to the book_references table
@@ -64,7 +65,8 @@ class BookRef(Base):
     __tablename__ = 'book_references'
 
     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
-               for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('bookreferences')]
+               for textsfile in os.listdir(RAW_DATA_DIR)
+               if textsfile.startswith('bookreferences')]
 
     col_names = ['biblio', 'file', 'title', 'gcode']
     dtype_dic_py2sql = {int: Integer, str: Text}
@@ -145,15 +147,14 @@ class Title(Base):  # todo handle cases of null in 'from/to century',
                         'title1': str}
     dtype_dic_py2sql = {int: Integer, float: Float, str: Text}
 
-    # dbg_index = Column(Integer, autoincrement=True, primary_key=True)
-    index_org = Column(String(SHORT_STRING_LEN), primary_key=True, nullable=False)  # todo remove # , nullable=False)
+    # index_org = Column(String(SHORT_STRING_LEN), primary_key=True, nullable=False)  # todo remove # , nullable=False)
     title = Column(String(500))  # fixme - shouldn't be that long - update in files
     author = Column(String(LONG_STRING_LEN))
     centend = Column(String(SHORT_STRING_LEN))  # Float, nullable=True, default=0)
     centstart = Column(String(SHORT_STRING_LEN))  # Float, nullable=True, default=0)
-    joined = Column(String(250))  # fixme - shouldn't be that long - update in files
+    # joined = Column(String(250))  # fixme - shouldn't be that long - update in files. doe's this even HAVE a value?
     language = Column(String(SHORT_STRING_LEN))
-    number = Column(String(SHORT_STRING_LEN), primary_key=True)
+    number = Column(String(SHORT_STRING_LEN), primary_key=True, unique=True)
 
     # fixme - number should be Integer - problem when file conains chars or empty field as number.
     #  also it should be the ONLY primary
@@ -166,7 +167,7 @@ class Title(Base):  # todo handle cases of null in 'from/to century',
 
     def __repr__(self):
         # todo rename column names
-        return f'<Title model title: {self.title},  author: {self.author}, index: {self.index_org}>'
+        return f'<Title model title: {self.title},  author: {self.author}, index: {{self.index_org}}>'
 
 
 # corresponds to the text_subjects2.csv
@@ -186,10 +187,13 @@ class TextSubject(Base):
                         'C': str}
     dtype_dic_py2sql = {int: Integer, str: Text}
 
-    subject = Column(String(200), primary_key=True, nullable=False)
-    dbg_index = Column(Integer, primary_key=True, autoincrement=True)  # todo remove
-    C = Column(Text)  # longest C value is ~68,000 chars in line 24794/5 &~31268 ..
-    Csum = Column(Integer)
+    subject = Column(String(LONG_STRING_LEN*2, collation='utf8_bin'),
+                     primary_key=True,
+                     nullable=False,
+                     # whitespace=
+                     )
+    C = Column(Text, nullable=False)  # longest C value is ~68,000 chars in line 24794/5 &~31268 ..
+    Csum = Column(Integer)  # used for ref counts (e.g. in listings of subjects)
 
     def __repr__(self):
         return f'<TextSubject subject: {self.subject}, #ref: {self.Csum} , C: {self.C}>'
@@ -214,14 +218,14 @@ class TextText(Base):
                         'number': str,
                         'C': str}  # {col:str for col in col_names}
     # dtype_dic_py2sql = {int: Integer, str: Text}
-    index_dbg = Column(Integer, autoincrement=True, primary_key=True, nullable=False)
+    # index_dbg = Column(Integer, autoincrement=True, primary_key=True, nullable=False)
 
-    subject = Column(String(120))
-    ref = Column(String(100))
-    page = Column(String(10))
-    biblio = Column(String(10))
-    number = Column(String(10))
-    C = Column(String(10))
+    subject = Column(String(120), nullable=False)
+    ref = Column(String(100))  # could be null(empty) - KT 20210221 - todo figure out what this means (for 'page' also)
+    page = Column(String(10))  # could be null(empty) - KT 20210221. also currently is a decimal (X.0) but should be int
+    biblio = Column(String(10), nullable=False)
+    number = Column(String(10), nullable=False)
+    C = Column(String(10), primary_key=True, nullable=False)
 
     def __repr__(self):
         return \
