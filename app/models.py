@@ -1,13 +1,14 @@
-import collections
 import os
+import collections
 from collections import defaultdict
+from typing import List, Dict, Set
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, ForeignKey, Table, MetaData, CheckConstraint
-from sqlalchemy.ext.declarative import synonym_for
-from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy import Column, ForeignKey, Table, MetaData, CheckConstraint, SmallInteger
 from sqlalchemy.orm import column_property, Query, validates, synonym
 from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float, Boolean, PickleType
+from sqlalchemy.ext.declarative import synonym_for
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from config import RAW_DATA_DIR
 
@@ -64,22 +65,20 @@ LONG_STRING_LEN = 100
 class BookRef(Base):
     __tablename__ = 'book_references'
 
+    biblio = Column(Integer, primary_key=True, nullable=False)  # (will be) a foreign key in TextText
+    title = Column(String(LONG_STRING_LEN), nullable=False)
+    file = Column(String(SHORT_STRING_LEN), nullable=False)
+    gcode = Column(String(SHORT_STRING_LEN), nullable=True)
+
     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
                for textsfile in os.listdir(RAW_DATA_DIR)
                if textsfile.startswith('bookreferences')]
-
     col_names = ['biblio', 'file', 'title', 'gcode']
     dtype_dic_py2sql = {int: Integer, str: Text}
     dtype_dic_csv2py = {'book bibliographic info': int,  # :int ???
                         'file': str,
                         'titleref': str,
                         'gcode': str}
-
-    # prime key 'bibinfo' is (will be) a foreign key in TextText
-    biblio = Column(Integer, primary_key=True, nullable=False)
-    title = Column(String(LONG_STRING_LEN), nullable=False)
-    file = Column(String(SHORT_STRING_LEN), nullable=False)
-    gcode = Column(String(SHORT_STRING_LEN), nullable=True)
 
     # CheckConstraint("gcode in ('x','#VALUE!')"), #this only throws an exception and stops table build
     # ,unique=True)
@@ -117,7 +116,7 @@ class BookRef(Base):
     #     else:
     #         return value
 
-    # todo what does it mean to have a column that is both nullable and has a default value
+    # todo what happens when a column is both nullable and has a default value
 
     def __repr__(self):
         return \
@@ -129,37 +128,33 @@ class BookRef(Base):
 # corresponds to the titles table
 # holding information for the referenced titles - the results of the search
 # prime key 'number' is (will be) a foreign key in TextText
-class Title(Base):  # todo handle cases of null in 'from/to century',
-    __tablename__ = 'titles'  # fixme
+class Title(Base):
+    __tablename__ = 'titles'
+
+    title = Column(String(500), nullable=True)  # fixme - shouldn't be that long - update in files
+    author = Column(String(LONG_STRING_LEN), nullable=True)
+    centstart = Column(SmallInteger, nullable=True)  # , default=+21)# , server_default='+21')
+    centend = Column(SmallInteger, nullable=True)  # , default=-21)# , server_default='+21')
+    lang = Column(String(SHORT_STRING_LEN), nullable=True)
+    number = Column(Integer, primary_key=True, unique=True)  # (will be) a foreign key in TextText
+    # `index_org` & `joined` columns are omitted since they don't appear to be used
 
     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
                for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('title')]
-
-    col_names = ['index_org', 'author', 'centend', 'centstart', 'joined', 'language', 'number', 'title']
-
-    dtype_dic_csv2py = {'index1': str,
-                        'author1': str,
-                        'centend': int,  # fixme float,
-                        'centstart': int,  # fixme float,
-                        'joined': str,
-                        'language': str,
-                        'number': str,  # fixme int, #todo can you try a conversion function? kt_nan_to_int() ...?
-                        'title1': str}
+    col_names = ['index_org', 'author', 'centend', 'centstart', 'joined', 'lang', 'number', 'title']
+    dtype_dic_csv2py = {
+        'index1': str,
+        'author1': str,
+        # 'centend': int,
+        # 'centstart': int,
+        'centend': str,
+        'centstart': str,
+        'joined': str,
+        'language': str,
+        'number': int,  # `int` is usable only for not-NaN cols: The lack of NaN rep in int cols is a pandas "gotcha".
+        'title1': str
+    }
     dtype_dic_py2sql = {int: Integer, float: Float, str: Text}
-
-    # index_org = Column(String(SHORT_STRING_LEN), primary_key=True, nullable=False)  # todo remove # , nullable=False)
-    title = Column(String(500))  # fixme - shouldn't be that long - update in files
-    author = Column(String(LONG_STRING_LEN))
-    centend = Column(Integer)  # Float, nullable=True, default=0)
-    centstart = Column(Integer)  # Float, nullable=True, default=0)
-    # centend = Column(String(SHORT_STRING_LEN))  # Float, nullable=True, default=0)
-    # centstart = Column(String(SHORT_STRING_LEN))  # Float, nullable=True, default=0)
-    # joined = Column(String(250))  # fixme - shouldn't be that long - update in files. doe's this even HAVE a value?
-    lang = Column(String(SHORT_STRING_LEN))
-    number = Column(String(SHORT_STRING_LEN), primary_key=True, unique=True)
-
-    # fixme - number should be Integer - problem when file conains chars or empty field as number.
-    #  also it should be the ONLY primary
 
     # CheckConstraint('centend <= centstart', name="ck_centend_before_centstart")
 
@@ -178,25 +173,20 @@ class TextSubject(Base):
     #  file structure not fully understood
     #  plus what happens when there are miultiple commas
     #   or a subject that contains a comma within brackets(', ")
-    __tablename__ = 'text_subjects'  # fixme
+    __tablename__ = 'text_subjects'
 
-    col_names = ['subject', 'C']
+    # fixme should subject be that long?
+    subject = Column(String(LONG_STRING_LEN * 2, collation='utf8_bin'), primary_key=True,
+                     nullable=False)  # , whitespace=
+    C = Column(Text, nullable=False)  # longest C value is ~68,000 chars in line 24794/5 &~31268 ..
+    Csum = Column(Integer)  # used for ref counts (e.g. in listings of subjects)
 
     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
                for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('texts_subjects')]
-
+    col_names = ['subject', 'C']
     dtype_dic_csv2py = {'subject': str,
                         'C': str}
     dtype_dic_py2sql = {int: Integer, str: Text}
-
-    subject = Column(String(LONG_STRING_LEN*2, collation='utf8_bin'),
-                     primary_key=True,
-                     nullable=False,
-                     # whitespace=
-                     )
-    C = Column(Text,
-               nullable=False)  # longest C value is ~68,000 chars in line 24794/5 &~31268 ..
-    Csum = Column(Integer)  # used for ref counts (e.g. in listings of subjects)
 
     def __repr__(self):
         return f'<TextSubject subject: {self.subject}, #ref: {self.Csum} , C: {self.C}>'
@@ -206,29 +196,33 @@ class TextSubject(Base):
 class TextText(Base):
     __tablename__ = "texts"
 
+    subject = Column(String(LONG_STRING_LEN), nullable=False)  # ForeignKey('text_subjects.subject'),
+    ref = Column(String(SHORT_STRING_LEN))  # could be null(empty) - KT 20210221 - todo figure out what this means (for 'page' also)
+    page = Column(Integer)  # could be null(empty) - KT 20210221. also currently is a decimal (X.0) but should be int
+    biblio = Column(Integer, ForeignKey('book_references.biblio'), nullable=False)
+    number = Column(Integer, ForeignKey('titles.number'), nullable=False)
+    C = Column(Integer, primary_key=True, nullable=False)
+
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa1.csv']
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa2.csv']
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa19.csv']
-    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'  # fixme should work
-               for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
+               for textsfile in os.listdir(RAW_DATA_DIR)
+               if textsfile.startswith('textsa')
 
+               ]
     col_names = ['subject', 'ref', 'page', 'biblio', 'number', 'C']
-
     dtype_dic_csv2py = {'subject': str,
                         'ref': str,
-                        'page': str,
-                        'book bibliographic info': str,  # :int ???
-                        'number': str,
-                        'C': str}  # {col:str for col in col_names}
-    # dtype_dic_py2sql = {int: Integer, str: Text}
+                        'page': int,
+                        'book bibliographic info': int,  # :int ???
+                        'number': int,
+                        'C': int}  # {col:str for col in col_names}
+    dtype_dic_py2sql = {int: Integer, str: String}
     # index_dbg = Column(Integer, autoincrement=True, primary_key=True, nullable=False)
 
-    subject = Column(String(120), nullable=False)
-    ref = Column(String(100))  # could be null(empty) - KT 20210221 - todo figure out what this means (for 'page' also)
-    page = Column(String(10))  # could be null(empty) - KT 20210221. also currently is a decimal (X.0) but should be int
-    biblio = Column(String(10), nullable=False)
-    number = Column(String(10), nullable=False)
-    C = Column(String(10), primary_key=True, nullable=False)
+
+    # chinese = relationship("Chinese", backref="eng")
 
     def __repr__(self):
         return \
@@ -240,9 +234,6 @@ class TextText(Base):
             f'pg.{self.page}, ' \
             f'C: {self.C}, ' \
             f'>'
-
-
-from typing import List, Dict, Set
 
 
 class Book:

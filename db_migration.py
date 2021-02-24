@@ -1,8 +1,11 @@
+import random
+
 from flask import current_app as app
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect, sql
 
 from app import create_app
 from app.models import *
+from app.utilities import c_sum
 
 import pandas as pd
 import numpy as np
@@ -13,81 +16,76 @@ from time import time
 
 def csv_to_mysql():
     print('csv_to_mysql()')
-    # Create engine
     engine = db.engine  # todo or?    # with app.app_context(): engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-    # Create All Tables
     Base.metadata.create_all(engine)  # todo or? db.create_all(engine)
-    # Create the session
-    Session = sessionmaker(bind=engine)
-    session = Session()  # todo or? session = scoped_session(Session())
+    session = sessionmaker(bind=engine)()  # todo or? session = scoped_session(Session())
 
-    t_total = time()
+    t_total = time()  # for logging
     with open('flask_python_log.txt', 'a') as f:
-        f.write('\n')
-        f.write('\n')
-        f.write("=" * 55 + str(time()))
-        f.write('\n')
+        f.writelines('\n=' * 55 + str(time()))
 
-    # try:
     # models = Base.__subclasses__()
-    # models = [BookRef, Title, TextSubject, TextText]
+    # models: List[Base.__subclasses__()] = [BookRef, Title, TextSubject] #, TextText]
     # models = [BookRef]
     # models = [TextSubject]
-    models = [Title]
-    # models = [TextText]
+    # models = [Title]
+    models = [TextText]
+    model: Base.__subclasses__()
     for model in models:
         t_per_model = time()
         for src_file in model.src_scv:
             t_per_src = time()
             with open(src_file) as csv_file:
+                dataframe: pd.DataFrame
+                # todo remove next 3 lines -----------------------------------------------
+                # n = sum(1 for line in csv_file) - 1  # number of records in file (excludes header)
+                # s = 10000  # desired sample size
+                # skip = sorted(
+                #     random.sample(range(1, n + 1), n - s))  # the 0-indexed header will not be included in the skip list
+                #  --------------------------------------------------------------------------------
                 for dataframe in pd.read_csv(csv_file,
                                              dtype=model.dtype_dic_csv2py,
                                              header=0,
                                              names=model.col_names,
                                              chunksize=app.config['CHUNK_SIZE_DB'],
-                                             # converters={'number': int},
-                                             na_values=['x', '#VALUE!', '', 'Unknown']
+                                             na_values=['x', '#VALUE!', '', 'Unknown'],
                                              # todo consider striping the brackets (qoutation marks regular & special)
+                                             # skiprows=skip #todo remove
                                              ):
-                    # next line is to handle cases of empty cell (e.g when val,val,,val in csv file
-                    df_nonone : pd.DataFrame = dataframe.replace(np.nan, '', regex=True)
-                    df_nonone = df_nonone.drop_duplicates('number')
-                    # df_nonone = dataframe.where((pd.notnull(dataframe)), None)
-                    # # df_nonone = dataframe
-                    # df_nonone['number'] = pd.to_numeric(df_nonone['number'], errors='coerce')
-                    # df_nonone = df_nonone.dropna(subset=['number'])
-                    # df_nonone['number'] = df_nonone['number'].astype(int)
                     try:
+                        prime_key = inspect(model).primary_key[0].name
+                        df_clean: pd.DataFrame = dataframe.drop_duplicates(prime_key)
+                        df_clean = df_clean.replace(np.nan, '')  # , regex=True)
                         if TextSubject == model:
-                            session.bulk_insert_mappings(model, df_nonone.to_dict(orient='records'))
-                            # todo the next two is another good WORKING option - find out which of the 3 is faster
-                            # db.engine.execute(model.__table__.insert(), df_nonone.to_dict('records'))
-                            # dataframe.to_sql(name=model.__tablename__, con=engine, if_exists='replace', index=False,
-                            #                  index_label='book_bibliographic_info', dtype=dtype_dic_py2sql)
-                            session.commit()
-                            # in TextSubject table add the Csum (#references) column
-                            sunject_list = session.query(TextSubject).all()
-                            # i=0
-                            for row in sunject_list:
-                                # i+=1
-                                csum = 0
-                                clist = str(row.C).split(',')
-                                for c in clist:
-                                    cc = c.split('-')
-                                    # print('-- ', i, ' -- ' , cc)
-                                    if 2 == len(cc):
-                                        csum += int(cc[1]) - int(cc[0])
-                                    csum += 1
-                                row.Csum = csum
+                            session.bulk_insert_mappings(model, df_clean.to_dict(orient='records'))  # session.commit()
+                            # NOTE: dont use (raises timeout exception (slower?)) subject_list = TextSubject.query.all()
+                            subject_list = session.query(TextSubject).all()
+                            for row in subject_list:
+                                row.Csum = c_sum(row)  # Add the `Csum` (#references) column
                         else:
-                            session.bulk_insert_mappings(model, df_nonone.to_dict(orient='records'))
+                            # handle numeric (int) columns (centend, centstart, number, biblio)
+                            numeric_cols = [col.name for col in model.__table__.c if
+                                            isinstance(col.type, sql.sqltypes.Integer)]
+                            for col in numeric_cols:
+                                df_clean[col] = pd.to_numeric(df_clean[col], errors='coerce', downcast='unsigned')
+                                df_clean[col] = df_clean[col].where(pd.notnull(df_clean[col]), None)
+                                # df_clean[col] = df_clean[col].astype('Int64') #https://stackoverflow.com/questions/60377531/pandas-valueerror-integer-column-has-na-values-in-column-2
+                                # df_clean = df_clean.replace(np.nan, sql.null())
+                                # df_clean = df_clean.replace(np.nan, -21 if 'centend'==col else 21, regex=True)
+                                # df_clean = df_clean.replace(None, 200)
+                                # df_clean = df_clean.df.fillna(200)
+                            # dataframe.to_sql(con=engine,
+                            #                  if_exists='replace',
+                            #                  name=model.__tablename__,
+                            #                  index=False,
+                            #                  # index_label='book_bibliographic_info',
+                            #                  dtype=model.dtype_dic_py2sql)
+                            session.bulk_insert_mappings(model, df_clean.to_dict(orient='records'))
                             # todo the next two is another good WORKING option - find out which of the 3 is faster
-                            # db.engine.execute(model.__table__.insert(), df_nonone.to_dict('records'))
+                            # db.engine.execute(model.__table__.insert(), df_clean.to_dict('records'))
                             # dataframe.to_sql(name=model.__tablename__, con=engine, if_exists='replace', index=False,
                             #                  index_label='book_bibliographic_info', dtype=dtype_dic_py2sql)
                         session.commit()
-                        # in TextSubject table add the Csum (#references) column
-
 
                     except Exception as e:
                         print('~' * 5 + ' In model ' + str(model) + '~' * 5)
@@ -100,14 +98,11 @@ def csv_to_mysql():
 
             print('.' * 3 + ' SRC File ' + src_file + ' time: ' + str(time() - t_per_src) + ' s.')
             with open('flask_python_log.txt', 'a') as f:
-                f.write('.' * 3 + ' SRC File ' + src_file + ' time: ' + str(time() - t_per_src) + ' s.')
-                f.write('\n')
+                f.writelines('.' * 3 + ' SRC File ' + src_file + ' time: ' + str(time() - t_per_src) + ' s.')
 
         print('-' * 6 + '  Model ' + str(model) + ' time: ' + str(time() - t_per_model) + ' s.')
         with open('flask_python_log.txt', 'a') as f:
-            f.write('-' * 6 + '  Model ' + str(model) + ' time: ' + str(time() - t_per_model) + ' s.')
-            f.write('\n')
-            f.write('\n')
+            f.writelines('-' * 6 + '  Model ' + str(model) + ' time: ' + str(time() - t_per_model) + ' s.\n')
 
     session.close()
 
@@ -118,35 +113,8 @@ def csv_to_mysql():
     #     session.close()
     print('=' * 12 + ' Total Time elapsed: ' + str(time() - t_total) + ' s.')
     with open('flask_python_log.txt', 'a') as f:
-        f.write('=' * 12 + ' Total Time elapsed: ' + str(time() - t_total) + ' s.')
-        f.write('\n')
-        f.write('=' * 55)
-        f.write('\n')
-        f.write('\n')
-
-
-def csv_clean_up(filename):
-    pass
-    print('-' * 10, ' csv_clean_up ', '-' * 10)
-    import csv
-
-    def row_factory(row):
-        return [x if x not in ('', 'x', '#VALUE!') else 'NaN' for x in row]
-
-    # with open(filename, 'r', newline='') as f:
-    with open(filename, 'r') as f, open('cleand.csv', 'wb') as csvfile:
-        reader = csv.reader(f, delimiter=',')
-        for row in reader:
-            print(row_factory(row))
-        # Using csv.writer() by default will not add these quotes to the entries.
-        # In order to add them, we will have to use another optional parameter called quoting.
-        # Let's take an example of how quoting can be used around the non-numeric values and ; as delimiters.
-        # writer = csv.writer(file, quoting=csv.QUOTE_NONNUMERIC, delimiter=';')
-        # filewriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        # filewriter.writerow(['Name', 'Profession'])
-        # filewriter.writerow(['Derek', 'Software Developer'])
-        # filewriter.writerow(['Steve', 'Software Developer'])
-        # filewriter.writerow(['Paul', 'Manager'])
+        f.writelines('=' * 12 + ' Total Time elapsed: ' + str(time() - t_total) + ' s.')
+        f.writelines('=' * 55)
 
 
 if __name__ == '__main__':
