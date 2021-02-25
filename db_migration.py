@@ -1,5 +1,3 @@
-import random
-
 from flask import current_app as app
 from sqlalchemy import create_engine, inspect, sql
 
@@ -40,6 +38,8 @@ def csv_to_mysql():
                 # todo remove next 3 lines -----------------------------------------------
                 # n = sum(1 for line in csv_file) - 1  # number of records in file (excludes header)
                 # s = 10000  # desired sample size
+                # # from random import random
+                # import random
                 # skip = sorted(
                 #     random.sample(range(1, n + 1), n - s))  # the 0-indexed header will not be included in the skip list
                 #  --------------------------------------------------------------------------------
@@ -50,9 +50,11 @@ def csv_to_mysql():
                                              chunksize=app.config['CHUNK_SIZE_DB'],
                                              na_values=['x', '#VALUE!', '', 'Unknown'],
                                              # todo consider striping the brackets (qoutation marks regular & special)
-                                             # skiprows=skip #todo remove
+                                             # skiprows=skip  # todo remove
                                              ):
                     try:
+                        dataframe = dataframe.sample(frac=0.1) #todo remove
+                        print(csv_file)
                         prime_key = inspect(model).primary_key[0].name
                         df_clean: pd.DataFrame = dataframe.drop_duplicates(prime_key)
                         df_clean = df_clean.replace(np.nan, '')  # , regex=True)

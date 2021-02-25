@@ -196,33 +196,31 @@ class TextSubject(Base):
 class TextText(Base):
     __tablename__ = "texts"
 
-    subject = Column(String(LONG_STRING_LEN), nullable=False)  # ForeignKey('text_subjects.subject'),
-    ref = Column(String(SHORT_STRING_LEN))  # could be null(empty) - KT 20210221 - todo figure out what this means (for 'page' also)
-    page = Column(Integer)  # could be null(empty) - KT 20210221. also currently is a decimal (X.0) but should be int
-    biblio = Column(Integer, ForeignKey('book_references.biblio'), nullable=False)
-    number = Column(Integer, ForeignKey('titles.number'), nullable=False)
     C = Column(Integer, primary_key=True, nullable=False)
+    subject = Column(String(LONG_STRING_LEN), nullable=False)  # ForeignKey('text_subjects.subject'),
+    number = Column(Integer, ForeignKey(f'{Title.__tablename__}.number'), nullable=False)
+    biblio = Column(Integer, ForeignKey(f'{BookRef.__tablename__}.biblio'), nullable=False)
+    page = Column(Integer)  # could be null(empty) - KT 20210221. also currently is a decimal (X.0) but should be int
+    ref = Column(String(
+        SHORT_STRING_LEN * 2))  # could be null(empty) - KT 20210221 - todo figure out what this means (for 'page' also)
 
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa1.csv']
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa2.csv']
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa19.csv']
-    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
-               for textsfile in os.listdir(RAW_DATA_DIR)
-               if textsfile.startswith('textsa')
-
-               ]
+    src_scv = [
+        # f'{RAW_DATA_DIR}/{textsfile}' for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')
+        '/home/fares/PycharmProjects/WebLib/app/raw_data/textsa1.csv'
+    ]
     col_names = ['subject', 'ref', 'page', 'biblio', 'number', 'C']
     dtype_dic_csv2py = {'subject': str,
                         'ref': str,
-                        'page': int,
-                        'book bibliographic info': int,  # :int ???
+                        'page': float,
+                        'book bibliographic info': float,
                         'number': int,
-                        'C': int}  # {col:str for col in col_names}
+                        'C': int}
     dtype_dic_py2sql = {int: Integer, str: String}
-    # index_dbg = Column(Integer, autoincrement=True, primary_key=True, nullable=False)
 
-
-    # chinese = relationship("Chinese", backref="eng")
+    # example = relationship("Chinese", backref="eng")
 
     def __repr__(self):
         return \
@@ -291,24 +289,12 @@ class ResultTitle:
             self.title = q_title_filter.value(Title.title)
             # print('.' * 50, self.title, 'by:', self.author)
 
-    def add_bib(self, bibinfo: str):  # todo bibinfo: int
-        # print(' ---------- add_bib --------- ')
-        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
+    def add_bib(self, bibinfo: int):
         self.bibinfo.append(bibinfo)
         # self.books[bibinfo] = Book(bibinfo)
         self.books.append(Book(bibinfo))
 
-    def add_page(self, page: str, bibinfo: str):  # todo bibinfo: int
-        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
-        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
-        if not page.strip(' '):  # todo should be handled in DB
-            page = ' Page-Unknown '
-        else:
-            page = int(float(page))  # todo page should be int in the DB, currentyly str
-        # self.books[bibinfo].pages.add(page)
-
-        # if page not in self.books[-1].pages:
-        # print(' --------- add_page --------')
+    def add_page(self, page: int, bibinfo: int):  # todo bibinfo: int and page: int
         self.books[-1].pages.add(page)
 
     def add_refs(self, ref: str, bibinfo: int):
