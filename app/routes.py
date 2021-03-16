@@ -146,8 +146,17 @@ def search_test(search_word='', page=''):
     #     print(sr)
     #     print(gr)
 
-    highly_valid.append(bib_more_than_1)
+    # highly_valid.append(bib_more_than_1)
     # valid.append(bib_only_1)
+
+    txts_q_filter_join_title:List[m.TextText] = txts_q_filter.all()
+    # txts_q_filter_join_title = txts_q_filter.join(m.Title).all()
+    resntit:m.TextText
+    for resntit in txts_q_filter_join_title:
+        print(resntit)
+        print(resntit.title.title)
+        print(resntit.title.author)
+        print()
 
     # 6276 for number and 15 & 31 for bub-info  || 8255 and 31.0 & 64.0
     return render_template('dbg/test_search.html',

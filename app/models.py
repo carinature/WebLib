@@ -5,7 +5,7 @@ from typing import List, Dict, Set
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, ForeignKey, Table, MetaData, CheckConstraint, SmallInteger
-from sqlalchemy.orm import column_property, Query, validates, synonym
+from sqlalchemy.orm import column_property, Query, validates, synonym, relationship
 from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float, Boolean, PickleType
 from sqlalchemy.ext.declarative import synonym_for
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -55,6 +55,32 @@ Base: SQLAlchemy.__base__ = db.Model
 
 SHORT_STRING_LEN = 20
 LONG_STRING_LEN = 100
+
+
+# class BookRefTest(Base):
+#     __tablename__ = 'test'
+#
+#     # index_dbg = Column(Integer, primary_key=True, nullable=False, autoincrement=True)  # (will be) a foreign key in TextText
+#     biblio = Column(Integer, primary_key=True, nullable=False)  # , default=-1)  # (will be) a foreign key in TextText
+#     title = Column(String(LONG_STRING_LEN), nullable=False)
+#     file = Column(String(SHORT_STRING_LEN), nullable=False)
+#     gcode = Column(String(SHORT_STRING_LEN), nullable=True)
+#
+#     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
+#                for textsfile in os.listdir(RAW_DATA_DIR)
+#                if textsfile.startswith('bookreferences')]
+#     col_names = ['biblio', 'file', 'title', 'gcode']
+#     dtype_dic_py2sql = {int: Integer, str: Text}
+#     dtype_dic_csv2py = {'book bibliographic info': int,  # :int ???
+#                         'file': str,
+#                         'titleref': str,
+#                         'gcode': str}
+#
+#     def __repr__(self):
+#         return \
+#             f'< (BookRef) - {self.title}, ' \
+#             f' file: {self.file}, ' \
+#             f' biblio: {self.biblio}>'
 
 
 # the fields marked as 'nullable(=True)' are (mostly) those who don't have a value in the orig (moshes) csv
@@ -131,12 +157,12 @@ class BookRef(Base):
 class Title(Base):
     __tablename__ = 'titles'
 
+    number = Column(Integer, primary_key=True, unique=True)  # (will be) a foreign key in TextText
     title = Column(String(500), nullable=True)  # fixme - shouldn't be that long - update in files
     author = Column(String(LONG_STRING_LEN), nullable=True)
     centstart = Column(SmallInteger, nullable=True)  # , default=+21)# , server_default='+21')
     centend = Column(SmallInteger, nullable=True)  # , default=-21)# , server_default='+21')
     lang = Column(String(SHORT_STRING_LEN), nullable=True)
-    number = Column(Integer, primary_key=True, unique=True)  # (will be) a foreign key in TextText
     # `index_org` & `joined` columns are omitted since they don't appear to be used
 
     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
@@ -196,13 +222,16 @@ class TextSubject(Base):
 class TextText(Base):
     __tablename__ = "texts"
 
-    C = Column(Integer, primary_key=True, nullable=False)
+    # index_dbg = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    C = Column(Integer, primary_key=True, nullable=False, autoincrement=False)
     subject = Column(String(LONG_STRING_LEN), nullable=False)  # ForeignKey('text_subjects.subject'),
     number = Column(Integer, ForeignKey(f'{Title.__tablename__}.number'), nullable=False)
     biblio = Column(Integer, ForeignKey(f'{BookRef.__tablename__}.biblio'), nullable=False)
-    page = Column(Integer)  # could be null(empty) - KT 20210221. also currently is a decimal (X.0) but should be int
-    ref = Column(String(
-        SHORT_STRING_LEN * 2))  # could be null(empty) - KT 20210221 - todo figure out what this means (for 'page' also)
+    page = Column(Integer, nullable=True)  # could be null(empty) - KT 20210221.
+    # could be null(empty) - KT 20210221 - todo figure out what this means (for 'page' also)
+    ref = Column(String(SHORT_STRING_LEN * 2), nullable=True)
+    title = relationship('Title')
+    book_ref = relationship('BookRef')
 
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa1.csv']
     # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa2.csv']
@@ -225,12 +254,12 @@ class TextText(Base):
     def __repr__(self):
         return \
             f'<(TextText) ' \
-            f'#{self.number}, ' \
-            f'subject: {self.subject}, ' \
-            f'ref: {self.ref}, ' \
-            f'bib_info: {self.biblio} ' \
-            f'pg.{self.page}, ' \
             f'C: {self.C}, ' \
+            f'subject: {self.subject}, ' \
+            f'#{self.number}, ' \
+            f'bib_info: {self.biblio} ' \
+            f'ref: {self.ref}, ' \
+            f'pg.{self.page}, ' \
             f'>'
 
 
