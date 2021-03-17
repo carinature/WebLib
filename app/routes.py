@@ -118,7 +118,7 @@ def search_test(search_word='', page=''):
         # sort=True,
     )
     # lists_by_title_num = groups_by_title_num.apply(list)
-
+    #
     title_key: str
     titles_group: pd.DataFrame
     for title_key, titles_group in groups_by_title_num:
@@ -129,7 +129,7 @@ def search_test(search_word='', page=''):
         if not res_title.filtered_flag:
             continue
         bib_count = len(titles_group['biblio'].unique())
-        print(bib_count)
+        # print(bib_count)
         if 2> bib_count:
             continue
         bib_info: str
@@ -151,11 +151,11 @@ def search_test(search_word='', page=''):
 
     txts_q_filter_join_title:List[m.TextText] = txts_q_filter.all()
     # txts_q_filter_join_title = txts_q_filter.join(m.Title).all()
-    resntit:m.TextText
-    for resntit in txts_q_filter_join_title:
-        print(resntit)
-        print(resntit.title.title)
-        print(resntit.title.author)
+    res_tit:m.TextText
+    for res_tit in txts_q_filter_join_title:
+        print(res_tit)
+        print(res_tit.title.title)
+        print(res_tit.title.author)
         print()
 
     # 6276 for number and 15 & 31 for bub-info  || 8255 and 31.0 & 64.0

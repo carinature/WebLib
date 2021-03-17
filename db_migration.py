@@ -41,9 +41,8 @@ def csv_to_mysql():
                                              dtype=model.dtype_dic_csv2py,
                                              header=0,
                                              names=model.col_names,
-                                             # chunksize=1000,
-                                             chunksize=app.config['CHUNK_SIZE_DB'],  # fixme change back to app.config
                                              na_values=['x', '#VALUE!', '', 'Unknown'],
+                                             chunksize=app.config['CHUNK_SIZE_DB'],  # fixme change back to app.config
                                              # todo consider striping the brackets (qoutation marks regular & special)
                                              # skiprows=skip  # todo remove
                                              ):
@@ -62,10 +61,6 @@ def csv_to_mysql():
                                 df_clean[col] = pd.to_numeric(df_clean[col], errors='coerce')  # , downcast='unsigned')
                                 df_clean[col] = df_clean[col].where(pd.notnull(df_clean[col]), None)
                                 # df_clean[col] = df_clean[col].astype('Int64') #https://stackoverflow.com/questions/60377531/pandas-valueerror-integer-column-has-na-values-in-column-2
-                                # df_clean = df_clean.replace(np.nan, sql.null())
-                                # df_clean = df_clean.replace(np.nan, -21 if 'centend'==col else 21, regex=True)
-                                # df_clean = df_clean.replace(None, 200)
-                                # df_clean = df_clean.df.fillna(200)
 
                         session.bulk_insert_mappings(model, df_clean.to_dict(orient='records'))
                         # todo the next two is another good WORKING option - find out which of the 3 is faster
