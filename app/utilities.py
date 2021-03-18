@@ -47,72 +47,81 @@ import numpy as np
 
 
 app = create_app()
-exceptions_dict: Dict[str, Tuple[Base, Exception]] = {}
+faulty_lines_exceptions_dict: Dict[str, Tuple[Base, Exception]] = {}
+model: Base = TextText
 
 
-# Finds the line in the data that throws exception during bulk_insert_mapping on data
-# return the number of the 1st problematic line, or -1 if no problem
-# def find_row(df: pd.DataFrame , i0: int = 0, df_len: int = app.config['CHUNK_SIZE_DB']) -> int:
-# todo find_row should return exceptions_dict (type Dict[str, Tuple[Base, Exception]])
-def find_row(df_dict: collections.abc.Mapping, i0: int = 0, df_len: int = app.config['CHUNK_SIZE_DB']) -> int:
-    first_row: model = model(**df_dict[0])
+# logs faulty lines into the file and return the str
+def log_faulty_line(faulty_line: model,
+                    exception: Exception,
+                    prime_key_name: str = inspect(model).primary_key[0].name,
+                    file='db_migration_log.txt'):
+    prime_key_val = str(faulty_line.__dict__[prime_key_name])
+    massage = f'\'{prime_key_name}\' value {prime_key_val}: ' \
+              f'\n\tEntry: {faulty_line}' \
+              f'\n\tError: {exception}'  # .args[0]}'
+    print(massage)  # todo # file.write(massage)
+    # faulty_lines_exceptions_dict[prime_key_val] = (faulty_line, exception)
+    return massage
+
+
+def log_faulty_lines(rows_dict, file='db_migration_log.txt'):
+    with open(file, 'a') as f:
+        for key, faulty_line in rows_dict.items():
+            print(log_faulty_line(key, faulty_line, f))
+
+
+# Finds the line in the data that throws exception during bulk_insert_mapping on data.
+# Recursivly attemps to insert smaller chunks of data until finds a faulty line.
+#   Recieves:
+#       df_dict - a pd.DataFrame.to_dict(orient='records')
+#       i0 - #line in the current chunk of data - for logging (so you can remove)
+#   Return exceptions_dict (type Dict[str, Tuple[Base, Exception]])
+def exclude_faulty_lines(df_dict: collections.abc.Mapping, i0: int = 0) -> Dict[str, Tuple[Base, Exception]]:
     df_len = df_dict.__len__()
+    if not df_len: return NO_LINE
+    first_row: model = model(**df_dict[0])
     try:  # insert 1st line
         session.add(first_row)
         session.commit()
 
-    except Exception as e_1_row:
-        prime_key = inspect(model).primary_key[0].name
-        print(f'\n\tProblem is in line #{1000 * chunk_num + i0}:')
-        print(f'\t cant insert {first_row} \n')
-        print(f'\t{prime_key} (prime key) value - {first_row.__dict__[prime_key]}\n')
-        print(f'{e_1_row.args[0]}\n')
-        session.rollback()
-        exceptions_dict[str(first_row.__dict__[prime_key])] = (first_row, e_1_row)
-        # fixme you should keep going, instead of return
-        # return i0
-    finally:
-        if 1 >= df_len:
-            return NO_LINE  # success  # return i0 if e else 0  #
-    #     # session.rollback()
-    #     # session.flush()
-    #     if 2 >= df_len:
-    #         # print(f'    Line try - finally - df_len: {df_len} - real_df_len: {df.__len__()}')
-    #         # return i0 if e else 0  #
-    #         print(f'\tdf_len <= 2 : {df_len}')
-    #         return -1  # success
+    except Exception as add_line_error:
+        session.rollback()  # & session.flush() ?
+        prime_key_name = inspect(model).primary_key[0].name
+        prime_key_val = first_row.__dict__[prime_key_name]
+        log_faulty_line(first_row, add_line_error, prime_key_name)
+        faulty_lines_exceptions_dict[str(prime_key_val)] = (first_row, add_line_error)
 
     half_len = int(df_len / 2)
 
     try:  # insert whole df
         session.bulk_insert_mappings(model, df_dict[1:])
-        session.commit()  # session.rollback()
-        # todo return exceptions_dict
+        session.commit()  # & session.rollback() ?
+        # todo maybe return exceptions_dict (instead of using global)
 
     except Exception as e_bulk_insert:
-        print(f'(Exception thrown) Bad line in chunk ({int(math.log((1000 / df_len), 2))} sub-chunk) '
-              f'\n - Trying smaller data chunks, size: {half_len}')
-        # print(e_bulk_insert)
-        session.rollback()
-        # session.flush()
+        print(f'\t(Exception thrown) Bad line in chunk ({int(math.log((CHUNK_SIZE / df_len), 2))} sub-chunk)'
+              f' - Trying smaller data chunks, size: {half_len}')  # print(e_bulk_insert)
+        session.rollback()  # session.flush()
 
         # smaller chunks
         # 1st half of data
-        # todo this should be returning an exceptions_dict
-        first_bad_line = find_row(df_dict[1:half_len + 1], i0 + 1, half_len)  # left quarter chunk
-        # if first_bad_line > NO_LINE:
-        # fixme you should keep going, instead of return
+        # todo maybe should be returning an exceptions_dict
+        exceptions_dict_1st_half = exclude_faulty_lines(df_dict[1:half_len + 1], i0 + 1)
         # todo merge exceptions_dicts
-        # return first_bad_line
+
+        # fixme check if there is actually a second half
+        #  - like in the case of array of size 2:
+        #  you check the 1st row,
+        #  then the 1st half after her, which in this case is the 2nd line
+        #  and then you move to the 3rd row (only it doesn't exists)
+        # todo you can do the len check here - and return statement
+        #  or in the beginning of find row - and then you call the next line but exit imidiatly
+        #       and then you can also remove the other if (1>=def line return NOLINE
 
         # 2nd half of data
-        first_bad_line = find_row(df_dict[half_len + 1:], half_len + 1, half_len)  # right quarter chunk
-        # todo or maybe this
-        # first_bad_line = find_row(df_dict[half_len + 1:df_len+1], half_len + 1, half_len)  # right quarter chunk
-        # todo consider returning the list
-        # todo merge exceptions_dicts
-        # return first_bad_line
-
+        exceptions_dict_2nd_half = exclude_faulty_lines(df_dict[half_len + 1:], half_len + 1)
+        # todo merge exceptions_dicts  # return exceptions_dicts
 
     # finally:
     #     session.rollback()
@@ -127,17 +136,15 @@ if '__main__' == __name__:
     engine = db.engine  # todo or? # with app.app_context(): engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     Base.metadata.create_all(engine)  # todo or? db.create_all(engine)
     session = sessionmaker(bind=engine)()  # todo or? session = scoped_session(Session())
-    model: Base = TextText
 
     NO_LINE = -1  # todo move to utils?
-    # todo consider passing as an argument or returning from the function
+    CHUNK_SIZE = 100  # todo sould be app.config['chunk..']
     prime_key = inspect(model).primary_key[0].name
 
-    chunk_num = 5083  # <----------------------------- todo for DBG
+    chunk_num = 5083
     exit_flag = False
 
     while not exit_flag:
-
         try:
             # this for-loop is inside `try` for cases of commas (`,`) in `subject` col without brackets (`"`)
             for df in pd.read_csv(model.src_scv[0],
@@ -145,16 +152,12 @@ if '__main__' == __name__:
                                   header=0,
                                   names=model.col_names,
                                   na_values=['x', '#VALUE!', 'Unknown', ''],
-                                  chunksize=100,
+                                  chunksize=CHUNK_SIZE,
                                   # chunksize=app.config['CHUNK_SIZE_DB'],
-                                  skiprows=100 * chunk_num,
-                                  nrows=100,
+                                  skiprows=CHUNK_SIZE * chunk_num,
+                                  nrows=CHUNK_SIZE,
                                   ):
-                print(f'Data chunk number #{chunk_num}')
-                # chunk_num += 1
-                # if 510 < chunk_num:  # fixme remove - DBG
-                #     exit_flag = True
-                #     raise Exception
+                print(f'Data chunk number #{chunk_num}', end=" ")
                 df_clean: pd.DataFrame = df.drop_duplicates(prime_key)
                 df_clean = df_clean.replace(np.nan, None)
 
@@ -168,35 +171,25 @@ if '__main__' == __name__:
                 # https://stackoverflow.com/questions/45395729/unknown-column-nan-in-field-list-python-pandas
                 try:
                     session.bulk_insert_mappings(model, df_clean.to_dict(orient='records'))
-                    session.commit()  # raise Exception
-                except Exception as e:
-                    print('~~~~~~~~~~~~~~~')
-                    # print(e)
-                    session.rollback()
-                    # session.flush()
-                    # todo find_row should return exceptions_dict
-                    first_bad_row = find_row(df_clean.to_dict(orient='records'), 0,
-                                             df_clean.__len__())  # finally:  # ctx.pop()
+                    session.commit()  # raises an Exception
+                except Exception as e:  # todo catch different kinds of exceptions
+                    session.rollback()  # session.flush()
+                    faulty_lines_exceptions_dict = exclude_faulty_lines(df_clean.to_dict(orient='records'))
                 finally:
-                    chunk_num += 1
+                    print(f' - Finshed')
+                    chunk_num += 1  # todo this might cause a problem (or skipping chunks)
             exit_flag = True
         except Exception as e_read_csv:
             print(f'{e_read_csv.args[0]}')
+            print(f'\nNote: The whole chunk #{chunk_num} was not inserted!\n')
             #     TypeError: Cannot cast array data from dtype('O') to dtype('float64') according to the rule 'safe'
             # ValueError: could not convert string to float: ' 155 n. 6'
-            print()
             chunk_num += 1
             exit_flag = False
 
-            pass  # todo handle case of chunk in read_csv and continue the for loop
-
-    if exceptions_dict:
+    if faulty_lines_exceptions_dict:  # todo log into a file
         print(f'Bad rows:')
-        for key, bad_row in exceptions_dict.items():
-            print(f'\'{prime_key}\' value {key}: '
-                  f'\n\tEntry: {bad_row[0]}'
-                  f'\n\tError: {bad_row[1]}')
-        #     todo log into a file
-    else:
-        print(f'Everything is fine and dandy')
+        log_faulty_lines(faulty_lines_exceptions_dict)
+    else: print(f'Everything is fine and dandy')
+
     ctx.pop()
