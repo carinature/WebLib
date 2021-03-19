@@ -139,11 +139,17 @@ class Title(Base):
     src_scv = [f'{RAW_DATA_DIR}/{textsfile}' for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('title')]
     col_names = ['index_org', 'author', 'centend', 'centstart', 'joined', 'lang', 'number', 'title']
     dtype_dic_csv2py = {
-        'index1' : str, 'author1': str,  # 'centend': int,
-        # 'centstart': int,
-        'centend': str, 'centstart': str, 'joined': str, 'language': str, 'number': int,
+        'index1'   : str,
+        'author1'  : str,
         # `int` is usable only for not-NaN cols: The lack of NaN rep in int cols is a pandas "gotcha".
-        'title1' : str
+        # 'centend': int,   todo
+        # 'centstart': int, todo
+        'centend'  : str,
+        'centstart': str,
+        'joined'   : str,
+        'language' : str,
+        'number'   : int,
+        'title1'   : str
         }
     dtype_dic_py2sql = {int: Integer, float: Float, str: Text}
 
@@ -196,7 +202,8 @@ class TextText(Base):
     C = Column(Integer, primary_key=True, nullable=False, autoincrement=False)
     subject = Column(String(LONG_STRING_LEN), nullable=False)  # ForeignKey('text_subjects.subject'),
     number = Column(Integer, ForeignKey(f'{Title.__tablename__}.{inspect(Title).primary_key[0].name}'), nullable=False)
-    biblio = Column(Integer, ForeignKey(f'{BookRef.__tablename__}.{inspect(BookRef).primary_key[0].name}'), nullable=False)
+    biblio = Column(Integer, ForeignKey(f'{BookRef.__tablename__}.{inspect(BookRef).primary_key[0].name}'),
+                    nullable=False)
     page = Column(Integer, nullable=True)  # could be null(empty) - KT 20210221.
     # could be null(empty) - KT 20210221 - todo figure out what this means (for 'page' also)
     ref = Column(String(SHORT_STRING_LEN * 3), nullable=True)
@@ -236,18 +243,16 @@ class TextText(Base):
 
 
 class Book:
-    def __init__(self, bibinfo: int):
-        self.bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
+    def __init__(self, bibinfo: BookRef):
+        self.biblio = bibinfo.biblio
         self.pages: Set[int] = set()
         self.refs: List[int] = []
-        q_book_ref: Query = BookRef.query
-        q_book_ref_filter: Query = q_book_ref.filter(BookRef.biblio == self.bibinfo)
-        self.title_full = q_book_ref_filter.value(BookRef.title)
+        self.title_full = bibinfo
 
     def __repr__(self):
         return f'... The Referencing Book: ' \
                f'{self.title_full} ' \
-               f'bib: {self.bibinfo} ' \
+               f'bib: {self.biblio} ' \
                f'pages: {self.pages}'
 
 
@@ -255,53 +260,28 @@ class ResultTitle:
     # print(' =============== ResultTitle ================')
     filtered_flag = False
 
-    def __init__(self, num: str, filter_form: Dict):
-        # def __init__(self, num: int, filter_form: f.FilterForm):
-        # todo better to accept dict, instead of form?
-        #  todo should accept num as int. change to DB
-        from_century = filter_form['from_century']
-        to_century = filter_form['to_century']
-        language = filter_form['language']
-        ancient_author = filter_form['ancient_author']
-        ancient_title = filter_form['ancient_title']
-        q_title_filter: Query = Title.query.filter(Title.number == num)
-        # todo  if to_century < from_century:
-        # todo remove the 'if' clause from the '*_century', when the html page would actually have a filter form
-        if from_century:
-            q_title_filter: Query = q_title_filter.filter(Title.centstart >= from_century)
-        if to_century:
-            q_title_filter: Query = q_title_filter.filter(Title.centend <= to_century)
-        if language:
-            q_title_filter: Query = q_title_filter.filter(Title.lang == language)
-        if ancient_author:
-            q_title_filter: Query = q_title_filter.filter(Title.author == ancient_author)
-        if ancient_title:
-            q_title_filter: Query = q_title_filter.filter(Title.title == ancient_title)
-        # if passed all filters
-        if q_title_filter.first():
-            self.filtered_flag = True
-            self.num = num
-            self.refs: Set = set()
-            self.bibinfo: List[int] = []
-            self.books: List[Book] = []
-            self.books_dict: Dict[str, Book] = {}
-            self.author = q_title_filter.value(Title.author)
-            self.title = q_title_filter.value(Title.title)  # print('.' * 50, self.title, 'by:', self.author)
+    def __init__(self, num: int, title: str, author: str):  # fixme you don't really need the num
 
-    def add_bib(self, bibinfo: int):
-        self.bibinfo.append(bibinfo)
-        # self.books[bibinfo] = Book(bibinfo)
-        self.books.append(Book(bibinfo))
+        self.num = num
+        self.refs: Set = set()
+        self.bibinfo: List[int] = []
+        self.books_dict: Dict[int, Book] = {}
+        self.author = author
+        self.title = title
 
-    def add_page(self, page: int, bibinfo: int):  # todo bibinfo: int and page: int
-        self.books[-1].pages.add(page)
+    def add_bib(self, bibinfo: BookRef):
+        biblio = bibinfo.biblio
+        self.bibinfo.append(biblio)
+        self.books_dict[bibinfo.biblio] = self.books_dict.setdefault(bibinfo.biblio, Book(bibinfo))
+
+    def add_page(self, page: int, bibinfo: int):
+        self.books_dict[bibinfo].pages.add(page)
 
     def add_refs(self, ref: str, bibinfo: int):
-        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
         # self.books[bibinfo].refs.append(ref)
         # self.refs[bibinfo] = ref
 
-        self.books[-1].refs.append(ref)
+        self.books_dict[bibinfo].refs.append(ref)
         if ref not in self.refs:
             print(' --- add_refs ---    ')
         self.refs.add(ref)
@@ -316,7 +296,7 @@ class ResultTitle:
             f'{self.bibinfo}, ' \
             f'{self.refs}\n'
         # for k, i in self.books.items():
-        for i in self.books:
+        for i in self.books_dict:
             s += f'\t\t{i}\n'
         return s
 

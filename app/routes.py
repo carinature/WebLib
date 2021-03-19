@@ -33,48 +33,61 @@ def teardown_db(exception):
 
 
 categories = [
-    {'name': 'Highly Validated',
-     'id': 'high',
-     'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
-     ]
-     },
-    {'name': 'Validated',
-     'id': 'valid',
-     'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
-     ]
-     },
-    {'name': 'Unvalidated',
-     'id': 'not',
-     'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
-     ]
-     }
-]
+    {
+        'name'   : 'Highly Validated',
+        'id'     : 'high',
+        'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
+            ]
+        },
+    {
+        'name'   : 'Validated',
+        'id'     : 'valid',
+        'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
+            ]
+        },
+    {
+        'name'   : 'Unvalidated',
+        'id'     : 'not',
+        'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
+            ]
+        }
+    ]
 links = {
-    'home': '/',
-    'search': '/search-results',
+    'home'       : '/',
+    'search'     : '/search-results',
     'test_search': '/test-search-results',
-    'books': '/book-indices',
-    'subjects': '/subject-list',
-}
+    'books'      : '/book-indices',
+    'subjects'   : '/subject-list',
+    }
 
 
 # ++++++++++++  search results and filtering page ++++++++++++
 @app.route(links['test_search'], methods=['GET', 'POST'])
 # @app.route('/search-results/<string:search_word>/<int:page>', methods=['GET', 'POST'])
 def search_test(search_word='', page=''):
+
+    from time import time
+    t_total = time()  # for logging
+
     # search = '%{}%'.format('freedwoman')
-    search = '%{}%'.format('divin')
-    # search = '%{}%'.format('woman')
+    # search = '%{}%'.format('divin')
+    search = '%{}%'.format('women')
     filter_form = f.FilterForm().return_as_dict()
+    from_century = filter_form['from_century']
+    to_century = filter_form['to_century']
+    language = 'Latin'
+    # language = filter_form['language']
+    ancient_author = filter_form['ancient_author']
+    ancient_title = filter_form['ancient_title']
+    reference = filter_form['reference']
 
-    txts_table = m.TextText
     # ............  return all matching results (subjects) by C column [list] ............
-    txts_query: BaseQuery = txts_table.query
+    txts_query: BaseQuery = m.TextText.query
     # filter by subject (and reference if ref_filter field in form is filled out)
-    txts_q_filter: BaseQuery = txts_query.filter(txts_table.subject.like(search))
-    txts_q_filter = txts_q_filter.filter_by(ref=filter_form['reference']) if filter_form['reference'] else txts_q_filter
+    txts_q_filter: BaseQuery = txts_query.filter(m.TextText.subject.like(search))
+    txts_q_filter = txts_q_filter.filter_by(ref=reference) if reference else txts_q_filter
 
-    filtered_sub_query: Query = txts_q_filter.subquery()
+    # filtered_sub_query: Query = txts_q_filter.subquery()
 
     # # group by title and then by bib_info (referencing book) and count refs (C's)
     # sub_q_title_and_bibinfo_with_count = txts_query.with_entities(
@@ -93,12 +106,8 @@ def search_test(search_word='', page=''):
     #     count().label('count_bib')
     # )
     # groups_by_title = sub_q_title_bibcount.group_by(grouped_sub_query.c.number)
-
-    bib_dict: Dict[int, List] = {}
-    res_dict: Dict[str, m.ResultTitle] = {}
-    highly_valid: List[m.ResultTitle] = []
     # highly_valid, valid, not_valid = List[m.ResultTitle], List[m.ResultTitle], List[m.ResultTitle]
-    bib_more_than_1, bib_only_1 = {}, {}
+    # bib_more_than_1, bib_only_1 = {}, {}
     # print(txts_q_filter)
 
     # x: m.TextText
@@ -108,38 +117,38 @@ def search_test(search_word='', page=''):
     #     title_key = x.number
     #     res_title: m.ResultTitle = res_dict.setdefault(title_key, m.ResultTitle(title_key, filter_form))
 
-    df: pd.DataFrame = pd.read_sql(txts_q_filter.statement, txts_q_filter.session.bind)
+    # df: pd.DataFrame = pd.read_sql(txts_q_filter.statement, txts_q_filter.session.bind)
     # print(df.tail())
-
-    groups_by_title_num: pd.DataFrame.groupby.DataFrameGroupBy = df.groupby(
-        by=['number'],  # ,'biblio'],  # Notice that a tuple is interpreted as a (single) key.
-        # level=0,
-        # as_index=False,  # is effectively “SQL-style” grouped output.
-        # sort=True,
-    )
+    #
+    # groups_by_title_num: pd.DataFrame.groupby.DataFrameGroupBy = df.groupby(
+    #     by=['number'],  # ,'biblio'],  # Notice that a tuple is interpreted as a (single) key.
+    #     # level=0,
+    #     # as_index=False,  # is effectively “SQL-style” grouped output.
+    #     # sort=True,
+    # )
     # lists_by_title_num = groups_by_title_num.apply(list)
     #
-    title_key: str
-    titles_group: pd.DataFrame
-    for title_key, titles_group in groups_by_title_num:
-        # print(type(titles_group))
-        groups_by_title_and_bib: pd.DataFrame.groupby.DataFrameGroupBy = titles_group.groupby(
-            by=['biblio'])
-        res_title: m.ResultTitle = res_dict.setdefault(title_key, m.ResultTitle(title_key, filter_form))
-        if not res_title.filtered_flag:
-            continue
-        bib_count = len(titles_group['biblio'].unique())
-        # print(bib_count)
-        if 2> bib_count:
-            continue
-        bib_info: str
-        bib_info_group: pd.DataFrame
-        for bib_info, bib_info_group in groups_by_title_and_bib:
-            # print('-------\n', bib_info)
-            # print('-------\n', bib_info_group)
-            res_bib = res_title.books_dict.setdefault(bib_info, res_title.add_bib(bib_info))
-            # res_title.add_bib(bib_info)
-        highly_valid.append(res_title)
+    # title_key: str
+    # titles_group: pd.DataFrame
+    # for title_key, titles_group in groups_by_title_num:
+    #     # print(type(titles_group))
+    #     groups_by_title_and_bib: pd.DataFrame.groupby.DataFrameGroupBy = titles_group.groupby(
+    #         by=['biblio'])
+    #     res_title: m.ResultTitle = res_dict.setdefault(title_key, m.ResultTitle(title_key, filter_form))
+    #     if not res_title.filtered_flag:
+    #         continue
+    #     bib_count = len(titles_group['biblio'].unique())
+    #     # print(bib_count)
+    #     if 2> bib_count:
+    #         continue
+    #     bib_info: str
+    #     bib_info_group: pd.DataFrame
+    #     for bib_info, bib_info_group in groups_by_title_and_bib:
+    #         # print('-------\n', bib_info)
+    #         # print('-------\n', bib_info_group)
+    #         res_bib = res_title.books_dict.setdefault(bib_info, res_title.add_bib(bib_info))
+    #         # res_title.add_bib(bib_info)
+    #     highly_valid.append(res_title)
 
     # print('sr' * 33)
     # for sr, gr in res_dict.items():
@@ -149,22 +158,45 @@ def search_test(search_word='', page=''):
     # highly_valid.append(bib_more_than_1)
     # valid.append(bib_only_1)
 
-    txts_q_filter_join_title:List[m.TextText] = txts_q_filter.all()
-    # txts_q_filter_join_title = txts_q_filter.join(m.Title).all()
-    res_tit:m.TextText
-    for res_tit in txts_q_filter_join_title:
-        print(res_tit)
-        print(res_tit.title.title)
-        print(res_tit.title.author)
-        print()
+    q_title_filter = txts_q_filter.join(m.Title)
 
+    if from_century:
+        q_title_filter: Query = q_title_filter.filter(m.Title.centstart >= from_century)
+    if to_century:
+        q_title_filter: Query = q_title_filter.filter(m.Title.centend <= to_century)
+    if language:
+        q_title_filter: Query = q_title_filter.filter(m.Title.lang == language)
+    if ancient_author:
+        q_title_filter: Query = q_title_filter.filter(m.Title.author == ancient_author)
+    if ancient_title:
+        q_title_filter: Query = q_title_filter.filter(m.Title.title == ancient_title)
+
+
+    res_dict: Dict[str, m.ResultTitle] = {}
+    highly_valid: List[m.ResultTitle] = []
+
+    res_tit: m.TextText
+    for res_tit in q_title_filter:
+
+        res_title: m.ResultTitle = res_dict.setdefault(
+                res_tit.number,
+                m.ResultTitle(res_tit.number,
+                              res_tit.title.title,
+                              res_tit.title.author))
+
+        res_title.add_bib(res_tit.book_ref)
+        highly_valid.append(res_title)
+
+    print('=' * 12 + ' Total Time elapsed: ' + str(time() - t_total) + ' s.')
+
+    res_dict
     # 6276 for number and 15 & 31 for bub-info  || 8255 and 31.0 & 64.0
     return render_template('dbg/test_search.html',
                            motototo=['Nothing', 'worth', 'having', 'comes', 'easy'],
                            # list1=highly_valid,
                            # list2=valid,
                            list1=highly_valid,
-                           list2={},
+                           dict2=res_dict,
                            )
 
 
@@ -222,11 +254,11 @@ def search_results(search_word='', page=''):
     # txts_q_with_ent: Query = texts_query.with_entities(num_col, sbj_col, ref_col, count(bib_info_col), page_col)  # count())
     #     # txts_q_with_ent: Query = texts_query.with_entities(txts_subject_col, count(txts_subject_col),
     txts_q_with_ent: Query = texts_query.with_entities(
-        num_col, ref_col,
-        sbj_col,
-        bib_info_col,
-        page_col,
-        c_col)  # count()) fixme remove C_col in production
+            num_col, ref_col,
+            sbj_col,
+            bib_info_col,
+            page_col,
+            c_col)  # count()) fixme remove C_col in production
     txts_q_with_ent_filter: Query = txts_q_with_ent.filter(sbj_col.like(search))
     if filter_form.reference.data:
         txts_q_with_ent_filter: Query = txts_q_with_ent_filter.filter(ref_col.like(str(filter_form.reference)))
@@ -242,8 +274,8 @@ def search_results(search_word='', page=''):
 
     # ............  group the results by (referenced) title ('number' column) [dict?] ............
     groups_by_number = groupby(
-        txts_q_with_ent_filter_order,
-        key=lambda txts_table: (txts_table.number))  # , txts_table.biblio))
+            txts_q_with_ent_filter_order,
+            key=lambda txts_table: (txts_table.number))  # , txts_table.biblio))
 
     # print('$'*20, )
     # for ke, ge in groups_by_number:
@@ -270,8 +302,8 @@ def search_results(search_word='', page=''):
         # ... sub grouping the results by the ref-ing titles
         texts_tuples_group_ordered = sorted(texts_tuples_group, key=lambda x: x[3])
         group_by_number_n_bibinfo = groupby(
-            texts_tuples_group_ordered,
-            key=lambda txts_table: txts_table[3])  # , txts_table.biblio))
+                texts_tuples_group_ordered,
+                key=lambda txts_table: txts_table[3])  # , txts_table.biblio))
 
         # add every ref-ing title to the current result (title) object
         for bibinfo, texts_tuples_sub_group in group_by_number_n_bibinfo:
@@ -289,7 +321,7 @@ def search_results(search_word='', page=''):
                 res.add_refs(ref=gg[1], bibinfo=gg[3])
 
         res_dict[title_number] = res
-        if len(res.books) > 1:
+        if len(res.books_dict) > 1:
             highly_valid.append(res)  # categories[0]['results'].append(res)
         elif len(res.refs) > 1:
             # elif len(res.pages) > 1:
@@ -297,7 +329,7 @@ def search_results(search_word='', page=''):
         else:
             not_valid.append(res)
 
-    categories[0]['results'] = sorted(highly_valid, key=lambda result: len(result.books), reverse=True)
+    categories[0]['results'] = sorted(highly_valid, key=lambda result: len(result.books_dict), reverse=True)
     categories[1]['results'] = sorted(valid, key=lambda result: len(result.refs), reverse=True)
     categories[2]['results'] = not_valid
 
