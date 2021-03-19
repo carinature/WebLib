@@ -65,13 +65,12 @@ links = {
 @app.route(links['test_search'], methods=['GET', 'POST'])
 # @app.route('/search-results/<string:search_word>/<int:page>', methods=['GET', 'POST'])
 def search_test(search_word='', page=''):
-
     from time import time
     t_total = time()  # for logging
 
     # search = '%{}%'.format('freedwoman')
-    # search = '%{}%'.format('divin')
-    search = '%{}%'.format('women')
+    search = '%{}%'.format('divin')
+    # search = '%{}%'.format('women')
     filter_form = f.FilterForm().return_as_dict()
     from_century = filter_form['from_century']
     to_century = filter_form['to_century']
@@ -171,13 +170,11 @@ def search_test(search_word='', page=''):
     if ancient_title:
         q_title_filter: Query = q_title_filter.filter(m.Title.title == ancient_title)
 
-
     res_dict: Dict[str, m.ResultTitle] = {}
     highly_valid: List[m.ResultTitle] = []
 
     res_tit: m.TextText
     for res_tit in q_title_filter:
-
         res_title: m.ResultTitle = res_dict.setdefault(
                 res_tit.number,
                 m.ResultTitle(res_tit.number,
@@ -185,11 +182,11 @@ def search_test(search_word='', page=''):
                               res_tit.title.author))
 
         res_title.add_bib(res_tit.book_ref)
-        highly_valid.append(res_title)
+
+    highly_valid = sorted(res_dict.values(), key=m.ResultTitle.num_ref_books, reverse=True)
 
     print('=' * 12 + ' Total Time elapsed: ' + str(time() - t_total) + ' s.')
 
-    res_dict
     # 6276 for number and 15 & 31 for bub-info  || 8255 and 31.0 & 64.0
     return render_template('dbg/test_search.html',
                            motototo=['Nothing', 'worth', 'having', 'comes', 'easy'],

@@ -65,3 +65,4 @@ class ProdConfig(Config):
     # MISC
     ITEMS_PER_PAGE = 10
     SUBJECTS_PER_PAGE = 100
+    CHUNK_SIZE_DB = 10000  # todo consider this

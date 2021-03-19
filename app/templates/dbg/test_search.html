@@ -19,34 +19,33 @@
 
     <h1>Highly Valid</h1>
 
+
     <div class="padding-5">
 
         {% for x in list1 %}
             {{ x }}<br>
-            {#            {% for t in x %}#}
-            {#                {{ t }}<br>#}
-            {#            {% endfor %}#}
+            {% for u,v in x.books_dict.items() %}
+                {#            {% for u,v in y.books_dict.items() %}#}
+                U: {{ u }}<br>
+                V: {{ v }}<br>
+            {% endfor %}
         {% endfor %}
 
     </div>
-    {##}
-    {#    <div class="padding-5">#}
-    {#        {% for x in list1 %}#}
-    {#            {% for t in x %}#}
-    {#                {{ t }}<br>#}
-    {#            {% endfor %}#}
-    {#        {% endfor %}#}
-    {#    </div>#}
+
 
     <h1>The Others</h1>
 
+
     <div class="padding-5">
-        {% for x,y in list2.items() %}
+        <h1>Total #result-titles: {{ dict2.__len__() }}</h1>
+        {% for x,y in dict2.items() %}
             {{ x }}
             {{ y.__repr__() }}<br>
             {% for u,v in y.books_dict.items() %}
-                {{ u }}<br>
-                {{ v }}<br>
+                {#            {% for u,v in y.books_dict.items() %}#}
+                U: {{ u }}<br>
+                V: {{ v }}<br>
             {% endfor %}
             <br>
         {% endfor %}
@@ -57,13 +56,6 @@
         {{ checkbox_input(label=item, type="checkbox", id=item, name='item', value=item) }}
     {% endfor %}
 
-    <button type="submit">Submit</button>
-    <br><br><br>
-    {% for item in printout %}
-        {{ item }}<br>
-    {% endfor %}
-
-    #}
 
 
 

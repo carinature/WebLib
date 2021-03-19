@@ -250,7 +250,7 @@ class Book:
         self.title_full = bibinfo
 
     def __repr__(self):
-        return f'... The Referencing Book: ' \
+        return f'\n... The Referencing Book: ' \
                f'{self.title_full} ' \
                f'bib: {self.biblio} ' \
                f'pages: {self.pages}'
@@ -286,6 +286,12 @@ class ResultTitle:
             print(' --- add_refs ---    ')
         self.refs.add(ref)
 
+    def num_ref_books(self):
+        return self.books_dict.__len__()
+
+    def num_refs_total(self):
+        return self.books_dict.__len__()
+
     def __repr__(self):
         s = '*' * 13
         # s += f' (The Result-Title): ' \
@@ -294,9 +300,10 @@ class ResultTitle:
             f'{self.title} By: ' \
             f'{self.author}, ' \
             f'{self.bibinfo}, ' \
-            f'{self.refs}\n'
+            f'{self.refs}\n' \
+            f'\nThe  ( ---{self.books_dict.__len__()}--- )  ref books: \n'
         # for k, i in self.books.items():
-        for i in self.books_dict:
+        for i in self.books_dict.items():
             s += f'\t\t{i}\n'
         return s
 
