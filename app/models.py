@@ -244,16 +244,36 @@ class TextText(Base):
 
 class Book:
     def __init__(self, bibinfo: BookRef):
-        self.biblio = bibinfo.biblio
-        self.pages: Set[int] = set()
-        self.refs: List[int] = []
-        self.title_full = bibinfo
+        self.biblio: int = bibinfo.biblio
+        self.refs: List[str] = []  # list of all refs todo maybe not nedded - depends on the data shown in the site
+        self.pages: Set[int] = set()  # list of all refs todo maybe not nedded - depends on the data shown in the site
+        self.refs_per_page: Dict[int, List[str]] = {}  # refs_per_page={pages: List[refs]}
+        self.title_full: BookRef = bibinfo
+
+    def add_page(self, page: int = -1):  # todo add ref?
+        self.pages.add(page)
+        return self
 
     def __repr__(self):
-        return f'\n... The Referencing Book: ' \
+        # f'\n\t The Referencing Book: ' \
+        return f'' \
                f'{self.title_full} ' \
                f'bib: {self.biblio} ' \
-               f'pages: {self.pages}'
+               f'refs per page: {self.refs_per_page}'
+
+    def __len__(self):
+        counter = 0
+        # for pg, ref_list in self.refs_per_page.items():
+        for ref_list in self.refs_per_page.values():
+            counter += ref_list.__len__()
+        return counter
+        # return self.refs.__len__()
+
+    def __lt__(self, other) -> bool:
+        return self.__len__() < other.__len__()
+
+    def __eq__(self, other) -> bool:
+        return self.__len__() == other.__len__()
 
 
 class ResultTitle:
@@ -261,29 +281,17 @@ class ResultTitle:
     filtered_flag = False
 
     def __init__(self, num: int, title: str, author: str):  # fixme you don't really need the num
-
         self.num = num
         self.refs: Set = set()
-        self.bibinfo: List[int] = []
         self.books_dict: Dict[int, Book] = {}
         self.author = author
         self.title = title
 
-    def add_bib(self, bibinfo: BookRef):
-        biblio = bibinfo.biblio
-        self.bibinfo.append(biblio)
+    def add_bib(self, bibinfo: BookRef) -> Book:
         self.books_dict[bibinfo.biblio] = self.books_dict.setdefault(bibinfo.biblio, Book(bibinfo))
+        return self.books_dict[bibinfo.biblio]
 
-    def add_page(self, page: int, bibinfo: int):
-        self.books_dict[bibinfo].pages.add(page)
-
-    def add_refs(self, ref: str, bibinfo: int):
-        # self.books[bibinfo].refs.append(ref)
-        # self.refs[bibinfo] = ref
-
-        self.books_dict[bibinfo].refs.append(ref)
-        if ref not in self.refs:
-            print(' --- add_refs ---    ')
+    def add_refs(self, ref: str):
         self.refs.add(ref)
 
     def num_ref_books(self):
@@ -299,7 +307,7 @@ class ResultTitle:
             f'#{self.num}, ' \
             f'{self.title} By: ' \
             f'{self.author}, ' \
-            f'{self.bibinfo}, ' \
+            f'{self.books_dict}, ' \
             f'{self.refs}\n' \
             f'\nThe  ( ---{self.books_dict.__len__()}--- )  ref books: \n'
         # for k, i in self.books.items():
@@ -307,11 +315,12 @@ class ResultTitle:
             s += f'\t\t{i}\n'
         return s
 
-# from sqlalchemy_utils import create_view
+    def __len__(self) -> int:
+        return self.books_dict.__len__()
 
-# view: Table = create_view('my_view', TextText, Base.metadata)
+    def __lt__(self, other) -> bool:
+        return self.__len__() < other.__len__()
 
+    def __eq__(self, other) -> bool:
+        return self.__len__() == other.__len__()
 
-# provides an ORM interface to the view
-# class MyView(Base):
-#     __table__ = 'my_view'

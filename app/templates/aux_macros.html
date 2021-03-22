@@ -13,18 +13,17 @@
     {% set rbtn_id='refsbtn'~num %}
     <div class="container-fluid">
         <h4 class="display-inline">
-            {{ index }}. <em>{{ title }} </em> by {{ author }}
+            {{ index }}. <em>{{ title }} </em> - {{ author }}
         </h4>
         <a href="#link" class="btn btn-sm btn-primary float-right" role="button"> For more information </a>
 
         <div class="padding-1">
-            {% for book in books %}
+            {% for bib, book in books.items() %}
                 <div class="padding-bot-1">
-                    <em class="padding-1"><strong>{{ book.title_full }}</strong></em> pages:
-                    {#                {{ book.pages }}#}
+                    <em class="padding-1"><strong>{{ book.title_full.title }}</strong></em> pages:
                     {% for page in book.pages -%}
                         <a href="{{ link|value_or_empty }}"> {{ page }} </a>
-                        {#                    {% if loop.index!=(books|length) %}, {% endif %}#}
+                        {% if not loop.last %}, {% endif %}
                     {%- endfor %}
                 </div>
             {% endfor %}
