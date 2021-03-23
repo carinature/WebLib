@@ -53,12 +53,13 @@ categories = [
         }
     ]
 links = {
-    'home'       : '/',
-    'search'     : '/search-results',
-    'test_search': '/test-search-results',
-    'books'      : '/book-indices',
-    'subjects'   : '/subject-list',
+    'home'     : '/',
+    'search'   : '/search-results',
+    'books'    : '/book-indices',
+    'subjects' : '/subject-list',
+    'not_found': '/page-not-found',
     }
+
 
 # ++++++++++++  search results and filtering page ++++++++++++
 @app.route(links['search'], methods=['GET', 'POST'])
@@ -156,7 +157,8 @@ def search_results(search_word='', page=''):
                            categories=categories,
                            search_word=search_word,
                            results_num=len(highly_valid) + len(valid) + len(not_valid),
-                           )
+                           )git
+
 
 def nothing():
     pass
@@ -210,7 +212,6 @@ def book_indices():
 
 # ++++++++++++  list of Subjects in the db page ++++++++++++
 @app.route(links['subjects'], methods=['GET', 'POST'])
-# @app.route('/subject-list', methods=['GET', 'POST'])
 def subject_list(search_word='', page=''):
     page = request.args.get('page', 1, type=int)
     search_bar: Dict = utils.init_search_bar()
@@ -262,7 +263,7 @@ def subject_list(search_word='', page=''):
 
 # ++++++++++++  Error Handling ++++++++++++
 @app.errorhandler(404)
-@app.route('/page-not-found')
+@app.route(links['not_found'], methods=['GET', 'POST'])
 def not_found(error):
     resp = make_response(render_template('page_not_found.html',
                                          title="Tiresias Project - Page not Found",
