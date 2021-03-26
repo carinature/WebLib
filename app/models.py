@@ -183,7 +183,7 @@ class TextSubject(Base):
     col_names = ['subject', 'C']
     dtype_dic_csv2py = {
         'subject': str,
-        'C'      : str
+        'C'      : str,
         }
     dtype_dic_py2sql = {
         int: Integer,
@@ -323,4 +323,3 @@ class ResultTitle:
 
     def __eq__(self, other) -> bool:
         return self.__len__() == other.__len__()
-

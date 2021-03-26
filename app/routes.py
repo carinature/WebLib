@@ -157,7 +157,7 @@ def search_results(search_word='', page=''):
                            categories=categories,
                            search_word=search_word,
                            results_num=len(highly_valid) + len(valid) + len(not_valid),
-                           )git
+                           )
 
 
 def nothing():

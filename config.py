@@ -45,7 +45,7 @@ class DevConfig(Config):
     # MISC
     ITEMS_PER_PAGE = 3  # used for pagination of the DB-query results
     SUBJECTS_PER_PAGE = 100
-    CHUNK_SIZE_DB = 10000  # used in DB migration for chunking huge amounts of data
+    CHUNK_SIZE_DB = 1000  # used in DB migration for chunking huge amounts of data
 
 
 class ProdConfig(Config):
