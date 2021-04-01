@@ -6682,7 +6682,7 @@ index1,author1,centend,centstart,joined,language,number,title1
 6792.0,Idatius of Chaves,5,4,,Latin,6767,Chronicon
 6793.0,Idatius of Chaves,5,4,,Latin,6768,Descriptio Consulum Ex Quo Primum Ordinati Sunt [Codex Parisiensis]
 6794.0,Idomeneus Lampsacenus,-3,-4,,Greek,6769,Fragments
-6796.0,,,2,,1,',Epistulae vii genuinae (recensio media)
+6796.0,,,2,,1,-1,Epistulae vii genuinae (recensio media)
 6797.0,Ignatius,,,,,6770,To Polycarp
 6798.0,Ignatius,,,,,6772,To the Ephesians
 6799.0,Ignatius,,,,,6773,To the Magnesians
@@ -12475,7 +12475,6 @@ index1,author1,centend,centstart,joined,language,number,title1
 13157.0,Epigraphy,,,epigraphy:lazzarini,,51170,Lazzarini
 13158.0,Epigraphy,,,epigraphy:le ors,,51171,Le Ors
 13159.0,Epigraphy,,,epigraphy:lead tablets from dodona (ed. lhôte),,51172,Lead Tablets From Dodona (Ed. Lhôte)
-13160.0,Epigraphy,,,,,,Leges Graecorum Sacrae (Ziehen)
 13161.0,Epigraphy,,,epigraphy:leon.jews of rome,,51174,Leon.Jews Of Rome
 13162.0,Epigraphy,,,epigraphy:lex coloniae genetiuae iuliae vrsonensis,,51175,Lex Coloniae Genetiuae Iuliae Vrsonensis
 13163.0,Epigraphy,,,epigraphy:m&l,,51176,M&L
@@ -12527,7 +12526,6 @@ index1,author1,centend,centstart,joined,language,number,title1
 13209.0,Epiphanius,,,epiphanius:ah,,51222,Ah
 13210.0,Epiphanius,,,epiphanius:anc.,,51223,Anc.
 13211.0,Epiphanius,,,epiphanius:commentary on isaiah,,51224,Commentary On Isaiah
-13212.0,Epiphanius,,,,,,De Mensuris Et Ponderibus
 13213.0,Epiphanius,,,epiphanius:epistle of the apostles,,51226,Epistle Of The Apostles
 13214.0,Epiphanius,,,epiphanius:epistle to diognetus (ep. diog),,51227,Epistle To Diognetus (Ep. Diog)
 13215.0,Epiphanius,,,epiphanius:epistula apostolorum,,51228,Epistula Apostolorum
@@ -14354,7 +14352,6 @@ index1,author1,centend,centstart,joined,language,number,title1
 15036.0,Zosimus,,,"zosimus:vita theod. syk.,",,53049,"Vita Theod. Syk.,"
 15037.0,Σ,,,"σ:scholia to pindar, nemean odes",,53050,"Scholia To Pindar, Nemean Odes"
 15038.0,‘Anti-Marcionite Gospel Prologues’ (Ed. Regul),,,‘anti-marcionite gospel prologues’ (ed. regul):prologue to john,,53051,Prologue To John
-11987.0,[arist.],,,[arist.]:mir. ausc.,,50000,mir. ausc.
 11988.0,[aristotle],,,[aristotle]:frag.,,50001,frag.
 11989.0,[aristotle],,,[aristotle]:oik.,,50002,oik.
 11990.0,[cicero],,,[cicero]:cil,,50003,cil

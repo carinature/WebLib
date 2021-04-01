@@ -1,6 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
+
+import logging.config
+
 # from flask_wtf import CSRFProtect
 
 db = SQLAlchemy()
@@ -22,12 +25,13 @@ def create_app():
     # csrf = CSRFProtect(app)
     # csrf.init_app(app)
 
+    # # logging #todo put in `with app.app_context()`  ?
+    # logging.config.fileConfig('logging.conf', defaults={'logfilename': 'db_migration.log'})
+
     with app.app_context():
-        # todo - make sure this line wasn't deleted:
-        #  from . import routes  # Import routes
-        from . import routes  # Import routes
-        # from . import test_routes  # fixme remove in production
+        from . import routes  # Import routes  # todo - make sure this line wasn't deleted:
+        from . import test_routes  # fixme remove in production
         # db.create_all()  # Create sql tables for our data models
-        # from db_migration import csv_to_mysql
-        # csv_to_mysql()
+        # from db_migration import DBMigration
+        # DBMigration().load_full_db()
         return app

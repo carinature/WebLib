@@ -7,6 +7,22 @@ $('a#test').on('click', function (e) {
         });
     return false;
 });
+
+//for testing purposes - currently not used
+$('a#test_query').on('click', function (e) {
+    e.preventDefault();
+    let json_res = $.getJSON('flam_flam',
+        function (data) {
+            //do nothing
+            console.log('datatatatata');
+            console.log(data);
+
+        });
+    console.log('json_res', json_res);
+    console.log('json_res', json_res);
+    return false;
+});
+
 //for testing purposes - currently not used(?)
 $('button#js-to-py').on('click', function (e) {
     //  NEXT TO COMMANDS DO NOT SEEM TO WORK
@@ -20,11 +36,11 @@ $('button#js-to-py').on('click', function (e) {
     return false;
 });
 /** template example **/
-$(document).ready(function() {
-			$( "#linkid" ).click(function() {
-				dothings();
-			});
-		});
+$(document).ready(function () {
+    $("#linkid").click(function () {
+        dothings();
+    });
+});
 
 //load raw scv files into the MySQL DB
 $('button#csv_to_mysql_btn').on('click', function (e) {
@@ -119,7 +135,7 @@ $('button.add-btn').on('click', function (e) {
  * The button disappears when you click it
  * */
 $('button.disappring-btn').on('click', function (e) {
-    this.style.display='none';
+    this.style.display = 'none';
 });
 
 /**
@@ -173,11 +189,11 @@ function displayWarningFetchAllChkbx() {
     else text.style.display = "none";
 }
 
-$(document).ready(function() {
-			$( "#linkid" ).click(function() {
-				dothings();
-			});
-		});
+$(document).ready(function () {
+    $("#linkid").click(function () {
+        dothings();
+    });
+});
 
 // Invoking a python script on click of html button can be accomplished using python-django framework.
 // The ajax for it is written this way

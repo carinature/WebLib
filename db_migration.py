@@ -1,124 +1,172 @@
+from typing import Tuple
+
 from flask import current_app as app
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect, sql
 
 from app import create_app
 from app.models import *
+from app.utilities import c_sum
 
 import pandas as pd
 import numpy as np
 from sqlalchemy.orm import sessionmaker, Query
 
-from time import time
+from time import time, localtime
+
+import logging
+import logging.config
 
 
-def csv_to_mysql():  # todo consider NOT using try
+class DBMigration:  # singleton class
 
-    print('csv_to_mysql()')
+    # models: List[Base] = [BookRef]
+    models: List[Base] = Base.__subclasses__()
 
-    # Create engine
-    engine = db.engine  # todo or?
-    # with app.app_context():
-    #     engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+    # logging #todo consider creating different logs for each CSV_file/model
+    tt = ''.join([str(i) for i in localtime()])
+    print(f'----- {tt} -------')
+    logging.config.fileConfig('logging.conf',
+                              defaults={
+                                  'logfilename'    : f'logs/db_migration_{tt}.log',
+                                  'fulllogfilename': f'logs/db_migration_full_{tt}.log',
+                                  }
+                              )
 
-    # Create All Tables
-    Base.metadata.create_all(engine)  # todo or? db.create_all(engine)
+    def __init__(self):
+        self.logger = logging.getLogger('dbLogger')
+        self.logger.info('=' * 10 + ' DB migration ' + '=' * 10)
 
-    # Create the session
-    Session = sessionmaker(bind=engine)
-    session = Session()  # todo or? session = scoped_session(Session())
+        engine = db.engine  # todo or?    # with app.app_context(): engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+        Base.metadata.create_all(engine)  # todo or? db.create_all(engine)
+        self.session = sessionmaker(bind=engine)()  # todo or    ? session = scoped_session(Session())
 
-    t = time()
-    with open('flask_python_log.txt', 'a') as f:
-        f.write('\n')
-        f.write('\n')
-        f.write("=" * 55 + str(time()))
-        f.write('\n')
+        self.faulty_lines_exceptions_dict: Dict[str, Tuple[Base, Exception]] = {}
 
-    # try:
-    # models = Base.__subclasses__()
-    models = [BookRef, Title, TextSubject, TextText]
-    # models = [BookRef]
-    for model in models:
-        tm = time()
 
+    def __del__(self):
+        self.session.close()
+
+
+    def load_full_db(self):
+        t_total = time()  # for logging
+        self.logger.info(F'Staring full DB migration ')
+        for model in self.models:
+            t_per_model = time()
+            self.logger.info(f'Model {model.__name__}')
+            self.load_single(model)  # <-----------------------------
+            self.logger.info(f'Model {model.__name__} finished in {time() - t_per_model} s.')
+        self.logger.info('=' * 12 + f' Total Time elapsed: {time() - t_total} s. ' + '=' * 12 + '\n')
+        if self.faulty_lines_exceptions_dict:  # todo log into a file
+            # self.logger.error(f'Bad News:\nIn {model.__name__}, file {src_file}, chunk #{chunk_num}')
+            self.logger.error(f'There are {self.faulty_lines_exceptions_dict.__len__()} faulty lines in the src data')
+            self.logger.debug(f'Check out the log file ({self.logger.handlers[0].__dict__["baseFilename"]})\n')
+        else: self.logger.info(f'Everything is fine and dandy\n')
+
+    def load_single(self, model: Base):
         for src_file in model.src_scv:
-            tsrc = time()
-            with open(src_file) as csv_file:
+            t_per_src = time()
+            self.logger.info(f'- CSV src file {src_file}')
+            self.load_src_file(model, src_file)  # <-----------------------------
+            self.logger.info(f'- CSV src file {src_file} finished in {time() - t_per_src} s.')
+
+    def load_src_file(self, model: Base, src_file):
+        prime_key_name, _ = get_prime_key(model)
+        # with open(src_file) as csv_file:
+        csv_file = open(src_file, 'r')
+        chunk_num = 0
+        exit_flag = False
+        while not exit_flag:
+            try:  # this for-loop is inside `try` for cases of commas (`,`) in `subject` col without brackets (`"`)
                 for dataframe in pd.read_csv(csv_file,
                                              dtype=model.dtype_dic_csv2py,
                                              header=0,
                                              names=model.col_names,
-                                             chunksize=app.config['CHUNK_SIZE_DB']
+                                             na_values=['x', '#VALUE!', '', 'Unknown'],
+                                             chunksize=app.config['CHUNK_SIZE_DB'],
+                                             # skiprows=18
                                              ):
-                    # next line is to handle cases of empty cell (e.g when val,val,,val in csv file
-                    df_nonone = dataframe.replace(np.nan, '', regex=True)
+                    self.logger.debug(f'{model.__name__} loading chunk #{chunk_num}')
+                    model_cols = model.__table__.c
+                    df_clean: pd.DataFrame = dataframe[[col.key for col in model_cols if 'Csum' != col.key]]
+                    df_clean = df_clean.drop_duplicates(prime_key_name)
+                    if TextSubject == model: df_clean['Csum'] = df_clean['C'].apply(c_sum)
+                    for col in model_cols:
+                        if isinstance(col.type, sql.sqltypes.Integer):
+                            df_clean[col.name] = pd.to_numeric(df_clean[col.name], errors='raise')  # ='coerce')
+                    df_clean = df_clean.astype(object).where(pd.notnull(df_clean), None)  # this is explained in:
+                    # https://stackoverflow.com/questions/45395729/unknown-column-nan-in-field-list-python-pandas
                     try:
-                        session.bulk_insert_mappings(model, df_nonone.to_dict(orient='records'))
-                        # todo the next two is another good WORKING option - find out which of the 3 is faster
-                        # db.engine.execute(model.__table__.insert(), df_nonone.to_dict('records'))
-                        # dataframe.to_sql(name=model.__tablename__, con=engine, if_exists='replace', index=False,
-                        #                  index_label='book_bibliographic_info', dtype=dtype_dic_py2sql)
-                        session.commit()
-                        if TextSubject == model:
-                            sunject_list = session.query(TextSubject).all()
-                            for row in sunject_list:
-                                csum = 0
-                                clist = str(row.C).split(',')
-                                for c in clist:
-                                    cc = c.split('-')
-                                    if 2 == len(cc):
-                                        csum += int(cc[1]) - int(cc[0])
-                                    csum += 1
-                                row.Csum = csum
-                        session.commit()
-                    except Exception as e:
-                        print('~' * 5, ' In model << ', model, ' >> ', '~' * 5)
-                        print('Error: {}'.format(str(e)))
-                        print(dataframe)
-                        with open('flask_python_log.txt', 'a') as f:
-                            f.write('~' * 5 + ' In model << ' + str(model) + ' >> ' + '~' * 5)
-                            f.write('\n')
-                            f.write('Error: {}'.format(str(e)))
-                            f.write('\n')
-                            f.write(dataframe)
-                            f.write('\n')
+                        self.session.bulk_insert_mappings(model, df_clean.to_dict(orient='records'))
+                        self.session.commit()  # raises an Exception if problem with data
+                    except Exception as e:  # todo catch different kinds of exceptions ?
+                        # (mysql.connector.errors.IntegrityError) 1062 (23000): Duplicate entry
+                        # (mysql.connector.errors.IntegrityError) 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`tryout`.`texts`, CONSTRAINT `texts_ibfk_1` FOREIGN KEY (`number`) REFERENCES `titles` (`number`))
+                        # (mysql.connector.errors.DataError) 1406 (22001): Data too long for column
+                        self.logger.debug(f'df chunk insert fail. trying \'exclude_faulty_lines\'')
+                        self.logger.debug(f'{e.args[0]}')
+                        self.session.rollback()  # self.session.flush()
+                        self.exclude_faulty_lines(model, df_clean.to_dict(orient='records'))
+                    finally:
+                        chunk_num += 1
 
-            print("...      SRC File " + src_file + " time: " + str(time() - tsrc) + " s.")
-            with open('flask_python_log.txt', 'a') as f:
-                f.write("...    SRC File " + src_file + " time: " + str(time() - tsrc) + " s.")
-                f.write('\n')
+                exit_flag = True
 
-        print("---  Model " + str(model) + " time: " + str(time() - tm) + " s.")
-        with open('flask_python_log.txt', 'a') as f:
-            f.write("---        Model " + str(model) + " time: " + str(time() - tm) + " s.")
-            f.write('\n')
-            f.write('\n')
+            except Exception as e_read_csv:
+                self.logger.error(f'{e_read_csv.args[0]}')
+                self.logger.debug(f'{e_read_csv}')
+                self.logger.critical(f'Note: The whole chunk #{chunk_num} was not inserted!\n'
+                                     f'(lines {chunk_num * app.config["CHUNK_SIZE_DB"]}-'
+                                     f'{chunk_num * (app.config["CHUNK_SIZE_DB"] + 1) - 1})')
+                chunk_num += 1  # todo this might cause a problem (or skipping chunks)
+                exit_flag = False
+        csv_file.close()
 
-    session.close()
+    # Finds the line in the data that throws exception during bulk_insert_mapping on data.
+    # Recursivly attemps to insert smaller chunks of data until finds a faulty line.
+    #   Recieves:
+    #       model - current model (table) into which loading data
+    #       df_dict - a pd.DataFrame.to_dict(orient='records')
+    #       i0 - #line in the current chunk of data - for logging (so you can remove)
+    #   Return exceptions_dict (type Dict[str, Tuple[Base, Exception]])
+    def exclude_faulty_lines(self, model: Base, df_dict: collections.abc.Mapping, i0: int = 0):
+        df_len = df_dict.__len__()
+        if not df_len: return {}  # faulty_lines_exceptions_dict
 
-    # except Exception as e:
-    #     print('Error: {}'.format(str(e)))
-    #     # s.rollback()  # Rollback the changes on error
-    # finally:
-    #     session.close()
-    print("=== Total Time elapsed: " + str(time() - t) + " s.")
-    with open('flask_python_log.txt', 'a') as f:
-        f.write("===            Total Time elapsed: " + str(time() - t) + " s.")
-        f.write('\n')
-        f.write("="*55)
-        f.write('\n')
-        f.write('\n')
+        first_row: model = model(**df_dict[0])
+        try:  # insert 1st line
+            self.session.add(first_row)
+            self.session.commit()
+
+        except Exception as add_line_error:
+            self.session.rollback()  # & self.session.flush() ?
+            prime_key_name, prime_key_val = get_prime_key(model, first_row)
+            self.faulty_lines_exceptions_dict[str(prime_key_val)] = (first_row, add_line_error)
+            self.logger.error(f'In \'{model.__name__}\' entry with \'{prime_key_name}\' key value: {prime_key_val}.')
+            self.logger.debug(f'\t{add_line_error.args[0]}\n\t\t\tFull Entry: {first_row}\n')
+            # self.logger.debug(f'{add_line_error}')
+
+        half_len = int(df_len / 2)
+
+        try:  # insert whole df
+            self.session.bulk_insert_mappings(model, df_dict[1:])
+            self.session.commit()  # & self.session.rollback() ?
+
+        except Exception as e_bulk_insert:
+            # self.logger.debug(f'{e_bulk_insert.args[0]}')
+            self.session.rollback()  # self.session.flush()
+            # smaller chunks
+            self.exclude_faulty_lines(model, df_dict[1:half_len + 1], i0 + 1)  # 1st half of data
+            self.exclude_faulty_lines(model, df_dict[half_len + 1:], half_len + 1)  # 2nd half of data
+
+        # finally:
+        #     self.session.rollback()
+
 
 if __name__ == '__main__':
-    # Load all CSV files to the DB
-    app = create_app()
-    ctx = app.app_context()
+    ctx = create_app().app_context()
     ctx.push()
-    csv_to_mysql()
-    ctx.pop()
 
-# printout:
-#     /home/fares/.virtualenvs/WebLib/bin/python /home/fares/PycharmProjects/WebLib/utilities/db_migration.py
-#     Time elapsed: 243.15527486801147 s.
-#
-#     Process finished with exit code 0
+    DBMigration().load_full_db()  # Load all CSV files to the DB
+
+    ctx.pop()
+    print(f'Fin!')

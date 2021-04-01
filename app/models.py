@@ -1,24 +1,23 @@
-import collections
 import os
+import collections
 from collections import defaultdict
+from typing import List, Dict, Set, Tuple
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, ForeignKey, Table, MetaData
-from sqlalchemy.orm import column_property, Query
+from sqlalchemy import Column, ForeignKey, Table, MetaData, CheckConstraint, SmallInteger, inspect
+from sqlalchemy.orm import column_property, Query, validates, synonym, relationship
 from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float, Boolean, PickleType
+from sqlalchemy.ext.declarative import synonym_for
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from config import RAW_DATA_DIR
 
 from . import db
-from . import forms as f
 
 Base: SQLAlchemy.__base__ = db.Model
-
-
 # Base:SQLAlchemy.Query = db.Model
 # Base:sqlalchemy.orm = db.Model
 # Base:SQLAlchemy = db.Model
-
 
 # Base = declarative_base()
 
@@ -53,72 +52,124 @@ Base: SQLAlchemy.__base__ = db.Model
 #     def __repr__(self):
 #         return '<Person model {}>'.format(self.id)
 
+SHORT_STRING_LEN = 20
+LONG_STRING_LEN = 100
 
-# corresponds to the bookrefernces.csv
+
+def get_prime_key(model: Base, model_row: Base = None) -> Tuple[str, str]:
+    prime_key_name = inspect(model).primary_key[0].name
+    prime_key_val = model_row.__dict__[prime_key_name] if model_row else None
+    return prime_key_name, str(prime_key_val)
+
+
+# the fields marked as 'nullable(=True)' are (mostly) those who don't have a value in the orig (moshes) csv
+
+# corresponds to the book_references table
+# holding information for the referencing books
+# prime key 'bibinfo' is (will be) a foreign key in TextText
 class BookRef(Base):
     __tablename__ = 'book_references'
 
-    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
-               for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('bookreferences')]
+    biblio = Column(Integer, primary_key=True, nullable=False)  # (will be) a foreign key in TextText
+    title = Column(String(LONG_STRING_LEN), nullable=False)
+    file = Column(String(SHORT_STRING_LEN), nullable=False)
+    gcode = Column(String(SHORT_STRING_LEN), nullable=True)
 
-    col_names = ['book_biblio_info', 'file', 'titleref', 'gcode']
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}' for textsfile in os.listdir(RAW_DATA_DIR)
+               if textsfile.startswith('bookreferences')]
+    col_names = ['biblio', 'file', 'title', 'gcode']
     dtype_dic_py2sql = {int: Integer, str: Text}
-    dtype_dic_csv2py = {'book bibliographic info': str,  # :int ???
-                        'file': str,
-                        'titleref': str,
-                        'gcode': str}
+    dtype_dic_csv2py = {
+        'book bibliographic info': int,  # :int ???
+        'file'                   : str, 'titleref': str, 'gcode': str
+        }
 
-    # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
-    dbg_index = Column(Integer, autoincrement=True, primary_key=True, )
-    book_biblio_info = Column(String(10), primary_key=True, nullable=False, default='non')
-    file = Column(String(100), default='non', nullable=True)
-    titleref = Column(String(100), nullable=True)
-    gcode = Column(Text, nullable=True)  # ,unique=True)
+    # CheckConstraint("gcode in ('x','#VALUE!')"), #this only throws an exception and stops table build
+    # ,unique=True)
 
-    # fixme find a better default val or handle empty field. try the option below
-    # file = Column(String(100), default=None, nullable=True) todo try this one
-    # todo what does it mean to have a column that is both nullable and has a default value
+    # def check_gcode(gcode: String):
+    #     # return context.get_current_parameters()['gcode'] + 12
+    #     if ('x' == gcode) or ('#VALUE!' == gcode):
+    #         _gcode = None
+    #     else:
+    #         print(gcode)
+    #         _gcode = gcode
+    #     return _gcode
+
+    # def mydefault(context):
+    #     return context.get_current_parameters()['counter'] + 12
+
+    # _gcode = Column(String(SHORT_STRING_LEN),
+    #                 default=check_gcode,
+    #                 nullable=True)
+
+    # @synonym_for("gcode")
+    # @property
+    # # @hybrid_property
+    # def _gcode(self):
+    #     if 'x' == self.gcode:
+    #         return None
+    #     else:
+    #         return self.gcode
+
+    # ggcode = synonym("gcode", descriptor=_gcode)
+    # @validates('gcode')
+    # def bad_value_in_csv(self, key, value):
+    #     if 'x' == value:
+    #         return None
+    #     else:
+    #         return value
+
+    # todo what happens when a column is both nullable and has a default value
 
     def __repr__(self):
-        return \
-            f'< (BookRef) - file: {self.file}, ' \
-            f' title ref: {self.titleref}, ' \
-            f' book_biblio_info: {self.book_biblio_info}>'
+        return f'< (BookRef) - {self.title}, ' \
+               f' file: {self.file}, ' \
+               f' biblio: {self.biblio}>'
 
 
-# corresponds to the titlesa.csv
-class Title(Base):  # todo handle cases of null in 'from/to century',
-    __tablename__ = 'titles'  # fixme
+# corresponds to the titles table
+# holding information for the referenced titles - the results of the search
+# prime key 'number' is (will be) a foreign key in TextText
+class Title(Base):
+    __tablename__ = 'titles'
 
-    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
-               for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('title')]
+    number = Column(Integer, primary_key=True, unique=True)  # (will be) a foreign key in TextText
+    title = Column(String(500), nullable=True)  # fixme - shouldn't be that long - update in files
+    author = Column(String(LONG_STRING_LEN), nullable=True)
+    centstart = Column(SmallInteger, nullable=True)  # , default=+21)# , server_default='+21')
+    centend = Column(SmallInteger, nullable=True)  # , default=-21)# , server_default='+21')
+    lang = Column(String(SHORT_STRING_LEN), nullable=True)
+    # `index_org` & `joined` columns are omitted since they don't appear to be used
 
-    col_names = ['index_org', 'author', 'centend', 'centstart', 'joined', 'language', 'number', 'title']
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}' for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('title')]
+    col_names = ['index_org', 'author', 'centend', 'centstart', 'joined', 'lang', 'number', 'title']
+    dtype_dic_csv2py = {
+        'index1'   : str,
+        'author1'  : str,
+        # `int` is usable only for not-NaN cols: The lack of NaN rep in int cols is a pandas "gotcha".
+        # 'centend': int,   todo
+        # 'centstart': int, todo
+        'centend'  : str,
+        'centstart': str,
+        'joined'   : str,
+        'language' : str,
+        'number'   : int,
+        'title1'   : str
+        }
+    dtype_dic_py2sql = {int: Integer, float: Float, str: Text}
 
-    dtype_dic_csv2py = {'index1': str,
-                        'author1': str,
-                        'centend': str,
-                        'centstart': str,
-                        'joined': str,
-                        'language': str,
-                        'number': str,
-                        'title1': str}
-    # dtype_dic_py2sql = {int: Integer, str: Text}
+    # CheckConstraint('centend <= centstart', name="ck_centend_before_centstart")
 
-    dbg_index = Column(Integer, autoincrement=True, primary_key=True)
-    # the fields marked as 'nullable(=True)' are those who doesn't necessarily have a value in the orig (moshes) csv
-    index_org = Column(String(10), primary_key=True, nullable=False, default='non')  # , nullable=False)
-    title = Column(String(500))
-    author = Column(String(100))
-    centend = Column(String(100))
-    centstart = Column(String(100))
-    joined = Column(String(200))  # fixme this seems to be always null
-    language = Column(String(100))
-    number = Column(String(100))
+    # @staticmethod
+    # def name():
+    #     return 'Title bla bla'
 
     def __repr__(self):
         # todo rename column names
-        return f'<Title model title: {self.title},  author: {self.author}, index: {self.index_org}>'
+        return f'< (Title) - {self.title},  ' \
+               f'author: {self.author}, ' \
+               f'number: {self.number}>'
 
 
 # corresponds to the text_subjects2.csv
@@ -127,162 +178,138 @@ class TextSubject(Base):
     #  file structure not fully understood
     #  plus what happens when there are miultiple commas
     #   or a subject that contains a comma within brackets(', ")
-    __tablename__ = 'text_subjects'  # fixme
+    __tablename__ = 'text_subjects'
 
+    # fixme should subject be that long?
+    subject = Column(String(LONG_STRING_LEN * 2, collation='utf8_bin'), primary_key=True,
+                     nullable=False)  # , whitespace=
+    C = Column(Text, nullable=False)  # longest C value is ~68,000 chars in line 24794/5 &~31268 ..
+    Csum = Column(Integer)  # used for ref counts (e.g. in listings of subjects)
+
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}' for textsfile in os.listdir(RAW_DATA_DIR) if
+               textsfile.startswith('texts_subjects')]
     col_names = ['subject', 'C']
-
-    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
-               for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('texts_subjects')]
-
-    dtype_dic_csv2py = {'subject': str,
-                        'C': str}
-    dtype_dic_py2sql = {int: Integer, str: Text}
-
-    dbg_index = Column(Integer, primary_key=True, autoincrement=True)
-    subject = Column(String(200), nullable=False)
-    C = Column(Text)  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
-    Csum = Column(
-        Integer)  # longest C value is ~68,000 chars in line 24794/5 &~31268 .. fixme consider creating sub tables
+    dtype_dic_csv2py = {
+        'subject': str,
+        'C'      : str,
+        }
+    dtype_dic_py2sql = {
+        int: Integer,
+        str: Text
+        }
 
     def __repr__(self):
-        return f'<TextSubject subject: {self.subject}, C: {self.C} >'
+        return f'< (TextSubject) - {self.subject}, ' \
+               f'#ref: {self.Csum}, ' \
+               f'C\'s List: {self.C}>'
 
 
 # corresponds to the textsa1.csv textsa2.csv textsa19.csv textsa1.csv
 class TextText(Base):
     __tablename__ = "texts"
 
-    # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa1.csv']
-    # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa2.csv']
-    # src_scv = ['/home/fares/PycharmProjects/WebLib/raw_data/textsa19.csv']
-    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'  # fixme should work
+    # index_dbg = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    C = Column(Integer, primary_key=True, nullable=False, autoincrement=False)
+    subject = Column(String(LONG_STRING_LEN), nullable=False)  # ForeignKey('text_subjects.subject'),
+    number = Column(Integer, ForeignKey(f'{Title.__tablename__}.{inspect(Title).primary_key[0].name}'), nullable=False)
+    biblio = Column(Integer, ForeignKey(f'{BookRef.__tablename__}.{inspect(BookRef).primary_key[0].name}'),
+                    nullable=False)
+    page = Column(Integer, nullable=True)  # could be null(empty) - KT 20210221.
+    # could be null(empty) - KT 20210221 - todo figure out what this means (for 'page' also)
+    ref = Column(String(SHORT_STRING_LEN * 3), nullable=True)
+    title = relationship('Title')
+    book_ref = relationship('BookRef')
+
+    # todo
+    # src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa1.csv']
+    # src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa2.csv']
+    # src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa19.csv']
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
                for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
+    col_names = ['subject', 'ref', 'page', 'biblio', 'number', 'C']
+    dtype_dic_csv2py = {
+        'subject'                : str,
+        'ref'                    : str,
+        'page'                   : float,
+        'book bibliographic info': float,
+        'number'                 : int,
+        'C'                      : int
+        }
+    dtype_dic_py2sql = {
+        int: Integer,
+        str: String
+        }
 
-    col_names = ['subject', 'ref', 'page', 'book_biblio_info', 'number', 'C']
-
-    dtype_dic_csv2py = {'subject': str,
-                        'ref': str,
-                        'page': str,
-                        'book bibliographic info': str,  # :int ???
-                        'number': str,
-                        'C': str}  # {col:str for col in col_names}
-    # dtype_dic_py2sql = {int: Integer, str: Text}
-    index_dbg = Column(Integer, autoincrement=True, primary_key=True, nullable=False)
-
-    subject = Column(String(120))
-    ref = Column(String(100))
-    page = Column(String(10))
-    book_biblio_info = Column(String(10))
-    number = Column(String(10))
-    C = Column(String(10))
+    # example = relationship("Chinese", backref="eng")
 
     def __repr__(self):
-        return \
-            f'<(TextText) ' \
-            f'#{self.number}, ' \
-            f'subject: {self.subject}, ' \
-            f'ref: {self.ref}, ' \
-            f'bib_info: {self.book_biblio_info} ' \
-            f'pg.{self.page}, ' \
-            f'C: {self.C}, ' \
-            f'>'
-
-
-from typing import List, Dict, Set
+        return f'<(TextText) - ' \
+               f'C: {self.C}, ' \
+               f'subject: {self.subject}, ' \
+               f'#{self.number}, ' \
+               f'bib_info: {self.biblio} ' \
+               f'ref: {self.ref}, ' \
+               f'pg.{self.page}, ' \
+               f'>'
 
 
 class Book:
-    def __init__(self, bibinfo: int):
-        self.bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
-        self.pages: Set[int] = set()
-        self.refs: List[int] = []
-        q_book_ref: Query = BookRef.query
-        q_book_ref_filter: Query = q_book_ref.filter(BookRef.book_biblio_info == self.bibinfo)
-        self.title_full = q_book_ref_filter.value(BookRef.titleref)
+    def __init__(self, bibinfo: BookRef):
+        self.biblio: int = bibinfo.biblio
+        self.refs: List[str] = []  # list of all refs todo maybe not nedded - depends on the data shown in the site
+        self.pages: Set[int] = set()  # list of all refs todo maybe not nedded - depends on the data shown in the site
+        self.refs_per_page: Dict[int, List[str]] = {}  # refs_per_page={pages: List[refs]}
+        self.title_full: BookRef = bibinfo
+
+    def add_page(self, page: int = -1):  # todo add ref?
+        self.pages.add(page)
+        return self
 
     def __repr__(self):
-        return \
-            f'... The Referencing Book: ' \
-            f'{self.title_full} ' \
-            f'bib: {self.bibinfo} ' \
-            f'pages: {self.pages}'
+        # f'\n\t The Referencing Book: ' \
+        return f'' \
+               f'{self.title_full} ' \
+               f'bib: {self.biblio} ' \
+               f'refs per page: {self.refs_per_page}'
+
+    def __len__(self):
+        counter = 0
+        # for pg, ref_list in self.refs_per_page.items():
+        for ref_list in self.refs_per_page.values():
+            counter += ref_list.__len__()
+        return counter
+        # return self.refs.__len__()
+
+    def __lt__(self, other) -> bool:
+        return self.__len__() < other.__len__()
+
+    def __eq__(self, other) -> bool:
+        return self.__len__() == other.__len__()
 
 
 class ResultTitle:
     # print(' =============== ResultTitle ================')
-    def __init__(self, num: int, filter_form):
-    # def __init__(self, num: int, filter_form: f.FilterForm):
-        # def __init__(self, num: int, filter_form: f.FilterForm):
+    filtered_flag = False
+
+    def __init__(self, num: int, title: str, author: str):  # fixme you don't really need the num
         self.num = num
-        # self.refs: Dict = {}
         self.refs: Set = set()
-        self.bibinfo: List[int] = []
-        self.books: List[Book] = []
-        # self.books: Dict[int, Book] = collections.defaultdict(Book)
-        q_title: Query = Title.query
-        q_title_filter: Query = q_title.filter(Title.number == num)
-        self.author = q_title_filter.value(Title.author)
-        self.title = q_title_filter.value(Title.title)
-        self.filtered_flag = False
-        from_century = filter_form.from_century.data
-        to_century = filter_form.to_century.data
-        language = filter_form.language.data
-        ancient_author = filter_form.ancient_author.data
-        ancient_title = filter_form.ancient_title.data
-        # if to_century < from_century:
-        #     raise Exception('KARINA. to_century is smaller than from_century.')
-        if from_century:
-            q_title_filter: Query = q_title_filter.filter(Title.centstart >= from_century)
-        if to_century:
-            q_title_filter: Query = q_title_filter.filter(Title.centend <= to_century)
-        if language:
-            q_title_filter: Query = q_title_filter.filter(Title.language == language)
-        if ancient_author:
-            q_title_filter: Query = q_title_filter.filter(Title.author == ancient_author)
-        if ancient_title:
-            q_title_filter: Query = q_title_filter.filter(Title.title == ancient_title)
-        # # fixme check this in routes or sooner in the code - at the top of this function!
-        # if ref: fixme
-        #     q_title_filter: Query = q_title_filter.filter(Title. == filter_form.from_century.data)  # fixme check this in routes!
+        self.books_dict: Dict[int, Book] = {}
+        self.author = author
+        self.title = title
 
-        if q_title_filter.first():
-            self.filtered_flag = True
-            print('.' * 50, self.title, 'by:', self.author)
+    def add_bib(self, bibinfo: BookRef) -> Book:
+        self.books_dict[bibinfo.biblio] = self.books_dict.setdefault(bibinfo.biblio, Book(bibinfo))
+        return self.books_dict[bibinfo.biblio]
 
-        # self.filtered_flag = True
-        # fixme - the above yields 87 results and only 15 results without the 2nd 'flag=true' line
-        #   even though in both cases the filters are empty in the form.
-        #   this is probably the result of mishandling null in the 'to_century" field
-        #   (currently 'Any' value is -100, so if NULL in the field the query to_century<-100 is always FALSE)
-
-    def add_bib(self, bibinfo: int):
-        print(' ---------------------- add_bib --------------------')
-        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
-        self.bibinfo.append(bibinfo)
-        # self.books[bibinfo] = Book(bibinfo)
-        self.books.append(Book(bibinfo))
-
-    def add_page(self, page: str, bibinfo: int):
-        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currentyly str
-        if not page.strip(' '):  # todo should be handled in DB
-            page = ' Page-Unknown '
-        else:
-            page = int(float(page))  # todo page should be int in the DB, currentyly str
-        # self.books[bibinfo].pages.add(page)
-
-        if page not in self.books[-1].pages:
-            print(' ------------ add_page -------------')
-        self.books[-1].pages.add(page)
-
-    def add_refs(self, ref: str, bibinfo: int):
-        bibinfo = int(float(bibinfo))  # todo bibinfo should be int in the DB, currently str
-        # self.books[bibinfo].refs.append(ref)
-        # self.refs[bibinfo] = ref
-
-        self.books[-1].refs.append(ref)
-        if ref not in self.refs:
-            print(' --- add_refs ---    ')
+    def add_refs(self, ref: str):
         self.refs.add(ref)
+
+    def num_ref_books(self):
+        return self.books_dict.__len__()
+
+    def num_refs_total(self):
+        return self.books_dict.__len__()
 
     def __repr__(self):
         s = '*' * 13
@@ -291,9 +318,19 @@ class ResultTitle:
             f'#{self.num}, ' \
             f'{self.title} By: ' \
             f'{self.author}, ' \
-            f'{self.bibinfo}, ' \
-            f'{self.refs}\n'
+            f'{self.books_dict}, ' \
+            f'{self.refs}\n' \
+            f'\nThe  ( ---{self.books_dict.__len__()}--- )  ref books: \n'
         # for k, i in self.books.items():
-        for i in self.books:
+        for i in self.books_dict.items():
             s += f'\t\t{i}\n'
         return s
+
+    def __len__(self) -> int:
+        return self.books_dict.__len__()
+
+    def __lt__(self, other) -> bool:
+        return self.__len__() < other.__len__()
+
+    def __eq__(self, other) -> bool:
+        return self.__len__() == other.__len__()
