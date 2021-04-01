@@ -1,7 +1,7 @@
 import os
 import collections
 from collections import defaultdict
-from typing import List, Dict, Set
+from typing import List, Dict, Set, Tuple
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, ForeignKey, Table, MetaData, CheckConstraint, SmallInteger, inspect
@@ -56,6 +56,12 @@ SHORT_STRING_LEN = 20
 LONG_STRING_LEN = 100
 
 
+def get_prime_key(model: Base, model_row: Base = None) -> Tuple[str, str]:
+    prime_key_name = inspect(model).primary_key[0].name
+    prime_key_val = model_row.__dict__[prime_key_name] if model_row else None
+    return prime_key_name, str(prime_key_val)
+
+
 # the fields marked as 'nullable(=True)' are (mostly) those who don't have a value in the orig (moshes) csv
 
 # corresponds to the book_references table
@@ -69,8 +75,8 @@ class BookRef(Base):
     file = Column(String(SHORT_STRING_LEN), nullable=False)
     gcode = Column(String(SHORT_STRING_LEN), nullable=True)
 
-    src_scv = [f'{RAW_DATA_DIR}/{textsfile}' for textsfile in os.listdir(RAW_DATA_DIR) if
-               textsfile.startswith('bookreferences')]
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}' for textsfile in os.listdir(RAW_DATA_DIR)
+               if textsfile.startswith('bookreferences')]
     col_names = ['biblio', 'file', 'title', 'gcode']
     dtype_dic_py2sql = {int: Integer, str: Text}
     dtype_dic_csv2py = {
@@ -161,7 +167,9 @@ class Title(Base):
 
     def __repr__(self):
         # todo rename column names
-        return f'<Title model title: {self.title},  author: {self.author}, index: {{self.index_org}}>'
+        return f'< (Title) - {self.title},  ' \
+               f'author: {self.author}, ' \
+               f'number: {self.number}>'
 
 
 # corresponds to the text_subjects2.csv
@@ -191,7 +199,9 @@ class TextSubject(Base):
         }
 
     def __repr__(self):
-        return f'<TextSubject subject: {self.subject}, #ref: {self.Csum} , C: {self.C}>'
+        return f'< (TextSubject) - {self.subject}, ' \
+               f'#ref: {self.Csum}, ' \
+               f'C\'s List: {self.C}>'
 
 
 # corresponds to the textsa1.csv textsa2.csv textsa19.csv textsa1.csv
@@ -210,11 +220,12 @@ class TextText(Base):
     title = relationship('Title')
     book_ref = relationship('BookRef')
 
+    # todo
     # src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa1.csv']
-    src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa2.csv']
+    # src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa2.csv']
     # src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa19.csv']
-    # src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
-    #            for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
+               for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
     col_names = ['subject', 'ref', 'page', 'biblio', 'number', 'C']
     dtype_dic_csv2py = {
         'subject'                : str,
@@ -232,7 +243,7 @@ class TextText(Base):
     # example = relationship("Chinese", backref="eng")
 
     def __repr__(self):
-        return f'<(TextText) ' \
+        return f'<(TextText) - ' \
                f'C: {self.C}, ' \
                f'subject: {self.subject}, ' \
                f'#{self.number}, ' \
