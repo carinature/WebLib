@@ -42,8 +42,10 @@ class DBMigration:  # singleton class
 
         self.faulty_lines_exceptions_dict: Dict[str, Tuple[Base, Exception]] = {}
 
+
     def __del__(self):
         self.session.close()
+
 
     def load_full_db(self):
         t_total = time()  # for logging
