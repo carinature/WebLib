@@ -222,10 +222,10 @@ class TextText(Base):
 
     # todo
     # src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa1.csv']
-    src_scv = ['app/raw_data/textsa2.csv']# src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa2.csv']
+    # src_scv = ['app/raw_data/textsa2.csv']# src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa2.csv']
     # src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa19.csv']
-    # src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
-            #   for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
+    src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
+              for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
     col_names = ['subject', 'ref', 'page', 'biblio', 'number', 'C']
     dtype_dic_csv2py = {
         'subject'                : str,

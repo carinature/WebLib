@@ -29,6 +29,7 @@ class DBMigration:  # singleton class
                               defaults={
                                   'logfilename'    : f'logs/db_migration_{tt}.log',
                                   'fulllogfilename': f'logs/db_migration_full_{tt}.log',
+                                  'querylogfilename': f"logs/q_{tt}_empty.log",
                                   }
                               )
 
@@ -83,7 +84,7 @@ class DBMigration:  # singleton class
                                              names=model.col_names,
                                              na_values=['x', '#VALUE!', '', 'Unknown'],
                                              chunksize=app.config['CHUNK_SIZE_DB'],
-                                             skiprows=305868
+                                            #  skiprows=305868
                                              ):
                     self.logger.debug(f'{model.__name__} loading chunk #{chunk_num}')
                     model_cols = model.__table__.c
