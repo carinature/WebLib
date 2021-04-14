@@ -51,7 +51,9 @@
     {% endif %}
 
     <!-- Validation Category Sections -->
-    {% for category in categories %}
+    {% for rank, category in categories.items() %}
+{#            {% for category in categories %}#}
+
         {#        rank  {{ rank }}<br>#}
         {#        category  {{ category }}<br>#}
         {#        category['name']  {{ category['name'] }}<br>#}
