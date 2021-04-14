@@ -27,7 +27,7 @@ class DBMigration:  # singleton class
                               defaults={
                                   'logfilename'    : f'logs/db_migration_{tt}.log',
                                   'fulllogfilename': f'logs/db_migration_full_{tt}.log',
-                                  'querylogfilename': f"logs/q_empty.log",
+                                  'querylogfilename': f'logs/q_empty.log',
                                   }
                               )
 
