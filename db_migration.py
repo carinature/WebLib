@@ -19,7 +19,7 @@ import logging.config
 
 class DBMigration:  # singleton class
 
-    # models: List[Base] = [BookRef]
+    # models: List[Base] = [TextText]
     models: List[Base] = Base.__subclasses__()
 
     # logging #todo consider creating different logs for each CSV_file/model
@@ -83,7 +83,7 @@ class DBMigration:  # singleton class
                                              names=model.col_names,
                                              na_values=['x', '#VALUE!', '', 'Unknown'],
                                              chunksize=app.config['CHUNK_SIZE_DB'],
-                                             # skiprows=18
+                                             skiprows=305868
                                              ):
                     self.logger.debug(f'{model.__name__} loading chunk #{chunk_num}')
                     model_cols = model.__table__.c
