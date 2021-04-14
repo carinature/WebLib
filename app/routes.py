@@ -1,57 +1,38 @@
 from typing import List, Dict, Tuple
+import logging, logging.config
+from time import time, localtime
 
-import pandas as pd
-from itertools import groupby
-
-from flask import current_app as app, flash, g, session, send_from_directory
+from flask import current_app as app, send_from_directory
 from flask import render_template, make_response, redirect, url_for, request
 from flask_sqlalchemy import BaseQuery
 from sqlalchemy.orm import Query
-from sqlalchemy.sql.functions import count
 
-from .models import Base
 from . import forms as f
 from . import models as m
 from . import utilities as utils
 
 print('~' * 80)
 
-from sqlalchemy import orm
-
-
-def get_flag():
-    if 'flag' not in g:
-        g.flag = False
-    return g.flag
-
-
-@app.teardown_appcontext
-def teardown_db(exception):
-    flag = g.pop('flag', None)
-    if flag is not None:
-        flag = False
-
-
-categories = [
-    {
+categories: Dict[str, Dict] = {
+    'high' : {
         'name'   : 'Highly Validated',
-        'id'     : 'high',
+        # 'id'     : 'high',
         'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
             ]
         },
-    {
+    'valid': {
         'name'   : 'Validated',
-        'id'     : 'valid',
+        # 'id'     : 'valid',
         'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
             ]
         },
-    {
+    'not'  : {
         'name'   : 'Unvalidated',
-        'id'     : 'not',
+        # 'id'     : 'not',
         'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
             ]
         }
-    ]
+    }
 links = {
     'home'     : '/',
     'search'   : '/search-results',
@@ -67,8 +48,7 @@ links = {
 # @app.route('/search-results/<int:page>', methods=['GET', 'POST'])
 # @app.route('/search-results/<string:search_word>', methods=['GET', 'POST'])
 def search_results(search_word='', page=''):
-    from time import time
-    t_total = time()  # for logging
+    t_time = time()  # for logging
 
     from flask_wtf import FlaskForm
     search_bar: Dict[str, FlaskForm] = utils.init_search_bar()
@@ -84,10 +64,6 @@ def search_results(search_word='', page=''):
                                search_bar=search_bar,
                                method='get'
                                )
-
-    search_word = subject_form.subject_keyword_1.data
-    search = '%{}%'.format(search_word)
-
     filter_form = f.FilterForm().return_as_dict()
     from_century = filter_form['from_century']
     to_century = filter_form['to_century']
@@ -99,9 +75,10 @@ def search_results(search_word='', page=''):
     # ............  return all matching results (subjects) by C column [list] ............
     txts_query: BaseQuery = m.TextText.query
     # filter by subject (and reference if ref_filter field in form is filled out)
+    search_word = subject_form.subject_keyword_1.data
+    search = '%{}%'.format(search_word)
     txts_q_filter: BaseQuery = txts_query.filter(m.TextText.subject.like(search))
     txts_q_filter = txts_q_filter.filter_by(ref=reference) if reference else txts_q_filter
-
     # filter by the title's category
     q_title_filter = txts_q_filter.join(m.Title)
 
@@ -121,6 +98,7 @@ def search_results(search_word='', page=''):
     valid: List[m.ResultTitle] = []
     not_valid: List[m.ResultTitle] = []
 
+    tt = time()  # for logging
     res_tit: m.TextText
     for res_tit in q_title_filter:
         res_title: m.ResultTitle = res_dict.setdefault(
@@ -128,26 +106,24 @@ def search_results(search_word='', page=''):
                 m.ResultTitle(res_tit.number,
                               res_tit.title.title,
                               res_tit.title.author))
-
         res_title.add_bib(res_tit.book_ref).add_page(res_tit.page)
         res_title.add_refs(res_tit.ref)
+    print(f'res_dict: {time() - tt:.5}')
 
-    for k, res in res_dict.items():
-        if len(res.books_dict) > 1:
-            highly_valid.append(res)  # categories[0]['results'].append(res)
-        elif len(res.refs) > 1:
-            # elif len(res.pages) > 1:
-            valid.append(res)
-        else:
-            not_valid.append(res)
+    for res in res_dict.values():
+        if len(res.books_dict) > 1: highly_valid.append(res)  # categories['high']['results'].append(res)
+        elif len(res.refs) > 1: valid.append(res)  # categories['valid']['results'].append(res)
+        else: not_valid.append(res)  # categories['not']['results'].append(res)
 
-    print('=' * 12 + ' query: ' + str(time() - t_total) + ' s.')
+    categories['high']['results'] = sorted(highly_valid, reverse=True)
+    categories['valid']['results'] = sorted(valid, reverse=True)
+    categories['not']['results'] = not_valid
 
-    categories[0]['results'] = sorted(highly_valid, reverse=True)
-    categories[1]['results'] = sorted(valid, reverse=True)
-    categories[2]['results'] = not_valid
+    t_total = time() - t_time
+    print('=' * 12 + f' Total Time elapsed: {t_total:.3} s.')
 
-    print('=' * 12 + ' Total Time elapsed: ' + str(time() - t_total) + ' s.')
+    query_logger: logging.Logger = logging.getLogger('queryLogger')
+    query_logger.info(f' Query time: {t_total:.3} s.    Query subject: {search_word}')
 
     return render_template('search_results.html',
                            title=f'Search Result for: {search_word}',
@@ -157,6 +133,7 @@ def search_results(search_word='', page=''):
                            categories=categories,
                            search_word=search_word,
                            results_num=len(highly_valid) + len(valid) + len(not_valid),
+                           query_time=t_total,
                            )
 
 
@@ -295,11 +272,17 @@ def load_db():
 
 
 @app.route("/csv_to_mysql_func")
-def csv_to_mysql_func_btn():
+# @app.route('/csv_to_mysql_func/<string:model>', methods=['GET', 'POST'])
+def csv_to_mysql_func_btn(model='TextText'):
     print("It's happening... ")
     from time import time
     t = time()
-    from db_migration import csv_to_mysql
-    csv_to_mysql()
+    from db_migration import DBMigration
+    DBMigration().load_full_db()
+    # todo
+    # DBMigration().load_single(m.TextText)
+    # DBMigration().load_single(Base.__subclasses__()[f'm.{model}']) #fixme
+    # DBMigration().load_src_file(m.TextText, './textsa2.csv')
+
     print("Time elapsed: " + str(time() - t) + " s.")
     return '<h1> A O K </h1>'

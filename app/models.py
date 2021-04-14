@@ -293,14 +293,16 @@ class ResultTitle:
 
     def __init__(self, num: int, title: str, author: str):  # fixme you don't really need the num
         self.num = num
+        self.subjects: Set = set()
         self.refs: Set = set()
         self.books_dict: Dict[int, Book] = {}
         self.author = author
         self.title = title
 
     def add_bib(self, bibinfo: BookRef) -> Book:
-        self.books_dict[bibinfo.biblio] = self.books_dict.setdefault(bibinfo.biblio, Book(bibinfo))
-        return self.books_dict[bibinfo.biblio]
+        return self.books_dict.setdefault(bibinfo.biblio, Book(bibinfo))
+        # self.books_dict[bibinfo.biblio] = self.books_dict.setdefault(bibinfo.biblio, Book(bibinfo))
+        # return self.books_dict[bibinfo.biblio]
 
     def add_refs(self, ref: str):
         self.refs.add(ref)

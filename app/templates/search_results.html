@@ -30,18 +30,20 @@
                             with the subject only once, in one book'>
                         ?
                     </button> #}
-                    <h6>{{ categories[0]['results']|length }} are <a class="popover_ctgry" href="#high">highly
+                    <h6>{{ categories['high']['results']|length }} are <a class="popover_ctgry" href="#high">highly
                         validated</a> results.</h6>
-                    <h6>{{ categories[1]['results']|length }} are <a class="popover_ctgry" href="#valid">validated</a>
+                    <h6>{{ categories['valid']['results']|length }} are <a class="popover_ctgry"
+                                                                           href="#valid">validated</a>
                         results.</h6>
-                    <h6>{{ categories[2]['results']|length }} are <a class="popover_ctgry" href="#not">unvalidated</a>
+                    <h6>{{ categories['not']['results']|length }} are <a class="popover_ctgry"
+                                                                         href="#not">unvalidated</a>
                         results.</h6>
                 </div>
 
                 <!-- Search & Filter Forms -->
                 <div class="col-lg-8">
-                    {% include 'bar_search.html' %}
-                    {#              {% include 'bar_srchbr.html' %} #}
+                    <p class='padding-1 color-accent text-center small'>Query time: {{ query_time|round(3) }} s.</p>
+                    {% include 'bar_search.html' %} {#  {% include 'bar_srchbr.html' %} #}
                 </div>
             </div>
             <hr>
@@ -50,7 +52,14 @@
 
     <!-- Validation Category Sections -->
     {% for category in categories %}
-        {{ category_head(category['name'], category['id']) }}
+        {#        rank  {{ rank }}<br>#}
+        {#        category  {{ category }}<br>#}
+        {#        category['name']  {{ category['name'] }}<br>#}
+        {#        category['id']  {{ category['id'] }}<br>#}
+        {#        category['results']  {{ category['results'] }}<br>#}
+
+        {{ category_head(category['name'], rank) }}
+
         <div class="category-padding">
             {% if not category['results'] %}
                 <h3>No results in this category.</h3>
@@ -66,7 +75,6 @@
                     books=res.books_dict,
                     refs=res.refs,
                     num=res.num) }}
-
                 <br>
                 <br>
                 {#            {% set elm_id=num %}#}

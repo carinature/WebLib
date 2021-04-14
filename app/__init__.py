@@ -16,8 +16,8 @@ def create_app():
     # The instance folder is located outside the flaskr package and can hold local data that shouldn’t be committed
     # to version control, such as configuration secrets and the database file.
 
-    # app.config.from_object('config.DevConfig')  # development configuration
-    app.config.from_object('config.ProdConfig')  # production configuration
+    app.config.from_object('config.DevConfig')  # development configuration, configured for local sql docker
+    # app.config.from_object('config.ProdConfig')  # production configuration, configured for pythonanywhere
 
     db.init_app(app)
     bootstrap.init_app(app)
