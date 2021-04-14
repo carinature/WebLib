@@ -15,12 +15,13 @@ app = create_app()
 import logging, logging.config
 from time import time, localtime
 
+print('*' * 80)
 tt = '-'.join([str(i) for i in localtime()])
 logging.config.fileConfig('logging.conf',
                           defaults={
-                              'logfilename'     : f'logs/db_migration_{tt}_empty.log',
-                              'fulllogfilename' : f'logs/db_migration_full_{tt}_empty.log',
-                              'querylogfilename': f"logs/q_{tt}.log",
+                              'logfilename'     : f'logs/db_migration_empty.log',
+                              'fulllogfilename' : f'logs/db_migration_full_empty.log',
+                              'querylogfilename': f"logs/q_{{tt}}.log",
                               }
                           )
 query_logger: logging.Logger = logging.getLogger('queryLogger')

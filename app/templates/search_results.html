@@ -53,13 +53,10 @@
     <!-- Validation Category Sections -->
     {% for rank, category in categories.items() %}
 {#            {% for category in categories %}#}
-
         {#        rank  {{ rank }}<br>#}
         {#        category  {{ category }}<br>#}
         {#        category['name']  {{ category['name'] }}<br>#}
-        {#        category['id']  {{ category['id'] }}<br>#}
         {#        category['results']  {{ category['results'] }}<br>#}
-
         {{ category_head(category['name'], rank) }}
 
         <div class="category-padding">

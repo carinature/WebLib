@@ -16,19 +16,16 @@ print('~' * 80)
 categories: Dict[str, Dict] = {
     'high' : {
         'name'   : 'Highly Validated',
-        # 'id'     : 'high',
         'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
             ]
         },
     'valid': {
         'name'   : 'Validated',
-        # 'id'     : 'valid',
         'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
             ]
         },
     'not'  : {
         'name'   : 'Unvalidated',
-        # 'id'     : 'not',
         'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
             ]
         }
@@ -45,8 +42,6 @@ links = {
 # ++++++++++++  search results and filtering page ++++++++++++
 @app.route(links['search'], methods=['GET', 'POST'])
 # @app.route('/search-results/<string:search_word>/<int:page>', methods=['GET', 'POST'])
-# @app.route('/search-results/<int:page>', methods=['GET', 'POST'])
-# @app.route('/search-results/<string:search_word>', methods=['GET', 'POST'])
 def search_results(search_word='', page=''):
     t_time = time()  # for logging
 
@@ -54,7 +49,7 @@ def search_results(search_word='', page=''):
     search_bar: Dict[str, FlaskForm] = utils.init_search_bar()
     subject_form: f.SearchSubject = search_bar['subject_form']
     filter_form: f.FilterForm = search_bar['filter_form']
-    print(filter_form.return_as_dict())
+    # print(filter_form.return_as_dict())
 
     if not subject_form.validate_on_submit():  # i.e. when method==GET
         return render_template('search_results.html',
@@ -120,10 +115,12 @@ def search_results(search_word='', page=''):
     categories['not']['results'] = not_valid
 
     t_total = time() - t_time
-    print('=' * 12 + f' Total Time elapsed: {t_total:.3} s.')
+    print('=' * 10 + f' Total Time elapsed: {t_total:.3} s.')
 
     query_logger: logging.Logger = logging.getLogger('queryLogger')
-    query_logger.info(f' Query time: {t_total:.3} s.    Query subject: {search_word}')
+    query_logger.info(f'\tQuery time: {t_total:.3} s.'
+                      f'\tQuery subject: {search_word}'
+                      f'\t#results: {len(res_dict)}')
 
     return render_template('search_results.html',
                            title=f'Search Result for: {search_word}',
@@ -132,7 +129,7 @@ def search_results(search_word='', page=''):
                            search_bar=search_bar,
                            categories=categories,
                            search_word=search_word,
-                           results_num=len(highly_valid) + len(valid) + len(not_valid),
+                           results_num=len(res_dict),
                            query_time=t_total,
                            )
 
