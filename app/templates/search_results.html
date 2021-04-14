@@ -18,7 +18,7 @@
     {% else %}
         <div class="container-fluid padding-bot-2">
             <div class="row">
-                <!-- Title & Results Info -->
+                 <!--Title & Results Info-->
                 <div class="col-lg-4 text-center ">
                     <h1 class="display-4 head-title padding-bot-2">
                         There are {{ results_num }} results for: <em>{{ search_word }}</em></h1>
@@ -40,7 +40,7 @@
                         results.</h6>
                 </div>
 
-                <!-- Search & Filter Forms -->
+                 <!--Search & Filter Forms -->
                 <div class="col-lg-8">
                     <p class='padding-1 color-accent text-center small'>Query time: {{ query_time|round(3) }} s.</p>
                     {% include 'bar_search.html' %} {#  {% include 'bar_srchbr.html' %} #}
@@ -52,11 +52,6 @@
 
     <!-- Validation Category Sections -->
     {% for rank, category in categories.items() %}
-{#            {% for category in categories %}#}
-        {#        rank  {{ rank }}<br>#}
-        {#        category  {{ category }}<br>#}
-        {#        category['name']  {{ category['name'] }}<br>#}
-        {#        category['results']  {{ category['results'] }}<br>#}
         {{ category_head(category['name'], rank) }}
 
         <div class="category-padding">
@@ -66,7 +61,7 @@
             {% endif %}
             {% set outer_loop = loop %}
             {% for res in category['results'] %}
-                <!-- Results (Per Category) -->
+                 <!--Results (Per Category)-->
                 {{ result_item(
                     index = loop.index,
                     author=res.author,
@@ -75,16 +70,6 @@
                     refs=res.refs,
                     num=res.num) }}
                 <br>
-                <br>
-                {#            {% set elm_id=num %}#}
-                {#            {% set btn_id='btn'~num %}#}
-                {#            <button id={{ btn_id }} class="padding bgn-dark" #}
-                {#                    onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">Show More#}
-                {#            </button>#}
-                {#            <br><br>#}
-                {#            <p   class="display-none" id={{ elm_id }}>#}
-                {#                preview of the text (???)#}
-                {#            </p>#}
             {% endfor %}
         </div>
     {% endfor %}
