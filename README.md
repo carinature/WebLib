@@ -33,37 +33,44 @@ site is published at https://karinature.pythonanywhere.com/
 
 **templates** - contains the html templates rendered in _routes.py_
 
-**static** - contains rest of the static files:
+**static** - contains rest of the static files:\
     ***css*** - 
-        all the original bootstrap-4 files
-        *bs4-style.css* and search-engine-main.css (examples from the web)
-        *style.css* has more specific properties
-        *Spectral-Regular.ttf* is the font currently chosen
-    ***images***
+        all the original bootstrap-4 files\
+        *bs4-style.css* and search-engine-main.css (examples from the web)\
+        *style.css* has more specific properties\
+        *Spectral-Regular.ttf* is the font currently chosen\
+    ***images***\
     ***js*** - 
-        all the original bootstrap-4 + JQuery + Popper files
-        *gui.js* - defines the functionality for the dynamic qualities of the static content
+        all the original bootstrap-4 + JQuery + Popper files\
+        *gui.js* - defines the functionality for the dynamic qualities of the static content\
 
    
 ## SQL Server (Local) 
-    run it:
+run it:\
 `docker-compose up -d -f mysql-docker-compose.yml`
 
-    connect to server
+connect to server:\
 `mysql -h 127.0.0.1 -u root -P 3306 -p <MYSQL_ROOT_PASSWORD>`
 
 ###### If you Stop running containers without removing them They can be started again with
     
-    stop server:
+stop server:\
 `docker-compose stop -f mysql-docker-compose.yml` 
     
-    start server: 
+start server: \
 `docker-compose start -f mysql-docker-compose.yml`
 
 ##Isues
 ##### If the next error is shown, while runnig docker
     Error starting userland proxy: listen tcp 0.0.0.0:3306: bind: address already in use
-run the next command:
-`sudo netstat -laputen | grep :3306`
-and then:
+run the next command:\
+`sudo netstat -laputen | grep :3306`\
+and then:\
 `sudo systemctl stop PROGRAM_NAME`
+
+##### If the next error is shown, while runnig docker
+    (mysql.connector.errors.ProgrammingError) 1054 (42S22): Unknown column '<col name>' in 'field list'
+might be a case of existing table while trying to load new/updated modules to the DB.
+try to delete the existing table (in the MySQL console):\
+`show tables;`\
+`DROP TABLE IF EXISTS <table name>;`

@@ -142,7 +142,7 @@ class DBMigration:  # singleton class
             prime_key_name, prime_key_val = get_prime_key(model, first_row)
             self.faulty_lines_exceptions_dict[str(prime_key_val)] = (first_row, add_line_error)
             self.logger.error(f'In \'{model.__name__}\' entry with \'{prime_key_name}\' key value: {prime_key_val}.')
-            self.logger.debug(f'\t{add_line_error.args[0]}\n\t\t\tFull Entry: {first_row}\n')
+            self.logger.debug(f'\t{add_line_error.args[0]}\n\t\tFull Entry: {first_row}\n')
             # self.logger.debug(f'{add_line_error}')
 
         half_len = int(df_len / 2)
