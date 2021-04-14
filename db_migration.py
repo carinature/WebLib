@@ -1,4 +1,3 @@
-from typing import Tuple
 
 from flask import current_app as app
 from sqlalchemy import create_engine, inspect, sql
@@ -8,7 +7,6 @@ from app.models import *
 from app.utilities import c_sum
 
 import pandas as pd
-import numpy as np
 from sqlalchemy.orm import sessionmaker, Query
 
 from time import time, localtime
@@ -23,7 +21,7 @@ class DBMigration:  # singleton class
     models: List[Base] = Base.__subclasses__()
 
     # logging #todo consider creating different logs for each CSV_file/model
-    tt = ''.join([str(i) for i in localtime()])
+    tt = '-'.join([str(i) for i in localtime()])
     print(f'----- {tt} -------')
     logging.config.fileConfig('logging.conf',
                               defaults={
@@ -37,16 +35,14 @@ class DBMigration:  # singleton class
         self.logger = logging.getLogger('dbLogger')
         self.logger.info('=' * 10 + ' DB migration ' + '=' * 10)
 
-        engine = db.engine  # todo or?    # with app.app_context(): engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-        Base.metadata.create_all(engine)  # todo or? db.create_all(engine)
-        self.session = sessionmaker(bind=engine)()  # todo or    ? session = scoped_session(Session())
+        engine = db.engine  # todo with app.app_context(): engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+        Base.metadata.create_all(engine)  # todo db.create_all(engine)
+        self.session = sessionmaker(bind=engine)()  # todo session = scoped_session(Session())
 
         self.faulty_lines_exceptions_dict: Dict[str, Tuple[Base, Exception]] = {}
 
-
     def __del__(self):
         self.session.close()
-
 
     def load_full_db(self):
         t_total = time()  # for logging
@@ -100,9 +96,12 @@ class DBMigration:  # singleton class
                         self.session.bulk_insert_mappings(model, df_clean.to_dict(orient='records'))
                         self.session.commit()  # raises an Exception if problem with data
                     except Exception as e:  # todo catch different kinds of exceptions ?
-                        # (mysql.connector.errors.IntegrityError) 1062 (23000): Duplicate entry
-                        # (mysql.connector.errors.IntegrityError) 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`tryout`.`texts`, CONSTRAINT `texts_ibfk_1` FOREIGN KEY (`number`) REFERENCES `titles` (`number`))
                         # (mysql.connector.errors.DataError) 1406 (22001): Data too long for column
+                        # (mysql.connector.errors.IntegrityError) 1062 (23000): Duplicate entry
+                        # (mysql.connector.errors.IntegrityError) 1452 (23000): Cannot add or update a child row:
+                        #   a foreign key constraint fails
+                        #   (`tryout`.`texts`,
+                        #   CONSTRAINT `texts_ibfk_1` FOREIGN KEY (`number`) REFERENCES `titles` (`number`))
                         self.logger.debug(f'df chunk insert fail. trying \'exclude_faulty_lines\'')
                         self.logger.debug(f'{e.args[0]}')
                         self.session.rollback()  # self.session.flush()
@@ -152,7 +151,8 @@ class DBMigration:  # singleton class
             self.session.bulk_insert_mappings(model, df_dict[1:])
             self.session.commit()  # & self.session.rollback() ?
 
-        except Exception as e_bulk_insert:
+        except:
+            # except Exception as e_bulk_insert:
             # self.logger.debug(f'{e_bulk_insert.args[0]}')
             self.session.rollback()  # self.session.flush()
             # smaller chunks

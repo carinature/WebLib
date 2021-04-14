@@ -304,7 +304,7 @@ def search_test():
 #         # print(k)
 #         # print(res)
 #         if len(res.books_dict) > 1:
-#             highly_valid.append(res)  # categories[0]['results'].append(res)
+#             highly_valid.append(res)  # categories['high']['results'].append(res)
 #         elif len(res.refs) > 1:
 #             # elif len(res.pages) > 1:
 #             valid.append(res)
@@ -314,9 +314,9 @@ def search_test():
 #     print('=' * 12 + ' Total Time elapsed: ' + str(time() - t_total) + ' s.')
 #
 #
-#     categories[0]['results'] = sorted(highly_valid, key=lambda result: len(result.books_dict), reverse=True)
-#     categories[1]['results'] = sorted(valid, key=lambda result: len(result.refs), reverse=True)
-#     categories[2]['results'] = not_valid
+#     categories['high']['results'] = sorted(highly_valid, key=lambda result: len(result.books_dict), reverse=True)
+#     categories['valid']['results'] = sorted(valid, key=lambda result: len(result.refs), reverse=True)
+#     categories['not']['results'] = not_valid
 #
 #     # 6276 for number and 15 & 31 for bub-info  || 8255 and 31.0 & 64.0
 #     # return render_template('dbg/test_search.html',
