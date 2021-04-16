@@ -11,16 +11,18 @@
     <!-- Fixed background -->
     <div class="padding-bot-5 padding-top-5">
         <figure>
-            <div class="fixed-wrap" id="about-hook">
-                <div id="fixed" style="background-image: url('../static/images/lib-4-noncom-reuse.jpg')">
+            <div style="min-height: 15rem; ">            </div>
+
+            <div class="fixed-wrap">
+                <div id="fixed" >
                 </div>
             </div>
         </figure>
     </div>
 
-
+    <span  id="about-hook" ></span>
     <!-- 'About' Section -->
-    <div class="container-fluid padding-bot-2 padding-top-5">
+    <div class="container-fluid padding-bot-2 padding-top-5"  >
         <div class="col-12  bgn-light-second">
             <p class="display-4 head-title text-center">About the Tiresias Project</p>
         </div>
@@ -153,8 +155,8 @@
                 <p>If you would like to receive updates on the development of the project, please enter your email and
                     click "submit":</p>
                 <label for="email_field">Email Address:</label><br>
-                <form >
-{#                <form action="">#}
+                <form>
+                    {#                <form action="">#}
                     {#        <input type="text" id="email_field" name="email_field" placeholder="username@email.edu"><br><br>#}
                     <br>
                     {{ email_form.hidden_tag() }}
@@ -201,7 +203,8 @@
             <div class="carousel-item active">
                 <!--            <img class="size-20" src="../images/bg-bluish.png"/>-->
                 <a target="_blank" href="http://tiresias.haifa.ac.il/static/large13.1.png">
-                    <img class="size-20 carousel-img" src="http://tiresias.haifa.ac.il/static/large13.1.png" alt="word graph"/></a>
+                    <img class="size-20 carousel-img" src="http://tiresias.haifa.ac.il/static/large13.1.png"
+                         alt="word graph"/></a>
                 <div class="carousel-caption">
                     <p class="display-2">This is an image of the main subjects in the database.</p>
                     <h3> Subjects are arranged by the number of references they share: subjects sharing many references
@@ -215,11 +218,13 @@
 
             <div class="carousel-item">
                 <a target="_blank" href="http://tiresias.haifa.ac.il/static/large13.1.png">
-                    <img class="size-20 carousel-img" src="http://tiresias.haifa.ac.il/static/large13.1.png" alt="word graph"/></a>
+                    <img class="size-20 carousel-img" src="http://tiresias.haifa.ac.il/static/large13.1.png"
+                         alt="word graph"/></a>
             </div>
             <div class="carousel-item">
                 <a target="_blank" href="http://tiresias.haifa.ac.il/static/large13.1.png">
-                    <img class="size-20 carousel-img" src="http://tiresias.haifa.ac.il/static/large13.1.png" alt="word graph"/></a>
+                    <img class="size-20 carousel-img" src="http://tiresias.haifa.ac.il/static/large13.1.png"
+                         alt="word graph"/></a>
             </div>
         </div>
     </div>
