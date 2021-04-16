@@ -4,8 +4,9 @@ from time import time, localtime
 
 from flask import current_app as app, send_from_directory
 from flask import render_template, make_response, redirect, url_for, request
-from flask_sqlalchemy import BaseQuery
+from sqlalchemy import or_
 from sqlalchemy.orm import Query
+from flask_sqlalchemy import BaseQuery
 
 from . import forms as f
 from . import models as m
@@ -48,7 +49,7 @@ def search_results(search_word='', page=''):
     from flask_wtf import FlaskForm
     search_bar: Dict[str, FlaskForm] = utils.init_search_bar()
     subject_form: f.SearchSubject = search_bar['subject_form']
-    filter_form: f.FilterForm = search_bar['filter_form']
+    filter_form: f.FilterForm = search_bar['filter_form'].return_as_dict()
     # print(filter_form.return_as_dict())
 
     if not subject_form.validate_on_submit():  # i.e. when method==GET
@@ -57,9 +58,10 @@ def search_results(search_word='', page=''):
                                description="Tiresias: The Ancient Mediterranean Religions Source Database. "
                                            "Default search page.",
                                search_bar=search_bar,
+                               # categories=categories,
                                method='get'
                                )
-    filter_form = f.FilterForm().return_as_dict()
+    # filter_form = f.FilterForm().return_as_dict()
     from_century = filter_form['from_century']
     to_century = filter_form['to_century']
     language = filter_form['language']
@@ -78,11 +80,11 @@ def search_results(search_word='', page=''):
     q_title_filter = txts_q_filter.join(m.Title)
 
     if from_century:
-        q_title_filter: Query = q_title_filter.filter(m.Title.centstart >= from_century)
+        q_title_filter: Query = q_title_filter.filter(or_(not m.Title.centstart, m.Title.centstart >= from_century))
     if to_century:
-        q_title_filter: Query = q_title_filter.filter(m.Title.centend <= to_century)
+        q_title_filter: Query = q_title_filter.filter(or_(m.Title.centstart == None, m.Title.centend <= to_century))
     if language:
-        q_title_filter: Query = q_title_filter.filter(m.Title.lang == language)
+        q_title_filter: Query = q_title_filter.filter(or_(m.Title.centstart == None, m.Title.lang == language))
     if ancient_author:
         q_title_filter: Query = q_title_filter.filter(m.Title.author == ancient_author)
     if ancient_title:
@@ -115,12 +117,11 @@ def search_results(search_word='', page=''):
     categories['not']['results'] = not_valid
 
     t_total = time() - t_time
-    print('=' * 10 + f' Total Time elapsed: {t_total:.3} s.')
+    print('=' * 10 + f' Total Time elapsed: {t_total:.3}s.')
 
     query_logger: logging.Logger = logging.getLogger('queryLogger')
-    query_logger.info(f'\tQuery time: {t_total:.3} s.'
-                      f'\tQuery subject: {search_word}'
-                      f'\t#results: {len(res_dict)}')
+    query_logger.info(f'\tQuery time: {t_total:<10.3} #results: {len(res_dict):<10} search word: \'{search_word}\''
+                      )
 
     return render_template('search_results.html',
                            title=f'Search Result for: {search_word}',

@@ -17,13 +17,15 @@ from time import time, localtime
 
 print('*' * 80)
 tt = '-'.join([str(i) for i in localtime()])
-logging.config.fileConfig('logging.conf',
-                          defaults={
-                              'logfilename'     : f'logs/db_migration_empty.log',
-                              'fulllogfilename' : f'logs/db_migration_full_empty.log',
-                              'querylogfilename': f'logs/q_{tt}.log',
-                              }
-                          )
+# print(os.path.join(project_home, 'logging.conf'))
+logging.config.fileConfig(
+        os.path.join(project_home, 'logging.conf'),
+        defaults={
+            'logfilename'     : f'{project_home}/logs/db_migration_empty.log',
+            'fulllogfilename' : f'{project_home}/logs/db_migration_full_empty.log',
+            'querylogfilename': f'{project_home}/logs/q_{{tt}}.log',
+            }
+        )
 query_logger: logging.Logger = logging.getLogger('queryLogger')
 query_logger.info('~' * 80)
 
