@@ -11,18 +11,17 @@
     <!-- Fixed background -->
     <div class="padding-bot-5 padding-top-5">
         <figure>
-            <div style="min-height: 15rem; ">            </div>
-
+            {# create a "filler" in the fixed-bkgrnd-window #}
+            <div style="min-height: 15rem; "></div> {# fixme should work without this div #}
             <div class="fixed-wrap">
-                <div id="fixed" >
+                <div id="fixed">
                 </div>
             </div>
         </figure>
     </div>
 
-    <span  id="about-hook" ></span>
     <!-- 'About' Section -->
-    <div class="container-fluid padding-bot-2 padding-top-5"  >
+    <div class="container-fluid padding-bot-2 padding-top-5" id="about-hook">
         <div class="col-12  bgn-light-second">
             <p class="display-4 head-title text-center">About the Tiresias Project</p>
         </div>
@@ -126,6 +125,8 @@
     <!-- Fixed background -->
     <div class="padding-bot-5 padding-top-5">
         <figure>
+            {# create a "filler" in the fixed-bkgrnd-window #}
+            <div style="min-height: 15rem; "></div> {# fixme should work without this div #}
             <div class="fixed-wrap">
                 <div id="fixed" style="background-image: url('../static/images/lib-4-noncom-reuse.jpg')">
                     <!--            this stays empty so you can see the pages background, and feel like you're sliding over it-->
@@ -133,6 +134,7 @@
             </div>
         </figure>
     </div>
+
 
 
     <!-- Note of caution Section (previous: Two Column Section) -->
