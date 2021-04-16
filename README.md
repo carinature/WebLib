@@ -74,3 +74,9 @@ might be a case of existing table while trying to load new/updated modules to th
 try to delete the existing table (in the MySQL console):\
 `show tables;`\
 `DROP TABLE IF EXISTS <table name>;`
+
+
+### In PythonAnywhere
+wsgi.py is found in /var/www/karinature_pythonanywhere_com_wsgi.py 
+[https://www.pythonanywhere.com/user/karinature/files/var/www/karinature_pythonanywhere_com_wsgi.py ] 
+(no meaning for the wsgi file in `mysite` folder)
