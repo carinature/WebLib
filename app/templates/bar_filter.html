@@ -19,14 +19,14 @@
                         Filter by<br>Sub-subject
                     </h5>
                     <hr>
-                    <div class="padding-1 padding-left-2r" style="align-content: center">
+                    <div class="padding-1 padding-left-2" style="align-content: center">
                         {{ search_bar['filter_form'].includes.label }}
                         {% for i in search_bar['filter_form'].includes %}
                             {{ i }}
                         {% endfor %}
                         <button class="add-btn margin-2r" id="add-include" type="button"> +</button>
                     </div>
-                    <div class="padding-1 padding-left-2r">
+                    <div class="padding-1 padding-left-2">
                         {{ search_bar['filter_form'].excludes.label }}
                         {% for i in search_bar['filter_form'].excludes %}
                             {{ i }}

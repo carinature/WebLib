@@ -261,8 +261,12 @@ hr.light-100 {
     padding-bottom: 5em;
 }
 
-.padding-left-2r { /* todo consider padding all around */
-    padding-left: 2rem;
+.padding-left-2 { /* todo consider padding all around */
+    padding-left: 2em;
+}
+
+.padding-right-2 { /* todo consider padding all around */
+    padding-right: 2em;
 }
 
 .padding-1 {

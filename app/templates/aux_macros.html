@@ -16,21 +16,25 @@
             {{ index }}. <em>{{ title }} </em> - {{ author }}
         </h4>
         <a href="#link" class="btn btn-sm btn-primary float-right" role="button"> For more information </a>
-
+{#        <h6 class="padding-top-1">Referencing Titles:</h6>#}
         <div class="padding-1">
             {% for bib, book in books.items() %}
                 <div class="padding-bot-1">
-                    <em class="padding-1"><strong>{{ book.title_full.title }}</strong></em> pages:
-                    {% for page in book.pages -%}
-                        <a href="{{ link|value_or_empty }}"> {{ page }} </a>
-                        {% if not loop.last %}, {% endif %}
-                    {%- endfor %}
+                    <em><strong>{{ book.title_full.title }}</strong></em>
+                    <span class="padding-1">
+                        pages:
+                        {% for page in book.pages -%}
+                            <a href="{{ link|value_or_empty }}"> {{ page }} </a>
+                            {% if not loop.last %}, {% endif %}
+                        {%- endfor %}
+                    </span>
+
                 </div>
             {% endfor %}
         </div>
 
         <span class="padding-bot-2">
-            <em class="collapse inline padding-left-2r" id={{ relm_id }}> {{ refs }} </em>
+            <em class="collapse inline padding-left-2" id={{ relm_id }}> {{ refs }} </em>
             {{ disappring_btn( text='references: ', rbtn_id = rbtn_id, relm_id = relm_id, class='btn-sm') }}
         </span>
     </div>
