@@ -225,7 +225,7 @@ class TextText(Base):
     # src_scv = ['app/raw_data/textsa2.csv']# src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa2.csv']
     # src_scv = ['/home/fares/PycharmProjects/WebLib/app/raw_data/textsa19.csv']
     src_scv = [f'{RAW_DATA_DIR}/{textsfile}'
-              for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
+               for textsfile in os.listdir(RAW_DATA_DIR) if textsfile.startswith('textsa')]
     col_names = ['subject', 'ref', 'page', 'biblio', 'number', 'C']
     dtype_dic_csv2py = {
         'subject'                : str,
@@ -292,20 +292,25 @@ class ResultTitle:
     filtered_flag = False
 
     def __init__(self, num: int, title: str, author: str):  # fixme you don't really need the num
-        self.num = num
+        self.num: int = num
         self.subjects: Set = set()
         self.refs: Set = set()
         self.books_dict: Dict[int, Book] = {}
-        self.author = author
-        self.title = title
+        self.author: str = author
+        self.title: str = title
 
     def add_bib(self, bibinfo: BookRef) -> Book:
         return self.books_dict.setdefault(bibinfo.biblio, Book(bibinfo))
         # self.books_dict[bibinfo.biblio] = self.books_dict.setdefault(bibinfo.biblio, Book(bibinfo))
         # return self.books_dict[bibinfo.biblio]
 
-    def add_refs(self, ref: str):
+    def add_ref(self, ref: str):
         self.refs.add(ref)
+        return self
+
+    def add_subject(self, subject: str):
+        self.subjects.add(subject)
+        return self
 
     def num_ref_books(self):
         return self.books_dict.__len__()

@@ -3,14 +3,29 @@
 
 {% block app_content %}
 
+
+    {% set elm_id=num %}
+    {% set btn_id='btn'~num %}
+    <button id='{{ btn_id }}' class="padding bgn-dark"
+            onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">
+        Show More
+    </button>
+    <br><br>
+    <p class="display-none" id={{ elm_id }}>
+        preview of the text (???)
+    </p>
+
+
     {% if 'get'==method %}
         {% include 'bar_search.html' %}
         <div class="s01 padding-5">
             <p>Search results are sorted by validity into three categories:<br>
                 <strong>highly validated</strong> results,
-                where the reference is tagged with the subject in more than one book; <br>
+                where the reference is tagged with the subject in more than one book; </p>
+            <p>
                 <strong>validated</strong> results,
-                where the reference is tagged with the subject only in one book, but more than once; <br>
+                where the reference is tagged with the subject only in one book, but more than once; </p>
+            <p>
                 and <strong>non-validated</strong> results,
                 where the reference is tagged with the subject only once, in one book.
             </p>
@@ -47,15 +62,10 @@
                 {% endif %}
                 {% set outer_loop = loop %}
                 {% for res in category['results'] %}
-                    <div class="padding-bot-2">
+                    <div class="padding-bot-2 padding-top-1">
                         <!-- Results (Per Category) -->
-                        {{ result_item(
-                        index = loop.index,
-                        author=res.author,
-                        title=res.title,
-                        books=res.books_dict,
-                        refs=res.refs,
-                        num=res.num) }}
+                        {{ result_item(res,
+                        index = loop.index) }}
                     </div>
                 {% endfor %}
             </div>
@@ -64,15 +74,4 @@
 
 {% endblock %}
 
-{#
-                {% set elm_id=num %}
-                {% set btn_id='btn'~num %}
-                <button id='{{ btn_id }}' class="padding bgn-dark"
-                        onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">
-                    Show More
-                </button>
-                <br><br>
-                <p class="display-none" id={{ elm_id }}>
-                    preview of the text (???)
-                </p>
-#}
+

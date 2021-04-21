@@ -111,7 +111,7 @@ def search_results(search_word='', page=''):
                               res_tit.title.title,
                               res_tit.title.author))
         res_title.add_bib(res_tit.book_ref).add_page(res_tit.page)
-        res_title.add_refs(res_tit.ref)
+        res_title.add_ref(res_tit.ref).add_subject(res_tit.subject)
 
     print(f'res_dict: {time() - tt:.5}')
 
