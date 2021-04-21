@@ -3,29 +3,14 @@
 
 {% block app_content %}
 
-
-    {% set elm_id=num %}
-    {% set btn_id='btn'~num %}
-    <button id='{{ btn_id }}' class="padding bgn-dark"
-            onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">
-        Show More
-    </button>
-    <br><br>
-    <p class="display-none" id={{ elm_id }}>
-        preview of the text (???)
-    </p>
-
-
     {% if 'get'==method %}
         {% include 'bar_search.html' %}
         <div class="s01 padding-5">
             <p>Search results are sorted by validity into three categories:<br>
                 <strong>highly validated</strong> results,
-                where the reference is tagged with the subject in more than one book; </p>
-            <p>
+                where the reference is tagged with the subject in more than one book; <br>
                 <strong>validated</strong> results,
-                where the reference is tagged with the subject only in one book, but more than once; </p>
-            <p>
+                where the reference is tagged with the subject only in one book, but more than once; <br>
                 and <strong>non-validated</strong> results,
                 where the reference is tagged with the subject only once, in one book.
             </p>
@@ -74,4 +59,17 @@
 
 {% endblock %}
 
+{#
 
+    {% set elm_id=num %}
+    {% set btn_id='btn'~num %}
+    <button id='{{ btn_id }}' class="padding bgn-dark"
+            onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">
+        Show More
+    </button>
+    <br><br>
+    <p class="display-none" id={{ elm_id }}>
+        preview of the text (???)
+    </p>
+
+#}
