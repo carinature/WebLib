@@ -95,7 +95,6 @@ def search_results(search_word='', page=''):
     if ancient_title: q_title_filter: Query = q_title_filter.filter(
             m.Title.title == ancient_title)
 
-
     res_dict: Dict[int, m.ResultTitle] = {}
     highly_valid: List[m.ResultTitle] = []
     valid: List[m.ResultTitle] = []
@@ -108,19 +107,16 @@ def search_results(search_word='', page=''):
         res_title: m.ResultTitle = res_dict.setdefault(
                 res_tit.number,
                 m.ResultTitle(res_tit.number,
-                              res_tit.title
-                              # res_tit.title.title,
-                              # res_tit.title.author
-                              ))
+                              res_tit.title))
         res_title.add_bib(res_tit.book_ref).add_page(res_tit.page)
         res_title.add_ref(res_tit.ref).add_subject(res_tit.subject)
 
     print(f'res_dict: {time() - tt:.5}')
 
     for res in res_dict.values():
-        if len(res.books_dict) > 1: highly_valid.append(res)  # categories['high']['results'].append(res)
-        elif len(res.refs) > 1: valid.append(res)  # categories['valid']['results'].append(res)
-        else: not_valid.append(res)  # categories['not']['results'].append(res)
+        if len(res.books_dict) > 1: highly_valid.append(res)
+        elif len(res.refs) > 1: valid.append(res)
+        else: not_valid.append(res)
 
     categories['high']['results'] = sorted(highly_valid, reverse=True)
     categories['valid']['results'] = sorted(valid, reverse=True)
