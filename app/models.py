@@ -256,8 +256,8 @@ class TextText(Base):
 class Book:
     def __init__(self, bibinfo: BookRef):
         self.biblio: int = bibinfo.biblio
-        self.refs: List[str] = []  # list of all refs todo maybe not nedded - depends on the data shown in the site
-        self.pages: Set[int] = set()  # list of all refs todo maybe not nedded - depends on the data shown in the site
+        self.refs: List[str] = []  # todo maybe not needed - depends on the data shown in the site
+        self.pages: Set[int] = set()  # todo maybe not needed - depends on the data shown in the site
         self.refs_per_page: Dict[int, List[str]] = {}  # refs_per_page={pages: List[refs]}
         self.title_full: BookRef = bibinfo
 
@@ -288,24 +288,17 @@ class Book:
 
 
 class ResultTitle:
-    # print(' =============== ResultTitle ================')
-    filtered_flag = False
 
-    # def __init__(self, num: int, title: str, author: str):  # fixme you don't really need the num
-    def __init__(self, num: int, title: Title):  # fixme you don't really need the num
-        self.num: int = num
+    def __init__(self, title: Title):
+        self.author: str = title.author
+        self.title: str = title.title
+        self.num: int = title.number
         self.subjects: Set = set()
         self.refs: Set = set()
         self.books_dict: Dict[int, Book] = {}
-        self.author: str = title.author
-        self.title: str = title.title
-        # self.author: str = author
-        # self.title: str = title
 
     def add_bib(self, bibinfo: BookRef) -> Book:
         return self.books_dict.setdefault(bibinfo.biblio, Book(bibinfo))
-        # self.books_dict[bibinfo.biblio] = self.books_dict.setdefault(bibinfo.biblio, Book(bibinfo))
-        # return self.books_dict[bibinfo.biblio]
 
     def add_ref(self, ref: str):
         self.refs.add(ref)

@@ -136,9 +136,7 @@ def search_test():
     for res_tit in q_title_filter:
         res_title: m.ResultTitle = res_dict.setdefault(
                 res_tit.number,
-                m.ResultTitle(res_tit.number,
-                              res_tit.title.title,
-                              res_tit.title.author))
+                m.ResultTitle(res_tit.title.title))
 
         res_title.add_bib(res_tit.book_ref)
 

@@ -78,22 +78,15 @@ def search_results(search_word='', page=''):
     txts_q_filter: BaseQuery = txts_query.filter(m.TextText.subject.like(search))
     txts_q_filter = txts_q_filter.filter_by(ref=reference) if reference else txts_q_filter
     # filter by the title's category
-    q_title_filter = txts_q_filter.join(m.Title)  # <--------------------------
-    # q_title_filter = txts_q_filter.join(m.Title).join(m.BookRef)  # <--------------------------
+    q_title_filter = txts_q_filter.join(m.Title)  # <-------------------------- .join(m.BookRef) slows significantly
 
     if from_century: q_title_filter: Query = q_title_filter.filter(
-            or_(m.Title.centstart == None,
-                m.Title.centstart >= from_century))
+            or_(m.Title.centstart == None, m.Title.centstart >= from_century))
     if to_century: q_title_filter: Query = q_title_filter.filter(
-            or_(m.Title.centend == None,
-                m.Title.centend <= to_century))
-    if language: q_title_filter: Query = q_title_filter.filter(
-            or_(m.Title.lang == None,
-                m.Title.lang == language))
-    if ancient_author: q_title_filter: Query = q_title_filter.filter(
-            m.Title.author == ancient_author)
-    if ancient_title: q_title_filter: Query = q_title_filter.filter(
-            m.Title.title == ancient_title)
+            or_(m.Title.centend == None, m.Title.centend <= to_century))
+    if language: q_title_filter: Query = q_title_filter.filter(or_(m.Title.lang == None, m.Title.lang == language))
+    if ancient_author: q_title_filter: Query = q_title_filter.filter(m.Title.author == ancient_author)
+    if ancient_title: q_title_filter: Query = q_title_filter.filter(m.Title.title == ancient_title)
 
     res_dict: Dict[int, m.ResultTitle] = {}
     highly_valid: List[m.ResultTitle] = []
@@ -104,10 +97,7 @@ def search_results(search_word='', page=''):
     res_tit: m.TextText
 
     for res_tit in q_title_filter:
-        res_title: m.ResultTitle = res_dict.setdefault(
-                res_tit.number,
-                m.ResultTitle(res_tit.number,
-                              res_tit.title))
+        res_title: m.ResultTitle = res_dict.setdefault(res_tit.number, m.ResultTitle(res_tit.title))
         res_title.add_bib(res_tit.book_ref).add_page(res_tit.page)
         res_title.add_ref(res_tit.ref).add_subject(res_tit.subject)
 
@@ -123,11 +113,8 @@ def search_results(search_word='', page=''):
     categories['not']['results'] = not_valid
 
     t_total = time() - t_time
-    print('=' * 10 + f' Total Time elapsed: {t_total:.3}s.')
-
     query_logger: logging.Logger = logging.getLogger('queryLogger')
-    query_logger.info(f'\tQuery time: {t_total:<10.3f} #results: {len(res_dict):<10} search word: \'{search_word}\''
-                      )
+    query_logger.info(f'\tQuery time: {t_total:<10.3f} #results: {len(res_dict):<10} search word: \'{search_word}\'')
 
     return render_template('search_results.html',
                            title=f'Search Result for: {search_word}',
