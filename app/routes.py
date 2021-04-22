@@ -108,8 +108,10 @@ def search_results(search_word='', page=''):
         res_title: m.ResultTitle = res_dict.setdefault(
                 res_tit.number,
                 m.ResultTitle(res_tit.number,
-                              res_tit.title.title,
-                              res_tit.title.author))
+                              res_tit.title
+                              # res_tit.title.title,
+                              # res_tit.title.author
+                              ))
         res_title.add_bib(res_tit.book_ref).add_page(res_tit.page)
         res_title.add_ref(res_tit.ref).add_subject(res_tit.subject)
 

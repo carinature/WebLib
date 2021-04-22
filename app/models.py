@@ -70,7 +70,7 @@ def get_prime_key(model: Base, model_row: Base = None) -> Tuple[str, str]:
 class BookRef(Base):
     __tablename__ = 'book_references'
 
-    biblio = Column(Integer, primary_key=True, nullable=False)  # (will be) a foreign key in TextText
+    biblio = Column(Integer, primary_key=True, nullable=False)  # a foreign key in TextText
     title = Column(String(LONG_STRING_LEN), nullable=False)
     file = Column(String(SHORT_STRING_LEN), nullable=False)
     gcode = Column(String(SHORT_STRING_LEN), nullable=True)
@@ -134,7 +134,7 @@ class BookRef(Base):
 class Title(Base):
     __tablename__ = 'titles'
 
-    number = Column(Integer, primary_key=True, unique=True)  # (will be) a foreign key in TextText
+    number = Column(Integer, primary_key=True, unique=True)  # a foreign key in TextText
     title = Column(String(500), nullable=True)  # fixme - shouldn't be that long - update in files
     author = Column(String(LONG_STRING_LEN), nullable=True)
     centstart = Column(SmallInteger, nullable=True)  # , default=+21)# , server_default='+21')
@@ -261,7 +261,7 @@ class Book:
         self.refs_per_page: Dict[int, List[str]] = {}  # refs_per_page={pages: List[refs]}
         self.title_full: BookRef = bibinfo
 
-    def add_page(self, page: int = -1):  # todo add ref?
+    def add_page(self, page: int = -1):
         self.pages.add(page)
         return self
 
@@ -291,13 +291,16 @@ class ResultTitle:
     # print(' =============== ResultTitle ================')
     filtered_flag = False
 
-    def __init__(self, num: int, title: str, author: str):  # fixme you don't really need the num
+    # def __init__(self, num: int, title: str, author: str):  # fixme you don't really need the num
+    def __init__(self, num: int, title: Title):  # fixme you don't really need the num
         self.num: int = num
         self.subjects: Set = set()
         self.refs: Set = set()
         self.books_dict: Dict[int, Book] = {}
-        self.author: str = author
-        self.title: str = title
+        self.author: str = title.author
+        self.title: str = title.title
+        # self.author: str = author
+        # self.title: str = title
 
     def add_bib(self, bibinfo: BookRef) -> Book:
         return self.books_dict.setdefault(bibinfo.biblio, Book(bibinfo))
@@ -312,10 +315,10 @@ class ResultTitle:
         self.subjects.add(subject)
         return self
 
-    def num_ref_books(self):
+    def num_ref_books(self) -> int:
         return self.books_dict.__len__()
 
-    def num_refs_total(self):
+    def num_refs_total(self) -> int:
         return self.books_dict.__len__()
 
     def __repr__(self):
