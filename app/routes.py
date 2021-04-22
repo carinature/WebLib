@@ -69,6 +69,8 @@ def search_results(search_word='', page=''):
     ancient_title = filter_form['ancient_title']
     reference = filter_form['reference']
 
+    t1 = time()  # for logging
+
     # ............  return all matching results (subjects) by C column [list] ............
     txts_query: BaseQuery = m.TextText.query
     # filter by subject (and reference if ref_filter field in form is filled out)
@@ -79,6 +81,7 @@ def search_results(search_word='', page=''):
     txts_q_filter = txts_q_filter.filter_by(ref=reference) if reference else txts_q_filter
     # filter by the title's category
     q_title_filter = txts_q_filter.join(m.Title).join(m.BookRef)  # <--------------------------
+    t2 = time()  # for logging
 
     if from_century: q_title_filter: Query = q_title_filter.filter(
             or_(m.Title.centstart == None,
@@ -93,7 +96,7 @@ def search_results(search_word='', page=''):
             m.Title.author == ancient_author)
     if ancient_title: q_title_filter: Query = q_title_filter.filter(
             m.Title.title == ancient_title)
-
+    t3 = time()  # for logging
 
     res_dict: Dict[int, m.ResultTitle] = {}
     highly_valid: List[m.ResultTitle] = []
@@ -114,6 +117,7 @@ def search_results(search_word='', page=''):
                               ))
         res_title.add_bib(res_tit.book_ref).add_page(res_tit.page)
         res_title.add_ref(res_tit.ref).add_subject(res_tit.subject)
+    t4 = time()  # for logging
 
     print(f'res_dict: {time() - tt:.5}')
 
@@ -121,17 +125,23 @@ def search_results(search_word='', page=''):
         if len(res.books_dict) > 1: highly_valid.append(res)  # categories['high']['results'].append(res)
         elif len(res.refs) > 1: valid.append(res)  # categories['valid']['results'].append(res)
         else: not_valid.append(res)  # categories['not']['results'].append(res)
+    t5 = time()  # for logging
 
     categories['high']['results'] = sorted(highly_valid, reverse=True)
     categories['valid']['results'] = sorted(valid, reverse=True)
     categories['not']['results'] = not_valid
+    t6 = time()  # for logging
 
     t_total = time() - t_time
     print('=' * 10 + f' Total Time elapsed: {t_total:.3}s.')
 
     query_logger: logging.Logger = logging.getLogger('queryLogger')
-    query_logger.info(f'\tQuery time: {t_total:<10.3f} #results: {len(res_dict):<10} search word: \'{search_word}\''
-                      )
+    query_logger.info(f'\tQuery time: {t_total:<10.3f} #results: {len(res_dict):<10} search word: \'{search_word}\'')
+    query_logger.debug(f'join: {t2-t1:.3f}\t '
+                       f'filters: {t3-t2:.3f}\t '
+                       f'res_dict: {t4-t3:.3f}\t '
+                       f'classification: {t5-t4:.3f}\t '
+                       f'sort: {t6-t5:.3f}\t ')
 
     return render_template('search_results.html',
                            title=f'Search Result for: {search_word}',
