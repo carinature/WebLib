@@ -78,7 +78,8 @@ def search_results(search_word='', page=''):
     txts_q_filter: BaseQuery = txts_query.filter(m.TextText.subject.like(search))
     txts_q_filter = txts_q_filter.filter_by(ref=reference) if reference else txts_q_filter
     # filter by the title's category
-    q_title_filter = txts_q_filter.join(m.Title).join(m.BookRef)  # <--------------------------
+    q_title_filter = txts_q_filter.join(m.Title)  # <--------------------------
+    # q_title_filter = txts_q_filter.join(m.Title).join(m.BookRef)  # <--------------------------
 
     if from_century: q_title_filter: Query = q_title_filter.filter(
             or_(m.Title.centstart == None,
@@ -103,8 +104,7 @@ def search_results(search_word='', page=''):
     tt = time()  # for logging
     res_tit: m.TextText
 
-    for res_tit in q_title_filter.all():
-        # print(res_tit)
+    for res_tit in q_title_filter:
         res_title: m.ResultTitle = res_dict.setdefault(
                 res_tit.number,
                 m.ResultTitle(res_tit.number,
