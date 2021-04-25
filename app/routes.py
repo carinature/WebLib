@@ -117,7 +117,7 @@ def search_results(search_word='', page=''):
     query_logger.info(f'\tQuery time: {t_total:<10.3f} #results: {len(res_dict):<10} search word: \'{search_word}\'')
 
     return render_template('search_results.html',
-                           title=f'Search Result for: {search_word}',
+                           index_title=f'Search Result for: {search_word}',
                            description=f'Tiresias: The Ancient Mediterranean Religions Source Database. '
                                        f'This page shows results for {search_word}, sorted by validity.',
                            search_bar=search_bar,
@@ -173,7 +173,8 @@ def home():
 # todo create a table of the listed books and fix the description to show the correct number of books (dynamically)
 def book_indices():
     return render_template('book_indices.html',
-                           title="Tiresias: Books Included in the Project Database",  # todo different title
+                           title="Tiresias",  # todo different title
+                           index_title="Books Included in the Project Database",  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database. "
                                        "The database references more than 200 title, which are listed in this page.", )
 
@@ -195,7 +196,8 @@ def subject_list(search_word='', page=''):
         prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
 
         return render_template('subject_list.html',
-                               title="Tiresias Subjects Included in the Project Database",  # todo different title
+                               title="Tiresias",
+                               index_title="Subjects Included in the Project Database",  # todo different title
                                description="Tiresias: The Ancient Mediterranean Religions Source Database."
                                            "The database includes over 50,000 subjects, listed in the page."
                                            "For a more topic specific list, use the search option",
@@ -217,7 +219,8 @@ def subject_list(search_word='', page=''):
     next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
     prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
     return render_template('subject_list.html',
-                           title=f'Tiresias Subjects Search Results for: {search_word}',  # todo different title
+                           title=f'Tiresias Subjects',
+                           index_title=f'Search Results for: {search_word}',  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database"
                                        "The database includes over 50,000 subjects, listed in the page.",
                            subjects=subjects,
@@ -256,7 +259,8 @@ def static_from_root():
 @app.route("/csv_to_mysql_route", methods=['GET', 'POST'])
 def load_db():
     from flask import flash
-    flash("If you click on the button below You are about to ask the server to load raw scv files into the mysql DB. ")
+    flash(
+            "If you click on the button below You are about to ask the server to load raw scv files into the mysql DB. ")
     flash("It's gonna take a loooong time to finish (if lucky). ")
     flash("Are you sure you want to do that? ")
     return render_template('dbg/csv_to_mysql.html', load_db_flag=True, avoid_robots=True)
