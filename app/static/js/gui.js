@@ -88,7 +88,7 @@ function filter_check_all(source) {
 
 /** creates a popover (small window hovering) when hovering over the div*/
 $(function () {
-    $('.popover_ctgry').hover(
+    $('.popover_category').hover(
         function (event) {
             // mouse in event handler
             let elem = $(event.currentTarget);

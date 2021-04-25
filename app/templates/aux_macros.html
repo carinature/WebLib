@@ -55,7 +55,7 @@
                     <h6>Tagged with subjects:</h6>
                     <p> {% for subject in res.subjects -%}
                         <strong class='padding-1'> &middot; </strong> {{ subject }}
-                    {%- endfor %} <strong> &middot; </strong></p>
+                    {%- endfor %} <strong class='padding-1'> &middot; </strong></p>
                 </div>
                 {#  References (Numbers) (BTN)  #}
                 <div class='padding-bot-2 col-1'>
@@ -70,7 +70,7 @@
 
 {#  Category Title Macro    #}
 {% macro category_head(category='', id='', res_num='', value='') -%}
-    <div class='container-fluid padding-bot-2 popover_ctgry' id='{{ id }}'>
+    <div class='container-fluid padding-bot-2 popover_category' id='{{ id }}'>
         <h1 class='col-12 bgn-light-second'>{{ category }} {{ res_num }}</h1>
     </div>
 {%- endmacro %}

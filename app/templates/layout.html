@@ -56,7 +56,7 @@
 </head>
 
 
-{#<body>#}
+<body class="d-flex flex-column min-vh-100">
 {#{% block navbar %}#}
 {% include 'bar_navigation.html' %}
 {#{% endblock %}#}
@@ -86,9 +86,9 @@
 {% include 'bar_footer.html' %}
 <script src='../static/js/script.js'></script>
 
-{#</body>
+</body>
 
-</html>#}
+</html>
 
 {#<div class="col-12">  <!--DO NOT DELETE THIS! -->#}
 {#    <h1 class="display-4  text-center">Tiresias</h1>#}
@@ -108,4 +108,4 @@
 </div>
 #}
 {#{% if status == 1 %} and {% if "active" in status %} are both valid#}
-</html>
+{#</html>#}

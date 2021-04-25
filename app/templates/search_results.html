@@ -33,7 +33,7 @@
                         </h1>
                         {% for id, category in categories.items() %}
                             <h6>{{ category['results']|length }}
-                                <a class="popover_ctgry" href='#{{ id }}'>{{ category['name'] }} </a> results.
+                                <a class="popover_category" href='#{{ id }}'>{{ category['name'] }} </a> results.
                             </h6>
                         {% endfor %}
                     </div>
