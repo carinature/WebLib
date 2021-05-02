@@ -14,7 +14,7 @@ from . import utilities as utils
 
 print('~' * 80)
 
-categories: Dict[str, Dict] = {
+categories: Dict[str, Dict] = {#todo move to utils?
     'high' : {
         'name'   : 'Highly Validated',
         'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
@@ -31,7 +31,7 @@ categories: Dict[str, Dict] = {
             ]
         }
     }
-links = {
+links = { #todo move to utils?
     'home'     : '/',
     'search'   : '/search-results',
     'books'    : '/book-indices',
