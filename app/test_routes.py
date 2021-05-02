@@ -494,12 +494,16 @@ def success(title=''):
 
 
 @app.route('/falala')
-def falalafunc():
+@app.route('/falala/<string:search_word>')
+def falalafunc(search_word=''):
+# def falalafunc(data):
     print('=-' * 33, ' falala')
     print('Adding your Email address')
 
     # csv_to_mysql()
-    return '<h1> A O K </h1>'
+    # return f'<h1> A O K </h1> '
+    return f'<h1> A O K </h1> {search_word}'
+    # return f'<h1> A O K </h1> {data}'
 
 
 @app.route('/flask_route_but_not_webpage')

@@ -14,7 +14,7 @@ from . import utilities as utils
 
 print('~' * 80)
 
-categories: Dict[str, Dict] = {#todo move to utils?
+categories: Dict[str, Dict] = {  # todo move to utils?
     'high' : {
         'name'   : 'Highly Validated',
         'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
@@ -31,7 +31,7 @@ categories: Dict[str, Dict] = {#todo move to utils?
             ]
         }
     }
-links = { #todo move to utils?
+links = {  # todo move to utils?
     'home'     : '/',
     'search'   : '/search-results',
     'books'    : '/book-indices',
@@ -101,7 +101,7 @@ def search_results(search_word='', page=''):
         res_title.add_bib(res_tit.book_ref).add_page(res_tit.page)
         res_title.add_ref(res_tit.ref).add_subject(res_tit.subject)
 
-    print(f'res_dict: {time() - tt:.5}')
+    # print(f'res_dict: {time() - tt:.5}')
 
     for res in res_dict.values():
         if len(res.books_dict) > 1: highly_valid.append(res)
@@ -230,6 +230,33 @@ def subject_list(search_word='', page=''):
                            search_bar=search_bar,
                            hide_filter=True,
                            )
+
+
+# ++++++++++++  Serving Requests from JS ++++++++++++
+@app.route('/fetchrefs')
+@app.route('/fetchrefs/<string:title_num>')
+def fetch_refs_for_title(title_num: str = '') -> str:
+    print('=-' * 3, 'Fetching Refs', '=-' * 3, )
+    q: BaseQuery = m.Title.query
+    res = q.filter(m.Title.number == title_num).first()
+    print(title_num)
+    print(res)
+    args = request.args
+    print(args)
+    print('--args--')
+    for arg in args.items():
+        print(arg)
+    print('-----')
+    for arg in args.values():
+        print(arg)
+    print('=====')
+    print(args['arr[]'])
+    refs = args['refs']
+    print(refs)
+    print(type(refs))
+    # for r in refs:
+    #     print(r)
+    return f'<h1> A O K </h1> <p>{title_num} - {res} </p>'
 
 
 # ++++++++++++  Error Handling ++++++++++++

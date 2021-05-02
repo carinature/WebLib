@@ -1,10 +1,23 @@
 //for testing purposes - currently not used
 $('a#test').on('click', function (e) {
     e.preventDefault();
-    $.getJSON('fetch_results',
+    let some_var = this.id;
+    let res = $.getJSON('fetch_results/' + some_var);
+
+    let res1 = $.getJSON('fetch_results/' + some_var,
         function (data) {
             //do nothing
         });
+
+    let res2 = $.ajax({
+        dataType: "json",
+        url: 'fetch_results/' + some_var,
+        data: 'data',
+        success: console.log('Great Success!')
+    });
+    console.log(res);
+    console.log(res1);
+    console.log(res2);
     return false;
 });
 
@@ -71,7 +84,7 @@ $('button#email_button').on('click', function (e) {
 });
 
 // function more_less_info(btn_id, elm_id, show_msg = 'Show More', hide_msg = 'Show less') {
-function more_less_info(btn_id, elm_id, show_msg = '', hide_msg = '', hide_btn_flag=false) {
+function more_less_info(btn_id, elm_id, show_msg = '', hide_msg = '', hide_btn_flag = false) {
     let btn = document.getElementById(btn_id); // Get the checkbox/button
     let elm = document.getElementById(elm_id); // Get the element to show/hide
     // If the element is shown, hide it. Otherwise, display
@@ -123,6 +136,7 @@ $('button.add-btn').on('click', function (e) {
     new_input.setAttribute('style', 'margin-left:15px');
     let new_td = document.createElement("td");
     new_td.appendChild(new_input);
+    let ksdfjl = 'sdlf';
     // construct and add the new input row to the table
     let new_tr = document.createElement("tr");
     new_tr.appendChild(new_th);
@@ -131,11 +145,61 @@ $('button.add-btn').on('click', function (e) {
 
 });
 
+
 /**
- * The button disappears when you click it
+ * The button disappears when you click it.
+ * In case of 'References' btn - will query the DB and show the full text of the ref.
  * */
 $('button.disappring-btn').on('click', function (e) {
-    this.style.display = 'none';
+    // this.style.display = 'none';
+    if (this.id.includes('ref')) {
+
+        let rid = this.id.replace('refsbtn', ''); // todo consider removing the `refsbtn` prefix from this btn's id in the jinja/html
+        let refs_elm = document.getElementById('refs' + rid);
+        let refs = refs_elm.textContent.trim(' ');
+        refs.trim('{');
+        refs.trim('}');
+        // let refs = document.getElementById('refs' + rid);
+        console.log(refs);
+        console.log('rid - ', rid);
+        // let res = $.getJSON(url = 'fetchrefs/' + rid);
+        let res = $.ajax({
+            dataType: 'text',
+            url: 'fetchrefs/' + rid,
+            // url: 'fetchrefs',
+            data: {param: 'uiuyiu', p2: 'slkfd', refs: refs, arr:['dsfs', 'sdfs', 'safsad']},
+            success: function (data) {
+                console.log('Great Success!');
+                console.log(data);
+                refs_elm.insertAdjacentHTML("afterend", '<h1>' + data + '</h1>');
+            },
+            // complete: function (data) {
+            //     console.log('Great complete!');
+            //     console.log(data);
+            //     console.log(data.responseText);
+            //     return data.responseText;
+            // }
+        });
+        let res2 = res.done(
+            function (data) {
+                console.log('Great Done!');
+                console.log(data);
+                // btn.insertAdjacentHTML("afterbegin", '<h1>afterbegin</h1>')
+                // btn.insertAdjacentHTML("afterend", '<h1>' + data + '</h1>')
+                // btn.insertAdjacentHTML("beforebegin", '<h1>beforebegin</h1>')
+                // btn.insertAdjacentHTML("beforeend", '<h1>beforeend</h1>')
+            }
+        );
+        console.log('11111');
+        console.log('res  ', res);
+        console.log('res2  ', res2);
+        console.log('res - ', res.responseText);
+        console.log('res2 - ', res2.responseText);
+        console.log('res -- ', res['responseText']);
+        console.log('res2 -- ', res2['responseText']);
+        console.log('22222');
+        return true; //note IMPORTANT - if returns false - data-toggle doesn't work
+    }
 });
 
 /**
@@ -236,3 +300,13 @@ $(document).ready(function () {
 //         }
 //     });
 // }
+
+$('button#test').on('click', function (e) {
+    e.preventDefault();
+    $.getJSON('fetch_results',
+        function (data) {
+            //do nothing
+        });
+    return false;
+});
+

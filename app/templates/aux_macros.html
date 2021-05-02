@@ -1,11 +1,10 @@
 {#  a button that disappears when clicked, showing `text` instead   #}
-{% macro disappring_btn(text, rbtn_id='rbtn_id', relm_id='relm_id', class='') -%}
+{% macro disappring_btn(text, rbtn_id='refsbtn', relm_id='refs', class='') -%}
     <button class='{{ class }} btn-rounded disappring-btn '
             data-toggle='collapse'
             data-target='#{{ relm_id }}'
-            id={{ rbtn_id }}>
-        {{ text }}
-    </button>
+            id="{{ rbtn_id }}"
+            >{{ text }}</button>
 {%- endmacro %}
 
 {#  ====    Macros for Search Results   ====    #}
@@ -17,8 +16,10 @@
                 <span class='padding-1'>
                         pages:
                     {% for page in book.pages -%}
-                        {% set glink = 'https://books.google.co.il/books?id='+book.title_full.gcode
-                        +'&lpg=PP1&pg=PA'+page|string+'#v=onepage&q&f=false' %}
+                        {% if book.title_full.gcode %}
+                            {% set glink = 'https://books.google.co.il/books?id='+book.title_full.gcode
+                                            +'&lpg=PP1&pg=PA'+page|string+'#v=onepage&q&f=false' %}
+                        {% endif %}
                         <a href={{ glink|value_or_empty }} target="_blank"> {{ page }} </a>
                         {% if not loop.last %}, {% endif %}
                     {%- endfor %}
@@ -41,12 +42,13 @@
                 {#                href='#info_{{ res.num }}'#}
                 class='btn btn-sm btn-primary float-right'
                 data-toggle='collapse'
-                data-target='#info_{{ res.num }}'
+                data-target=#info_{{ res.num }}
         >
             For more information </a>
 
         {#  Referencing Books   #}
-        <h6 class='padding-top-1'>Referenced in books:</h6>
+        <h6 class='padding-top-1'>
+            Referenced in {{ res.books_dict|length }} book{% if 1<res.books_dict|length -%}s{% endif -%} :</h6>
         {{ ref_books_list(res.books_dict) }}
 
         {#  More Info   #}
@@ -61,7 +63,7 @@
                 </div>
                 {#  References (Numbers) (BTN)  #}
                 <div class='padding-bot-2 col-1'>
-                    {{ disappring_btn( text='references: ', rbtn_id = rbtn_id, relm_id = relm_id, class='btn-sm float-right') }}
+                    {{ disappring_btn( text='references:', rbtn_id = rbtn_id, relm_id = relm_id, class='btn-sm float-right') }}
                 </div>
             </div>
             {#  References (Numbers) #}

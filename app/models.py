@@ -256,7 +256,7 @@ class TextText(Base):
 class Book:
     def __init__(self, bibinfo: BookRef):
         self.biblio: int = bibinfo.biblio
-        self.refs: List[str] = []  # todo maybe not needed - depends on the data shown in the site
+        self.refs: Set[str] = set()  # todo maybe not needed - depends on the data shown in the site
         self.pages: Set[int] = set()  # todo maybe not needed - depends on the data shown in the site
         self.refs_per_page: Dict[int, List[str]] = {}  # refs_per_page={pages: List[refs]}
         self.title_full: BookRef = bibinfo
