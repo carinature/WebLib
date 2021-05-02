@@ -17,7 +17,9 @@
                 <span class='padding-1'>
                         pages:
                     {% for page in book.pages -%}
-                        <a href='{{ link|value_or_empty }}'> {{ page }} </a>
+                        {% set glink = 'https://books.google.co.il/books?id='+book.title_full.gcode
+                        +'&lpg=PP1&pg=PA'+page|string+'#v=onepage&q&f=false' %}
+                        <a href={{ glink|value_or_empty }} target="_blank"> {{ page }} </a>
                         {% if not loop.last %}, {% endif %}
                     {%- endfor %}
                     </span>
