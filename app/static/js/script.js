@@ -156,9 +156,9 @@ $('button.disappring-btn').on('click', function (e) {
 
         let rid = this.id.replace('refsbtn', ''); // todo consider removing the `refsbtn` prefix from this btn's id in the jinja/html
         let refs_elm = document.getElementById('refs' + rid);
-        let refs = refs_elm.textContent.trim(' ');
-        refs.trim('{');
-        refs.trim('}');
+        let refs = refs_elm.textContent;//.trim(' ');
+        // refs.trim('{');
+        // refs.trim('}');
         // let refs = document.getElementById('refs' + rid);
         console.log(refs);
         console.log('rid - ', rid);

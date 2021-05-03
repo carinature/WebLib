@@ -237,25 +237,25 @@ def subject_list(search_word='', page=''):
 @app.route('/fetchrefs/<string:title_num>')
 def fetch_refs_for_title(title_num: str = '') -> str:
     print('=-' * 3, 'Fetching Refs', '=-' * 3, )
-    q: BaseQuery = m.Title.query
-    res = q.filter(m.Title.number == title_num).first()
-    print(title_num)
-    print(res)
-    args = request.args
-    print(args)
-    print('--args--')
-    for arg in args.items():
-        print(arg)
-    print('-----')
-    for arg in args.values():
-        print(arg)
-    print('=====')
-    print(args['arr[]'])
-    refs = args['refs']
+    print(request.args['refs'])
+    refs = []
+    for r in request.args['refs'].split(','):
+        refs.append(r.strip('{ }\''))
+        print(refs[-1])
     print(refs)
-    print(type(refs))
-    # for r in refs:
-    #     print(r)
+    tbl = m.TextText
+    q: BaseQuery = tbl.query
+    res = q.filter(tbl.number == title_num).filter(tbl.ref.in_(refs)).all()
+    for r in res:
+        print(f'res - {r}')
+    # print('--args--')
+    # for arg in args.items():
+    #     print(arg)
+    # print('-----')
+    # for arg in args.values():
+    #     print(arg)
+    # print('=====')
+    # print(args['arr[]'])
     return f'<h1> A O K </h1> <p>{title_num} - {res} </p>'
 
 
