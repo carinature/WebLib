@@ -17,8 +17,10 @@ import logging.config
 
 class DBMigration:  # singleton class
 
-    # models: List[Base] = [TextText]
-    models: List[Base] = Base.__subclasses__()
+    # models: List[Base] = [RefQuote]
+    models: List[Base] = [TextText]
+    # models: List[Base] = [BookRef, Title, RefQuote, TextSubject, TextText]
+    # models: List[Base] = Base.__subclasses__()
 
     # logging #todo consider creating different logs for each CSV_file/model
     tt = '-'.join([str(i) for i in localtime()])
@@ -74,6 +76,7 @@ class DBMigration:  # singleton class
         exit_flag = False
         while not exit_flag:
             try:  # this for-loop is inside `try` for cases of commas (`,`) in `subject` col without brackets (`"`)
+            # with open(src_file):
                 for dataframe in pd.read_csv(csv_file,
                                              dtype=model.dtype_dic_csv2py,
                                              header=0,
@@ -86,7 +89,7 @@ class DBMigration:  # singleton class
                     model_cols = model.__table__.c
                     df_clean: pd.DataFrame = dataframe[[col.key for col in model_cols if 'Csum' != col.key]]
                     df_clean = df_clean.drop_duplicates(prime_key_name)
-                    if TextSubject == model: df_clean['Csum'] = df_clean['C'].apply(c_sum)
+                    if TextSubject == model: df_clean['Csum'] = df_clean['C'].apply(c_sum) #count number of refs
                     for col in model_cols:
                         if isinstance(col.type, sql.sqltypes.Integer):
                             df_clean[col.name] = pd.to_numeric(df_clean[col.name], errors='raise')  # ='coerce')
@@ -102,9 +105,9 @@ class DBMigration:  # singleton class
                         #   a foreign key constraint fails
                         #   (`tryout`.`texts`,
                         #   CONSTRAINT `texts_ibfk_1` FOREIGN KEY (`number`) REFERENCES `titles` (`number`))
+                        self.session.rollback()  # self.session.flush()
                         self.logger.debug(f'df chunk insert fail. trying \'exclude_faulty_lines\'')
                         self.logger.debug(f'{e.args[0]}')
-                        self.session.rollback()  # self.session.flush()
                         self.exclude_faulty_lines(model, df_clean.to_dict(orient='records'))
                     finally:
                         chunk_num += 1
@@ -112,6 +115,7 @@ class DBMigration:  # singleton class
                 exit_flag = True
 
             except Exception as e_read_csv:
+                self.session.rollback()  # self.session.flush()
                 self.logger.error(f'{e_read_csv.args[0]}')
                 self.logger.debug(f'{e_read_csv}')
                 self.logger.critical(f'Note: The whole chunk #{chunk_num} was not inserted!\n'
