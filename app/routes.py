@@ -240,14 +240,16 @@ def fetch_refs_for_title(title_num: str = '') -> str:
     print(request.args['refs'])
     refs = []
     for r in request.args['refs'].split(','):
-        refs.append(r.strip('{ }\''))
+        refs.append('\''+r.strip('{ }\'')) #fixme should be refs.append(r.strip('{ }\''))
         print(refs[-1])
     print(refs)
-    tbl = m.TextText
+    tbl:m.Base = m.RefQuote
     q: BaseQuery = tbl.query
-    res = q.filter(tbl.number == title_num).filter(tbl.ref.in_(refs)).all()
-    for r in res:
-        print(f'res - {r}')
+    res = q.filter(tbl.number == title_num).filter(tbl.ref.in_(refs))
+    # print(res)
+    r:m.RefQuote
+    for r in res.all():
+        print(f'res - {r.texteng}')
     # print('--args--')
     # for arg in args.items():
     #     print(arg)
@@ -256,7 +258,7 @@ def fetch_refs_for_title(title_num: str = '') -> str:
     #     print(arg)
     # print('=====')
     # print(args['arr[]'])
-    return f'<h1> A O K </h1> <p>{title_num} - {res} </p>'
+    return f'<p>{title_num} - {refs} - {res.all()} </p>'
 
 
 # ++++++++++++  Error Handling ++++++++++++

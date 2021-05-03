@@ -156,12 +156,9 @@ $('button.disappring-btn').on('click', function (e) {
 
         let rid = this.id.replace('refsbtn', ''); // todo consider removing the `refsbtn` prefix from this btn's id in the jinja/html
         let refs_elm = document.getElementById('refs' + rid);
-        let refs = refs_elm.textContent;//.trim(' ');
-        // refs.trim('{');
-        // refs.trim('}');
-        // let refs = document.getElementById('refs' + rid);
-        console.log(refs);
-        console.log('rid - ', rid);
+        let refs = refs_elm.textContent;
+        // console.log(refs);
+        // console.log('rid - ', rid);
         // let res = $.getJSON(url = 'fetchrefs/' + rid);
         let res = $.ajax({
             dataType: 'text',
@@ -171,7 +168,8 @@ $('button.disappring-btn').on('click', function (e) {
             success: function (data) {
                 console.log('Great Success!');
                 console.log(data);
-                refs_elm.insertAdjacentHTML("afterend", '<h1>' + data + '</h1>');
+                refs_elm.insertAdjacentHTML("afterend", data);
+                // refs_elm.insertAdjacentHTML("afterend", '<h1>' + data + '</h1>');
             },
             // complete: function (data) {
             //     console.log('Great complete!');
@@ -180,24 +178,14 @@ $('button.disappring-btn').on('click', function (e) {
             //     return data.responseText;
             // }
         });
-        let res2 = res.done(
-            function (data) {
-                console.log('Great Done!');
-                console.log(data);
-                // btn.insertAdjacentHTML("afterbegin", '<h1>afterbegin</h1>')
-                // btn.insertAdjacentHTML("afterend", '<h1>' + data + '</h1>')
-                // btn.insertAdjacentHTML("beforebegin", '<h1>beforebegin</h1>')
-                // btn.insertAdjacentHTML("beforeend", '<h1>beforeend</h1>')
-            }
-        );
-        console.log('11111');
+        // let res2 = res.done(
+        //     function (data) {
+        //         console.log('Great Done!');
+        //         console.log(data);
+        //     }
+        // );
         console.log('res  ', res);
-        console.log('res2  ', res2);
-        console.log('res - ', res.responseText);
-        console.log('res2 - ', res2.responseText);
-        console.log('res -- ', res['responseText']);
-        console.log('res2 -- ', res2['responseText']);
-        console.log('22222');
+        // console.log('res2  ', res2);
         return true; //note IMPORTANT - if returns false - data-toggle doesn't work
     }
 });
