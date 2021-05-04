@@ -55,17 +55,17 @@
         {% set display_ref_bar = "display-none" %}
             <form action='{{ url }}' method="POST" id="search-ref" class="display-none"
                   onsubmit="$('#loading_bar').show();$('#search_content').hide();">
-                {{ search_bar['subject_form'].hidden_tag() }} {# csrf_token #}
+                {{ search_bar['reference_form'].hidden_tag() }} {# csrf_token #}
                 <div class="search-bar-kt form-inline container-fluid">
                     {{ search_field(search_bar['reference_form'].search_author) }}
                     {{ search_field(search_bar['reference_form'].search_work) }}
                     {{ search_field(search_bar['reference_form'].search_reference) }}
                     <div class="list-inline-item">
-                        {{ search_bar['subject_form'].submit_subject }} {# <i class="fas fa-search"></i> #}
+                        {{ search_bar['reference_form'].submit_reference }} {# <i class="fas fa-search"></i> #}
                     </div>
                 </div>
                 <div class="s01 ">
-                    <p class="lead color-accent">If you have a specific reference to ancient
+                    <p class="lead color-accent small">If you have a specific reference to ancient
                         text, enter it here to receive a list of subjects relevant to it.<br>
                         Most author/title styles are accepted. for reference style, please use arabic numerals
                         separated by a period:<br> e.g., 1.5 for book 1, line 5 (or chapter 1, verse 5).<br>
@@ -79,15 +79,15 @@
 
 
 <!-- Radio search buttons -->
-<div class="container-fluid ">
-    <div class='text-center padding-1r'>
+<form class="container-fluid ">
+    <div class='text-center padding-1r small'>
         <div class="inline-radio-span">
-            <input id="chkYes" class="inline-radio" type="radio" name="search-radio" checked/>
-            <label for="chkYes" class="inline-radio-label">Search by Subject</label>
+            <input id='chkYes' class='inline-radio' type='radio' name='search-radio' value='by_subject' checked/>
+            <label for='chkYes' class='inline-radio-label'>Search by Subject</label>
         </div>
         <div class="inline-radio-span">
-            <input id="chkNo" class="inline-radio" type="radio" name="search-radio"/>
-            <label for="chkNo" class="inline-radio-label">Search by Reference</label>
+            <input id='chkNo' class='inline-radio' type='radio' name='search-radio' value='by_reference'/>
+            <label for='chkNo' class='inline-radio-label'>Search by Reference</label>
         </div>
     </div>
-</div>
+</form>

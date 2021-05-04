@@ -15,7 +15,7 @@
                 where the reference is tagged with the subject only once, in one book.
             </p>
         </div>
-    {% else %}
+    {% elif 'by_subject'==search_by %}
         <div id='loading_bar' style='display: none;'>
             <div class="d-flex justify-content-center text-center" style="height: 40rem">
                 <div class="spinner-grow text-primary m-5" role="status" style="width: 25rem; height: 25rem;">
@@ -39,7 +39,7 @@
                     </div>
                     <!-- Search & Filter Forms -->
                     <div class='col-lg-8'>
-                        <p class='padding-1 color-accent text-center small'>Query time: {{ query_time|round(3) }} s.</p>
+                        {#                        <p class='padding-1 color-accent text-center small'>Query time: {{ query_time|round(3) }} s.</p>#}
                         {% include 'bar_search.html' %}
                     </div>
                 </div>
@@ -63,20 +63,16 @@
                 </div>
             {% endfor %}
         </div>
+    {% else %}
+        {% include 'bar_search.html' %}
+        <h1 class="text-center"> The days are long, but the years are short</h1>
+        {% if ref_html %}
+            <h4 class="padding-1"> Source Quotes Referenced: </h4>
+            <div class="container-fluid padding-5">{{ ref_html|safe }}</div>
+        {% else %}
+            No Quotes Available for References:
+{#        <div class="padding">{request.args["refs"]}</div>#}
+        {% endif %}
+
     {% endif %}
 {% endblock %}
-
-{#
-
-    {% set elm_id=num %}
-    {% set btn_id='btn'~num %}
-    <button id='{{ btn_id }}' class="padding bgn-dark"
-            onclick="more_less_info('{{ btn_id }}','{{ elm_id }}')">
-        Show More
-    </button>
-    <br><br>
-    <p class="display-none" id={{ elm_id }}>
-        preview of the text (???)
-    </p>
-
-#}

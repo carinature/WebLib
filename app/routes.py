@@ -15,23 +15,6 @@ from . import utilities as utils
 
 print('~' * 80)
 
-categories: Dict[str, Dict] = {  # todo move to utils?
-    'high' : {
-        'name'   : 'Highly Validated',
-        'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
-            ]
-        },
-    'valid': {
-        'name'   : 'Validated',
-        'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
-            ]
-        },
-    'not'  : {
-        'name'   : 'Unvalidated',
-        'results': [  # {'title': 'title', 'author': 'Author', 'ref_num': 'ref_num', 'refs': 'refs'}
-            ]
-        }
-    }
 links = {  # todo move to utils?
     'home'     : '/',
     'search'   : '/search-results',
@@ -51,10 +34,14 @@ def search_results(search_word='', page=''):
     search_bar: Dict[str, FlaskForm] = utils.init_search_bar()
     subject_form: f.SearchSubject = search_bar['subject_form']
     filter_form: f.FilterForm = search_bar['filter_form'].return_as_dict()
+    reference_form: f.SearchReference = search_bar['reference_form']
     # radio: f.RadioField = f.SearchSubject(request.form)
-    # print(filter_form.return_as_dict())
+    # print(f'submit_subject - {request.form["submit_subject"]}')
+    # print(f'submit_reference - {request.form["submit_reference"]}')
+    # print(f'request - {request.form.to_dict()}')
+    # print(f'reference_form - {reference_form.return_as_dict()}')
 
-    if not subject_form.validate_on_submit():  # i.e. when method==GET
+    if not subject_form.validate_on_submit() and not reference_form.validate_on_submit():  # i.e. when method==GET
         return render_template('search_results.html',
                                title='Search',
                                description="Tiresias: The Ancient Mediterranean Religions Source Database. "
@@ -63,6 +50,86 @@ def search_results(search_word='', page=''):
                                # categories=categories,
                                method='get'
                                )
+    if 'submit_subject' in request.form:
+        print('search by subject')
+        categories: Dict[str, Dict] = search_by_subject(subject_form, filter_form)
+        t_total = time() - t_time
+        query_logger: logging.Logger = logging.getLogger('queryLogger')
+        res_size = sum([len(cat["results"]) for cat in categories.values()])
+        print(res_size)
+        query_logger.info(f'\tQuery time: {t_total:<10.3f} '
+                          f'#results: {res_size :<10} '
+                          f'search word: \'{search_word}\'')
+        return render_template('search_results.html',
+                               index_title=f'Search Result for: {search_word}',
+                               description=f'Tiresias: The Ancient Mediterranean Religions Source Database. '
+                                           f'This page shows results for {search_word}, sorted by validity.',
+                               search_by='by_subject',
+                               search_bar=search_bar,
+                               search_word=search_word,
+                               categories=categories,
+                               results_num=res_size,
+                               query_time=t_total,
+                               )
+    else:
+        print('search by reference')
+        search_author: str = reference_form["search_author"].data
+        search_work: str = reference_form["search_work"].data
+        search_reference: str = reference_form["search_reference"].data
+        # search_author: str = f'%{reference_form["search_author"].data}%'
+        # search_work: str = f'%{reference_form["search_work"].data}%'
+        # search_reference: str = f'%{reference_form["search_reference"].data}%'
+        # # if search_author or search_work :
+        # title_tbl: m.Base = m.Title
+        # title_tbl_q: Query = title_tbl.query
+        #
+        # txt_tbl: m.Base = m.TextText
+        # txt_tbl_q: Query = txt_tbl.query
+        # bib_info = txt_tbl_q.filter(txt_tbl.ref.like(search_author))
+        #
+        # res: Query = m.RefQuote.query
+        # if search_author:
+        #     print(f'search_author')
+        #     title_tbl_q = title_tbl_q.filter(title_tbl.author.like(search_author))
+        #     # res = res.filter(m.RefQuote.author.like(search_author))
+        # if search_work:
+        #     print(f'search_work')
+        #     title_tbl_q = title_tbl_q.filter(title_tbl.title.like(search_work))
+        #     # res = res.filter(m.RefQuote.work.like(search_work))
+        # title_numbers = [r.number for r in title_tbl_q] if search_author or search_work else []
+        # print(f'title_numbers - \n {len(title_numbers)}')
+        res: Query = m.RefQuote.query
+        if search_reference:
+            print(f'search_reference - {search_reference}')
+            search_reference: str = f'%{reference_form["search_reference"].data}%'
+            res = res.filter(m.RefQuote.ref.like(search_reference))
+        refs_list: List = [tuple([r.ref.strip('\''), r.text, r.texteng]) for r in res if r.ref or r.text or r.texteng]
+        # ref_html = refs_list
+        ref_html = pd.DataFrame(refs_list).to_html(header=False,
+                                                   index=False,
+                                                   # table_id=f'reftbl{title_num}',
+                                                   border=0,
+                                                   classes='table table-hover',
+                                                   na_rep='Quote unavailable')
+
+        # return f'<h4 class="padding-1"> Source Quotes Referenced: </h4> {ref_html}' if refs_list \
+        #     else f'No Quotes Available for References: <div class="padding">{request.args["refs"]}</div>'
+
+        return render_template('search_results.html',
+                               index_title=f'Search Result for: {search_word}',
+                               description=f'Tiresias: The Ancient Mediterranean Religions Source Database. '
+                                           f'This page shows results for {search_word}, sorted by validity.',
+                               search_by='by_reference',
+                               search_bar=search_bar,
+                               search_word=search_word,
+                               ref_html=ref_html,
+                               # results_num=res_size,
+                               # query_time=t_total,
+                               )
+
+
+def search_by_subject(subject_form: f.SearchSubject,
+                      filter_form: f.FilterForm) -> Dict[str, Dict]:
     # filter_form = f.FilterForm().return_as_dict()
     from_century = filter_form['from_century']
     to_century = filter_form['to_century']
@@ -70,7 +137,6 @@ def search_results(search_word='', page=''):
     ancient_author = filter_form['ancient_author']
     ancient_title = filter_form['ancient_title']
     reference = filter_form['reference']
-
     # ............  return all matching results (subjects) by C column [list] ............
     txts_query: BaseQuery = m.TextText.query
     # filter by subject (and reference if ref_filter field in form is filled out)
@@ -81,53 +147,47 @@ def search_results(search_word='', page=''):
     txts_q_filter = txts_q_filter.filter_by(ref=reference) if reference else txts_q_filter
     # filter by the title's category
     q_title_filter = txts_q_filter.join(m.Title)  # <-------------------------- .join(m.BookRef) slows significantly
-
-    if from_century: q_title_filter: Query = q_title_filter.filter(
-            or_(m.Title.centstart == None, m.Title.centstart >= from_century))
-    if to_century: q_title_filter: Query = q_title_filter.filter(
-            or_(m.Title.centend == None, m.Title.centend <= to_century))
-    if language: q_title_filter: Query = q_title_filter.filter(or_(m.Title.lang == None, m.Title.lang == language))
-    if ancient_author: q_title_filter: Query = q_title_filter.filter(m.Title.author == ancient_author)
-    if ancient_title: q_title_filter: Query = q_title_filter.filter(m.Title.title == ancient_title)
-
+    if -21 != from_century:
+        q_title_filter: Query = q_title_filter.filter(or_(m.Title.centstart is None, m.Title.centstart >= from_century))
+    if 21 != to_century:
+        q_title_filter: Query = q_title_filter.filter(or_(m.Title.centend is None, m.Title.centend <= to_century))
+    if language:
+        q_title_filter: Query = q_title_filter.filter(or_(m.Title.lang is None, m.Title.lang == language))
+    if ancient_author:
+        q_title_filter: Query = q_title_filter.filter(m.Title.author == ancient_author)
+    if ancient_title:
+        q_title_filter: Query = q_title_filter.filter(m.Title.title == ancient_title)
     res_dict: Dict[int, m.ResultTitle] = {}
     highly_valid: List[m.ResultTitle] = []
     valid: List[m.ResultTitle] = []
     not_valid: List[m.ResultTitle] = []
-
     tt = time()  # for logging
     res_tit: m.TextText
-
     for res_tit in q_title_filter:
         res_title: m.ResultTitle = res_dict.setdefault(res_tit.number, m.ResultTitle(res_tit.title))
         res_title.add_bib(res_tit.book_ref).add_page(res_tit.page)
         res_title.add_ref(res_tit.ref).add_subject(res_tit.subject)
-
     # print(f'res_dict: {time() - tt:.5}')
-
     for res in res_dict.values():
         if len(res.books_dict) > 1: highly_valid.append(res)
         elif len(res.refs) > 1: valid.append(res)
         else: not_valid.append(res)
 
-    categories['high']['results'] = sorted(highly_valid, reverse=True)
-    categories['valid']['results'] = sorted(valid, reverse=True)
-    categories['not']['results'] = not_valid
-
-    t_total = time() - t_time
-    query_logger: logging.Logger = logging.getLogger('queryLogger')
-    query_logger.info(f'\tQuery time: {t_total:<10.3f} #results: {len(res_dict):<10} search word: \'{search_word}\'')
-
-    return render_template('search_results.html',
-                           index_title=f'Search Result for: {search_word}',
-                           description=f'Tiresias: The Ancient Mediterranean Religions Source Database. '
-                                       f'This page shows results for {search_word}, sorted by validity.',
-                           search_bar=search_bar,
-                           categories=categories,
-                           search_word=search_word,
-                           results_num=len(res_dict),
-                           query_time=t_total,
-                           )
+    categories: Dict[str, Dict] = {
+        'high' : {
+            'name'   : 'Highly Validated',
+            'results': sorted(highly_valid, reverse=True)
+            },
+        'valid': {
+            'name'   : 'Validated',
+            'results': sorted(valid, reverse=True)
+            },
+        'not'  : {
+            'name'   : 'Unvalidated',
+            'results': not_valid
+            }
+        }
+    return categories
 
 
 def nothing():
@@ -213,7 +273,7 @@ def subject_list(search_word='', page=''):
                                )
 
     search_word = subject_form.subject_keyword_1.data
-    search = '%{}%'.format(search_word)
+    search = f'%{search_word}%'
     subjects_query: Query = m.TextSubject.query
     subjects_filter: Query = subjects_query.filter(m.TextSubject.subject.like(search))
     subjects_ordered: Query = subjects_filter.order_by(m.TextSubject.Csum.desc())

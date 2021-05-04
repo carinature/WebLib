@@ -29,18 +29,62 @@ EARLIEST_CENTURY = -100
 NEWEST_CENTURY = 21
 
 
+class SearchTypeChoice(FlaskForm):
+    r_field = RadioField(
+            'Label',
+            choices=[(1, 'Search by Subject'), (0, 'Search by Reference')],
+            render_kw={'class': 'inline-radio'}
+            # 'style': 'font-size:16px; vertical-align: middle; horizontal-align: middle;text-align: center'}
+            )
+
+
+class SearchReference(FlaskForm):
+
+    def any_fields_filled(self):
+        return any([self.search_author.data, self.search_work.data, self.search_reference.data])
+
+    def validate(self):
+        return self.any_fields_filled()
+
+    search_author = StringField('Author\'s name',
+                                [Optional()],
+                                # , validators.Regexp('^\w+$', message="Field accepts one search word")],
+                                render_kw={'placeholder': 'Author\'s name'})
+    search_work = StringField('Work',
+                              [Optional()],
+                              # , validators.Regexp('^\w+$', message="Field accepts one search word")],
+                              render_kw={'placeholder': 'Work'})
+    search_reference = StringField('Reference',
+                                   [Optional()],
+                                   # , validators.Regexp('^\w+$', message="Field accepts one search word")],
+                                   render_kw={'placeholder': 'Reference'})
+    submit_reference = SubmitField('Submit',
+                                   render_kw={
+                                       'class': 'btn btn-primary',
+                                       'id'   : 'submit_reference',
+                                       }
+                                   )
+
+    def return_as_dict(self):
+        return {
+            'search_author'   : self.search_author.data,
+            'search_work'     : self.search_work.data,
+            'search_reference': self.search_reference.data,
+            }
+
+
 class SearchSubject(FlaskForm):
     subject_keyword_1 = StringField(
-        EMPTY_LABEL,
-        validators=[DataRequired(), Regexp('^\w+$', message="Field accepts one search word")],
-        render_kw={'placeholder': ' Subject'})
+            EMPTY_LABEL,
+            validators=[DataRequired(), Regexp('^\w+$', message="Field accepts one search word")],
+            render_kw={'placeholder': ' Subject'})
     subject_keyword_2 = StringField(
-        EMPTY_LABEL,
-        validators=[Optional(), Regexp('^\w+$', message="Field accepts one search word")],
-        render_kw={'placeholder': '(Optional) Subject'})
-    submit_subject = SubmitField(Markup(' Search'), render_kw={'class': 'btn-primary ', })
-    # submit_subject = SubmitField(Markup("""<i class='fas fa-search'></i>"""), render_kw={'class': 'btn-primary', })
+            EMPTY_LABEL,
+            validators=[Optional(), Regexp('^\w+$', message="Field accepts one search word")],
+            render_kw={'placeholder': '(Optional) Subject'})
+    submit_subject = SubmitField(' Search', render_kw={'class': 'btn-primary ', 'id': 'submit_subject'})
 
+    # submit_subject = SubmitField(Markup("""<i class='fas fa-search'></i>"""), render_kw={'class': 'btn-primary', })
 
     def __repr__(self):
         return f'SearchSubject:\n' \
@@ -66,7 +110,7 @@ centuries = [
     (6, '6 CE'),
     (7, '7 CE'),
     (8, '8 CE')
-]
+    ]
 languages = [
     ('', 'Any'),
     ('Aramaic', 'Aramaic'),
@@ -75,17 +119,21 @@ languages = [
     ('Hebrew', 'Hebrew'),
     ('Latin', 'Latin'),
     ('Syriac', 'Syriac')
-]
+    ]
 
 
 class Include(FlaskForm):
-    include = StringField(render_kw={'placeholder': ' Subject',
-                                     'class': 'margin-left-15'})
+    include = StringField(render_kw={
+        'placeholder': ' Subject',
+        'class'      : 'margin-left-15'
+        })
 
 
 class Exclude(FlaskForm):
-    exclude = StringField(render_kw={'placeholder': ' Subject',
-                                     'class': 'margin-left-15'})
+    exclude = StringField(render_kw={
+        'placeholder': ' Subject',
+        'class'      : 'margin-left-15'
+        })
 
 
 def validate_century(field_from):
@@ -102,13 +150,13 @@ def validate_century(field_from):
 class FilterForm(FlaskForm):
     # <!--sub-subject filtering options-->
     includes = FieldList(
-        # 'Including ',  # fixme remove *all* [Optional()] ?
-        FormField(Include), min_entries=1, label='Includes'
-    )
+            # 'Including ',  # fixme remove *all* [Optional()] ?
+            FormField(Include), min_entries=1, label='Includes'
+            )
     excludes = FieldList(
-        # 'Including ',  # fixme remove *all* [Optional()] ?
-        FormField(Exclude), min_entries=1, label='Excludes'
-    )
+            # 'Including ',  # fixme remove *all* [Optional()] ?
+            FormField(Exclude), min_entries=1, label='Excludes'
+            )
 
     # <!--text and reference filtering options-->
     # Dont delete this: https://gist.github.com/Overdese/abebc48e878662377988
@@ -117,6 +165,7 @@ class FilterForm(FlaskForm):
                                render_kw={'class': 'float-right'},
                                # choices=centuries,
                                choices=[(-21, 'Any'), *centuries],
+                               # choices=[('', 'Any'), *centuries],
                                coerce=int
                                )
     to_century = SelectField('To ', id="to-century-dl",
@@ -124,6 +173,7 @@ class FilterForm(FlaskForm):
                              render_kw={'class': 'float-right'},
                              # choices=centuries,
                              choices=[tuple((21, 'Any')), *centuries],
+                             # choices=[('', 'Any'), *centuries],
                              coerce=int
                              )
     language = SelectField('Language ', id="language-dl",
@@ -138,24 +188,25 @@ class FilterForm(FlaskForm):
                                 )
     reference = StringField('Reference ',
                             render_kw={
-                                'placeholder': '(e.g., 1.1 for chapter 1 verse 1, or leave empty for whole work)'}
+                                'placeholder': '(e.g., 1.1 for chapter 1 verse 1, or leave empty for whole work)'
+                                }
                             )
     fetch_full = BooleanField('Fetch full text', id='fetch_full_chkbox')
     attention_label = Label(
-        text='(Attention: Checking this box will attempt full text fetching,'
-             '\nwhich can result in very highly loading times.)',
-        field_id=fetch_full)
+            text='(Attention: Checking this box will attempt full text fetching,'
+                 '\nwhich can result in very highly loading times.)',
+            field_id=fetch_full)
 
     def return_as_dict(self):
         return {
-            'from_century': self.from_century.data,
-            'to_century': self.to_century.data,
-            'language': self.language.data,
+            'from_century'  : self.from_century.data,
+            'to_century'    : self.to_century.data,
+            'language'      : self.language.data,
             'ancient_author': self.ancient_author.data,
-            'reference': self.reference.data,
-            'ancient_title': self.ancient_title.data,
-            'fetch_full': self.fetch_full.data
-        }
+            'reference'     : self.reference.data,
+            'ancient_title' : self.ancient_title.data,
+            'fetch_full'    : self.fetch_full.data
+            }
 
     # clean_button = ('Clear all fields')
 
@@ -179,49 +230,18 @@ class FilterForm(FlaskForm):
         return strtr
 
 
-class SearchReference(FlaskForm):
-
-    def any_fields_filled(self):
-        return any([self.search_author.data, self.search_work.data, self.search_reference.data])
-
-    def validate(self):
-        return self.any_fields_filled()
-
-    search_author = StringField(
-        'Author\'s name',
-        [Optional()],  # , validators.Regexp('^\w+$', message="Field accepts one search word")],
-        render_kw={'placeholder': 'Author\'s name'})
-    search_work = StringField(
-        'Work',
-        [Optional()],  # , validators.Regexp('^\w+$', message="Field accepts one search word")],
-        render_kw={'placeholder': 'Work'})
-    search_reference = StringField(
-        'Reference',
-        [Optional()],  # , validators.Regexp('^\w+$', message="Field accepts one search word")],
-        render_kw={'placeholder': 'Reference'})
-    submit_reference = SubmitField('Submit',
-                                   # render_kw={'class': 'btn btn-lg btn-primary float-right'}
-                                   )
-
-
-class SearchTypeChoice(FlaskForm):
-    r_field = RadioField(
-        'Label',
-        choices=[(1, 'Search by Subject'), (0, 'Search by Reference')],
-        render_kw={'class': 'inline-radio'}
-        # 'style': 'font-size:16px; vertical-align: middle; horizontal-align: middle;text-align: center'}
-    )
-
-
 class SignupForm(FlaskForm):
     # sign up for updates
     email = EmailField('Email', [DataRequired(), Email()],
-                       render_kw={'id': 'email_field',
-                                  'placeholder': ' e.g. username@email.edu '})
+                       render_kw={
+                           'id'         : 'email_field',
+                           'placeholder': ' e.g. username@email.edu '
+                           })
     submit_email = SubmitField('Submit',
-                               render_kw={'class': 'btn btn-default bgn-light-second',
-                                          'id': 'lala',
-                                          }
+                               render_kw={
+                                   'class': 'btn btn-default bgn-light-second',
+                                   'id'   : 'lala',
+                                   }
                                )
 
 #     """Sign up for a user account."""

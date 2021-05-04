@@ -125,7 +125,7 @@ def search_test():
     if language:
         q_title_filter: Query = q_title_filter.filter(m.Title.lang == language)
     if ancient_author:
-        q_title_filter: Query = q_title_filter.filter(m.Title.author == ancient_author)
+        q_title_filter = q_title_filter.filter(m.Title.author == ancient_author)
     if ancient_title:
         q_title_filter: Query = q_title_filter.filter(m.Title.title == ancient_title)
 

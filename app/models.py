@@ -194,10 +194,10 @@ class RefQuote(Base):
     text = Column(Text, nullable=True)
     texteng = Column(Text, nullable=True)
     # todo - the next two fields seem redundent (if there's a title's number anyway
-    # author = Column(String(LONG_STRING_LEN),
+    # author = Column(String(2*SHORT_STRING_LEN),
     #                 ForeignKey(f'{Title.__tablename__}.{inspect(Title).author.name}'),
     #                 nullable=True)
-    # title = Column(String(LONG_STRING_LEN),
+    # title = Column(String(2*SHORT_STRING_LEN),
     #                ForeignKey(f'{Title.__tablename__}.{inspect(Title).title.name}'),
     #                nullable=True)
 
