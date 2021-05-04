@@ -146,48 +146,50 @@ $('button.add-btn').on('click', function (e) {
 });
 
 
+$('button.refbtn').on('click', function (e) {
+    let rid = this.id.replace('refsbtn', ''); // todo consider removing the `refsbtn` prefix from this btn's id in the jinja/html
+    let refs_elm = document.getElementById('refs' + rid);
+    let refs = refs_elm.textContent;
+    // let res = $.getJSON(url = 'fetchrefs/' + rid);
+    let res = $.ajax({
+        // type: 'POST',
+        dataType: 'text',
+        url: 'fetchrefs/' + rid,
+        // url: 'fetchrefs',
+        data: {param: 'uiuyiu', p2: 'slkfd', refs: refs, arr: ['dsfs', 'sdfs', 'safsad']},
+        success: function (data) {
+            console.log('Great Success!');
+            // console.log(data);
+            refs_elm.insertAdjacentHTML("afterend", data);
+            // refs_elm.insertAdjacentHTML("afterend", '<h1>' + data + '</h1>');
+        },
+        // complete: function (data) {
+        //     console.log('Great complete!');
+        //     console.log(data);
+        //     console.log(data.responseText);
+        //     return data.responseText;
+        // }
+    });
+    // let res2 = res.done(
+    //     function (data) {
+    //         console.log('Great Done!');
+    //         console.log(data);
+    //     }
+    // );
+    // console.log('res  ', res);
+    // console.log('res2  ', res2);
+    return true; //note IMPORTANT - if returns false - data-toggle doesn't work
+    // }
+});
+
 /**
  * The button disappears when you click it.
  * In case of 'References' btn - will query the DB and show the full text of the ref.
  * */
 $('button.disappring-btn').on('click', function (e) {
     // this.style.display = 'none';
-    if (this.id.includes('ref')) {
+    this.remove();
 
-        let rid = this.id.replace('refsbtn', ''); // todo consider removing the `refsbtn` prefix from this btn's id in the jinja/html
-        let refs_elm = document.getElementById('refs' + rid);
-        let refs = refs_elm.textContent;
-        // console.log(refs);
-        // console.log('rid - ', rid);
-        // let res = $.getJSON(url = 'fetchrefs/' + rid);
-        let res = $.ajax({
-            dataType: 'text',
-            url: 'fetchrefs/' + rid,
-            // url: 'fetchrefs',
-            data: {param: 'uiuyiu', p2: 'slkfd', refs: refs, arr:['dsfs', 'sdfs', 'safsad']},
-            success: function (data) {
-                console.log('Great Success!');
-                console.log(data);
-                refs_elm.insertAdjacentHTML("afterend", data);
-                // refs_elm.insertAdjacentHTML("afterend", '<h1>' + data + '</h1>');
-            },
-            // complete: function (data) {
-            //     console.log('Great complete!');
-            //     console.log(data);
-            //     console.log(data.responseText);
-            //     return data.responseText;
-            // }
-        });
-        // let res2 = res.done(
-        //     function (data) {
-        //         console.log('Great Done!');
-        //         console.log(data);
-        //     }
-        // );
-        console.log('res  ', res);
-        // console.log('res2  ', res2);
-        return true; //note IMPORTANT - if returns false - data-toggle doesn't work
-    }
 });
 
 /**

@@ -70,6 +70,13 @@ footer button {
 /* Elements
    ========================================================================== */
 
+/** Tables **/
+/*.table-hover .table {*/
+.table {
+    margin-bottom: 2em;
+}
+
+
 /** Image **/
 
 

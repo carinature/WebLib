@@ -1,6 +1,7 @@
 from typing import List, Dict, Tuple
 import logging, logging.config
 from time import time, localtime
+import pandas as pd
 
 from flask import current_app as app, send_from_directory
 from flask import render_template, make_response, redirect, url_for, request
@@ -236,29 +237,13 @@ def subject_list(search_word='', page=''):
 @app.route('/fetchrefs')
 @app.route('/fetchrefs/<string:title_num>')
 def fetch_refs_for_title(title_num: str = '') -> str:
-    print('=-' * 3, 'Fetching Refs', '=-' * 3, )
-    print(request.args['refs'])
-    refs = []
-    for r in request.args['refs'].split(','):
-        refs.append('\''+r.strip('{ }\'')) #fixme should be refs.append(r.strip('{ }\''))
-        print(refs[-1])
-    print(refs)
-    tbl:m.Base = m.RefQuote
-    q: BaseQuery = tbl.query
-    res = q.filter(tbl.number == title_num).filter(tbl.ref.in_(refs))
-    # print(res)
-    r:m.RefQuote
-    for r in res.all():
-        print(f'res - {r.texteng}')
-    # print('--args--')
-    # for arg in args.items():
-    #     print(arg)
-    # print('-----')
-    # for arg in args.values():
-    #     print(arg)
-    # print('=====')
-    # print(args['arr[]'])
-    return f'<p>{title_num} - {refs} - {res.all()} </p>'
+    ref_nums = ['\'' + r.strip('{ }\'') for r in request.args['refs'].split(',')]  # fixme should be r.strip('{ }\'')
+    res = m.RefQuote.query.filter(m.RefQuote.number == title_num).filter(m.RefQuote.ref.in_(ref_nums))
+    refs_list: List = [tuple([r.ref.strip('\''), r.text, r.texteng]) for r in res if r.ref or r.text or r.texteng]
+    ref_html = pd.DataFrame(refs_list).to_html(header=False, index=False, table_id=f'reftbl{title_num}', border=0,
+                                               classes='table table-hover', na_rep='Quote unavailable')
+    return f'<h4 class="padding-1"> Source Quotes Referenced: </h4> {ref_html}' if refs_list \
+        else f'No Quotes Available for References: <div class="padding">{request.args["refs"]}</div>'
 
 
 # ++++++++++++  Error Handling ++++++++++++
