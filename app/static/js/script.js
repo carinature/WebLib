@@ -2,16 +2,17 @@
 $('a#test').on('click', function (e) {
     e.preventDefault();
     let some_var = this.id;
-    let res = $.getJSON('fetch_results/' + some_var);
-
+    let res = $.getJSON('fetch_results/' + some_var).done(function (data) {
+        console.log(data);
+    });
     let res1 = $.getJSON('fetch_results/' + some_var,
         function (data) {
             //do nothing
         });
-
+    // probably the most appropriate option:
     let res2 = $.ajax({
         dataType: "json",
-        url: 'fetch_results/' + some_var,
+        url: 'fetch_results/' + some_var, // corresponds to @app.route('/fetch_results/<string:some_var>') in flask
         data: 'data',
         success: console.log('Great Success!')
     });
@@ -31,7 +32,6 @@ $('a#test_query').on('click', function (e) {
             console.log(data);
 
         });
-    console.log('json_res', json_res);
     console.log('json_res', json_res);
     return false;
 });
@@ -106,10 +106,8 @@ $('button.add-btn').on('click', function (e) {
 // function add_field(type = 'exclude') {
     let type = this.id.split('-')[1];
     console.log(type)
-    // which table to expand
-    let tbody = document.getElementById(type + 's-0').lastChild;
-    // get number of input fields
-    let labels = tbody.getElementsByTagName('label');
+    let tbody = document.getElementById(type + 's-0').lastChild;    // which table to expand
+    let labels = tbody.getElementsByTagName('label');    // get number of input fields
     let i = 0;
     if (0 < labels.length) {
         let last_label = labels[labels.length - 1];
@@ -117,7 +115,7 @@ $('button.add-btn').on('click', function (e) {
     }
     // too many fields added
     if (2 < i) {
-        alert("Hey buddy, you're asking too much.");
+        alert("Hey buddy, that way too many fields.");
         return;
     }
     // construct and add label
@@ -136,60 +134,39 @@ $('button.add-btn').on('click', function (e) {
     new_input.setAttribute('style', 'margin-left:15px');
     let new_td = document.createElement("td");
     new_td.appendChild(new_input);
-    let ksdfjl = 'sdlf';
     // construct and add the new input row to the table
     let new_tr = document.createElement("tr");
     new_tr.appendChild(new_th);
     new_tr.appendChild(new_td);
     tbody.appendChild(new_tr);
-
-});
-
-
-$('button.refbtn').on('click', function (e) {
-    let rid = this.id.replace('refsbtn', ''); // todo consider removing the `refsbtn` prefix from this btn's id in the jinja/html
-    let refs_elm = document.getElementById('refs' + rid);
-    let refs = refs_elm.textContent;
-    // let res = $.getJSON(url = 'fetchrefs/' + rid);
-    let res = $.ajax({
-        // type: 'POST',
-        dataType: 'text',
-        url: 'fetchrefs/' + rid,
-        // url: 'fetchrefs',
-        data: {param: 'uiuyiu', p2: 'slkfd', refs: refs, arr: ['dsfs', 'sdfs', 'safsad']},
-        success: function (data) {
-            console.log('Great Success!');
-            // console.log(data);
-            refs_elm.insertAdjacentHTML("afterend", data);
-            // refs_elm.insertAdjacentHTML("afterend", '<h1>' + data + '</h1>');
-        },
-        // complete: function (data) {
-        //     console.log('Great complete!');
-        //     console.log(data);
-        //     console.log(data.responseText);
-        //     return data.responseText;
-        // }
-    });
-    // let res2 = res.done(
-    //     function (data) {
-    //         console.log('Great Done!');
-    //         console.log(data);
-    //     }
-    // );
-    // console.log('res  ', res);
-    // console.log('res2  ', res2);
-    return true; //note IMPORTANT - if returns false - data-toggle doesn't work
-    // }
 });
 
 /**
  * The button disappears when you click it.
- * In case of 'References' btn - will query the DB and show the full text of the ref.
  * */
 $('button.disappring-btn').on('click', function (e) {
     // this.style.display = 'none';
     this.remove();
+});
 
+/**
+ * In case of 'References' btn - will query the DB and show the full text of the ref.
+ * */
+$('button.refbtn').on('click', function (e) {
+    let rid = this.id.replace('refsbtn', ''); // todo consider rm the `refsbtn` prefix from this btn's id in the jinja/html ?
+    let refs_elm = document.getElementById('refs' + rid);
+    let refs = refs_elm.textContent;
+    // let res = $.getJSON(url = 'fetchrefs/' + rid);
+    $.ajax({
+        dataType: 'text',
+        // url: 'fetchrefs/' + rid, corresponds to # @app.route('/fetchrefs/<string:title_num>') in flask
+        url: 'fetchrefs',
+        data: {refs: refs, title_num: rid},
+        success: function (data) {
+            refs_elm.insertAdjacentHTML("afterend", data);
+        },
+    });
+    return true; //note IMPORTANT - if returns false - data-toggle doesn't work
 });
 
 /**

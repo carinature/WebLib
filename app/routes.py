@@ -235,10 +235,9 @@ def subject_list(search_word='', page=''):
 
 # ++++++++++++  Serving Requests from JS ++++++++++++
 @app.route('/fetchrefs')
-@app.route('/fetchrefs/<string:title_num>')
 def fetch_refs_for_title(title_num: str = '') -> str:
     ref_nums = ['\'' + r.strip('{ }\'') for r in request.args['refs'].split(',')]  # fixme should be r.strip('{ }\'')
-    res = m.RefQuote.query.filter(m.RefQuote.number == title_num).filter(m.RefQuote.ref.in_(ref_nums))
+    res = m.RefQuote.query.filter(m.RefQuote.number == request.args['title_num']).filter(m.RefQuote.ref.in_(ref_nums))
     refs_list: List = [tuple([r.ref.strip('\''), r.text, r.texteng]) for r in res if r.ref or r.text or r.texteng]
     ref_html = pd.DataFrame(refs_list).to_html(header=False, index=False, table_id=f'reftbl{title_num}', border=0,
                                                classes='table table-hover', na_rep='Quote unavailable')
