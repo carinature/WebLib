@@ -38,7 +38,9 @@ class SearchSubject(FlaskForm):
         EMPTY_LABEL,
         validators=[Optional(), Regexp('^\w+$', message="Field accepts one search word")],
         render_kw={'placeholder': '(Optional) Subject'})
-    submit_subject = SubmitField(' Search', render_kw={'class': 'btn-primary', })
+    submit_subject = SubmitField(Markup(' Search'), render_kw={'class': 'btn-primary ', })
+    # submit_subject = SubmitField(Markup("""<i class='fas fa-search'></i>"""), render_kw={'class': 'btn-primary', })
+
 
     def __repr__(self):
         return f'SearchSubject:\n' \

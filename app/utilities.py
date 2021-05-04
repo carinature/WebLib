@@ -16,7 +16,6 @@ def init_search_bar() -> Dict[str, FlaskForm]:
         'radio_buttons' : forms.SearchTypeChoice(request.form)
         }
 
-
 def c_sum(clist: List[str]) -> int:
     csum: int = 0
     clist_exp: List[str] = str(clist).split(',')

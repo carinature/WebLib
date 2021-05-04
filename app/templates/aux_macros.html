@@ -4,7 +4,7 @@
             data-toggle='collapse'
             data-target='#{{ relm_id }}'
             id="{{ rbtn_id }}"
-            >{{ text }}</button>
+    >{{ text }}</button>
 {%- endmacro %}
 
 {#  ====    Macros for Search Results   ====    #}
@@ -64,7 +64,7 @@
                 {#  References (Numbers) (BTN)  #}
                 <div class='padding-bot-2 padding-left-2 col-1'>
                     {{ disappring_btn( text='references:', rbtn_id = rbtn_id, relm_id = None, class='btn-sm float-right refbtn') }}
-{#                    {{ disappring_btn( text='references:', rbtn_id = rbtn_id, relm_id = relm_id, class='btn-sm float-right') }}#}
+                    {#                    {{ disappring_btn( text='references:', rbtn_id = rbtn_id, relm_id = relm_id, class='btn-sm float-right') }}#}
                 </div>
             </div>
             {#  References (Numbers) #}
@@ -77,6 +77,20 @@
 {% macro category_head(category='', id='', res_num='', value='') -%}
     <div class='container-fluid padding-bot-2 popover_category' id='{{ id }}'>
         <h1 class='col-12 bgn-light-second'>{{ category }} {{ res_num }}</h1>
+    </div>
+{%- endmacro %}
+
+{#  Category Title Macro    #}
+{% macro search_field(field) -%}
+    <div class="list-inline-item">
+        {{ field }}
+        {% if field.errors %}
+            <ul class="errors">
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 {%- endmacro %}
 

@@ -51,6 +51,7 @@ def search_results(search_word='', page=''):
     search_bar: Dict[str, FlaskForm] = utils.init_search_bar()
     subject_form: f.SearchSubject = search_bar['subject_form']
     filter_form: f.FilterForm = search_bar['filter_form'].return_as_dict()
+    # radio: f.RadioField = f.SearchSubject(request.form)
     # print(filter_form.return_as_dict())
 
     if not subject_form.validate_on_submit():  # i.e. when method==GET

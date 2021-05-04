@@ -57,12 +57,15 @@ $(document).ready(function () {
 });
 
 /** supposed to toggle between to radio button options */
-$('input.inline-radio').on('click', function (e) {
+$('input.inline-radio').on('click', function () {
+    console.log('jdfhkjasdhflkjasdhf');
+    console.log(this);
     let chkYes = document.getElementById("chkYes");
     let search_subject = document.getElementById("search-subject");
     let search_ref = document.getElementById("search-ref");
     search_subject.style.display = chkYes.checked ? "block" : "none";
     search_ref.style.display = chkYes.checked ? "none" : "block";
+    console.log(search_ref.style.display)
 });
 
 
