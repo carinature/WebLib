@@ -5,6 +5,7 @@ from typing import List, Dict, Set, Tuple
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, ForeignKey, Table, MetaData, CheckConstraint, SmallInteger, inspect
+from sqlalchemy.dialects.mysql import LONGTEXT
 from sqlalchemy.orm import column_property, Query, validates, synonym, relationship
 from sqlalchemy.types import Integer, String, Text, UnicodeText, DateTime, Float, Boolean, PickleType
 from sqlalchemy.ext.declarative import synonym_for
@@ -84,8 +85,8 @@ class BookRef(Base):
     dtype_dic_csv2py = {
         'book bibliographic info': int,  # :int ???
         'file'                   : str,
-        'titleref': str,
-        'gcode': str
+        'titleref'               : str,
+        'gcode'                  : str
         }
 
     # CheckConstraint("gcode in ('x','#VALUE!')"), #this only throws an exception and stops table build
@@ -189,17 +190,18 @@ class RefQuote(Base):
                     primary_key=True,
                     nullable=False)
     ref = Column(String(SHORT_STRING_LEN),
+                 # ForeignKey(f'{Title.__tablename__}.{inspect(Title).primary_key[0].name}'),
                  primary_key=True,
                  nullable=False)  # would be a foreign key in TextText?
-    text = Column(Text, nullable=True)
+    text = Column(Text, nullable=True)  # fixme change to Column(LONGTEXT, nullable=True) #
     texteng = Column(Text, nullable=True)
     # todo - the next two fields seem redundent (if there's a title's number anyway
-    # author = Column(String(2*SHORT_STRING_LEN),
-    #                 ForeignKey(f'{Title.__tablename__}.{inspect(Title).author.name}'),
-    #                 nullable=True)
-    # title = Column(String(2*SHORT_STRING_LEN),
-    #                ForeignKey(f'{Title.__tablename__}.{inspect(Title).title.name}'),
-    #                nullable=True)
+    author = Column(String(2 * SHORT_STRING_LEN),
+                    # ForeignKey(f'{Title.__tablename__}.{inspect(Title).c.author.name}'),
+                    nullable=True)
+    title = Column(String(4 * SHORT_STRING_LEN),
+                   # ForeignKey(f'{Title.__tablename__}.{inspect(Title).c.title.name}'),
+                   nullable=True)
 
     title_r = relationship('Title')
 
