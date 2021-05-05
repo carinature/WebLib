@@ -1,4 +1,3 @@
-
 from flask import current_app as app
 from sqlalchemy import create_engine, inspect, sql
 
@@ -25,8 +24,8 @@ class DBMigration:  # singleton class
     print(f'----- {tt} -------')
     logging.config.fileConfig('logging.conf',
                               defaults={
-                                  'logfilename'    : f'logs/db_migration_{tt}.log',
-                                  'fulllogfilename': f'logs/db_migration_full_{tt}.log',
+                                  'logfilename'     : f'logs/db_migration_{tt}.log',
+                                  'fulllogfilename' : f'logs/db_migration_full_{tt}.log',
                                   'querylogfilename': f'logs/q_empty.log',
                                   }
                               )
@@ -74,23 +73,26 @@ class DBMigration:  # singleton class
         exit_flag = False
         while not exit_flag:
             try:  # this for-loop is inside `try` for cases of commas (`,`) in `subject` col without brackets (`"`)
-            # with open(src_file):
+                # with open(src_file):
                 for dataframe in pd.read_csv(csv_file,
                                              dtype=model.dtype_dic_csv2py,
                                              header=0,
                                              names=model.col_names,
                                              na_values=['x', '#VALUE!', '', 'Unknown'],
                                              chunksize=app.config['CHUNK_SIZE_DB'],
-                                            #  skiprows=305868
+                                             #  skiprows=305868
                                              ):
                     self.logger.debug(f'{model.__name__} loading chunk #{chunk_num}')
                     model_cols = model.__table__.c
                     df_clean: pd.DataFrame = dataframe[[col.key for col in model_cols if 'Csum' != col.key]]
                     df_clean = df_clean.drop_duplicates(prime_key_name)
-                    if TextSubject == model: df_clean['Csum'] = df_clean['C'].apply(c_sum) #count number of refs
+                    if TextSubject == model: df_clean['Csum'] = df_clean['C'].apply(c_sum)  # count number of refs
                     for col in model_cols:
                         if isinstance(col.type, sql.sqltypes.Integer):
                             df_clean[col.name] = pd.to_numeric(df_clean[col.name], errors='raise')  # ='coerce')
+                        elif RefQuote == model and 'ref'==col.name:
+                            df_clean[col.name] = df_clean[col.name].apply(lambda x: x.strip('\''))  # rempve the leading `'`
+
                     df_clean = df_clean.astype(object).where(pd.notnull(df_clean), None)  # this is explained in:
                     # https://stackoverflow.com/questions/45395729/unknown-column-nan-in-field-list-python-pandas
                     try:

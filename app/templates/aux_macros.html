@@ -13,8 +13,7 @@
         {% for bib, book in books_dict.items() %}
             <div class='padding-bot-1'>
                 <em><strong>{{ book.title_full.title }}</strong></em>
-                <span class='padding-1'>
-                        pages:
+                <span class='padding-1'> pages:
                     {% for page in book.pages -%}
                         {% if book.title_full.gcode %}
                             {% set glink = 'https://books.google.co.il/books?id='+book.title_full.gcode
