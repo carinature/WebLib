@@ -47,10 +47,10 @@ def search_results(search_word='', page=''):
                                method='get'
                                )
     # search query submitted for search by subject
+    query_logger: logging.Logger = logging.getLogger('queryLogger')
     if 'submit_subject' in request.form:
         categories: Dict[str, Dict] = search_by_subject(subject_form, filter_form)
         t_total = time() - t_time
-        query_logger: logging.Logger = logging.getLogger('queryLogger')
         res_size = sum([len(cat["results"]) for cat in categories.values()])
         print(res_size)
         query_logger.info(f'\tQuery time: {t_total:<10.3f} '
@@ -73,51 +73,14 @@ def search_results(search_word='', page=''):
         author: str = reference_form["search_author"].data
         work: str = reference_form["search_work"].data
         reference: str = reference_form["search_reference"].data
-        # if search_author or search_work :
-        title_tbl: m.Base = m.Title
-        title_query: Query = title_tbl.query
 
-        txt_tbl: m.Base = m.TextText
-        txt_query: Query = txt_tbl.query
+        refs_list, subjects_list = search_ref(author, work, reference)
 
-        ref_quote_tbl: m.Base = m.RefQuote
-        ref_quote_q: Query = ref_quote_tbl.query
-
-        if author:
-            search_author: str = f'%{author}%'
-            title_query = title_query.filter(title_tbl.author.like(search_author))
-            ref_quote_q = ref_quote_q.filter(ref_quote_tbl.author.like(search_author))
-        if work:
-            search_work: str = f'%{work}%'
-            title_query = title_query.filter(title_tbl.title.like(search_work))
-            ref_quote_q = ref_quote_q.filter(ref_quote_tbl.title.like(search_work))
-        if reference:
-            search_reference: str = f'%{reference}%'
-            txt_query = txt_query.filter(txt_tbl.ref.like(search_reference))
-            ref_quote_q = ref_quote_q.filter(ref_quote_tbl.ref.like(search_reference))
-
-        refs_list: List = [['Reference', 'Original Text', 'Translation to English']] + [
-            [f'{r.author}, {r.title}, {r.ref}',
-             r.text if None != r.text else 'Quote Unavailabe',
-             r.texteng if None != r.texteng else 'Quote Unavailabe']
-            for r in ref_quote_q if r.ref or r.text or r.texteng]
-
-        print(f'=' * 50)
-        txt_query = txt_query.join(title_query)
-        print(f'subquery join size - {txt_query.count()}')
-        subjects_dict: Dict[str, List[Set[str], Set[str]]] = {}
-        for r in txt_query:
-            pg_str = str(r.page)
-            res: List[Set[str], Set[str]] = subjects_dict.setdefault(r.book_ref.title, [{pg_str}, set()])
-            res[0].add(pg_str)  # if search_author or search_work else []
-            res[1].add(r.subject)  # if search_author or search_work else []
-
-        # glink = 'https://books.google.co.il/books?id=' + book.title_full.gcode
-        # +'&lpg=PP1&pg=PA' + page | string + '#v=onepage&q&f=false'
-        subjects_list: List[List[str, str]] = [['Book bibliographic info', 'Subject']] + [
-            [f'{title} pages: {", ".join(s[0])}', ', '.join(s[1])]
-            for title, s, in subjects_dict.items()]
         t_total = time() - t_time
+        query_logger.info(f'\tQuery time: {t_total:<10.3f} '
+                          f'#results: quotes - {len(refs_list)-1 :<6} & refs&subjects - {len(subjects_list)-1 :<6} '
+                          f'query (auth,work,ref): {[author, work, reference]}'
+        )
 
         return render_template('search_ref_results.html',
                                index_title=f'Search Result for:'
@@ -138,8 +101,51 @@ def search_results(search_word='', page=''):
                                )
 
 
+def search_ref(author: str,
+               work: str,
+               reference: str)\
+        -> [List[List[str]], List[List[str]]]:
+    title_tbl: m.Base = m.Title
+    title_query: Query = title_tbl.query
+    txt_tbl: m.Base = m.TextText
+    txt_query: Query = txt_tbl.query
+    ref_quote_tbl: m.Base = m.RefQuote
+    ref_quote_q: Query = ref_quote_tbl.query
+    if author:
+        search_author: str = f'%{author}%'
+        title_query = title_query.filter(title_tbl.author.like(search_author))
+        ref_quote_q = ref_quote_q.filter(ref_quote_tbl.author.like(search_author))
+    if work:
+        search_work: str = f'%{work}%'
+        title_query = title_query.filter(title_tbl.title.like(search_work))
+        ref_quote_q = ref_quote_q.filter(ref_quote_tbl.title.like(search_work))
+    if reference:
+        search_reference: str = f'%{reference}%'
+        txt_query = txt_query.filter(txt_tbl.ref.like(search_reference))
+        ref_quote_q = ref_quote_q.filter(ref_quote_tbl.ref.like(search_reference))
+    refs_list: List[List[str, str, str]] = [['Reference', 'Original Text', 'Translation to English']] + [
+        [f'{r.author}, {r.title}, {r.ref}',
+         r.text if None != r.text else 'Quote Unavailabe',
+         r.texteng if None != r.texteng else 'Quote Unavailabe']
+        for r in ref_quote_q if r.ref or r.text or r.texteng]
+    txt_query = txt_query.join(title_query)
+    subjects_dict: Dict[str, List[Set[str], Set[str]]] = {}
+    for r in txt_query:
+        pg_str = str(r.page)
+        res: List[Set[str], Set[str]] = subjects_dict.setdefault(r.book_ref.title, [{pg_str}, set()])
+        res[0].add(pg_str)
+        res[1].add(r.subject)
+        # glink = 'https://books.google.co.il/books?id=' + book.title_full.gcode
+        # +'&lpg=PP1&pg=PA' + page | string + '#v=onepage&q&f=false'
+    subjects_list: List[List[str, str]] = [['Book bibliographic info', 'Subject']] + [
+        [f'{title} pages: {", ".join(s[0])}', ', '.join(s[1])]
+        for title, s, in subjects_dict.items()]
+    return refs_list, subjects_list
+
+
 def search_by_subject(subject_form: f.SearchSubject,
-                      filter_form: f.FilterForm) -> Dict[str, Dict]:
+                      filter_form: f.FilterForm)\
+        -> Dict[str, Dict]:
     # filter_form = f.FilterForm().return_as_dict()
     from_century = filter_form['from_century']
     to_century = filter_form['to_century']
