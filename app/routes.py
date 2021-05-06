@@ -35,11 +35,6 @@ def search_results(search_word='', page=''):
     subject_form: f.SearchSubject = search_bar['subject_form']
     filter_form: f.FilterForm = search_bar['filter_form'].return_as_dict()
     reference_form: f.SearchReference = search_bar['reference_form']
-    # radio: f.RadioField = f.SearchSubject(request.form)
-    # print(f'submit_subject - {request.form["submit_subject"]}')
-    # print(f'submit_reference - {request.form["submit_reference"]}')
-    # print(f'request - {request.form.to_dict()}')
-    # print(f'reference_form - {reference_form.return_as_dict()}')
 
     # go to a clean `Search Results` page
     if not subject_form.validate_on_submit() and not reference_form.validate_on_submit():  # i.e. when method==GET
@@ -73,14 +68,11 @@ def search_results(search_word='', page=''):
                                query_time=t_total,
                                )
 
-    # search query submitted for search by subject
+    # search query submitted for search by reference
     else:
-        search_author: str = reference_form["search_author"].data
-        search_work: str = reference_form["search_work"].data
-        search_reference: str = reference_form["search_reference"].data
-        # search_author: str = f'%{reference_form["search_author"].data}%'
-        # search_work: str = f'%{reference_form["search_work"].data}%'
-        # search_reference: str = f'%{reference_form["search_reference"].data}%'
+        author: str = reference_form["search_author"].data
+        work: str = reference_form["search_work"].data
+        reference: str = reference_form["search_reference"].data
         # if search_author or search_work :
         title_tbl: m.Base = m.Title
         title_query: Query = title_tbl.query
@@ -91,72 +83,58 @@ def search_results(search_word='', page=''):
         ref_quote_tbl: m.Base = m.RefQuote
         ref_quote_q: Query = ref_quote_tbl.query
 
-        if search_author:
-            print(f'search_author')
-            search_author: str = f'%{search_author}%'
+        if author:
+            search_author: str = f'%{author}%'
             title_query = title_query.filter(title_tbl.author.like(search_author))
             ref_quote_q = ref_quote_q.filter(ref_quote_tbl.author.like(search_author))
-        if search_work:
-            print(f'search_work')
-            search_work: str = f'%{search_work}%'
+        if work:
+            search_work: str = f'%{work}%'
             title_query = title_query.filter(title_tbl.title.like(search_work))
             ref_quote_q = ref_quote_q.filter(ref_quote_tbl.title.like(search_work))
-        if search_reference:
-            print(f'search_reference - {search_reference}')
-            search_reference: str = f'%{search_reference}%'
+        if reference:
+            search_reference: str = f'%{reference}%'
+            txt_query = txt_query.filter(txt_tbl.ref.like(search_reference))
             ref_quote_q = ref_quote_q.filter(ref_quote_tbl.ref.like(search_reference))
 
-        refs_list: List = [tuple([r.ref.strip('\''), r.text, r.texteng])
-                           for r in ref_quote_q if r.ref or r.text or r.texteng]
-        # ref_html = refs_list
-        ref_html = pd.DataFrame(refs_list).to_html(header=False,
-                                                   index=False,
-                                                   # table_id=f'reftbl{title_num}',
-                                                   border=0,
-                                                   classes='table table-hover',
-                                                   na_rep='Quote unavailable')
+        refs_list: List = [['Reference', 'Original Text', 'Translation to English']] + [
+            [f'{r.author}, {r.title}, {r.ref}',
+             r.text if None != r.text else 'Quote Unavailabe',
+             r.texteng if None != r.texteng else 'Quote Unavailabe']
+            for r in ref_quote_q if r.ref or r.text or r.texteng]
 
-        subjects_dict: Dict[(str,int),Set[str]] = {}
+        print(f'=' * 50)
+        txt_query = txt_query.join(title_query)
+        print(f'subquery join size - {txt_query.count()}')
+        subjects_dict: Dict[str, List[Set[str], Set[str]]] = {}
+        for r in txt_query:
+            pg_str = str(r.page)
+            res: List[Set[str], Set[str]] = subjects_dict.setdefault(r.book_ref.title, [{pg_str}, set()])
+            res[0].add(pg_str)  # if search_author or search_work else []
+            res[1].add(r.subject)  # if search_author or search_work else []
 
-        title_numbers = [r.number for r in title_query] if search_author or search_work else []
-        print(f'title_numbers - \n {len(title_numbers)} \n {title_numbers}')
-        for title_number in title_numbers:
-            txt_query = txt_query.filter(txt_tbl.number == title_number)
-            if search_reference:
-                txt_query = txt_query.filter(txt_tbl.ref.like(search_reference))
-            r: m.TextText
-            for r in txt_query:
-                subjects_dict.setdefault((r.book_ref.title, r.page),set())
-                subjects_dict[(r.book_ref.title,r.page)].add(str(r.subject)) #if search_author or search_work else []
-        print(subjects_dict)
-        # subjects_dict = pd.DataFrame(subjects_dict).to_html()
-        # return f'<h4 class="padding-1"> Source Quotes Referenced: </h4> {ref_html}' if refs_list \
-        #     else f'No Quotes Available for References: <div class="padding">{request.args["refs"]}</div>'
+        # glink = 'https://books.google.co.il/books?id=' + book.title_full.gcode
+        # +'&lpg=PP1&pg=PA' + page | string + '#v=onepage&q&f=false'
+        subjects_list: List[List[str, str]] = [['Book bibliographic info', 'Subject']] + [
+            [f'{title} pages: {", ".join(s[0])}', ', '.join(s[1])]
+            for title, s, in subjects_dict.items()]
         t_total = time() - t_time
-        # subjects_d
-        # glink = 'https://books.google.co.il/books?id=' + book.title_full.gcode        +'&lpg=PP1&pg=PA' + page | string + '#v=onepage&q&f=false'
-        subjects_list = [(f'{k[0]}, {k[1]}',
-                          ', '.join(s))
-                         for k, s, in subjects_dict.items()]
-        subject_html = pd.DataFrame(subjects_list).to_html(header=False,
-                                                   index=False,
-                                                   # table_id=f'reftbl{title_num}',
-                                                   border=0,
-                                                   classes='table table-hover',
-                                                   na_rep='Quote unavailable')
 
-        return render_template('search_results.html',
-                               index_title=f'Search Result for: {search_word}',
+        return render_template('search_ref_results.html',
+                               index_title=f'Search Result for:'
+                                           f' {author}'
+                                           f' {work}'
+                                           f' {reference}',
                                description=f'Tiresias: The Ancient Mediterranean Religions Source Database. '
-                                           f'This page shows results for {search_word}, sorted by validity.',
+                                           f'This page shows results for '
+                                           f'{author}'
+                                           f'{work}'
+                                           f'{reference}.',
                                search_by='by_reference',
                                search_bar=search_bar,
-                               search_word=search_word,
-                               ref_html=ref_html,
-                               # results_num=res_size,
+                               search_word=' '.join([author, work, reference]),
+                               refs_list=refs_list,
+                               subjects_list=subjects_list,
                                query_time=t_total,
-                               subjects_list=subjects_dict,
-                               subject_html=subject_html,
                                )
 
 

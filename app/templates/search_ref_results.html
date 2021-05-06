@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+{% from 'aux_macros.html' import result_item, category_head, table_macro %}
+
+{% block app_content %}
+    <div id='loading_bar' style='display: none;'>
+        <div class="d-flex justify-content-center text-center" style="height: 40rem">
+            <div class="spinner-grow text-primary m-5" role="status" style="width: 25rem; height: 25rem;">
+                <span class="sr-only">Loading...</span> {# For accessibility purposes #}
+            </div>
+        </div>
+    </div>
+    <div id='search_content'>
+        <div class='container-fluid padding-bot-2'>
+            <div class='row'>
+                <!-- Title & Results Info -->
+                <div class='col-lg-4 text-center '>
+                    <h1 class='display-4 head-title padding-bot-2'>
+                        {{ refs_list[1:]|length }} Quotes for: <em>{{ search_word }}</em>
+                    </h1>
+
+                    <h6>There are {{ subjects_list[1:]|length }}
+                        <a class="popover_category" href='#referencing_books'>Referencing Books </a>
+                    </h6>
+                </div>
+                <!-- Search Bar -->
+                <div class='col-lg-8'>
+                    <p class='padding-1 color-accent text-center small'>Query time: {{ query_time|round(3) }} s.</p>
+                    {% include 'bar_search.html' %}
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+    {% if refs_list[1:] %}
+        {{ table_macro(title='Source Quotes Referenced:', head_row=refs_list[0], tuple_list=refs_list[1:]) }}
+        {#    {% else %}#}
+        {#    {% elif subjects_list[1:] %}#}
+        <span id="referencing_books"><br><br></span>
+        {{ table_macro(title='Referencing Books:', head_row=subjects_list[0], tuple_list=subjects_list[1:]) }}
+    {% else %}
+        <div class='category-padding text-center'>
+            <h3>No results for this query.</h3>
+            <h4>Try using a different filter or search word.</h4>
+        </div>
+    {% endif %}
+{% endblock %}

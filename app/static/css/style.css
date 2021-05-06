@@ -76,6 +76,29 @@ footer button {
     margin-bottom: 2em;
 }
 
+thead {
+    /*background-color: var(--primary-color-light);*/
+    background-color: var(--secondary-color-light);
+    /*color: var(--accent-color);*/
+    font-size: large;
+}
+
+tbody {
+    /*color: blue;*/
+}
+
+tfoot {
+    color: var(--accent-color);
+    /*background-color: var(--secondary-color-light);*/
+    font-size: small;
+}
+
+th {
+    /*table, th, td {*/
+    font-weight: bold;
+    /*font-size: large;*/
+    transform: scale(1.5);
+}
 
 /** Image **/
 
@@ -128,20 +151,19 @@ footer button {
 }
 
 /*  Radio Buttons   */
-.inline-radio:hover {
-    background-color: var(--misc-color);
-}
-
 .inline-radio {
-    /*display:  inline;*/
-    /*padding-right: 2em;*/
-    vertical-align: middle;
-    /*float: left;*/
-    transform: scale(2);
-    /*margin: 1em;*/
+    vertical-align: sub;
+    transform: scale(1.5);
+    /*color: var(--accent-color);*/
     /*background-color: var(--accent-color);*/
     margin-right: 1em
 }
+
+/*.inline-radio:hover {*/
+/*    background-color: var(--misc-color);*/
+/*    color: var(--accent-color);*/
+/*}*/
+
 
 .inline-radio-span {
     margin-left: 2em;
@@ -181,6 +203,42 @@ footer button {
 
 .color-accent {
     color: var(--accent-color);
+}
+
+.bg-color-accent {
+    background-color: var(--accent-color);
+}
+
+.color-prime-light {
+    color: var(--primary-color-light);
+}
+
+.bg-color-prime-light {
+    background-color: var(--primary-color-light);
+}
+
+.color-prime-dark {
+    color: var(--primary-color-dark);
+}
+
+.bg-color-prime-dark {
+    background-color: var(--primary-color-dark);
+}
+
+.color-secondary-light {
+    color: var(--secondary-color-light);
+}
+
+.bg-color-secondary-light {
+    background-color: var(--secondary-color-light);
+}
+
+.color-secondary-dark {
+    color: var(--secondary-color-dark);
+}
+
+.bg-color-secondary-dark {
+    background-color: var(--secondary-color-dark);
 }
 
 hr.light {
@@ -278,6 +336,11 @@ hr.light-100 {
 
 .padding-1 {
     padding: 1em;
+}
+
+.padding-table {
+    padding-left: 3em;
+    padding-right: 3em;
 }
 
 .padding-5 {

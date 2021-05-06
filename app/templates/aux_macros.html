@@ -79,7 +79,7 @@
     </div>
 {%- endmacro %}
 
-{#  Category Title Macro    #}
+{#  Search Form field    #}
 {% macro search_field(field) -%}
     <div class="list-inline-item">
         {{ field }}
@@ -90,6 +90,38 @@
                 {% endfor %}
             </ul>
         {% endif %}
+    </div>
+{%- endmacro %}
+
+{#  Tables Macro #}
+{% macro table_macro(title='<thead>', head_row=(), tuple_list=[()] ) -%}
+    {% set col_num = head_row|length %}
+    {% set len = tuple_list|length %}
+    <div class="container-fluid padding-table padding-bot-2">
+    <h3 class="padding-1"> {{ title }} </h3>
+        <table class='table table-hover'>
+            <thead>
+            {% for i in range(col_num) %}
+                <td>{{ head_row[i] }}</td>
+            {% endfor %}
+            </thead>
+            <tbody>
+            {% for tuple in tuple_list %}
+                <tr>
+                    {% for i in range(col_num) %}
+                        <td>{{ tuple[i] }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot class="small">
+            <tr>
+                <td>Total</td>
+                <td>{{ len }} Result{% if 1<len -%}s{% endif %}</td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
     </div>
 {%- endmacro %}
 

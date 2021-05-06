@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% from 'aux_macros.html' import disappearing_btn %}
+{% from 'aux_macros.html' import disappearing_btn, table_macro %}
 
 {% block app_content %}
 
@@ -22,9 +22,13 @@
 
     <div class="container">
         {# Rows must be placed within a .container (fixed-width) or .container-fluid (full-width) for proper alignment and padding. #}
+        {#
+        {{ table_macro(
+        head_row=('Subject','Number of References in the Database'),
+        tuple_list=subjects.items) }}
+        #}
 
-        {#        <table border="1" class="dataframe">#}
-        <table class='table table-hover'>
+        <table class='table table-hover '>
             <thead class="bgn-light-second">
             <tr>
                 {#  this column is for the index #}
@@ -35,8 +39,8 @@
             <tbody>
             {% for row in subjects.items %}
                 <tr onclick="alert('this is the subject: {{ row.subject|replace("'", "") }}')">
-{#                <tr>#}
-{#                     {{ loop.index0 }}#}
+                    {#                <tr>#}
+                    {#                     {{ loop.index0 }}#}
                     <td>{{ row.subject }}</td>
                     <td class="text-center">{{ row.Csum }}</td>
                 </tr>
@@ -61,7 +65,7 @@
         {% endfor %}
 
     </div>
-{#    <script src="../static/js/script.js"></script>#}
+    {#    <script src="../static/js/script.js"></script>#}
 
 {% endblock %}
 
