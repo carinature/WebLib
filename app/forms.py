@@ -64,6 +64,11 @@ class SearchReference(FlaskForm):
                                        'id'   : 'submit_reference',
                                        }
                                    )
+    fetch_books = BooleanField('Fetch Books', id='fetch_books_chkbox')
+    attention_label = Label(
+            text='(Attention: Checking this box will attempt fetching a heavy dataset,'
+                 '\nwhich can result in very highly loading times.)',
+            field_id=fetch_books)
 
     def return_as_dict(self):
         return {

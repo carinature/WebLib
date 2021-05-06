@@ -19,7 +19,7 @@
                     </h1>
 
                     <h6>There are {{ subjects_list[1:]|length }}
-                        <a class="popover_category" href='#referencing_books'>Referencing Books </a>
+                        <a class="popover_category" href='#referencing_books'> Referencing Books </a>
                     </h6>
                 </div>
                 <!-- Search Bar -->
@@ -31,12 +31,13 @@
             <hr>
         </div>
     </div>
-    {% if refs_list[1:] %}
+    {% if refs_list[1] %}
         {{ table_macro(title='Source Quotes Referenced:', head_row=refs_list[0], tuple_list=refs_list[1:]) }}
         {#    {% else %}#}
-        {#    {% elif subjects_list[1:] %}#}
-        <span id="referencing_books"><br><br></span>
-        {{ table_macro(title='Referencing Books:', head_row=subjects_list[0], tuple_list=subjects_list[1:]) }}
+        {% if subjects_list[1] %}
+            <span id="referencing_books"><br><br></span>
+            {{ table_macro(title='Referencing Books:', head_row=subjects_list[0], tuple_list=subjects_list[1:]) }}
+        {% endif %}
     {% else %}
         <div class='category-padding text-center'>
             <h3>No results for this query.</h3>

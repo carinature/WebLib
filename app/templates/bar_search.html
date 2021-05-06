@@ -64,6 +64,17 @@
                     <div class="list-inline-item">
                         {{ search_bar['reference_form'].submit_reference }} {# <i class="fas fa-search"></i> #}
                     </div>
+
+                </div>
+
+                <div class="text-left inline">
+                    {{ search_bar['reference_form'].fetch_books }}
+                    <span class="margin-2r inline-label"> {{ search_bar['reference_form'].fetch_books.label }} </span>
+                    {#  {{ search_bar['reference_form'].attention_label }}#}
+                    {#                        <p id="fetch_book_warn small inline" class=" display-none"> {# #}
+                    <p id="fetch_book_warn small inline" class="display-inline">
+                        (Attention: Checking this box will attempt fetching a heavy dataset, which can result in
+                        very highly loading times.)</p>
                 </div>
                 <div class="s01 ">
                     <p class="lead color-accent small">If you have a specific reference to ancient
@@ -82,7 +93,7 @@
 
     <!-- Radio search buttons -->
     <form class="container-fluid ">
-{#    <form class="container-fluid  {{ collapse }}">#}
+        {#    <form class="container-fluid  {{ collapse }}">#}
         <div class='text-center padding-1r small'>
             <div class="inline-radio-span">
                 <input id='chkYes' class='inline-radio' type='radio' name='search-radio' value='by_subject' checked/>
@@ -90,7 +101,7 @@
             </div>
             <div class="inline-radio-span">
                 <input id='chkNo' class='inline-radio' type='radio' name='search-radio' value='by_reference'
-                style="color: green; background-color: green"/>
+                       style="color: green; background-color: green"/>
                 <label for='chkNo' class='inline-radio-label'>Search by Reference</label>
             </div>
         </div>

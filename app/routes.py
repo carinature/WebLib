@@ -73,8 +73,10 @@ def search_results(search_word='', page=''):
         author: str = reference_form["search_author"].data
         work: str = reference_form["search_work"].data
         reference: str = reference_form["search_reference"].data
+        chkbox: str = reference_form["fetch_books"].data
+        print(f'chkbox - {chkbox}')
 
-        refs_list, subjects_list = search_ref(author, work, reference)
+        refs_list, subjects_list = search_ref(author, work, reference, chkbox)
 
         t_total = time() - t_time
         query_logger.info(f'\tQuery time: {t_total:<10.3f} '
@@ -103,7 +105,8 @@ def search_results(search_word='', page=''):
 
 def search_ref(author: str,
                work: str,
-               reference: str)\
+               reference: str,
+               chkbox:bool)\
         -> [List[List[str]], List[List[str]]]:
     title_tbl: m.Base = m.Title
     title_query: Query = title_tbl.query
@@ -128,18 +131,20 @@ def search_ref(author: str,
          r.text if None != r.text else 'Quote Unavailabe',
          r.texteng if None != r.texteng else 'Quote Unavailabe']
         for r in ref_quote_q if r.ref or r.text or r.texteng]
-    txt_query = txt_query.join(title_query)
-    subjects_dict: Dict[str, List[Set[str], Set[str]]] = {}
-    for r in txt_query:
-        pg_str = str(r.page)
-        res: List[Set[str], Set[str]] = subjects_dict.setdefault(r.book_ref.title, [{pg_str}, set()])
-        res[0].add(pg_str)
-        res[1].add(r.subject)
-        # glink = 'https://books.google.co.il/books?id=' + book.title_full.gcode
-        # +'&lpg=PP1&pg=PA' + page | string + '#v=onepage&q&f=false'
-    subjects_list: List[List[str, str]] = [['Book bibliographic info', 'Subject']] + [
-        [f'{title} pages: {", ".join(s[0])}', ', '.join(s[1])]
-        for title, s, in subjects_dict.items()]
+    subjects_list: List[List[str, str]] = [['Book bibliographic info', 'Subject']]
+    if chkbox:
+        txt_query = txt_query.join(title_query)
+        subjects_dict: Dict[str, List[Set[str], Set[str]]] = {}
+        for r in txt_query:
+            pg_str = str(r.page)
+            res: List[Set[str], Set[str]] = subjects_dict.setdefault(r.book_ref.title, [{pg_str}, set()])
+            res[0].add(pg_str)
+            res[1].add(r.subject)
+            # glink = 'https://books.google.co.il/books?id=' + book.title_full.gcode
+            # +'&lpg=PP1&pg=PA' + page | string + '#v=onepage&q&f=false'
+        subjects_list += [
+            [f'{title} pages: {", ".join(s[0])}', ', '.join(s[1])]
+            for title, s, in subjects_dict.items()]
     return refs_list, subjects_list
 
 
@@ -263,7 +268,7 @@ def subject_list(search_word='', page=''):
     page = request.args.get('page', 1, type=int)
     search_bar: Dict = utils.init_search_bar()
     subject_form = search_bar['subject_form']
-    filter_form = search_bar['filter_form']
+    # filter_form = search_bar['filter_form']
 
     if not subject_form.validate_on_submit():  # i.e. when method==GET
         subjects = m.TextSubject.query.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
