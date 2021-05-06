@@ -1,5 +1,5 @@
 {#  a button that disappears when clicked, showing `text` instead   #}
-{% macro disappring_btn(text, rbtn_id='refsbtn', relm_id='refs', class='') -%}
+{% macro disappearing_btn(text, rbtn_id='refsbtn', relm_id='refs', class='') -%}
     <button class='{{ class }} btn-rounded disappring-btn '
             data-toggle='collapse'
             data-target='#{{ relm_id }}'
@@ -62,8 +62,8 @@
                 </div>
                 {#  References (Numbers) (BTN)  #}
                 <div class='padding-bot-2 padding-left-2 col-1'>
-                    {{ disappring_btn( text='references:', rbtn_id = rbtn_id, relm_id = None, class='btn-sm float-right refbtn') }}
-                    {#                    {{ disappring_btn( text='references:', rbtn_id = rbtn_id, relm_id = relm_id, class='btn-sm float-right') }}#}
+                    {{ disappearing_btn( text='references:', rbtn_id = rbtn_id, relm_id = None, class='btn-sm float-right refbtn') }}
+                    {#                    {{ disappearing_btn( text='references:', rbtn_id = rbtn_id, relm_id = relm_id, class='btn-sm float-right') }}#}
                 </div>
             </div>
             {#  References (Numbers) #}
