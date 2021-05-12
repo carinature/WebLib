@@ -35,6 +35,7 @@ def search_results(search_word='', page=''):
     subject_form: f.SearchSubject = search_bar['subject_form']
     filter_form: f.FilterForm = search_bar['filter_form'].return_as_dict()
     reference_form: f.SearchReference = search_bar['reference_form']
+    search_word: str = subject_form.subject_keyword_1.data
 
     # go to a clean `Search Results` page
     if not subject_form.validate_on_submit() and not reference_form.validate_on_submit():  # i.e. when method==GET
@@ -167,7 +168,8 @@ def search_by_subject(subject_form: f.SearchSubject,
     txts_q_filter: BaseQuery = txts_query.filter(m.TextText.subject.like(search))
     txts_q_filter = txts_q_filter.filter_by(ref=reference) if reference else txts_q_filter
     # filter by the title's category
-    q_title_filter = txts_q_filter.join(m.Title)  # <-------------------------- .join(m.BookRef) slows significantly
+    # q_title_filter = txts_q_filter.join(m.Title)  # <-------------------------- .join(m.BookRef) slows significantly
+    q_title_filter: BaseQuery = m.Title.query  # <-------------------------- .join(m.BookRef) slows significantly
     if -21 != from_century:
         q_title_filter: Query = q_title_filter.filter(or_(m.Title.centstart is None, m.Title.centstart >= from_century))
     if 21 != to_century:
@@ -178,13 +180,15 @@ def search_by_subject(subject_form: f.SearchSubject,
         q_title_filter: Query = q_title_filter.filter(m.Title.author == ancient_author)
     if ancient_title:
         q_title_filter: Query = q_title_filter.filter(m.Title.title == ancient_title)
+    title_q_filter = txts_q_filter.join(q_title_filter)  # <-------------------------- .join(m.BookRef) slows significantly
+
     res_dict: Dict[int, m.ResultTitle] = {}
     highly_valid: List[m.ResultTitle] = []
     valid: List[m.ResultTitle] = []
     not_valid: List[m.ResultTitle] = []
     tt = time()  # for logging
     res_tit: m.TextText
-    for res_tit in q_title_filter:
+    for res_tit in title_q_filter:
         res_title: m.ResultTitle = res_dict.setdefault(res_tit.number, m.ResultTitle(res_tit.title))
         res_title.add_bib(res_tit.book_ref).add_page(res_tit.page)
         res_title.add_ref(res_tit.ref).add_subject(res_tit.subject)
@@ -320,9 +324,11 @@ def subject_list(search_word='', page=''):
 def fetch_refs_for_title(title_num: str = '') -> str:
     ref_nums = ['\'' + r.strip('{ }\'') for r in request.args['refs'].split(',')]  # fixme should be r.strip('{ }\'')
     res = m.RefQuote.query.filter(m.RefQuote.number == request.args['title_num']).filter(m.RefQuote.ref.in_(ref_nums))
-    refs_list: List = [tuple([r.ref.strip('\''), r.text, r.texteng]) for r in res if r.ref or r.text or r.texteng]
+    refs_list: List[Tuple] = [tuple([r.ref.strip('\''), r.text, r.texteng]) for r in res if r.ref or r.text or r.texteng]
     ref_html = pd.DataFrame(refs_list).to_html(header=False, index=False, table_id=f'reftbl{title_num}', border=0,
                                                classes='table table-hover', na_rep='Quote unavailable')
+    print(f' - fetchrefs - fetchrefs - fetchrefs - ')
+    print(f' - {res.count()} -  {len(refs_list)} - ')
     return f'<h4 class="padding-1"> Source Quotes Referenced: </h4> {ref_html}' if refs_list \
         else f'No Quotes Available for References: <div class="padding">{request.args["refs"]}</div>'
 

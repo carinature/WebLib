@@ -166,6 +166,7 @@ $('button.refbtn').on('click', function (e) {
             refs_elm.insertAdjacentHTML("afterend", data);
         },
     });
+    console.log(' - refbtn - refbtn - refbtn - ')
     return true; //note IMPORTANT - if returns false - data-toggle doesn't work
 });
 
