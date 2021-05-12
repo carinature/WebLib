@@ -9,10 +9,10 @@
     class='s01 btn-primary') }}
     </div>
 
-{#    <h4 class="s01 head-title padding-bot-1">#}
-{#        Total Number of Subjects Currently Included in Database:#}
-{#        <em class="color-accent padding-left-2"> {{ total }}</em>#}
-{#    </h4>#}
+    {#    <h4 class="s01 head-title padding-bot-1">#}
+    {#        Total Number of Subjects Currently Included in Database:#}
+    {#        <em class="color-accent padding-left-2"> {{ total }}</em>#}
+    {#    </h4>#}
 
     {% with hide_bar=true %}
         {% include 'bar_search.html' %}
@@ -31,17 +31,15 @@
         {# todo make bigger #}
         <!-- Prev & Next Buttons -->
         {% if prev_url %}
-            <a class="page-link pagination" href='{{ prev_url }}'>Prev</a>
+            <div class="padding-bot-5 text-center">
+                <a class="page-link pagination" href='{{ prev_url }}'>Prev</a>
+            </div>
         {% endif %}
-        &nbsp; &nbsp
         {% if next_url %}
-            <a href='{{ next_url }}'>Next</a>
+            <div class="padding-bot-5 text-center">
+                <a href='{{ next_url }}'>Next</a>
+            </div>
         {% endif %}
-
-        <br><br><br><br><br>
-        {% for i in range(11) %}
-            {{ i }}
-        {% endfor %}
 
     </div>
     {#    <script src="../static/js/script.js"></script>#}
