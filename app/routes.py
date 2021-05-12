@@ -322,13 +322,11 @@ def subject_list(search_word='', page=''):
 # ++++++++++++  Serving Requests from JS ++++++++++++
 @app.route('/fetchrefs')
 def fetch_refs_for_title(title_num: str = '') -> str:
-    ref_nums = ['\'' + r.strip('{ }\'') for r in request.args['refs'].split(',')]  # fixme should be r.strip('{ }\'')
+    ref_nums = [r.strip('{ }\'') for r in request.args['refs'].split(',')]  # fixme should be r.strip('{ }\'')
     res = m.RefQuote.query.filter(m.RefQuote.number == request.args['title_num']).filter(m.RefQuote.ref.in_(ref_nums))
-    refs_list: List[Tuple] = [tuple([r.ref.strip('\''), r.text, r.texteng]) for r in res if r.ref or r.text or r.texteng]
+    refs_list: List[Tuple] = [tuple([r.ref, r.text, r.texteng]) for r in res if r.ref or r.text or r.texteng]
     ref_html = pd.DataFrame(refs_list).to_html(header=False, index=False, table_id=f'reftbl{title_num}', border=0,
                                                classes='table table-hover', na_rep='Quote unavailable')
-    print(f' - fetchrefs - fetchrefs - fetchrefs - ')
-    print(f' - {res.count()} -  {len(refs_list)} - ')
     return f'<h4 class="padding-1"> Source Quotes Referenced: </h4> {ref_html}' if refs_list \
         else f'No Quotes Available for References: <div class="padding">{request.args["refs"]}</div>'
 
