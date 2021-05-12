@@ -271,14 +271,15 @@ def book_indices():
 def subject_list(search_word='', page=''):
     page = request.args.get('page', 1, type=int)
     search_bar: Dict = utils.init_search_bar()
-    subject_form = search_bar['subject_form']
-    # filter_form = search_bar['filter_form']
+    subject_form:f.SearchSubject = search_bar['subject_form']
 
     if not subject_form.validate_on_submit():  # i.e. when method==GET
-        subjects = m.TextSubject.query.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
+        subjects : BaseQuery= m.TextSubject.query.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
         # there is not enough memory to do the next, but maybe consider the idea
         # subjects = TextSubject.query.order_by(
         #   TextSubject.subject.asc()).paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
+        s: m.TextSubject
+        subjects_list:List[List[str]] = [[s.subject, s.Csum] for s in subjects.items]
         next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
         prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
 
@@ -288,7 +289,7 @@ def subject_list(search_word='', page=''):
                                description="Tiresias: The Ancient Mediterranean Religions Source Database."
                                            "The database includes over 50,000 subjects, listed in the page."
                                            "For a more topic specific list, use the search option",
-                               subjects=subjects,
+                               subjects=subjects_list,
                                total=subjects.total,
                                next_url=next_url,
                                prev_url=prev_url,
@@ -299,10 +300,12 @@ def subject_list(search_word='', page=''):
 
     search_word = subject_form.subject_keyword_1.data
     search = f'%{search_word}%'
-    subjects_query: Query = m.TextSubject.query
-    subjects_filter: Query = subjects_query.filter(m.TextSubject.subject.like(search))
-    subjects_ordered: Query = subjects_filter.order_by(m.TextSubject.Csum.desc())
-    subjects = subjects_ordered.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
+    subjects_query: BaseQuery = m.TextSubject.query
+    subjects_filter: BaseQuery = subjects_query.filter(m.TextSubject.subject.like(search))
+    subjects_ordered: BaseQuery = subjects_filter.order_by(m.TextSubject.Csum.desc())
+    subjects: BaseQuery = subjects_ordered.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
+    s: m.TextSubject
+    subjects_list: List[List[str]] = [[s.subject, s.Csum] for s in subjects.items]
     next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
     prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
     return render_template('subject_list.html',
@@ -310,7 +313,7 @@ def subject_list(search_word='', page=''):
                            index_title=f'Search Results for: {search_word}',  # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database"
                                        "The database includes over 50,000 subjects, listed in the page.",
-                           subjects=subjects,
+                           subjects=subjects_list,
                            total=subjects.total,
                            next_url=next_url,
                            prev_url=prev_url,

@@ -126,11 +126,13 @@
 {%- endmacro %}
 
 {#  Tables Macro #}
-{% macro table_macro(title='<thead>', head_row=(), tuple_list=[()] ) -%}
+{% macro table_macro(title='', head_row=(), tuple_list=[()] ) -%}
     {% set col_num = head_row|length %}
     {% set len = tuple_list|length %}
     <div class="container-fluid padding-table padding-bot-2">
-        <h3 class="padding-1"> {{ title }} </h3>
+        {% if title %}
+            <h3 class="padding-1"> {{ title|safe }} </h3>
+        {% endif %}
         <table class='table table-hover'>
             <thead>
             {% for i in range(col_num) %}
@@ -139,6 +141,7 @@
             </thead>
             <tbody>
             {% for tuple in tuple_list %}
+                {# <tr onclick="alert('{{ tuple|replace("'", "") }}')"> #}
                 <tr>
                     {% for i in range(col_num) %}
                         <td>{{ tuple[i] }}</td>
