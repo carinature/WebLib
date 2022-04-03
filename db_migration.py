@@ -16,8 +16,8 @@ import logging.config
 
 class DBMigration:  # singleton class
 
-    models: List[Base] = [TextText]
-    # models: List[Base] = Base.__subclasses__()
+    # models: List[Base] = [TextText]
+    models: List[Base] = Base.__subclasses__()
 
     # logging #todo consider creating different logs for each CSV_file/model
     tt = '-'.join([str(i) for i in localtime()])

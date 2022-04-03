@@ -10,7 +10,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 123
-      MYSQL_DATABASE: tryout
+      MYSQL_DATABASE: tiresias_sqldb
       MYSQL_USER: karinature
       MYSQL_PASSWORD: 1234
     ports:

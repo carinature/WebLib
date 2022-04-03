@@ -39,7 +39,7 @@ class DevConfig(Config):
             username="root",
             password="123",
             hostname="localhost",
-            db_name="tryout",
+            db_name="tiresias_sqldb",
             )
     # SQLALCHEMY_ECHO = True
     # SQLALCHEMY_ENGINE_OPTIONS =  # options to pass to SQLAlchemy-engine which holds your app's DB connection.
@@ -60,7 +60,7 @@ class ProdConfig(Config):
             username="karinature",
             password="dsmiUw2sn",
             hostname="karinature.mysql.pythonanywhere-services.com",
-            db_name="karinature$tryout",
+            db_name="karinature$tiresias_sqldb",
             )
     SQLALCHEMY_ECHO = False
 
