@@ -16,12 +16,12 @@ from . import utilities as utils
 print('~' * 80)
 
 links = {  # todo move to utils?
-    'home'     : '/',
-    'search'   : '/search-results',
-    'books'    : '/book-indices',
-    'subjects' : '/subject-list',
+    'home': '/',
+    'search': '/search-results',
+    'books': '/book-indices',
+    'subjects': '/subject-list',
     'not_found': '/page-not-found',
-    }
+}
 
 
 # ++++++++++++  search results and filtering page ++++++++++++
@@ -50,7 +50,8 @@ def search_results(search_word='', page=''):
     # search query submitted for search by subject
     query_logger: logging.Logger = logging.getLogger('queryLogger')
     if 'submit_subject' in request.form:
-        categories: Dict[str, Dict] = search_by_subject(subject_form, filter_form)
+        categories: Dict[str, Dict] = search_by_subject(subject_form,
+                                                        filter_form)
         t_total = time() - t_time
         res_size = sum([len(cat["results"]) for cat in categories.values()])
         print(res_size)
@@ -81,9 +82,9 @@ def search_results(search_word='', page=''):
 
         t_total = time() - t_time
         query_logger.info(f'\tQuery time: {t_total:<10.3f} '
-                          f'#results: quotes - {len(refs_list)-1 :<6} & refs&subjects - {len(subjects_list)-1 :<6} '
+                          f'#results: quotes - {len(refs_list) - 1 :<6} & refs&subjects - {len(subjects_list) - 1 :<6} '
                           f'query (auth,work,ref): {[author, work, reference]}'
-        )
+                          )
 
         return render_template('search_ref_results.html',
                                index_title=f'Search Result for:'
@@ -107,7 +108,7 @@ def search_results(search_word='', page=''):
 def search_ref(author: str,
                work: str,
                reference: str,
-               chkbox:bool)\
+               chkbox: bool) \
         -> [List[List[str]], List[List[str]]]:
     title_tbl: m.Base = m.Title
     title_query: Query = title_tbl.query
@@ -118,7 +119,8 @@ def search_ref(author: str,
     if author:
         search_author: str = f'%{author}%'
         title_query = title_query.filter(title_tbl.author.like(search_author))
-        ref_quote_q = ref_quote_q.filter(ref_quote_tbl.author.like(search_author))
+        ref_quote_q = ref_quote_q.filter(
+            ref_quote_tbl.author.like(search_author))
     if work:
         search_work: str = f'%{work}%'
         title_query = title_query.filter(title_tbl.title.like(search_work))
@@ -126,19 +128,25 @@ def search_ref(author: str,
     if reference:
         search_reference: str = f'%{reference}%'
         txt_query = txt_query.filter(txt_tbl.ref.like(search_reference))
-        ref_quote_q = ref_quote_q.filter(ref_quote_tbl.ref.like(search_reference))
-    refs_list: List[List[str, str, str]] = [['Reference', 'Original Text', 'Translation to English']] + [
-        [f'{r.author}, {r.title}, {r.ref}',
-         r.text if None != r.text else 'Quote Unavailabe',
-         r.texteng if None != r.texteng else 'Quote Unavailabe']
-        for r in ref_quote_q if r.ref or r.text or r.texteng]
-    subjects_list: List[List[str, str]] = [['Book bibliographic info', 'Subject']]
+        ref_quote_q = ref_quote_q.filter(
+            ref_quote_tbl.ref.like(search_reference))
+    refs_list: List[List[str, str, str]] = [['Reference', 'Original Text',
+                                             'Translation to English']] + [
+                                               [
+                                                   f'{r.author}, {r.title}, {r.ref}',
+                                                   r.text if None != r.text else 'Quote Unavailabe',
+                                                   r.texteng if None != r.texteng else 'Quote Unavailabe']
+                                               for r in ref_quote_q if
+                                               r.ref or r.text or r.texteng]
+    subjects_list: List[List[str, str]] = [
+        ['Book bibliographic info', 'Subject']]
     if chkbox:
         txt_query = txt_query.join(title_query)
         subjects_dict: Dict[str, List[Set[str], Set[str]]] = {}
         for r in txt_query:
             pg_str = str(r.page)
-            res: List[Set[str], Set[str]] = subjects_dict.setdefault(r.book_ref.title, [{pg_str}, set()])
+            res: List[Set[str], Set[str]] = subjects_dict.setdefault(
+                r.book_ref.title, [{pg_str}, set()])
             res[0].add(pg_str)
             res[1].add(r.subject)
             # glink = 'https://books.google.co.il/books?id=' + book.title_full.gcode
@@ -150,7 +158,7 @@ def search_ref(author: str,
 
 
 def search_by_subject(subject_form: f.SearchSubject,
-                      filter_form: f.FilterForm)\
+                      filter_form: f.FilterForm) \
         -> Dict[str, Dict]:
     # filter_form = f.FilterForm().return_as_dict()
     from_century = filter_form['from_century']
@@ -165,22 +173,30 @@ def search_by_subject(subject_form: f.SearchSubject,
     # search_word = 'left'
     search_word = subject_form.subject_keyword_1.data
     search = f'%{search_word}%'
-    txts_q_filter: BaseQuery = txts_query.filter(m.TextText.subject.like(search))
-    txts_q_filter = txts_q_filter.filter_by(ref=reference) if reference else txts_q_filter
+    txts_q_filter: BaseQuery = txts_query.filter(
+        m.TextText.subject.like(search))
+    txts_q_filter = txts_q_filter.filter_by(
+        ref=reference) if reference else txts_q_filter
     # filter by the title's category
     # q_title_filter = txts_q_filter.join(m.Title)  # <-------------------------- .join(m.BookRef) slows significantly
     q_title_filter: BaseQuery = m.Title.query  # <-------------------------- .join(m.BookRef) slows significantly
     if -21 != from_century:
-        q_title_filter: Query = q_title_filter.filter(or_(m.Title.centstart is None, m.Title.centstart >= from_century))
+        q_title_filter: Query = q_title_filter.filter(
+            or_(m.Title.centstart is None, m.Title.centstart >= from_century))
     if 21 != to_century:
-        q_title_filter: Query = q_title_filter.filter(or_(m.Title.centend is None, m.Title.centend <= to_century))
+        q_title_filter: Query = q_title_filter.filter(
+            or_(m.Title.centend is None, m.Title.centend <= to_century))
     if language:
-        q_title_filter: Query = q_title_filter.filter(or_(m.Title.lang is None, m.Title.lang == language))
+        q_title_filter: Query = q_title_filter.filter(
+            or_(m.Title.lang is None, m.Title.lang == language))
     if ancient_author:
-        q_title_filter: Query = q_title_filter.filter(m.Title.author == ancient_author)
+        q_title_filter: Query = q_title_filter.filter(
+            m.Title.author == ancient_author)
     if ancient_title:
-        q_title_filter: Query = q_title_filter.filter(m.Title.title == ancient_title)
-    title_q_filter = txts_q_filter.join(q_title_filter)  # <-------------------------- .join(m.BookRef) slows significantly
+        q_title_filter: Query = q_title_filter.filter(
+            m.Title.title == ancient_title)
+    title_q_filter = txts_q_filter.join(
+        q_title_filter)  # <-------------------------- .join(m.BookRef) slows significantly
 
     res_dict: Dict[int, m.ResultTitle] = {}
     highly_valid: List[m.ResultTitle] = []
@@ -189,29 +205,34 @@ def search_by_subject(subject_form: f.SearchSubject,
     tt = time()  # for logging
     res_tit: m.TextText
     for res_tit in title_q_filter:
-        res_title: m.ResultTitle = res_dict.setdefault(res_tit.number, m.ResultTitle(res_tit.title))
+        res_title: m.ResultTitle = res_dict.setdefault(res_tit.number,
+                                                       m.ResultTitle(
+                                                           res_tit.title))
         res_title.add_bib(res_tit.book_ref).add_page(res_tit.page)
         res_title.add_ref(res_tit.ref).add_subject(res_tit.subject)
     # print(f'res_dict: {time() - tt:.5}')
     for res in res_dict.values():
-        if len(res.books_dict) > 1: highly_valid.append(res)
-        elif len(res.refs) > 1: valid.append(res)
-        else: not_valid.append(res)
+        if len(res.books_dict) > 1:
+            highly_valid.append(res)
+        elif len(res.refs) > 1:
+            valid.append(res)
+        else:
+            not_valid.append(res)
 
     categories: Dict[str, Dict] = {
-        'high' : {
-            'name'   : 'Highly Validated',
+        'high': {
+            'name': 'Highly Validated',
             'results': sorted(highly_valid, reverse=True)
-            },
+        },
         'valid': {
-            'name'   : 'Validated',
+            'name': 'Validated',
             'results': sorted(valid, reverse=True)
-            },
-        'not'  : {
-            'name'   : 'Unvalidated',
+        },
+        'not': {
+            'name': 'Unvalidated',
             'results': not_valid
-            }
         }
+    }
     return categories
 
 
@@ -261,7 +282,8 @@ def home():
 def book_indices():
     return render_template('book_indices.html',
                            title="Tiresias",  # todo different title
-                           index_title="Books Included in the Project Database",  # todo different title
+                           index_title="Books Included in the Project Database",
+                           # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database. "
                                        "The database references more than 200 title, which are listed in this page.", )
 
@@ -271,21 +293,26 @@ def book_indices():
 def subject_list(search_word='', page=''):
     page = request.args.get('page', 1, type=int)
     search_bar: Dict = utils.init_search_bar()
-    subject_form:f.SearchSubject = search_bar['subject_form']
+    subject_form: f.SearchSubject = search_bar['subject_form']
 
     if not subject_form.validate_on_submit():  # i.e. when method==GET
-        subjects : BaseQuery= m.TextSubject.query.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
+        subjects: BaseQuery = m.TextSubject.query.paginate(page, app.config[
+            'SUBJECTS_PER_PAGE'], False)
         # there is not enough memory to do the next, but maybe consider the idea
         # subjects = TextSubject.query.order_by(
         #   TextSubject.subject.asc()).paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
         s: m.TextSubject
-        subjects_list:List[List[str]] = [[s.subject, s.Csum] for s in subjects.items]
-        next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
-        prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
+        subjects_list: List[List[str]] = [[s.subject, s.Csum] for s in
+                                          subjects.items]
+        next_url = url_for('subject_list',
+                           page=subjects.next_num) if subjects.has_next else None
+        prev_url = url_for('subject_list',
+                           page=subjects.prev_num) if subjects.has_prev else None
 
         return render_template('subject_list.html',
                                title="Tiresias",
-                               index_title="Subjects Included in the Project Database",  # todo different title
+                               index_title="Subjects Included in the Project Database",
+                               # todo different title
                                description="Tiresias: The Ancient Mediterranean Religions Source Database."
                                            "The database includes over 50,000 subjects, listed in the page."
                                            "For a more topic specific list, use the search option",
@@ -301,16 +328,23 @@ def subject_list(search_word='', page=''):
     search_word = subject_form.subject_keyword_1.data
     search = f'%{search_word}%'
     subjects_query: BaseQuery = m.TextSubject.query
-    subjects_filter: BaseQuery = subjects_query.filter(m.TextSubject.subject.like(search))
-    subjects_ordered: BaseQuery = subjects_filter.order_by(m.TextSubject.Csum.desc())
-    subjects: BaseQuery = subjects_ordered.paginate(page, app.config['SUBJECTS_PER_PAGE'], False)
+    subjects_filter: BaseQuery = subjects_query.filter(
+        m.TextSubject.subject.like(search))
+    subjects_ordered: BaseQuery = subjects_filter.order_by(
+        m.TextSubject.Csum.desc())
+    subjects: BaseQuery = subjects_ordered.paginate(page, app.config[
+        'SUBJECTS_PER_PAGE'], False)
     s: m.TextSubject
-    subjects_list: List[List[str]] = [[s.subject, s.Csum] for s in subjects.items]
-    next_url = url_for('subject_list', page=subjects.next_num) if subjects.has_next else None
-    prev_url = url_for('subject_list', page=subjects.prev_num) if subjects.has_prev else None
+    subjects_list: List[List[str]] = [[s.subject, s.Csum] for s in
+                                      subjects.items]
+    next_url = url_for('subject_list',
+                       page=subjects.next_num) if subjects.has_next else None
+    prev_url = url_for('subject_list',
+                       page=subjects.prev_num) if subjects.has_prev else None
     return render_template('subject_list.html',
                            title=f'Tiresias Subjects',
-                           index_title=f'Search Results for: {search_word}',  # todo different title
+                           index_title=f'Search Results for: {search_word}',
+                           # todo different title
                            description="Tiresias: The Ancient Mediterranean Religions Source Database"
                                        "The database includes over 50,000 subjects, listed in the page.",
                            subjects=subjects_list,
@@ -325,11 +359,19 @@ def subject_list(search_word='', page=''):
 # ++++++++++++  Serving Requests from JS ++++++++++++
 @app.route('/fetchrefs')
 def fetch_refs_for_title(title_num: str = '') -> str:
-    ref_nums = [r.strip('{ }\'') for r in request.args['refs'].split(',')]  # fixme should be r.strip('{ }\'')
-    res = m.RefQuote.query.filter(m.RefQuote.number == request.args['title_num']).filter(m.RefQuote.ref.in_(ref_nums))
-    refs_list: List[List[str]] = [[f'\"{r.title}\" - {r.author}, {r.ref}', f'{r.text}', f'{r.texteng}'] for r in res if r.ref or r.text or r.texteng]
-    ref_html = pd.DataFrame(refs_list).to_html(header=False, index=False, table_id=f'reftbl{title_num}', border=0,
-                                               classes='table table-hover', na_rep='Quote unavailable')
+    ref_nums = [r.strip('{ }\'') for r in request.args['refs'].split(
+        ',')]  # fixme should be r.strip('{ }\'')
+    res = m.RefQuote.query.filter(
+        m.RefQuote.number == request.args['title_num']).filter(
+        m.RefQuote.ref.in_(ref_nums))
+    refs_list: List[List[str]] = [
+        [f'\"{r.title}\" - {r.author}, {r.ref}', f'{r.text}', f'{r.texteng}']
+        for r in res if r.ref or r.text or r.texteng]
+    ref_html = pd.DataFrame(refs_list).to_html(header=False, index=False,
+                                               table_id=f'reftbl{title_num}',
+                                               border=0,
+                                               classes='table table-hover',
+                                               na_rep='Quote unavailable')
     return f'<h4 class="padding-1"> Source Quotes Referenced: </h4> {ref_html}' if refs_list \
         else f'No Quotes Available for References: <div class="padding">{request.args["refs"]}</div>'
 
@@ -361,11 +403,12 @@ def static_from_root():
 @app.route("/csv_to_mysql_route", methods=['GET', 'POST'])
 def load_db():
     from flask import flash
-    flash(
-            "If you click on the button below You are about to ask the server to load raw scv files into the mysql DB. ")
+    flash("If you click on the button below "
+          "You are about to ask the server to load raw scv files into the mysql DB. ")
     flash("It's gonna take a loooong time to finish (if lucky). ")
     flash("Are you sure you want to do that? ")
-    return render_template('dbg/csv_to_mysql.html', load_db_flag=True, avoid_robots=True)
+    return render_template('dbg/csv_to_mysql.html', load_db_flag=True,
+                           avoid_robots=True)
 
 
 @app.route("/csv_to_mysql_func")
@@ -383,3 +426,13 @@ def csv_to_mysql_func_btn(model='TextText'):
 
     print("Time elapsed: " + str(time() - t) + " s.")
     return '<h1> A O K </h1>'
+    # fixme create an appropriate html tempplate
+    #    with a message of finishing upload
+    #   (maybe similar to the "waiting" animation temoplate for search)
+
+
+@app.route('/trynew')
+@utils.requires_auth
+def trynew():
+    # return render_template('dbg/navbar_sidebar_fixed.html')
+    return '<h1>A O K O K OK O K </h1>'

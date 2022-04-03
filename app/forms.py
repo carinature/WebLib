@@ -5,6 +5,7 @@ from markupsafe import Markup
 from numpy import insert
 from wtforms import *
 from wtforms.fields.html5 import EmailField
+# from wtforms.fields.html import EmailField    # may be helpful in some cases when WTForms version is newer
 from wtforms.validators import *
 
 # from . import models as m  # for the global variables and db constants
