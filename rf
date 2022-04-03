@@ -3,19 +3,22 @@ export FLASK_APP=wsgi.py
 export FLASK_ENV=development #fixme should work with the config.py instead
 export FLASK_DEBUG=1 #fixme should work with the config.py instead
 
-# sudo docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=123 -d mysql:5
-#
-# docker-compose start -f mysql-docker-compose.yml #(3)
 
-#docker-machine start default  # (1)
-docker-compose -f mysql-docker-compose.yml up -d #doesn't "override" the terminal with log (2)
-# sudo docker-compose -f mysql-docker-compose.yml up -d #doesn't "override" the terminal with log (2)
-# sudo docker-compose -f mysql-docker-compose.yml up #show logs of the DB #usefull (2)
-# sudo docker ps
-# sudo docker-machine restart default
-# eval $(sudo docker-machine env default)
+#   Install Requirements (including Flask and other libraries)
+pip3 install -r requirements.txt
 
+#   Creating a Local SQL Server - using docker
+#        - you don't need this if the SQL server already installed on the machine and running
+#   docker-machine start default  # (1)
+docker-compose up -f mysql-docker-compose.yml  -d        # doesn't "override" the terminal with log. if you want log remove -d (not recommended)
+
+#   Run the Web Application
 flask run
+
+
+
+
+
 
 
 
@@ -46,3 +49,14 @@ flask run
 # OR
 #   $ sudo kill NUMBER
 # TODO move this to the readme file ?
+
+
+
+# sudo docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=123 -d mysql:5
+#
+# docker-compose start -f mysql-docker-compose.yml #(3)
+# sudo docker-compose -f mysql-docker-compose.yml up -d #doesn't "override" the terminal with log (2)
+# sudo docker-compose -f mysql-docker-compose.yml up #show logs of the DB #usefull (2)
+# sudo docker ps
+# sudo docker-machine restart default
+# eval $(sudo docker-machine env default)

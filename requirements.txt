@@ -1,7 +1,6 @@
 # flask~=1.1.2
 # Flask-SQLAlchemy
-# mysql-connector-python # this is for the option to run 'db.createall()' which is a one-off
-
+# mysql-connector-python
 
 # pandas~=1.1.2
 # pandas #pythnanwr
@@ -12,22 +11,20 @@
 # flask_wtf~=0.14.3
 # flask_wtf~=0.14.3 #pythnanwr
 
-# all the next are for wtf forms
-# # should run these before 'pip install mysqlclient' :
-# #   sudo apt-get install mysql-server
-# #   sudo apt-get install libmysqlclient-dev
-
-
+docker>=5.0.3
 python-dotenv~=0.17.0
+Flask~=1.1.2
+
 flask-bootstrap~=3.3.7.1
 sqlalchemy-utils~=0.37.0
 
 DateTime~=4.3
 MarkupSafe~=1.1.1
 numpy~=1.19.5
+
 WTForms~=2.3.3
-Flask~=1.1.2
 SQLAlchemy~=1.4.11
+
 mysqlclient~=2.0.3
 PyMySQL==1.0.2
 pandas~=1.1.5
@@ -41,5 +38,11 @@ flask_wtf~=0.14.3
 Flask-SQLAlchemy>=2.5.1
 
 email-validator==1.1.2
-mysql-connector-python~=8.0.24 # for virtenv in pyhtnanwr, instead of mysqlclient~=2.0.3
 
+# for virtenv in pyhtnanwr, instead of mysqlclient~=2.0.3
+mysql-connector-python~=8.0.24  # this is for the option to run 'db.createall()' which is a one-off
+
+
+# should run these before 'pip install mysqlclient' :
+#   sudo apt-get install mysql-server
+#   sudo apt-get install libmysqlclient-dev

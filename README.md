@@ -2,6 +2,30 @@
 
 site is published at https://karinature.pythonanywhere.com/
 (static site is published at https://karinature.github.io/WebLib/)
+{project_root} = [...]/Project_Dir
+
+## Instruction for first time loading the project:
+note: Make sure the server running the flask uses python3 as default (this can be checked using the command `python --version`).
+If not, there are simple guides online, tailored for your operating system.
+#### Before running the website app:
+**Install requirements** using `pip3 install -r requirements.txt`
+note: yor should be on the same dir as requirements.txt file (in {project_root})
+#### Running the app
+##### If running on a server without sql (e.g. basic local machine):
+in project root run the `rf` script. 
+Shell command:  `cd {project_root} && ./rf`  
+This will use a docker with an sql (on port 3306), and creates an admin port (8080).
+##### if running on a server with sql (e.g. pythonanywhere)
+just make sure to put the correct file `wsgi.py` in /var/www/{karinature_pythonanywhere_com_}wsgi.py 
+[https://www.pythonanywhere.com/user/karinature/files/var/www/karinature_pythonanywhere_com_wsgi.py ] 
+Note: It is highly recommended to follow the deployment's server *official* manual/guide.
+#### DB Migration (first time)
+Currently you can either go to the `{home_url}/csv_to_mysql_route` on your favorite internet explorer 
+or run `python db_migration.py`
+  
+## Loading the site (not first time, after loading db)
+Just run thr command `./rf` from project_root, if no sql on machine
+or `flask run` from {project_root}
 
 ## structure and file summery
 **rf** - shell scrypt running the website/application on the local machine paste in the bash console: `cd {project_root} && ./rf`
@@ -68,7 +92,8 @@ run the next command:\
 and then:\
 `sudo systemctl stop PROGRAM_NAME`
 
-##### If the next error is shown, while runnig docker
+
+##### If the next error is shown, while running docker
     (mysql.connector.errors.ProgrammingError) 1054 (42S22): Unknown column '<col name>' in 'field list'
 might be a case of existing table while trying to load new/updated modules to the DB.
 try to delete the existing table (in the MySQL console):\
@@ -76,7 +101,22 @@ try to delete the existing table (in the MySQL console):\
 `DROP TABLE IF EXISTS <table name>;`
 
 
+##### If error: 
+Sometimes, for some reason or other (like after renaming the database), there will be an error:
+`sqlalchemy.exc.ProgrammingError: (mysql.connector.errors.ProgrammingError) 1049 (42000): Unknown database '{database_name}'` ,e.g.    
+ 
+    sqlalchemy.exc.ProgrammingError: (mysql.connector.errors.ProgrammingError) 1049 (42000): Unknown database 'tiresiassqldb'
+In that case, if possible, on the SQL server, run the command:
+`CREATE DATABASE {database_name};`(e.g. `CREATE DATABASE tiresiassqldb;`)
+and run db_migration.py script (`python3 db_migration.py` from {prject_root
+or, on your internet explorer, go to the url 
+
+    {home_page}/csv_to_mysql_route
+   
+or contact the person in charge of database maintenance 
+
 ### In PythonAnywhere
 wsgi.py is found in /var/www/karinature_pythonanywhere_com_wsgi.py 
 [https://www.pythonanywhere.com/user/karinature/files/var/www/karinature_pythonanywhere_com_wsgi.py ] 
 (no meaning for the wsgi file in `mysite` folder)
+
