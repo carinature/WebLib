@@ -26,7 +26,7 @@ class DBMigration:  # singleton class
                               defaults={
                                   'logfilename'     : f'logs/db_migration_{tt}.log',
                                   'fulllogfilename' : f'logs/db_migration_full_{tt}.log',
-                                  'querylogfilename': f'logs/q_empty.log',
+                                  'querylogfilename': f'logs/q_{{tt}}.log',
                                   }
                               )
 
@@ -103,7 +103,7 @@ class DBMigration:  # singleton class
                         # (mysql.connector.errors.IntegrityError) 1062 (23000): Duplicate entry
                         # (mysql.connector.errors.IntegrityError) 1452 (23000): Cannot add or update a child row:
                         #   a foreign key constraint fails
-                        #   (`tryout`.`texts`,
+                        #   (`tiresias_sqldb`.`texts`,
                         #   CONSTRAINT `texts_ibfk_1` FOREIGN KEY (`number`) REFERENCES `titles` (`number`))
                         self.session.rollback()  # self.session.flush()
                         self.logger.debug(f'df chunk insert fail. trying \'exclude_faulty_lines\'')

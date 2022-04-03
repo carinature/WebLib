@@ -23,7 +23,7 @@ logging.config.fileConfig(
         defaults={
             'logfilename'     : f'{project_home}/logs/db_migration_empty.log',
             'fulllogfilename' : f'{project_home}/logs/db_migration_full_empty.log',
-            'querylogfilename': f'{project_home}/logs/q_{{tt}}.log',
+            'querylogfilename': f'{project_home}/logs/q_empty.log',
             }
         )
 query_logger: logging.Logger = logging.getLogger('queryLogger')
