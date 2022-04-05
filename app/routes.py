@@ -401,6 +401,7 @@ def static_from_root():
 # ++++++++++++ ++++++++++++ ++++++++++++
 # ++++++++++++ ++++++++++++ ++++++++++++
 @app.route("/csv_to_mysql_route", methods=['GET', 'POST'])
+@utils.requires_auth
 def load_db():
     from flask import flash
     flash("If you click on the button below "
