@@ -3,7 +3,7 @@ import logging, logging.config
 from time import time, localtime
 import pandas as pd
 
-from flask import current_app as app, send_from_directory
+from flask import current_app as app, send_from_directory, session, flash
 from flask import render_template, make_response, redirect, url_for, request
 from sqlalchemy import or_
 from sqlalchemy.orm import Query
@@ -400,6 +400,8 @@ def static_from_root():
 # ++++++++++++ ++++++++++++ ++++++++++++
 # ++++++++++++ ++++++++++++ ++++++++++++
 # ++++++++++++ ++++++++++++ ++++++++++++
+
+# ++++++++++++  Updating DB (only available for admin) ++++++++++++
 @app.route("/csv_to_mysql_route", methods=['GET', 'POST'])
 @utils.requires_auth
 def load_db():
@@ -409,7 +411,13 @@ def load_db():
     flash("It's gonna take a loooong time to finish (if lucky). ")
     flash("Are you sure you want to do that? ")
     return render_template('dbg/csv_to_mysql.html', load_db_flag=True,
-                           avoid_robots=True)
+                           avoid_robots=True,
+                           title=f'Tiresias Admin',
+                           index_title=f'Admin Database Control Panel',
+                           # todo different title
+                           description="Tiresias: The Ancient Mediterranean Religions Source Database"
+                                       "The database includes over 50,000 subjects, listed in the page.",
+                           )
 
 
 @app.route("/csv_to_mysql_func")
@@ -436,4 +444,36 @@ def csv_to_mysql_func_btn(model='TextText'):
 @utils.requires_auth
 def trynew():
     # return render_template('dbg/navbar_sidebar_fixed.html')
-    return '<h1>A O K O K OK O K </h1>'
+    # return '<h1>A O K O K OK O K </h1>'
+    return render_template("dbg/login.html")
+
+
+@app.route('/login', methods=['GET', 'POST'])
+@utils.requires_auth
+def login():
+    error = None
+    if request.method == 'POST':
+        # if (request.form['username'] != 'admin') \
+        #         or request.form['password'] != 'admin':
+        #     # error = 'Invalid Credentials. Please try again.'
+        #     pass
+        # else:
+
+        session['logged_in'] = True
+        flash('You were logged in.')
+        # return redirect(url_for('availability'))
+        # return redirect(url_for('load_db'))
+        # return render_template("dbg/check.html", session=session)
+        return render_template("index.html", session=session)
+    # return render_template('login.html', error=error)
+    # return render_template("dbg/check.html", session=session)
+    return render_template("dbg/login.html", session=session)
+
+
+@app.route('/logout')
+@utils.requires_auth
+def logout():
+    session.pop('logged_in', None)
+    flash('You were logged out.')
+    # return redirect(url_for('welcome'))
+    return render_template("dbg/try_bs.html")

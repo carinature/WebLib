@@ -7,6 +7,7 @@ window.onscroll = function () {
 
 function scrollFunction() {
     let navbar = document.getElementsByClassName("navbar")[0];
+    let navbar_brand = document.getElementsByClassName("navbar-brand")[0];
     let logo = document.getElementById("logo");
     let button_line = document.getElementById("navbarResponsive");
     let subtitle = document.getElementById("navbar-subtitle");
@@ -14,34 +15,44 @@ function scrollFunction() {
 
     if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
         document.getElementById("top_btn").style.display = "block";
+
+    } else if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+
         // scrolled DOWN
-        // subtitle.style.display = 'none';
-        // subtitle.style.transition = '400ms';
-        // navbar.style.padding = "5px 10px 5px 10px";
-        // navbar.style.padding = "0";
-        // title.style.transform = "scale(0.5)";
-        // title.style.margin = "0";
-        // title.style.paddingTop = "0";
-        // logo.style.margin = "0";
-        // logo.style.width = "5em";
-        // logo.style.height = "3rem";
-        // logo.style.padding = "5px 10px 5px 10px";
-        // logo.style.margin = "5px 10px 5px 10px";
-        title.style.padding = "1rem 0 0 0 ";
+        title.style.padding = "1em 0 0 0 ";
         title.style.fontSize = '0.5em';
 
-    } else {  // scrolled to TOP
-        document.getElementById("top_btn").style.display = "none";
-        // subtitle.style.display = 'block';
+        navbar.style.padding = "0";
+        navbar.style.margin = "0";
+
+        navbar_brand.style.padding = "0";
+        // navbar_brand.style.margin = "0";
+
+        logo.style.margin = ".5rem";
+
+        // subtitle.style.display = 'none';
         // subtitle.style.transition = '400ms';
-        // navbar.style.padding = "30px 10px 10px 10px";
-        // logo.style.padding = "30px 10px 30px 10px";
-        // logo.style.margin = "30px 10px 30px 10px";
-        // logo.style.width = "10em";
-        // logo.style.height = "3rem";
-        // title.style.transform = "scale(1)";
+        // title.style.transform = "scale(0.5)";
+
+    } else {
+        // scrolled to TOP
+        document.getElementById("top_btn").style.display = "none";
         title.style.padding = "initial";
         title.style.fontSize = 'inherit';
+
+        // navbar_brand.style.margin=".3125rem 1rem .3125rem 0 ";
+        navbar.style.padding = ".8em";
+
+        navbar_brand.style.padding = "0.3125em 0";
+        // navbar_brand.style.marginRight = ".8em";
+
+        // logo.style.margin = "30px 10px 30px 10px";
+        logo.style.height = "2.5em";
+        logo.style.margin = "1em";
+
+        // subtitle.style.display = 'block';
+        // subtitle.style.transition = '400ms';
+        // title.style.transform = "scale(1)";
     }
 }
 
@@ -74,7 +85,7 @@ $('input.inline-radio').on('click', function () {
  * */
 function filter_check_all(source) {
     checkboxes = document.getElementsByName('filter-opt');
-    console.log('==============')
+    console.log('==============');
     for (let i = 0, n = checkboxes.length; i < n; i++) {
         let checked = source.checked;
         checkboxes[i].checked = checked;

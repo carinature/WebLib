@@ -72,8 +72,39 @@ $('button#csv_to_mysql_btn').on('click', function (e) {
             });
     }
     return false;
-
 });
+
+//load a single raw scv file into the MySQL DB
+$('button#single_csv_to_mysql_btn').on('click', function (e) {
+    // alert("You are about to ask the server to load raw scv files into the mysql DB. " +
+    // answer = window.confirm("You are about to ask the server to load raw scv files into the mysql DB. " +
+    //     "It's gonna take a loooong time to finish (if lucky). " +
+    //     "Are you sure?");
+    // if (answer) {
+    //     console.log("Loading DataBase ... ");
+    //     console.log("It's happening ... ");
+    //     // e.preventDefault();
+    //     // $.getJSON('csv_to_mysql_func',
+    //     //     function (data) {
+    //     //         //do nothing
+    //     //     });
+    // }
+    // return false;
+    alert("Option Not Yet Supported. TBD.");
+});
+
+//update a single MySQL table in DB (todo assuming all new files already on the server?)
+$('button#update_single_table_btn').on('click', function (e) {
+    alert("Option Not Yet Supported. TBD.");
+    return false;
+});
+
+//update a single MySQL table in DB (todo assuming all new files already on the server?)
+$('button#add_single_record_btn').on('click', function (e) {
+    alert("Option Not Yet Supported. TBD.");
+    return false;
+});
+
 
 // todo should load an email to the db?
 $('button#email_button').on('click', function (e) {

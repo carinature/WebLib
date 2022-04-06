@@ -386,10 +386,11 @@ hr.light-100 {
 
 /* Style the logo */
 .navbar #logo {
-    max-height: 5em;
+    max-height: 2.5em;
+    /*height: 3rem;*/
     width: auto;
     margin: 1em;
-    transition: 0.2s;
+    /*transition: 0.2s;*/
     display: inline;
     /*margin-right: 2em;*/
     /*margin-left: 1em;*/
@@ -815,6 +816,18 @@ figure {
     }
 }
 
+.elements-on-one-line {
+    display: flex;
+
+    /*  maybe useful */
+    /*justify-content: center;*/
+    /*align-items: center;*/
+
+    /* probably not useful */
+    /*display: -ms-flexbox;*/
+    /*-ms-flex-pack: center;*/
+    /*-ms-flex-align: center;*/
+}
 
 /*
 Extra small (xs) devices (portrait phones, less than 576px)
