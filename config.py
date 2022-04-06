@@ -55,13 +55,20 @@ class ProdConfig(Config):
     DEBUG = False
     TESTING = False
 
-    # Database
+    # # Database
+    # SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{db_name}".format(
+    #         username="karinature",
+    #         password="dsmiUw2sn",
+    #         hostname="karinature.mysql.pythonanywhere-services.com",
+    #         db_name="karinature$tiresias_sqldb",
+    #         )
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{db_name}".format(
-            username="karinature",
+            username="wildhrushka",
             password="dsmiUw2sn",
-            hostname="karinature.mysql.pythonanywhere-services.com",
-            db_name="karinature$tiresias_sqldb",
+            hostname="wildhrushka.mysql.pythonanywhere-services.com",
+            db_name="wildhrushka$tiresias_sqldb",
             )
+
     SQLALCHEMY_ECHO = False
 
     # MISC

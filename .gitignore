@@ -2,5 +2,9 @@ venv
 .idea
 misc
 __pycache__
-/logs/*
+/logs/db_migration*
+/logs/q_*
+/logs/
 app/raw_data/*
+
+!/logs/

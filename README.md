@@ -23,9 +23,98 @@ Note: It is highly recommended to follow the deployment's server *official* manu
 Currently you can either go to the `{home_url}/csv_to_mysql_route` on your favorite internet explorer 
 or run `python db_migration.py`
   
-## Loading the site (not first time, after loading db)
+### Loading the site (not first time, after loading db)
 Just run thr command `./rf` from project_root, if no sql on machine
 or `flask run` from {project_root}
+
+## Instructions for Loading the site on PyhtonAnywhwer.com
+#### Creating and loading the web app
+###### option 1
+On your Dashboard (the landing page after login, or `https://www.pythonanywhere.com/user/{user_name}`), 
+on the tabs panel in the top-right corner, click the **Web** link (top right corner).
+1. Click **Add a new web app** button.
+2. Select **Flask**
+3. Select **Python3.7** or **Python3.8**
+4. Under **Security:** section click on the **Force HTTPS** toggle button so it will show a blue *Enabled*
+
+
+You can go ahead and clack on the Green **Reload** button; 
+Wait until finished reloading and the reload icon not showing anymore and go to the website page 
+(url is in the link above the reload button or can be found in the list under **Web apps** section in the **Dashboard** ).
+It will show a minimal page with a welcome message. note: this is not the real website. 
+
+#### Open a **Bash** console 
+####### option 1
+On your Dashboard (the landing page after login, or `https://www.pythonanywhere.com/user/{user_name}`), 
+on the tabs panel in the top-right corner, click the **Consoles** link (top right corner).
+Open a bash console: Under the **Start a new console** headline pick **Bash**.
+####### option 2
+On your Dashboard (the landing page after login, or `https://www.pythonanywhere.com/user/{user_name}`), 
+ Under the **Consoles** headline either pick an open Bash console or click **Bash** button.
+
+p.s: don't worry if you need to create or delete console 
+(for instance, if you have a beginner account which has a limit of 2 consoles).
+
+#### Downloading project source code 
+Go to your Project Working Directory (can be found in **Web** under *Code*, typically it's /home/_{user_name}_)
+Inside the console run: `git clone https://github.com/karinature/WebLib.git`
+1. `cd ~`
+2. `ls` should show you:
+    
+    README.txt  WebLib  mysite
+3. `cp WebLib/ mysite/ -r`
+4. `rm -r mysite/`  # this is improtant in cases of low disk space
+
+#####   Configure WSGI file
+Go to the **Web** tab (can be found on top-right corner tab panel).
+Under **Code:** section click the link to the **WSGI configuration file** 
+and override its contents with the one from *user_name_pythonanywhere_com_wsgi.py*
+#####   Configure a Production (???)Run
+In the **Files** tab open the file __init__.py located in the *app* direcroty (full path: `~/mysite/app/__init__.py`)
+Comment out the line `app.config.from_object('config.DevConfig')`
+and unComment the line `app.config.from_object('config.ProdConfig')`
+
+
+##### Create and Use a vireturl env
+`mkvirtualenv --python=/usr/bin/python3 my-virtualenv`
+and then:` workon my-virtualenv`
+###### note: anytime you will use the Bash console you should start with `workon my-virtualenv`, otherwise you won't be able to use the installed packages
+Go to the **Web** tab (can be found on top-right corner tab panel).
+Under **Virtualenv:** enter in the field the path to the virtualenv.
+This will be something like /home/{user_name}/.virtualenvs/my-virtualenv.
+######## note: if needed, some more useful info here: https://help.pythonanywhere.com/pages/Virtualenvs/
+
+##### Install Packages
+`cd ~/mysite`
+run `pip install -r requirements.txt` in the **Bash** console
+note: possible issues are listed in the Issues section at the bottom of this README
+
+#### Creating and loading the MySQL DB 
+On your Dashboard (the landing page after login, or `https://www.pythonanywhere.com/user/{user_name}`), 
+on the tabs panel in the top-right corner, click the **Databases** link (top right corner).
+Make sure you're in the MySQL tab/option on the left (not Postgres).
+##### Create
+Under the **Create a database** headline enter `tiresias_sqldb` (all lower case!) and click **create**.
+No need to set a password - it is handled in the project source code.
+##### Configure
+
+##### Load
+This step make take up to a few hours
+
+
+
+###### option 2
+Select **Manual configuration**
+
+
+
+
+
+
+
+
+
+
 
 ## structure and file summery
 **rf** - shell scrypt running the website/application on the local machine paste in the bash console: `cd {project_root} && ./rf`
@@ -85,7 +174,7 @@ start server: \
 `docker-compose start -f mysql-docker-compose.yml`
 
 ##Isues
-##### If the next error is shown, while runnig docker
+##### If the next error is shown, while running docker
     Error starting userland proxy: listen tcp 0.0.0.0:3306: bind: address already in use
 run the next command:\
 `sudo netstat -laputen | grep :3306`\
@@ -116,7 +205,39 @@ or, on your internet explorer, go to the url
 or contact the person in charge of database maintenance 
 
 ### In PythonAnywhere
+##### when running `pip install -r requirements.txt`
+in case you've reached disk quota (this can happen in the *Beginner*  account )
+try this steps in the bash console:
+
+    deactivate  # this deactivats the virtual env
+    rm -rf /home/{user_name}/.virtualenvs/my-virtualenv/
+    rm -rf /tmp/* /tmp/.*
+    rm -rf */tmp/* */tmp/.*
+    du -hs /tmp ~/.[!.]* ~/* | sort -h  # this show disk-usage
+    rm -rf /home/{user_name}/.cache/   
+    rm -rf ~/.cache/   
+    rm -rf */.cache/   
+    ####### dont you dare run this, no matter how tempting : rm -rf /home/wildhrushka/.local/
+    ####### but if you did... go to **Web**, at the bottom click on the **Delete** button and then **Add a new web app** at the top. no need to repeat the rest of the steps again
+when finished cleaning go to your projects home directory {project_home}:
+    `cd  /home/{user_name}/mysite/`
+recreate the virtual env:
+   ` mkvirtualenv --python=/usr/bin/python3 my-virtualenv`
+and then either run
+`pip install -r requirements.txt`
+or `pip install {package_name}` for each of the lines in **reauirements.txt**
+(or
+1. run `pip install -r requirements.txt` 
+2. run `pip install -r requirements.txt` again, 
+3. for every requirement from reqs.txt run an individual pip install command)
+
+
+
+
+
 wsgi.py is found in /var/www/karinature_pythonanywhere_com_wsgi.py 
 [https://www.pythonanywhere.com/user/karinature/files/var/www/karinature_pythonanywhere_com_wsgi.py ] 
 (no meaning for the wsgi file in `mysite` folder)
+
+#
 
