@@ -1,11 +1,10 @@
 <nav class="navbar navbar-expand-md navbar-light bgn-light sticky-top shadow-sm rounded">
     <div class="container-fluid">
         <a class="navbar-brand" href="#"> {# fixme Inline Elements (<a>) Containing Block Elements (<div>) #}
-            <div class="row">
-                <img class="img-fluid " id="logo" src="../static/favicon.ico"
-                     alt="h.c.m.h logo">
+            <div class="elements-on-one-line">
+                <img class="" id="logo" src="../static/favicon.ico" alt="h.c.m.h logo">
                 <div class="navbar-title">
-                    <p class="head-title " style="font-size: 2em; line-height: 1.2;">Tiresias</p> {# todo move to style#}
+                    <h1 class="">Tiresias</h1> {# todo move to style#}
                     {#                    <p id="navbar-subtitle">The Ancient Mediterranean Religions Source Database</p>#}
                 </div>
             </div>
@@ -13,8 +12,8 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse bottom" id="navbarResponsive" >
-            <ul class="navbar-nav ml-auto">
+        <div class="collapse navbar-collapse bottom" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto padding-left-2">
                 <li class="nav-item active"><a class="nav-link" href="/#">Home</a></li>
                 <li class="nav-item"><a class="nav-link active" href="/#about-hook">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('book_indices') }}">Sources</a></li>
