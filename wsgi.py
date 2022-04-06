@@ -18,12 +18,14 @@ from time import time, localtime
 print('*' * 80)
 tt = '-'.join([str(i) for i in localtime()])
 # print(os.path.join(project_home, 'logging.conf'))
+logs_dir = 'logs'
+os.mkdir(os.path.join(project_home, logs_dir))
 logging.config.fileConfig(
         os.path.join(project_home, 'logging.conf'),
         defaults={
-            'logfilename'     : f'{project_home}/logs/db_migration_empty.log',
-            'fulllogfilename' : f'{project_home}/logs/db_migration_full_empty.log',
-            'querylogfilename': f'{project_home}/logs/q_empty.log',
+            'logfilename'     : f'{project_home}/{logs_dir}/db_migration_empty.log',
+            'fulllogfilename' : f'{project_home}/{logs_dir}/db_migration_full_empty.log',
+            'querylogfilename': f'{project_home}/{logs_dir}/q_empty.log',
             }
         )
 query_logger: logging.Logger = logging.getLogger('queryLogger')
