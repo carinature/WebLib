@@ -55,20 +55,24 @@ $(document).ready(function () {
     });
 });
 
+
 //load raw scv files into the MySQL DB
 $('button#csv_to_mysql_btn').on('click', function (e) {
-    alert("You are about to ask the server to load raw scv files into the mysql DB. " +
+    // alert("You are about to ask the server to load raw scv files into the mysql DB. " +
+    answer = window.confirm("You are about to ask the server to load raw scv files into the mysql DB. " +
         "It's gonna take a loooong time to finish (if lucky). " +
-        "Are you sure?")
-    console.log("Loading DataBase ... ")
-    console.log("It's happening ... ")
-    e.preventDefault();
-    $.getJSON('csv_to_mysql_func',
-        function (data) {
-            //do nothing
-        });
-
+        "Are you sure?");
+    if (answer) {
+        console.log("Loading DataBase ... ");
+        console.log("It's happening ... ");
+        e.preventDefault();
+        $.getJSON('csv_to_mysql_func',
+            function (data) {
+                //do nothing
+            });
+    }
     return false;
+
 });
 
 // todo should load an email to the db?
